@@ -17,6 +17,12 @@ namespace Backend
             userList = userDataReader.GetAllUserData();
         }
 
+        // returns null if not found
+        public User GetUser(int id)
+        {
+            return userList.Find(user => user.Id == id);
+        }
+
         public void AddUser(User user)
         {
             userList.Add(user);
