@@ -11,7 +11,7 @@ namespace Backend
         private string userDatabasePath;
         private string carDatabasePath;
         private Logger logger;
-        private int lastCarId = 0;
+        internal int lastCarId { get; private set; } = 0;
 
         public FileReader(string dbPath, Logger logger)
         {

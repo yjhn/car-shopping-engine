@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Backend
 {
@@ -9,13 +8,14 @@ namespace Backend
         private List<Car> carList;
         private FileReader carDataReader;
         private FileWriter carDataWriter;
-        private int lastCarId;
+        public int lastCarId { get; internal set; }
 
         public CarList(Logger logger, FileReader reader, FileWriter writer)
         {
             carDataReader = reader;
             carDataWriter = writer;
             carList = carDataReader.GetAllCarData();
+            lastCarId = carDataReader.lastCarId;
         }
 
         public Car[] SortBy(SortingCriteria sortBy)
@@ -50,6 +50,10 @@ namespace Backend
         {
             carList.Add(car);
             carDataWriter.WriteCarData(car);
+            if (car.Id > lastCarId)
+            {
+                lastCarId = car.Id;
+            }
         }
 
         public void DeleteCar(int id)
