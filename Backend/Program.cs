@@ -40,7 +40,7 @@ namespace Backend
                 ChassisType = ChassisType.universalas,
                 Color = "juoda",
                 Gearbox = GearboxType.automatic,
-                Mileage = 100000,
+                TotalKilometersDriven = 100000,
                 DriveWheels = DriveWheels.rear,
                 Defects = new string[] { "dauzta mazda" },
                 SteeringWheelPosition = SteeringWheelPosition.left,
