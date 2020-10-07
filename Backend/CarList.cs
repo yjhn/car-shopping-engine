@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Backend
 {
     class CarList
     {
-        private List<Car> carList;
+        public List<Car> carList;
         private FileReader carDataReader;
         private FileWriter carDataWriter;
         public int lastCarId { get; internal set; }
@@ -15,34 +17,41 @@ namespace Backend
             carDataReader = reader;
             carDataWriter = writer;
             carList = carDataReader.GetAllCarData();
+
             lastCarId = carDataReader.lastCarId;
         }
 
-        public Car[] SortBy(SortingCriteria sortBy)
+        public ReadOnlyCollection<Car> GetCarList(int resultAmount)
+        {
+            return new ReadOnlyCollection<Car>((IList<Car>)carList.Take(resultAmount));
+        }
+
+        public ReadOnlyCollection<Car> SortBy(SortingCriteria sortBy, int resultAmount)
         {
             switch (sortBy)
             {
                 case (SortingCriteria.UploadDateOrId):
                     carList.Sort((x, y) => x.Id.CompareTo(y.Id));
-                    return carList.ToArray();
+                    break;
                 case (SortingCriteria.Price):
                     carList.Sort((x, y) => x.Price.CompareTo(y.Price));
-                    return carList.ToArray();
+                    break;
                 case (SortingCriteria.DateOfPurchase):
                     carList.Sort((x, y) => x.DateOfPurchase.CompareTo(y.DateOfPurchase));
-                    return carList.ToArray();
-                case (SortingCriteria.Mileage):
-                    carList.Sort((x, y) => x.Mileage.CompareTo(y.Mileage));
-                    return carList.ToArray();
+                    break;
+                case (SortingCriteria.TotalKilometersDriven):
+                    carList.Sort((x, y) => x.TotalKilometersDriven.CompareTo(y.TotalKilometersDriven));
+                    break;
                 case (SortingCriteria.NextVehicleInspection):
                     carList.Sort((x, y) => x.NextVehicleInspection.CompareTo(y.NextVehicleInspection));
-                    return carList.ToArray();
+                    break;
                 case (SortingCriteria.OriginalPurchaseCountry):
                     carList.Sort((x, y) => x.OriginalPurchaseCountry.CompareTo(y.OriginalPurchaseCountry));
-                    return carList.ToArray();
+                    break; ;
                 default:
-                    throw new ArgumentException("Bad compare criterion");
+                    throw new ArgumentException("Bad compare criteria");
             }
+            return new ReadOnlyCollection<Car>((List<Car>)carList.Take(resultAmount));
         }
 
         // doesn't add car to the user's ad list
@@ -54,6 +63,12 @@ namespace Backend
             {
                 lastCarId = car.Id;
             }
+        }
+
+        // returns null if not found
+        public Car GetCar(int id)
+        {
+            return carList.Find(car => car.Id == id);
         }
 
         public void DeleteCar(int id)
@@ -74,7 +89,7 @@ namespace Backend
         UploadDateOrId,
         Price,
         DateOfPurchase,
-        Mileage,
+        TotalKilometersDriven,
         NextVehicleInspection,
         Weight,
         OriginalPurchaseCountry,

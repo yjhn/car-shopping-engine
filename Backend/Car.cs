@@ -17,7 +17,7 @@ namespace Backend
         public ChassisType ChassisType { get; set; }
         public string Color { get; set; }
         public GearboxType Gearbox { get; set; }
-        public int Mileage { get; set; }
+        public int TotalKilometersDriven { get; set; }
         public DriveWheels DriveWheels { get; set; }
         public string[] Defects { get; set; }
         public SteeringWheelPosition SteeringWheelPosition { get; set; }
@@ -32,7 +32,8 @@ namespace Backend
         public string OriginalPurchaseCountry { get; set; }
         public string Vin { get; set; }
         public string[] AdditionalProperties { get; set; }
-        public string[] images { get; set; }
+        public string[] Images { get; set; }
+        public int UserId { get; set; }
 
         public bool Equals([AllowNull] Car other)
         {
