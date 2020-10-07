@@ -59,5 +59,15 @@ namespace CarEngine.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap branson_f42c_akcija_f47cn {
+            get {
+                object obj = ResourceManager.GetObject("branson_f42c_akcija_f47cn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
