@@ -12,8 +12,8 @@ namespace Backend
 
         public UserList(Logger logger, FileReader reader, FileWriter writer)
         {
-            userDataReader = reader; /*new DataReader(logger);*/
-            userDataWriter = writer; /*new DataWriter(logger);*/
+            userDataReader = reader;
+            userDataWriter = writer;
             userList = userDataReader.GetAllUserData();
         }
 
