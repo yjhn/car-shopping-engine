@@ -12,6 +12,7 @@ namespace Backend
         private string carDatabasePath;
         private Logger logger;
         internal int lastCarId { get; private set; } = 0;
+        internal int lastUserId { get; private set; } = 0;
 
         public FileReader(string dbPath, Logger logger)
         {
@@ -107,6 +108,11 @@ namespace Backend
                 {
                     foreach (string file in Directory.EnumerateFiles(databasePath + @"users\", "*.json"))
                     {
+                        int userId = int.Parse(file.Substring(file.IndexOf(@"users\"), file.Length - 5));
+                        if (userId > lastUserId)
+                        {
+                            lastUserId = userId;
+                        }
                         byte[] jsonBytes = File.ReadAllBytes(file);
                         var utf8Reader = new Utf8JsonReader(jsonBytes);
                         User user = JsonSerializer.Deserialize<User>(ref utf8Reader);

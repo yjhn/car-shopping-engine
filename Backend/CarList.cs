@@ -17,7 +17,6 @@ namespace Backend
             carDataReader = reader;
             carDataWriter = writer;
             carList = carDataReader.GetAllCarData();
-
             lastCarId = carDataReader.lastCarId;
         }
 

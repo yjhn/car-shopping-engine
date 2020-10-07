@@ -9,12 +9,14 @@ namespace Backend
         private List<User> userList;
         private FileReader userDataReader;
         private FileWriter userDataWriter;
+        private int lastUserId = 0;
 
         public UserList(Logger logger, FileReader reader, FileWriter writer)
         {
             userDataReader = reader;
             userDataWriter = writer;
             userList = userDataReader.GetAllUserData();
+            lastUserId = userDataReader.lastUserId;
         }
 
         // returns null if not found
@@ -27,6 +29,10 @@ namespace Backend
         {
             userList.Add(user);
             userDataWriter.WriteUserData(user);
+            if(user.Id > lastUserId)
+            {
+                lastUserId = user.Id;
+            }
         }
 
         public void DeleteUser(int id)
