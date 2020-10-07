@@ -71,18 +71,20 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(139, 245);
+            this.button1.BackColor = System.Drawing.SystemColors.Window;
+            this.button1.Location = new System.Drawing.Point(144, 249);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(112, 34);
             this.button1.TabIndex = 2;
             this.button1.Text = "login";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // LoginScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(401, 342);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.passwordText);
