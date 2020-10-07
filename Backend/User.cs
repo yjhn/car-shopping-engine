@@ -1,6 +1,9 @@
-﻿namespace Backend
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Backend
 {
-    class User
+    class User : IEquatable<User>
     {
         public int Id { get; set; }
         public string Username { get; set; }
@@ -9,5 +12,10 @@
         public string HashedPassword { get; set; }
         public string Email { get; set; }
         public int[] AdIds { get; set; }
+
+        public bool Equals([AllowNull] User other)
+        {
+            return this.Id == other.Id;
+        }
     }
 }

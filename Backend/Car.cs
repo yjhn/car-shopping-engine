@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Backend
 {
-    public class Car
+    public class Car : IEquatable<Car>
     {
         public int UploaderId { get; set; }
         public DateTime UploadDate { get; set; }
@@ -32,45 +33,42 @@ namespace Backend
         public string Vin { get; set; }
         public string[] AdditionalProperties { get; set; }
         public string[] images { get; set; }
+
+        public bool Equals([AllowNull] Car other)
+        {
+            return this.Id == other.Id;
+        }
     }
 
-    public class Month : IComparable
+    public class Month : IComparable<Month>
     {
         public int year { get; set; }
         public int month { get; set; }
 
-        public int CompareTo(object obj)
+        public int CompareTo([AllowNull] Month other)
         {
-            if (obj is Month)
+            if (other.year > this.year)
             {
-                Month m = (Month)obj;
-                if (m.year > this.year)
+                return -1;
+            }
+            else if (other.year < this.year)
+            {
+                return 1;
+            }
+            else
+            {
+                if (other.month > this.month)
                 {
                     return -1;
                 }
-                else if (m.year < this.year)
+                else if (other.month < this.month)
                 {
                     return 1;
                 }
                 else
                 {
-                    if (m.month > this.month)
-                    {
-                        return -1;
-                    }
-                    else if (m.month < this.month)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
+                    return 0;
                 }
-            }
-            else
-            {
-                throw new ArgumentException("Cannot compare objects of different types");
             }
         }
     }
