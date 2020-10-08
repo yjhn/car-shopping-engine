@@ -14,5 +14,19 @@ namespace CarEngine.Pages
         {
             InitializeComponent();
         }
+
+        string imgLocation = "";
+
+
+        private void browseButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "PNG files (*.png)|*.png|JPEG files(*.jpg)|*.jpg|All files(*.*)|(*.*)";
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                imgLocation = dialog.FileName.ToString();
+                pictureBox1.ImageLocation = imgLocation;
+            }
+        }
     }
 }
