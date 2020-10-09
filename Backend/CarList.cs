@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 
 namespace Backend
 {
@@ -11,21 +11,30 @@ namespace Backend
         private FileReader carDataReader;
         private FileWriter carDataWriter;
         public int lastCarId { get; internal set; }
+        private Logger logger;
 
-        public CarList(Logger logger, FileReader reader, FileWriter writer)
+        public CarList(Logger logger, string carDbPath = null)
         {
-            carDataReader = reader;
-            carDataWriter = writer;
+            this.logger = logger;
+            carDataReader = new FileReader(logger, carDbPath);
+            carDataWriter = new FileWriter(logger, carDbPath);
             carList = carDataReader.GetAllCarData();
             lastCarId = carDataReader.lastCarId;
         }
 
-        public ReadOnlyCollection<Car> GetCarList(int resultAmount)
+        private List<Car> GetCarList(int resultAmount = 50)
         {
-            return new ReadOnlyCollection<Car>((IList<Car>)carList.Take(resultAmount));
+            return carList.Take(resultAmount).ToList<Car>();
         }
 
-        public ReadOnlyCollection<Car> SortBy(SortingCriteria sortBy, int resultAmount)
+
+        // returns List<Car> serialized to JSON
+        public byte[] JsonGetCarList(int resultAmount = 50)
+        {
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(GetCarList(resultAmount));
+        }
+
+        private List<Car> SortBy(SortingCriteria sortBy, int resultAmount = 50)
         {
             switch (sortBy)
             {
@@ -50,13 +59,20 @@ namespace Backend
                 default:
                     throw new ArgumentException("Bad compare criteria");
             }
-            return new ReadOnlyCollection<Car>((List<Car>)carList.Take(resultAmount));
+            return carList.Take(resultAmount).ToList<Car>();
+        }
+
+        // returns List<Car> serialized to JSON
+        public byte[] JsonSortBy(SortingCriteria sortBy, int resultAmount = 50)
+        {
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(SortBy(sortBy, resultAmount));
         }
 
         // doesn't add car to the user's ad list
-        public void AddCar(Car car)
+        private void AddCar(Car car)
         {
             carList.Add(car);
+            carDataWriter.WriteCarData(car);
             carDataWriter.WriteCarData(car);
             if (car.Id > lastCarId)
             {
@@ -64,10 +80,28 @@ namespace Backend
             }
         }
 
+        // params: Car serialized to JSON
+        public void JsonAddCar(byte[] car)
+        {
+            try
+            {
+                AddCar(JsonSerializer.Deserialize<Car>(car));
+            }
+            catch (Exception e)
+            {
+                logger.LogException(new BackendException("Failed to write car due to bad serialization", e));
+            }
+        }
+
         // returns null if not found
-        public Car GetCar(int id)
+        private Car GetCar(int id)
         {
             return carList.Find(car => car.Id == id);
+        }
+
+        public byte[] JsonGetCar(int id)
+        {
+            return JsonSerializer.SerializeToUtf8Bytes<Car>(GetCar(id));
         }
 
         public void DeleteCar(int id)
@@ -90,7 +124,6 @@ namespace Backend
         DateOfPurchase,
         TotalKilometersDriven,
         NextVehicleInspection,
-        Weight,
         OriginalPurchaseCountry,
     };
 }
