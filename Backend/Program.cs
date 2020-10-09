@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
 
 namespace Backend
 {
@@ -8,12 +6,13 @@ namespace Backend
     {
         static void Main()
         {
-            //Console.WriteLine(DateTime.Now.ToString("T"));
             Logger logger = new Logger();
-            //logger.Log(new BackendException("labas", new Exception("ate")));
 
-            CarList carList = new CarList(logger);
-            UserList userList = new UserList(logger);
+            FileReader reader = new FileReader(logger);
+            FileWriter writer = new FileWriter(logger);
+
+            CarList carList = new CarList(logger, reader, writer);
+            UserList userList = new UserList(logger, reader, writer);
 
             User user1 = new User
             {
@@ -58,15 +57,8 @@ namespace Backend
                 //images = new string[] { base64ImageRepresentation }
             };
 
-            carList.JsonAddCar(JsonSerializer.SerializeToUtf8Bytes<Car>(car1));
-            userList.JsonAddUser(JsonSerializer.SerializeToUtf8Bytes<User>(user1));
-
-            List<Car> car2 = JsonSerializer.Deserialize<List<Car>>(carList.JsonSortBy(SortingCriteria.Price));
-
-            car2[0].Id = 2;
-            //Console.WriteLine(carList.lastCarId);
-            carList.JsonAddCar(JsonSerializer.SerializeToUtf8Bytes<Car>(car2[0]));
-            //Console.WriteLine(carList.lastCarId);
+            carList.AddCar(car1);
+            userList.AddUser(user1);
         }
     }
 }
