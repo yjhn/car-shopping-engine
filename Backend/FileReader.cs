@@ -14,19 +14,26 @@ namespace Backend
         internal int lastCarId { get; private set; } = 0;
         internal int lastUserId { get; private set; } = 0;
 
-        public FileReader(string dbPath, Logger logger)
+        public FileReader(Logger logger, string carDbPath = null, string userDbPath = null)
         {
-            this.databasePath = dbPath;
             this.logger = logger;
-            carDatabasePath = databasePath + @"cars\";
-            userDatabasePath = databasePath + @"users\";
-        }
 
-        public FileReader(Logger logger)
-        {
-            this.logger = logger;
-            carDatabasePath = databasePath + @"cars\";
-            userDatabasePath = databasePath + @"users\";
+            if (carDbPath != null)
+            {
+                this.carDatabasePath = carDbPath;
+            }
+            else
+            {
+                carDatabasePath = databasePath + @"cars\";
+            }
+            if (userDbPath != null)
+            {
+                this.userDatabasePath = userDbPath;
+            }
+            else
+            {
+                userDatabasePath = databasePath + @"users\";
+            }
         }
 
         public Car GetCarData(int Id)
@@ -43,7 +50,7 @@ namespace Backend
                 }
                 catch (Exception e)
                 {
-                    logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                    logger.LogException(e);
                 }
             }
             return null;
@@ -53,8 +60,7 @@ namespace Backend
         {
             if (Directory.Exists(userDatabasePath))
             {
-                string fileName = databasePath + @"users\" + UserId + ".json";
-
+                string fileName = userDatabasePath + UserId + ".json";
                 try
                 {
                     byte[] jsonBytes = File.ReadAllBytes(fileName);
@@ -64,7 +70,7 @@ namespace Backend
                 }
                 catch (Exception e)
                 {
-                    logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                    logger.LogException(e);
                 }
             }
             return null;
@@ -77,9 +83,9 @@ namespace Backend
             {
                 try
                 {
-                    foreach (string file in Directory.EnumerateFiles(databasePath + @"cars\", "*.json"))
+                    foreach (string file in Directory.EnumerateFiles(carDatabasePath, "*.json"))
                     {
-                        int carId = int.Parse(file.Substring(file.IndexOf(@"cars\"), file.Length - 5));
+                        int carId = GetId(file);
                         if (carId > lastCarId)
                         {
                             lastCarId = carId;
@@ -93,7 +99,7 @@ namespace Backend
                 }
                 catch (Exception e)
                 {
-                    logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                    logger.LogException(e);
                 }
             }
             return cars;
@@ -106,9 +112,9 @@ namespace Backend
             {
                 try
                 {
-                    foreach (string file in Directory.EnumerateFiles(databasePath + @"users\", "*.json"))
+                    foreach (string file in Directory.EnumerateFiles(userDatabasePath, "*.json"))
                     {
-                        int userId = int.Parse(file.Substring(file.IndexOf(@"users\"), file.Length - 5));
+                        int userId = GetId(file);
                         if (userId > lastUserId)
                         {
                             lastUserId = userId;
@@ -122,10 +128,15 @@ namespace Backend
                 }
                 catch (Exception e)
                 {
-                    logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                    logger.LogException(e);
                 }
             }
             return users;
+        }
+
+        private int GetId(string filePath)
+        {
+            return int.Parse(Path.GetFileNameWithoutExtension(filePath));
         }
     }
 }
