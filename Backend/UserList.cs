@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Backend
 {
-    class UserList
+    public class UserList
     {
         private List<User> userList;
         private FileReader userDataReader;

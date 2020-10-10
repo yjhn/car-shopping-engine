@@ -4,9 +4,10 @@ namespace Server
     public class Response
     {
         private int statusCode, contentLength;
-        private String statusText, contentMessage;
+        private String statusText;
+        private byte[] contentMessage;
 
-        public Response(int statusCode, String contentMessage)
+        private Response(int statusCode)
         {
             this.statusCode = statusCode;
             switch (statusCode)
@@ -33,12 +34,30 @@ namespace Server
                     statusText = "UNKNOWN";
                     break;
             }
+        }
+
+        public Response(int statusCode, String contentMessage)
+: this(statusCode)
+        {
+            this.contentMessage = System.Text.Encoding.ASCII.GetBytes(contentMessage);
+            contentLength = contentMessage.Length;
+        }
+
+        public Response(int statusCode, byte[] contentMessage)
+        : this(statusCode)
+        {
             this.contentMessage = contentMessage;
             contentLength = contentMessage.Length;
         }
-        override public String ToString()
+
+        public byte[] Format()
         {
-            return statusCode.ToString() + " " + statusText + "\r\nContent-length: " + contentLength + "\r\n\r\n" + contentMessage;
+            String headers = $"{statusCode} {statusText}\r\nContent-length: {contentLength}\r\n\r\n";
+            byte[] finalOutput = System.Text.Encoding.ASCII.GetBytes(headers);
+            int headersSize = finalOutput.Length;
+            Array.Resize<byte>(ref finalOutput, headersSize + contentMessage.Length);
+            Array.Copy(contentMessage, 0, finalOutput, headersSize, contentMessage.Length);
+            return finalOutput;
         }
     }
 }

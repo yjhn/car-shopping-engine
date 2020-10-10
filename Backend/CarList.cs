@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Backend
 {
-    class CarList
+    public class CarList
     {
         public List<Car> carList;
         private FileReader carDataReader;
@@ -117,7 +117,7 @@ namespace Backend
         }
     }
 
-    enum SortingCriteria
+    public enum SortingCriteria
     {
         UploadDateOrId,
         Price,
@@ -125,5 +125,6 @@ namespace Backend
         TotalKilometersDriven,
         NextVehicleInspection,
         OriginalPurchaseCountry,
+        Unknown
     };
 }
