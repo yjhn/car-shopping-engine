@@ -33,7 +33,6 @@ namespace Backend
         public string Vin { get; set; }
         public string[] AdditionalProperties { get; set; }
         public string[] Images { get; set; }
-        public int UserId { get; set; }
 
         public bool Equals([AllowNull] Car other)
         {

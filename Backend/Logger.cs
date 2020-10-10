@@ -9,12 +9,17 @@ namespace Backend
         private string LogPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\logs\" + DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToLongTimeString().Replace(":", "-") + ".txt";
         private FileStream LogFile;
 
-        public Logger()
+        public Logger(string logPath = null)
         {
+            if (logPath != null)
+            {
+                this.LogPath = logPath;
+            }
+
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(LogPath));
-                LogFile = File.OpenWrite(LogPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(this.LogPath));
+                LogFile = File.OpenWrite(this.LogPath);
             }
             catch (Exception e)
             {
@@ -22,31 +27,17 @@ namespace Backend
             }
         }
 
-        public Logger(string LogPath)
+        public void LogException(Exception e)
         {
-            this.LogPath = LogPath;
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(LogPath));
-                LogFile = File.OpenWrite(LogPath);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Failed to create log file\n" + e.ToString());
-            }
-        }
-
-        public void Log(string text)
-        {
-            byte[] info = new UTF8Encoding(true).GetBytes(text);
+            byte[] info = new UTF8Encoding(true).GetBytes("[" + DateTime.Now.ToString("T") + "] " + e.ToString());
             try
             {
                 LogFile.Write(info, 0, info.Length);
                 LogFile.Flush();
             }
-            catch (Exception e)
+            catch (Exception exc)
             {
-                Console.WriteLine("Cannot write to log file\n" + e.ToString());
+                Console.WriteLine("Cannot write to log file\n" + exc.Message + "\n" + exc.ToString());
             }
         }
     }

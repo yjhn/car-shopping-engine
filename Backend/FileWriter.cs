@@ -16,19 +16,26 @@ namespace Backend
             WriteIndented = true
         };
 
-        public FileWriter(string DbPath, Logger logger)
+        public FileWriter(Logger logger, string carDbPath = null, string userDbPath = null)
         {
-            this.databasePath = DbPath;
             this.logger = logger;
-            carDatabasePath = databasePath + @"cars\";
-            userDatabasePath = databasePath + @"users\";
-        }
 
-        public FileWriter(Logger logger)
-        {
-            this.logger = logger;
-            carDatabasePath = databasePath + @"cars\";
-            userDatabasePath = databasePath + @"users\";
+            if (carDbPath != null)
+            {
+                this.carDatabasePath = carDbPath;
+            }
+            else
+            {
+                carDatabasePath = databasePath + @"cars\";
+            }
+            if (userDbPath != null)
+            {
+                this.userDatabasePath = userDbPath;
+            }
+            else
+            {
+                userDatabasePath = databasePath + @"users\";
+            }
         }
 
         public void WriteCarData(Car car)
@@ -48,7 +55,7 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                logger.LogException(e);
             }
         }
 
@@ -62,7 +69,7 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                logger.LogException(e);
             }
         }
 
@@ -83,7 +90,7 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                logger.LogException(e);
             }
         }
 
@@ -97,7 +104,7 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.Log(DateTime.Now.ToShortTimeString() + "\n" + e.ToString());
+                logger.LogException(e);
             }
         }
     }
