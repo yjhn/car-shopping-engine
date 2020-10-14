@@ -17,7 +17,7 @@ namespace Test1
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginScreen());
+            Application.Run(new Form2());
         }
     }
 }
