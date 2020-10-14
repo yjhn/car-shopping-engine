@@ -145,7 +145,8 @@ namespace DataTypes
     {
         gasoline,
         diesel,
-        electricity
+        electricity,
+        hybrid
     };
 
     public enum ChassisType
