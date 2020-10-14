@@ -23,5 +23,10 @@ namespace CarEngine
             this.additionInfo.Text += " \"" + comment + "\"";
             carImage.Image = Converter.Base64ToImg(base64Image);
         }
+
+        private void carImage_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

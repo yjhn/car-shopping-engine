@@ -70,6 +70,7 @@
             this.carImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.carImage.TabIndex = 1;
             this.carImage.TabStop = false;
+            this.carImage.Click += new System.EventHandler(this.carImage_Click);
             // 
             // price
             // 
