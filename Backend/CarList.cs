@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using DataTypes;
 
 namespace Backend
 {
-    class CarList
+    public class CarList
     {
         public List<Car> carList;
         private FileReader carDataReader;
@@ -63,6 +64,18 @@ namespace Backend
             return carList.Take(resultAmount).ToList<Car>();
         }
 
+        public byte[] JsonFilter(CarFilters filters)
+        {
+            List<Car> filteredCarList = carList;
+
+            if(filters.PriceFrom.HasValue && filters.PriceTo.HasValue)
+                filteredCarList = (from car in carList where (car.Price >= filters.PriceFrom && car.Price <= filters.PriceTo) select car).ToList();
+            if(!string.IsNullOrEmpty(filters.Username))
+                filteredCarList = (from car in carList where car.UploaderUsername.Equals(filters.Username) select car).ToList();
+
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(filteredCarList);
+        }
+
         // returns List<Car> serialized to JSON
         public byte[] JsonSortBy(SortingCriteria sortBy, int resultAmount = 50)
         {
@@ -90,6 +103,8 @@ namespace Backend
                 logger.LogException(new BackendException("Failed to write car due to bad serialization", e));
             }
         }
+
+
 
         // returns null if not found
         private Car GetCar(int id)
@@ -128,7 +143,7 @@ namespace Backend
         }
     }
 
-    enum SortingCriteria
+    public enum SortingCriteria
     {
         UploadDateOrId,
         Price,
@@ -137,4 +152,11 @@ namespace Backend
         NextVehicleInspection,
         OriginalPurchaseCountry,
     };
+
+    public class CarFilters
+    {
+        public decimal? PriceFrom { get; set; }
+        public decimal? PriceTo { get; set; }
+        public string Username { get; set; }
+    }
 }

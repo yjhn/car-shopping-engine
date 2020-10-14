@@ -5,7 +5,7 @@ using DataTypes;
 
 namespace Backend
 {
-    class UserList
+    public class UserList
     {
         private List<User> userList;
         private FileReader userDataReader;
@@ -31,21 +31,30 @@ namespace Backend
             return JsonSerializer.SerializeToUtf8Bytes<User>(GetUser(username));
         }
 
-        private void AddUser(User user)
+        private bool AddUser(User user)
         {
-            userList.Add(user);
-            userDataWriter.WriteUserData(user);
+            if (!CheckIfExists(user.Username))
+            {
+                userList.Add(user);
+                userDataWriter.WriteUserData(user);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public void JsonAddUser(byte[] user)
+        public bool JsonAddUser(byte[] user)
         {
             try
             {
-                AddUser(JsonSerializer.Deserialize<User>(user));
+                return AddUser(JsonSerializer.Deserialize<User>(user));
             }
             catch (Exception e)
             {
                 logger.LogException(new BackendException("Cannot add user due to bad serialization", e));
+                return false;
             }
         }
 
