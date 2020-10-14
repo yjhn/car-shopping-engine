@@ -3,13 +3,9 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-<<<<<<< HEAD
-    <NoWin32Manifest>true</NoWin32Manifest>
-=======
     <FileUpgradeFlags>40</FileUpgradeFlags>
     <UpgradeBackupLocation>D:\Repos\car-shopping-engine\Backup2\</UpgradeBackupLocation>
     <OldToolsVersion>Current</OldToolsVersion>
->>>>>>> master
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Backend\Backend.csproj" />
