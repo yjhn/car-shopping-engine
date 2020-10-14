@@ -1,13 +1,20 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 namespace Server
 {
     public class Response
     {
-        private int statusCode, contentLength;
-        private String statusText;
-        private byte[] contentMessage;
+        private const string HttpVersion = "HTTP/1.1";
+        private string headersDelimitor = "\r\n";
+        private int statusCode;
+        private string statusText;
+        public List<Header> Headers
+        { set; get; }
+        public byte[] Content
+        { set; get; }
 
-        private Response(int statusCode)
+        public Response(int statusCode)
         {
             this.statusCode = statusCode;
             switch (statusCode)
@@ -16,47 +23,45 @@ namespace Server
                     statusText = "OK";
                     break;
                 case 201:
-                    statusText = "CREATED";
+                    statusText = "Created";
                     break;
                 case 400:
-                    statusText = "BAD REQUEST";
+                    statusText = "Bad Request";
                     break;
                 case 403:
-                    statusText = "FORBIDDEN";
+                    statusText = "Forbidden";
                     break;
                 case 404:
-                    statusText = "NOT FOUND";
+                    statusText = "Not Found";
                     break;
                 case 500:
-                    statusText = "ERROR";
+                    statusText = "Internal Server Error";
                     break;
+                case 505:
+                    statusText = "HTTP Version Not Supported";
+                    break;
+                case 411:
+                    statusText = "Length Required";
+                    break;
+
                 default:
-                    statusText = "UNKNOWN";
+                    statusText = "Unknown";
                     break;
             }
         }
 
-        public Response(int statusCode, String contentMessage)
-: this(statusCode)
-        {
-            this.contentMessage = System.Text.Encoding.ASCII.GetBytes(contentMessage);
-            contentLength = contentMessage.Length;
-        }
-
-        public Response(int statusCode, byte[] contentMessage)
-        : this(statusCode)
-        {
-            this.contentMessage = contentMessage;
-            contentLength = contentMessage.Length;
-        }
-
         public byte[] Format()
         {
-            String headers = $"{statusCode} {statusText}\r\nContent-length: {contentLength}\r\n\r\n";
-            byte[] finalOutput = System.Text.Encoding.ASCII.GetBytes(headers);
-            int headersSize = finalOutput.Length;
-            Array.Resize<byte>(ref finalOutput, headersSize + contentMessage.Length);
-            Array.Copy(contentMessage, 0, finalOutput, headersSize, contentMessage.Length);
+            StringBuilder output = new StringBuilder($"{HttpVersion} {statusCode} {statusText}{headersDelimitor}");
+            foreach (Header h in Headers)
+            {
+                output.Append($"{h.Name}: {h.Value}{headersDelimitor}");
+            }
+            output.Append(headersDelimitor);
+            byte[] finalOutput = System.Text.Encoding.ASCII.GetBytes(output.ToString());
+            int outputSize = finalOutput.Length;
+            Array.Resize<byte>(ref finalOutput, outputSize + Content.Length);
+            Array.Copy(Content, 0, finalOutput, outputSize, Content.Length);
             return finalOutput;
         }
     }

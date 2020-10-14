@@ -54,39 +54,29 @@ namespace Server
 
             String data = null;
             byte[] bytes = new Byte[maxBufferLength];
-            int i;
 
             try
             {
+                int i = stream.Read(bytes, 0, bytes.Length);
+                // Translate data bytes to a ASCII string.
+                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
-                // Loop to receive all the data sent by the client.
-                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
-                {
-                    // Translate data bytes to a ASCII string.
-                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                // Process the data sent by the client and make a response.
+                byte[] msg = new RequestHandler(data).HandleRequest();
 
-                    // Process the data sent by the client and make a response.
-                    byte[] msg = new RequestHandler(data).HandleRequest();
-
-                    // Send back a response.
-                    stream.Write(msg, 0, msg.Length);
-                }
+                // Send back a response.
+                stream.Write(msg, 0, msg.Length);
             }
             catch (SocketException e)
             {
                 HandleSocketExceptionMessage(e);
-                client.Close();
-            }
-            catch (IOException e)
-            {
-                // Client probably disconnected
-                Console.WriteLine("Client closed the connection\n");
-                Console.WriteLine(e.Message);
-                client.Close();
             }
 
             // Shutdown and end connection
-            client.Close();
+            finally
+            {
+                client.Close();
+            }
         }
 
         private void HandleSocketExceptionMessage(SocketException e)

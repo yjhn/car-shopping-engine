@@ -4,30 +4,26 @@ namespace Server
 {
     public class Request
     {
-        private string method, resource, contentMessage;
-        private List<Query> queries;
         public string Method
+        { get; }
+                  public string Resource
+        { get; set; }
+        public Dictionary<string, string> Queries
+        { get; }
+        public string HttpVersion
+        { get; }
+public List<Header> Headers
+        { get; }
+        public String Content
+        { get; }
+        public Request(string method, string resource, Dictionary<string, string> queries, string httpVersion, List<Header> headers, string content)
         {
-            get { return method; }
-        }
-        public string Resource
-        {
-            get { return resource; }
-        }
-        public String ContentMessage
-        {
-            get { return contentMessage; }
-        }
-        public List<Query> Queries
-        {
-            get { return queries; }
-        }
-        public Request(string method, string resource, string contentMessage, List<Query> queries)
-        {
-            this.method = method;
-            this.resource = resource;
-            this.contentMessage = contentMessage;
-            this.queries = queries;
+            Method = method;
+            Resource = resource;
+            Queries = queries;
+            HttpVersion = httpVersion;
+            Headers = headers;
+            Content = content;
         }
     }
 }
