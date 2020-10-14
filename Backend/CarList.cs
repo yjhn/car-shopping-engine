@@ -72,6 +72,10 @@ namespace Backend
                 filteredCarList = (from car in carList where (car.Price >= filters.PriceFrom && car.Price <= filters.PriceTo) select car).ToList();
             if(!string.IsNullOrEmpty(filters.Username))
                 filteredCarList = (from car in carList where car.UploaderUsername.Equals(filters.Username) select car).ToList();
+            if(filters.YearFrom.HasValue && filters.YearTo.HasValue)
+                filteredCarList = (from car in carList where (car.DateOfPurchase.year >= filters.YearFrom && car.DateOfPurchase.year <= filters.YearTo) select car).ToList();
+            if(filters.FuelType.HasValue)
+                filteredCarList = (from car in carList where car.FuelType == filters.FuelType select car).ToList();
 
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(filteredCarList);
         }
@@ -159,5 +163,8 @@ namespace Backend
         public decimal? PriceFrom { get; set; }
         public decimal? PriceTo { get; set; }
         public string Username { get; set; }
+        public int? YearFrom { get; set; }
+        public int? YearTo { get; set; }
+        public FuelType? FuelType { get; set; }
     }
 }
