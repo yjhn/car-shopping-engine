@@ -9,4 +9,8 @@
     <Compile Remove="Program.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataTypes\DataTypes.csproj" />
+  </ItemGroup>
+
 </Project>
