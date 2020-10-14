@@ -12,7 +12,6 @@ namespace Backend
         private string carDatabasePath;
         private Logger logger;
         internal int lastCarId { get; private set; } = 0;
-        internal int lastUserId { get; private set; } = 0;
 
         public FileReader(Logger logger, string carDbPath = null, string userDbPath = null)
         {
@@ -56,11 +55,11 @@ namespace Backend
             return null;
         }
 
-        public User GetUserData(int UserId)
+        public User GetUserData(string username)
         {
             if (Directory.Exists(userDatabasePath))
             {
-                string fileName = userDatabasePath + UserId + ".json";
+                string fileName = userDatabasePath + username + ".json";
                 try
                 {
                     byte[] jsonBytes = File.ReadAllBytes(fileName);
@@ -114,11 +113,7 @@ namespace Backend
                 {
                     foreach (string file in Directory.EnumerateFiles(userDatabasePath, "*.json"))
                     {
-                        int userId = GetId(file);
-                        if (userId > lastUserId)
-                        {
-                            lastUserId = userId;
-                        }
+                        string username = GetUsername(file);
                         byte[] jsonBytes = File.ReadAllBytes(file);
                         var utf8Reader = new Utf8JsonReader(jsonBytes);
                         User user = JsonSerializer.Deserialize<User>(ref utf8Reader);
@@ -132,6 +127,11 @@ namespace Backend
                 }
             }
             return users;
+        }
+
+        private string GetUsername(string filePath)
+        {
+            return Path.GetFileNameWithoutExtension(filePath);
         }
 
         private int GetId(string filePath)
