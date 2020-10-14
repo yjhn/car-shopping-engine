@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
+using DataTypes;
 
 namespace Backend
 {
@@ -75,7 +76,7 @@ namespace Backend
 
         public void WriteUserData(User user)
         {
-            string fileName = userDatabasePath + user.Id + ".json";
+            string fileName = userDatabasePath + user.Username + ".json";
 
             byte[] jsonUtf8Bytes;
             jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(user, options);
@@ -94,9 +95,9 @@ namespace Backend
             }
         }
 
-        public void DeleteUser(int Id)
+        public void DeleteUser(string username)
         {
-            string fileName = userDatabasePath + Id + ".json";
+            string fileName = userDatabasePath + username + ".json";
 
             try
             {

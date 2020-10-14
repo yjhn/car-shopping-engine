@@ -1,14 +1,59 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Backend
+/*
+ * change how i deal with exceptions
+*/
+
+namespace DataTypes
 {
     public class Car : IEquatable<Car>
     {
-        public int UploaderId { get; set; }
-        public DateTime UploadDate { get; set; }
+        // unique db key = Id
+
+        public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, Month dateOfPurchase, Engine engine, FuelType fuelType,
+            ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, string[] defects,
+            SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, Month nextVehicleInspection,
+            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images)
+        {
+            Price = price;
+            UploaderUsername = uploaderUsername;
+            UploadDate = uploadDate;
+            Brand = brand;
+            Model = model;
+            DateOfPurchase = dateOfPurchase;
+            Engine = engine;
+            FuelType = fuelType;
+            ChassisType = chassisType;
+            Color = color;
+            GearboxType = gearboxType;
+            TotalKilometersDriven = totalKilometersDriven;
+            DriveWheels = driveWheels;
+            Defects = defects;
+            SteeringWheelPosition = steeringWheelPosition;
+            NumberOfDoors = numberOfDoors;
+            NumberOfCylinders = numberOfCylinders;
+            NumberOfGears = numberOfGears;
+            Seats = seats;
+            NextVehicleInspection = nextVehicleInspection;
+            WheelSize = wheelSize;
+            Weight = weight;
+            EuroStandard = euroStandard;
+            OriginalPurchaseCountry = originalPurchaseCountry;
+            Vin = vin;
+            AdditionalProperties = additionalProperties;
+            Images = images;
+        }
+
+        public Car()
+        {
+            ;
+        }
+
         public int Id { get; set; }
         public int Price { get; set; }
+        public string UploaderUsername { get; set; }
+        public DateTime UploadDate { get; set; }
         public string Brand { get; set; }
         public string Model { get; set; }
         public Month DateOfPurchase { get; set; }
@@ -16,7 +61,7 @@ namespace Backend
         public FuelType FuelType { get; set; }
         public ChassisType ChassisType { get; set; }
         public string Color { get; set; }
-        public GearboxType Gearbox { get; set; }
+        public GearboxType GearboxType { get; set; }
         public int TotalKilometersDriven { get; set; }
         public DriveWheels DriveWheels { get; set; }
         public string[] Defects { get; set; }
@@ -34,7 +79,7 @@ namespace Backend
         public string[] AdditionalProperties { get; set; }
         public string[] Images { get; set; }
 
-        public bool Equals([AllowNull] Car other)
+        public bool Equals(Car other)
         {
             return this.Id == other.Id;
         }
@@ -45,7 +90,7 @@ namespace Backend
         public int year { get; set; }
         public int month { get; set; }
 
-        public int CompareTo([AllowNull] Month other)
+        public int CompareTo(Month other)
         {
             if (other.year > this.year)
             {
@@ -82,24 +127,24 @@ namespace Backend
 
     public enum FuelType
     {
-        benzinas,
-        dyzelis,
-        elektra
+        gasoline,
+        diesel,
+        electricity
     };
 
     public enum ChassisType
     {
-        universalas,
-        hečbekas,
-        sedanas,
-        visureigis,
-        vienatūris,
+        station_wagon,
+        hatchback,
+        sedan,
+        suv,
+        minivan,
         coupe,
-        kabrioletas,
-        keleivinis_mikroautobusas,
-        kombi_mikroautobusas,
-        krovininis_mikroautobusas,
-        komercinis
+        convertible,
+        passenger_minibus,
+        combi_minibus,
+        freight_minibus,
+        commercial
     };
 
     public enum GearboxType

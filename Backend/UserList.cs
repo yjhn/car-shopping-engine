@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using DataTypes;
 
 namespace Backend
 {
@@ -10,7 +11,6 @@ namespace Backend
         private FileReader userDataReader;
         private FileWriter userDataWriter;
         private Logger logger;
-        private int lastUserId = 0;
 
         public UserList(Logger logger, string userDbPath = null)
         {
@@ -18,28 +18,23 @@ namespace Backend
             userDataReader = new FileReader(logger, userDbPath);
             userDataWriter = new FileWriter(logger, userDbPath);
             userList = userDataReader.GetAllUserData();
-            lastUserId = userDataReader.lastUserId;
         }
 
         // returns null if not found
-        private User GetUser(int id)
+        private User GetUser(string username)
         {
-            return userList.Find(user => user.Id == id);
+            return userList.Find(user => user.Username == username);
         }
 
-        public byte[] JsonGetUser(int id)
+        public byte[] JsonGetUser(string username)
         {
-            return JsonSerializer.SerializeToUtf8Bytes<User>(GetUser(id));
+            return JsonSerializer.SerializeToUtf8Bytes<User>(GetUser(username));
         }
 
         private void AddUser(User user)
         {
             userList.Add(user);
             userDataWriter.WriteUserData(user);
-            if (user.Id > lastUserId)
-            {
-                lastUserId = user.Id;
-            }
         }
 
         public void JsonAddUser(byte[] user)
@@ -54,16 +49,21 @@ namespace Backend
             }
         }
 
-        public void DeleteUser(int id)
+        public void DeleteUser(string username)
         {
             foreach (User user in userList)
             {
-                if (user.Id == id)
+                if (user.Username == username)
                 {
                     userList.Remove(user);
-                    userDataWriter.DeleteCar(id);
+                    userDataWriter.DeleteUser(username);
                 }
             }
+        }
+
+        public bool CheckIfExists(string username)
+        {
+            return userList.Exists(user => user.Username.Equals(username));
         }
     }
 }

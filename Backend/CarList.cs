@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using DataTypes;
 
 namespace Backend
 {
@@ -71,13 +72,10 @@ namespace Backend
         // doesn't add car to the user's ad list
         private void AddCar(Car car)
         {
+            car.Id = lastCarId + 1;
+            lastCarId++;
             carList.Add(car);
             carDataWriter.WriteCarData(car);
-            carDataWriter.WriteCarData(car);
-            if (car.Id > lastCarId)
-            {
-                lastCarId = car.Id;
-            }
         }
 
         // params: Car serialized to JSON
@@ -114,6 +112,19 @@ namespace Backend
                     carDataWriter.DeleteCar(id);
                 }
             }
+        }
+
+        public List<int> GetUserAdIds(string username)
+        {
+            List<int> ids = new List<int>();
+            foreach(Car car in carList)
+            {
+                if (car.UploaderUsername.Equals(username))
+                {
+                    ids.Add(car.Id);
+                }
+            }
+            return ids;
         }
     }
 
