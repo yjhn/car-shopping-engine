@@ -90,7 +90,7 @@ namespace Backend
         public int year { get; set; }
         public int month { get; set; }
 
-        public int CompareTo([AllowNull] Month other)
+        public int CompareTo(Month other)
         {
             if (other.year > this.year)
             {
@@ -127,24 +127,24 @@ namespace Backend
 
     public enum FuelType
     {
-        benzinas,
-        dyzelis,
-        elektra
+        gasoline,
+        diesel,
+        electricity
     };
 
     public enum ChassisType
     {
-        universalas,
-        hečbekas,
-        sedanas,
-        visureigis,
-        vienatūris,
+        station_wagon,
+        hatchback,
+        sedan,
+        suv,
+        minivan,
         coupe,
-        kabrioletas,
-        keleivinis_mikroautobusas,
-        kombi_mikroautobusas,
-        krovininis_mikroautobusas,
-        komercinis
+        convertible,
+        passenger_minibus,
+        combi_minibus,
+        freight_minibus,
+        commercial
     };
 
     public enum GearboxType
