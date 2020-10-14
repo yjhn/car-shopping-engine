@@ -16,9 +16,6 @@ namespace Test1
             InitializeComponent();
             Load += Form2_load;
 
-            browsePage1.Controls.Add(new CarAdMinimal("ADasd", 489, "V65", "Vairavo moteris"));
-
-
         }
 
         private void Form2_load(object sender, EventArgs e)
