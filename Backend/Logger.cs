@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Backend
 {
-    class Logger
+    public class Logger
     {
         private string LogPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\logs\" + DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToLongTimeString().Replace(":", "-") + ".txt";
         private FileStream LogFile;

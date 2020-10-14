@@ -5,7 +5,7 @@ using DataTypes;
 
 namespace Backend
 {
-    class UserList
+    public class UserList
     {
         private List<User> userList;
         private FileReader userDataReader;
