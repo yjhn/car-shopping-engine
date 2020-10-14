@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Backend
+namespace DataTypes
 {
     public class User : IEquatable<User>
     {

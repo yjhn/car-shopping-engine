@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
  * change how i deal with exceptions
 */
 
-namespace Backend
+namespace DataTypes
 {
     public class Car : IEquatable<Car>
     {
