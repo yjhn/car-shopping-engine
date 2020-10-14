@@ -8,24 +8,35 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Net;
 using System.IO;
+using DataTypes;
+using CarEngine.Forms;
 
 namespace CarEngine
 {
     public partial class CarAdMinimal : UserControl
     {
-        public CarAdMinimal(string carModel, float price, string engine, string comment, string base64Image)
+        Car carInfo;
+        
+        public CarAdMinimal(Car carInfo)
         {
             InitializeComponent();
 
-            this.carModel.Text = carModel;
-            this.price.Text = price.ToString() + "€";
-            this.additionInfo.Text = engine;
-            this.additionInfo.Text += " \"" + comment + "\"";
-            carImage.Image = Converter.Base64ToImg(base64Image);
-        }
+            this.carInfo = carInfo;
 
+            this.carModel.Text = $"{carInfo.Brand} {carInfo.Model}";
+            this.price.Text = carInfo.Price.ToString() + "€";
+            this.additionInfo.Text = carInfo.Engine.kw.ToString() +"kW";
+            this.additionInfo.Text += " \"" + carInfo.Comment + "\"";
+            if (carInfo.Images.Length > 0)
+            {
+                carImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
+            }
+        }
+         
         private void carImage_Click(object sender, EventArgs e)
         {
+            CarForm form = new CarForm(carInfo);
+            form.Show();
 
         }
     }

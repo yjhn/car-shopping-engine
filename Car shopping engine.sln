@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarEngine", "WinFormsUI\Car
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend", "Backend\Backend.csproj", "{55465E5F-0C70-4A6F-BF68-B7A7391808BF}"
 EndProject
+<<<<<<< HEAD
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{96EFA4CF-12B1-49BE-8130-7A20C40431FF}"
+=======
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "DataTypes\DataTypes.csproj", "{7A96F441-1694-49A1-BA1B-F85DF30BE92D}"
+>>>>>>> master
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +27,17 @@ Global
 		{55465E5F-0C70-4A6F-BF68-B7A7391808BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55465E5F-0C70-4A6F-BF68-B7A7391808BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55465E5F-0C70-4A6F-BF68-B7A7391808BF}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
+		{96EFA4CF-12B1-49BE-8130-7A20C40431FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96EFA4CF-12B1-49BE-8130-7A20C40431FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96EFA4CF-12B1-49BE-8130-7A20C40431FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96EFA4CF-12B1-49BE-8130-7A20C40431FF}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
 		{7A96F441-1694-49A1-BA1B-F85DF30BE92D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A96F441-1694-49A1-BA1B-F85DF30BE92D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A96F441-1694-49A1-BA1B-F85DF30BE92D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A96F441-1694-49A1-BA1B-F85DF30BE92D}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> master
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

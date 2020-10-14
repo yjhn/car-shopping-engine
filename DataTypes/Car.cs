@@ -14,7 +14,7 @@ namespace DataTypes
         public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, Month dateOfPurchase, Engine engine, FuelType fuelType,
             ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, string[] defects,
             SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, Month nextVehicleInspection,
-            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images)
+            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images,string comment)
         {
             Price = price;
             UploaderUsername = uploaderUsername;
@@ -43,6 +43,7 @@ namespace DataTypes
             Vin = vin;
             AdditionalProperties = additionalProperties;
             Images = images;
+            Comment = comment;
         }
 
         public Car()
@@ -78,6 +79,7 @@ namespace DataTypes
         public string Vin { get; set; }
         public string[] AdditionalProperties { get; set; }
         public string[] Images { get; set; }
+        public string Comment { get; set; }
 
         public bool Equals(Car other)
         {
@@ -123,6 +125,20 @@ namespace DataTypes
         public int hp { get; set; }
         public int kw { get; set; }
         public float volume { get; set; }
+        public Enginetype engineType{get;set;}
+
+    }
+
+    public enum Enginetype
+    {
+        I4,
+        V6,
+        V8,
+        W3,
+        W8,
+        W12,
+        W16,
+        Other
     }
 
     public enum FuelType

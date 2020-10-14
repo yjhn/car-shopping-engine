@@ -151,6 +151,7 @@ namespace Backend
         TotalKilometersDriven,
         NextVehicleInspection,
         OriginalPurchaseCountry,
+        Unknown
     };
 
     public class CarFilters
