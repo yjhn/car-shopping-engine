@@ -1,7 +1,7 @@
-﻿using System;
+﻿using DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using DataTypes;
 
 namespace Backend
 {
@@ -24,7 +24,7 @@ namespace Backend
         public byte[] GetUser(string username)
         {
             User user = userList.Find(user => user.Username == username);
-            return user != null? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
+            return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
         }
 
         public bool AddUser(byte[] user)

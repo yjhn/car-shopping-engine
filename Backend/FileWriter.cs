@@ -1,7 +1,7 @@
-﻿using System;
+﻿using DataTypes;
+using System;
 using System.IO;
 using System.Text.Json;
-using DataTypes;
 
 namespace Backend
 {

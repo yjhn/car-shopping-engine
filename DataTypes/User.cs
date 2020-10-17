@@ -14,7 +14,7 @@ namespace DataTypes
             Email = email;
         }
 
-        public User(){}
+        public User() { }
 
         public string Username { get; set; }
         public long Phone1 { get; set; }

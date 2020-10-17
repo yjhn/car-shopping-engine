@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <Compile Remove="BackendException.cs" />
+    <Compile Remove="ErrorHandler.cs" />
+    <Compile Remove="IErrorHandler.cs" />
     <Compile Remove="Program.cs" />
   </ItemGroup>
 

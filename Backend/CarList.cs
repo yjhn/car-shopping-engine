@@ -85,7 +85,7 @@ namespace Backend
                 carDataWriter.WriteCarData(c);
                 return true;
             }
-            catch(JsonException e)
+            catch (JsonException e)
             {
                 logger.LogException(new Exception("Failed to write car data due to bad serialization", e));
                 return false;
