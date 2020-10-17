@@ -1,28 +1,30 @@
+#define DEBUG
 using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using Backend;
 using System.Diagnostics;
-
+using System.Text.RegularExpressions;
 namespace Server
 {
     public class RequestHandler
     {
         private String rawRequest;
         private const bool debugMode = true;
+        private Response r;
 
         public RequestHandler(String rawRequest)
         {
             this.rawRequest = rawRequest;
         }
+
         public byte[] HandleRequest()
         {
-            Response r;
             try
             {
-                Request newRequest = Parse();
-                Validation isValid = Validator.ValidateRequest(newRequest);
+                Request newRequest = ParseRequest();
+                Validation isValid = ValidateRequest(newRequest);
                 if (isValid != Validation.OK)
                     return MakeResponse(isValid).Format();
                 switch (newRequest.Method)
@@ -33,9 +35,11 @@ namespace Server
                     case "POST":
                         r = ProcessPost(newRequest);
                         break;
-                    default:
+                    case "DELETE":
                         r = ProcessDelete(newRequest);
                         break;
+                    default:
+                        throw new ArgumentException("UnknownMethod");
                 }
             }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is ArgumentException || e is ArgumentNullException)
@@ -50,29 +54,64 @@ namespace Server
             return r.Format();
         }
 
-        private Request Parse()
+        private Request ParseRequest()
         {
-            int methodEnd = rawRequest.IndexOf(" ");
-            String method = rawRequest.Substring(0, methodEnd);
-            method = method.ToUpper();
-            methodEnd++;
-            int resourceEnd = rawRequest.IndexOf(" ", methodEnd);
-            String resource = rawRequest.Substring(methodEnd, resourceEnd - methodEnd);
-            int versionEnd = rawRequest.IndexOf("\r\n");
-            resourceEnd++;
-            string httpVersion = rawRequest.Substring(resourceEnd, versionEnd - resourceEnd);
-            int resNameEnd = resource.IndexOf("?");
+            Regex regex = new Regex(@"^(?<method>[\w]+)\s(?<url>(https?:\/\/)?([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-]+))*))?\s(?<httpVersion>[\w\/\d\.]+)\r\n(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z\,\.:\/\?\d&_]+)\r\n)+\r\n(?<content>[\d\D]*)$");
+            if (!regex.IsMatch(rawRequest))
+                throw new ArgumentException("Invalid request");
+            GroupCollection groups = regex.Matches(rawRequest)[0].Groups;
+            string method = groups["method"].Value.ToUpper();
+            string url = groups["url"].Value;
+            string resource = groups["resource"].Value;
+            CaptureCollection names = groups["queryName"].Captures;
+            CaptureCollection values = groups["queryValue"].Captures;
             Dictionary<string, string> queries = new Dictionary<string, string>();
-            if (resNameEnd == -1)
-                resNameEnd = resource.Length;
-            else
-                queries = SeparateQueries(resource.Substring(resNameEnd + 1, resource.Length - resNameEnd - 1));
-            string resName = resource.Substring(0, resNameEnd);
-            int headersEnd = rawRequest.IndexOf("\r\n\r\n");
-            String content = rawRequest.Substring(headersEnd + 4, rawRequest.Length - headersEnd - 4);
-            List<Header> headers = SeparateHeaders(rawRequest.Substring(versionEnd + 2, headersEnd - versionEnd - 2));
-            Request parsing = new Request(method, resName, queries, httpVersion, headers, content);
+            for (int i = 0; i < names.Count; i++)
+                queries.Add(names[i].Value, values[i].Value);
+            string httpVersion = groups["httpVersion"].Value;
+            names = groups["headerName"].Captures;
+            values = groups["headerValue"].Captures;
+            List<Header> headers = new List<Header>();
+            for (int i = 0; i < names.Count; i++)
+                if (!Header.Contains(headers, names[i].Value))
+                    headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
+                else
+                    throw new ArgumentException("DuplicateHeader");
+            string content = groups["content"].Value;
+            Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
+        }
+
+        private Validation ValidateRequest(Request req)
+        {
+            if (req.HttpVersion != "HTTP/1.1")
+                return Validation.HttpVersionNotSupported;
+
+            // check Host header
+            List<Header> headers = req.Headers;
+            if (!Header.Contains(headers, "HOST"))
+                return Validation.NoHost;
+
+            // Host header validity
+            string hostValue = Header.GetValueByName(headers, "HOST");
+            Regex hostRegex = new Regex(@"^([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?$");
+            if (!hostRegex.IsMatch(hostValue))
+                return Validation.InvalidHost;
+
+            // if full URL was set in resource part, its Host header should match it
+            string url = req.Url;
+            if (url.StartsWith("http"))
+            {
+                int hostFromUrlIndex = url.IndexOf("://") + 3;
+                string hostFromUrl = url.Substring(hostFromUrlIndex, url.Length - hostFromUrlIndex);
+                if (hostFromUrl != hostValue)
+                    return Validation.HostMismatch;
+            }
+
+            if (req.Method == "POST" && !Header.Contains(headers, "CONTENT-LENGTH"))
+                return Validation.NoContentLength;
+
+            return Validation.OK;
         }
 
         private Response ProcessGet(Request req)
@@ -81,14 +120,11 @@ namespace Server
             string res = req.Resource;
             switch (res)
             {
-                case "CARS":
+                case "cars":
                     r = GetCars(req);
                     break;
-                case "USERS":
-                    r = GetUsers(req);
-                    break;
-                case "CHECK_USER":
-                    r = CheckUser(req);
+                case "user":
+                    r = GetUser(req);
                     break;
                 default:
                     r = MakeResponse(404, "", req.Resource);
@@ -105,9 +141,18 @@ namespace Server
                 case "CARS":
                     AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
-                case "USERS":
-                    AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                case "SIGNUP":
+                    {
+                        bool success = true;
+                        //AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                        if (!success)
+                            r = MakeResponse(400, "This username already exists", "");
+                    }
                     break;
+                case "LOGIN":
+                    //r = LogIn(req.Content);
+                    break;
+
                 default:
                     r = MakeResponse(404, "", req.Resource);
                     break;
@@ -198,20 +243,6 @@ namespace Server
             return MakeResponse(200, responseBody);
         }
 
-        private Dictionary<string, string> SeparateQueries(string queryList)
-        {
-            string[] queries = queryList.Split('&', StringSplitOptions.None);
-            string[] pair;
-            Dictionary<string, string> separated = new Dictionary<string, string>();
-            foreach (string q in queries)
-                if (!string.IsNullOrEmpty(q))
-                {
-                    pair = q.Split('=', 2, StringSplitOptions.None);
-                    separated.Add(pair[0], pair[1]);
-                }
-            return separated;
-        }
-
         private int GetId(Request req)
         {
             Dictionary<string, string> queries = req.Queries;
@@ -228,10 +259,10 @@ namespace Server
             return id;
         }
 
-        private Response GetUsers(Request req)
+        private Response GetUser(Request req)
         {
             int id = GetId(req);
-            byte[] responseBody = new UserList(new Logger()).JsonGetUser(id);
+            byte[] responseBody = new UserList(new Logger()).JsonGetUser(id.ToString());
             return MakeResponse(200, responseBody);
         }
 
@@ -243,6 +274,7 @@ namespace Server
         private void AddUser(byte[] userData)
         {
             new UserList(new Logger()).JsonAddUser(userData);
+
         }
 
         private void DeleteCar(int id)
@@ -252,26 +284,7 @@ namespace Server
 
         private void DeleteUser(int id)
         {
-            new UserList(new Logger()).DeleteUser(id);
-        }
-
-        private List<Header> SeparateHeaders(string headerList)
-        {
-            List<Header> headers = new List<Header>();
-            string[] fullHeaders = headerList.Split("\r\n", StringSplitOptions.None);
-            foreach (string h in fullHeaders)
-            {
-                int nameLength = h.IndexOf(":");
-                string name = h.Substring(0, nameLength);
-                name = name.ToUpper();
-                string body = h.Substring(nameLength + 1, h.Length - nameLength - 1);
-                body = System.Text.RegularExpressions.Regex.Replace(body, @"\s+", "");
-                if (!Header.Contains(headers, name))
-                    headers.Add(new Header(name, body));
-                else
-                    throw new ArgumentException("DuplicateHeader");
-            }
-            return headers;
+            new UserList(new Logger()).DeleteUser(id.ToString());
         }
 
         private Response MakeResponse(Validation v)
@@ -290,7 +303,7 @@ namespace Server
         private Response MakeResponse(int statusCode, string content, string debugOutput)
         {
             if (debugMode)
-                Console.WriteLine(debugOutput);
+                Debug.WriteLine(debugOutput);
             return MakeResponse(statusCode, System.Text.Encoding.ASCII.GetBytes(content));
         }
 
@@ -312,11 +325,21 @@ namespace Server
             return r;
         }
 
-        private Response CheckUser(Request req)
+
+        private Response LogIn(byte[] loginData)
         {
-            if (!req.Queries.ContainsKey("USERNAME"))
-                throw new ArgumentException("No username given");
-            return new Response(400);
+            string loginDataStr = System.Text.Encoding.ASCII.GetString(loginData);
+            return new Response(100);
         }
+
+        enum Validation
+        {
+            HttpVersionNotSupported,
+            InvalidHost,
+            HostMismatch,
+            NoContentLength,
+            NoHost,
+            OK
+        };
     }
 }
