@@ -6,13 +6,13 @@ namespace Server
     {
         public string Method
         { get; }
-                  public string Resource
+        public string Resource
         { get; set; }
         public Dictionary<string, string> Queries
         { get; }
         public string HttpVersion
         { get; }
-public List<Header> Headers
+        public List<Header> Headers
         { get; }
         public String Content
         { get; }

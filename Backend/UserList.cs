@@ -5,7 +5,7 @@ using DataTypes;
 
 namespace Backend
 {
-    public class UserList
+    public class UserList : IUserDb
     {
         private List<User> userList;
         private FileReader userDataReader;
@@ -21,53 +21,42 @@ namespace Backend
         }
 
         // returns null if not found
-        private User GetUser(string username)
+        public byte[] GetUser(string username)
         {
-            return userList.Find(user => user.Username == username);
+            User user = userList.Find(user => user.Username == username);
+            return user != null? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
         }
 
-        public byte[] JsonGetUser(string username)
-        {
-            return JsonSerializer.SerializeToUtf8Bytes<User>(GetUser(username));
-        }
-
-        private bool AddUser(User user)
-        {
-            if (!CheckIfExists(user.Username))
-            {
-                userList.Add(user);
-                userDataWriter.WriteUserData(user);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool JsonAddUser(byte[] user)
+        public bool AddUser(byte[] user)
         {
             try
             {
-                return AddUser(JsonSerializer.Deserialize<User>(user));
+                User u = JsonSerializer.Deserialize<User>(user);
+                if (!CheckIfExists(u.Username))
+                {
+                    userList.Add(u);
+                    return userDataWriter.WriteUserData(u); // make filewriter be able to write serialized data
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (JsonException e)
+            {
+                logger.LogException(new Exception("Cannot add user due to bad serialization", e));
+                return false;
             }
             catch (Exception e)
             {
-                logger.LogException(new BackendException("Cannot add user due to bad serialization", e));
+                logger.LogException(e);
                 return false;
             }
         }
 
-        public void DeleteUser(string username)
+        public bool DeleteUser(string username)
         {
-            foreach (User user in userList)
-            {
-                if (user.Username == username)
-                {
-                    userList.Remove(user);
-                    userDataWriter.DeleteUser(username);
-                }
-            }
+            return userList.RemoveAll(user => user.Username == username) == 1 && userDataWriter.DeleteUser(username);
         }
 
         public bool CheckIfExists(string username)
