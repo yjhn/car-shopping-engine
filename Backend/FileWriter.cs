@@ -5,7 +5,7 @@ using DataTypes;
 
 namespace Backend
 {
-    internal class FileWriter
+    class FileWriter
     {
         private string databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
         private Logger logger;
@@ -17,7 +17,7 @@ namespace Backend
             WriteIndented = true
         };
 
-        internal FileWriter(Logger logger, string carDbPath = null, string userDbPath = null)
+        public FileWriter(Logger logger, string carDbPath = null, string userDbPath = null)
         {
             this.logger = logger;
 
@@ -39,7 +39,7 @@ namespace Backend
             }
         }
 
-        internal bool WriteCarData(Car car)
+        public void WriteCarData(Car car)
         {
             string fileName = carDatabasePath + car.Id + ".json";
 
@@ -53,32 +53,28 @@ namespace Backend
                 {
                     writer.Write(jsonUtf8Bytes);
                 }
-                return true;
             }
             catch (Exception e)
             {
                 logger.LogException(e);
-                return false;
             }
         }
 
-        internal bool DeleteCar(int Id)
+        public void DeleteCar(int Id)
         {
             string fileName = carDatabasePath + Id + ".json";
 
             try
             {
                 File.Delete(fileName);
-                return true;
             }
             catch (Exception e)
             {
                 logger.LogException(e);
-                return false;
             }
         }
 
-        internal bool WriteUserData(User user)
+        public void WriteUserData(User user)
         {
             string fileName = userDatabasePath + user.Username + ".json";
 
@@ -92,28 +88,24 @@ namespace Backend
                 {
                     writer.Write(jsonUtf8Bytes);
                 }
-                return true;
             }
             catch (Exception e)
             {
                 logger.LogException(e);
-                return false;
             }
         }
 
-        internal bool DeleteUser(string username)
+        public void DeleteUser(string username)
         {
             string fileName = userDatabasePath + username + ".json";
 
             try
             {
                 File.Delete(fileName);
-                return true;
             }
             catch (Exception e)
             {
                 logger.LogException(e);
-                return false;
             }
         }
     }

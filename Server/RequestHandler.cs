@@ -11,14 +11,10 @@ namespace Server
     {
         private String rawRequest;
         private const bool debugMode = true;
-        private ICarDb carDb;
-        private IUserDb userDb;
 
-        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb)
+        public RequestHandler(String rawRequest)
         {
             this.rawRequest = rawRequest;
-            this.userDb = userDb;
-            this.carDb = carDb;
         }
         public byte[] HandleRequest()
         {
@@ -129,7 +125,7 @@ namespace Server
                     DeleteCar(id);
                     break;
                 case "USERS":
-                    DeleteUser(/* TODO: supply username */);
+                    DeleteUser(id);
                     break;
                 default:
                     r = MakeResponse(404, "", req.Resource);
@@ -187,16 +183,17 @@ namespace Server
                 }
             }
             byte[] responseBody;
+            CarList cs = new CarList(new Logger());
             if (getById)
-                responseBody = carDb.GetCar(id);
+                responseBody = cs.JsonGetCar(id);
             else if (getSorted && amountSet)
-                responseBody = carDb.SortBy(criteria, resultAmount);
+                responseBody = cs.JsonSortBy(criteria, resultAmount);
             else if (getSorted)
-                responseBody = carDb.SortBy(criteria);
+                responseBody = cs.JsonSortBy(criteria);
             else if (amountSet)
-                responseBody = carDb.GetCarList(resultAmount);
+                responseBody = cs.JsonGetCarList(resultAmount);
             else
-                responseBody = carDb.GetCarList();
+                responseBody = cs.JsonGetCarList();
 
             return MakeResponse(200, responseBody);
         }
@@ -234,28 +231,28 @@ namespace Server
         private Response GetUsers(Request req)
         {
             int id = GetId(req);
-            byte[] responseBody = userDb.GetUser(/* TODO: supply username instead of id*/);
+            byte[] responseBody = new UserList(new Logger()).JsonGetUser(id);
             return MakeResponse(200, responseBody);
         }
 
         private void AddCar(byte[] carData)
         {
-            carDb.AddCar(carData);
+            new CarList(new Logger()).JsonAddCar(carData);
         }
 
         private void AddUser(byte[] userData)
         {
-            userDb.AddUser(userData);
+            new UserList(new Logger()).JsonAddUser(userData);
         }
 
         private void DeleteCar(int id)
         {
-            carDb.DeleteCar(id);
+            new CarList(new Logger()).DeleteCar(id);
         }
 
-        private void DeleteUser(string username)
+        private void DeleteUser(int id)
         {
-            userDb.DeleteUser(username);
+            new UserList(new Logger()).DeleteUser(id);
         }
 
         private List<Header> SeparateHeaders(string headerList)

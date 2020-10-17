@@ -1,12 +1,12 @@
-﻿using DataTypes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using DataTypes;
 
 namespace Backend
 {
-    internal class FileReader
+    class FileReader
     {
         private string databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
         private string userDatabasePath;
@@ -14,7 +14,7 @@ namespace Backend
         private Logger logger;
         internal int lastCarId { get; private set; } = 0;
 
-        internal FileReader(Logger logger, string carDbPath = null, string userDbPath = null)
+        public FileReader(Logger logger, string carDbPath = null, string userDbPath = null)
         {
             this.logger = logger;
 
@@ -36,7 +36,7 @@ namespace Backend
             }
         }
 
-        internal Car GetCarData(int Id)
+        public Car GetCarData(int Id)
         {
             if (Directory.Exists(carDatabasePath))
             {
@@ -56,7 +56,7 @@ namespace Backend
             return null;
         }
 
-        internal User GetUserData(string username)
+        public User GetUserData(string username)
         {
             if (Directory.Exists(userDatabasePath))
             {
@@ -76,58 +76,68 @@ namespace Backend
             return null;
         }
 
-        internal List<Car> GetAllCarData()
+        public List<Car> GetAllCarData()
         {
             List<Car> cars = new List<Car>();
             if (Directory.Exists(carDatabasePath))
             {
-                foreach (string file in Directory.EnumerateFiles(carDatabasePath, "*.json"))
+                try
                 {
-                    try
+                    foreach (string file in Directory.EnumerateFiles(carDatabasePath, "*.json"))
                     {
+                        int carId = GetId(file);
+                        if (carId > lastCarId)
+                        {
+                            lastCarId = carId;
+                        }
                         byte[] jsonBytes = File.ReadAllBytes(file);
                         var utf8Reader = new Utf8JsonReader(jsonBytes);
                         Car car = JsonSerializer.Deserialize<Car>(ref utf8Reader);
-                        if (car.Id > lastCarId)
-                        {
-                            lastCarId = car.Id;
-                        }
                         cars.Add(car);
                     }
-                    catch (Exception e)
-                    {
-                        // ignore files that do not hold cars
-                        logger.LogException(new Exception("Garbage file in car database directory", e));
-                    }
+                    return cars;
                 }
-                return cars;
+                catch (Exception e)
+                {
+                    logger.LogException(e);
+                }
             }
             return cars;
         }
 
-        internal List<User> GetAllUserData()
+        public List<User> GetAllUserData()
         {
             List<User> users = new List<User>();
             if (Directory.Exists(userDatabasePath))
             {
-                foreach (string file in Directory.EnumerateFiles(userDatabasePath, "*.json"))
+                try
                 {
-                    try
+                    foreach (string file in Directory.EnumerateFiles(userDatabasePath, "*.json"))
                     {
-                        string username = Path.GetFileNameWithoutExtension(file);
+                        string username = GetUsername(file);
                         byte[] jsonBytes = File.ReadAllBytes(file);
                         var utf8Reader = new Utf8JsonReader(jsonBytes);
                         User user = JsonSerializer.Deserialize<User>(ref utf8Reader);
                         users.Add(user);
                     }
-                    catch (Exception e)
-                    {
-                        // ignore files that do not hold users
-                        logger.LogException(new Exception("Garbage file in user database directory", e));
-                    }
+                    return users;
+                }
+                catch (Exception e)
+                {
+                    logger.LogException(e);
                 }
             }
             return users;
+        }
+
+        private string GetUsername(string filePath)
+        {
+            return Path.GetFileNameWithoutExtension(filePath);
+        }
+
+        private int GetId(string filePath)
+        {
+            return int.Parse(Path.GetFileNameWithoutExtension(filePath));
         }
     }
 }
