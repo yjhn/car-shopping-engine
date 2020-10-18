@@ -28,8 +28,8 @@ namespace Server
                 case 400:
                     statusText = "Bad Request";
                     break;
-                case 403:
-                    statusText = "Forbidden";
+                case 401:
+                    statusText = "Unauthorized";
                     break;
                 case 404:
                     statusText = "Not Found";
@@ -37,13 +37,15 @@ namespace Server
                 case 500:
                     statusText = "Internal Server Error";
                     break;
+                case 501:
+                    statusText = "Not Implemented";
+                    break;
                 case 505:
                     statusText = "HTTP Version Not Supported";
                     break;
                 case 411:
                     statusText = "Length Required";
                     break;
-
                 default:
                     statusText = "Unknown";
                     break;
@@ -58,7 +60,7 @@ namespace Server
                 output.Append($"{h.Name}: {h.Value}{headersDelimitor}");
             }
             output.Append(headersDelimitor);
-            byte[] finalOutput = System.Text.Encoding.ASCII.GetBytes(output.ToString());
+            byte[] finalOutput = Encoding.ASCII.GetBytes(output.ToString());
             int outputSize = finalOutput.Length;
             Array.Resize<byte>(ref finalOutput, outputSize + Content.Length);
             Array.Copy(Content, 0, finalOutput, outputSize, Content.Length);

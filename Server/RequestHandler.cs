@@ -44,19 +44,19 @@ namespace Server
                             ProcessDelete(newRequest);
                             break;
                         default:
-                            r = MakeResponse(501, "");
+                            r = MakeResponse(501);
                             break;
                     }
             }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is ArgumentException || e is ArgumentNullException)
             {
                 logger.LogException(e);
-                r = MakeResponse(400, "");
+                r = MakeResponse(400);
             }
             catch (Exception e)
             {
                 logger.LogException(e);
-                r = MakeResponse(500, "");
+                r = MakeResponse(500);
             }
 
             return r.Format();
@@ -137,7 +137,7 @@ namespace Server
                     GetUser(req.Queries["username"]);
                     break;
                 default:
-                    r = MakeResponse(404, "");
+                    r = MakeResponse(404);
                     break;
             }
         }
@@ -145,41 +145,48 @@ namespace Server
         private void ProcessPost(Request req)
         {
             bool result = false;
-            r = MakeResponse(200, "");
+            r = MakeResponse(200);
             switch (req.Resource)
             {
                 case "car":
+                    //if (!Verify(req))
+                    //return;
                     result = AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
                 case "signup":
                     result = AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
                 case "login":
-                    //r = LogIn(req.Content);
+                    //LogIn(req.Content);
                     break;
                 default:
-                    r = MakeResponse(404, "");
+                    r = MakeResponse(404);
                     break;
             }
             if (result)
-                r = MakeResponse(201, "");
+                r = MakeResponse(201);
         }
 
         private void ProcessDelete(Request req)
         {
-            r = MakeResponse(200, "");
+            //if (!Verify(req))
+            //return;
+            r = MakeResponse(200);
+            bool result = true;
             switch (req.Resource)
             {
                 case "car":
-                    DeleteCar(int.Parse(req.Queries["id"]));
+                    result = DeleteCar(int.Parse(req.Queries["id"]));
                     break;
                 case "user":
-                    DeleteUser(req.Queries["username"]);
+                    result = DeleteUser(req.Queries["username"]);
                     break;
                 default:
-                    r = MakeResponse(404, "");
+                    r = MakeResponse(404);
                     break;
             }
+            if (!result)
+                r.Content = SetContent("Deletion failed");
         }
 
         private void GetCars(Dictionary<string, string> queries)
@@ -267,12 +274,12 @@ namespace Server
                 statusCode = 411;
             else
                 statusCode = 400;
-            return MakeResponse(statusCode, "");
+            return MakeResponse(statusCode);
         }
 
-        private Response MakeResponse(int statusCode, string content)
+        private Response MakeResponse(int statusCode)
         {
-            return MakeResponse(statusCode, System.Text.Encoding.ASCII.GetBytes(content));
+            return MakeResponse(statusCode, SetContent(""));
         }
 
         private Response MakeResponse(int statusCode, byte[] content)
@@ -311,6 +318,19 @@ namespace Server
             if (queries.ContainsKey("fuelType"))
                 cf.FuelType = (FuelType)Enum.Parse(typeof(FuelType), queries["fuelType"]);
             r = MakeResponse(200, carDb.Filter(cf));
+        }
+
+        private byte[] SetContent(string output)
+        {
+            return System.Text.Encoding.ASCII.GetBytes(output);
+        }
+
+        private bool Verify(Request req)
+        {
+            bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
+            if (!verified)
+                r = MakeResponse(401);
+            return verified;
         }
 
         enum Validation

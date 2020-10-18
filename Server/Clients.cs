@@ -10,29 +10,44 @@ namespace Server
         public static int Register(string username)
         {
             var r = new Random();
-            if (!registeredClients.ContainsKey(username))
+            bool success = true;
+            do
             {
-                registeredClients.Add(username, r.Next());
-                clientTimes.Add(username, DateTime.UtcNow);
+                int session = r.Next();
+                if (!registeredClients.ContainsKey(username))
+                {
+                    registeredClients.Add(username, session);
+                    clientTimes.Add(username, DateTime.UtcNow);
+                }
+                else
+                {
+                    registeredClients[username] = session;
+                    clientTimes[username] = DateTime.UtcNow;
+                }
+                int sessionRepeated = 0;
+                foreach (KeyValuePair<string, int> kvp in registeredClients)
+                    if (session == kvp.Value)
+                        sessionRepeated++;
+                if (sessionRepeated > 1)
+                    success = false;
             }
-            else
-            {
-                registeredClients[username] = r.Next();
-                clientTimes[username] = DateTime.UtcNow;
-            }
+            while (!success);
+
             return registeredClients[username];
         }
 
-        public static bool Verify(string username, int id)
+        public static bool Verify(int session)
         {
-            if (!registeredClients.ContainsKey(username))
-                return false;
-            if (registeredClients[username] != id)
-                return false;
-            TimeSpan interval = DateTime.UtcNow - clientTimes[username];
-            if (interval.Hours > 0)
-                return false;
-            return true;
+            foreach (KeyValuePair<string, int> kvp in registeredClients)
+                if (kvp.Value == session)
+                {
+                    TimeSpan interval = DateTime.UtcNow - clientTimes[kvp.Key];
+                    if (interval.Hours > 0)
+                        return false;
+                    else
+                        return true;
+                }
+            return false;
         }
     }
 }
