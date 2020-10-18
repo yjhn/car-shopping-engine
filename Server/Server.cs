@@ -45,7 +45,7 @@ namespace Server
             }
             catch (SocketException e)
             {
-                HandleSocketExceptionMessage(e);
+                logger.LogException(e);
                 tcpServer.Stop();
             }
         }
@@ -68,14 +68,14 @@ namespace Server
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
                 // Process the data sent by the client and make a response.
-                byte[] msg = new RequestHandler(data, carDb, userDb).HandleRequest();
+                byte[] msg = new RequestHandler(data, carDb, userDb, logger).HandleRequest();
 
                 // Send back a response.
                 stream.Write(msg, 0, msg.Length);
             }
             catch (SocketException e)
             {
-                HandleSocketExceptionMessage(e);
+                logger.LogException(e);
             }
 
             // Shutdown and end connection
@@ -83,11 +83,6 @@ namespace Server
             {
                 client.Close();
             }
-        }
-
-        private void HandleSocketExceptionMessage(SocketException e)
-        {
-            Console.WriteLine("Fatal error: {0}", e);
         }
 
         public static void Main(String[] args)

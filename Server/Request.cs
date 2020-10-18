@@ -6,6 +6,8 @@ namespace Server
     {
         public string Method
         { get; }
+        public string Url
+        { get; set; }
         public string Resource
         { get; set; }
         public Dictionary<string, string> Queries
@@ -16,9 +18,10 @@ namespace Server
         { get; }
         public String Content
         { get; }
-        public Request(string method, string resource, Dictionary<string, string> queries, string httpVersion, List<Header> headers, string content)
+        public Request(string method, string url, string resource, Dictionary<string, string> queries, string httpVersion, List<Header> headers, string content)
         {
             Method = method;
+            Url = url;
             Resource = resource;
             Queries = queries;
             HttpVersion = httpVersion;

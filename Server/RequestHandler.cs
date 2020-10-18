@@ -1,188 +1,222 @@
-using Backend;
 using System;
+using System.IO;
+using System.Text;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Backend;
+using DataTypes;
 
 namespace Server
 {
     public class RequestHandler
     {
         private String rawRequest;
-        private const bool debugMode = true;
+        private Response r;
         private ICarDb carDb;
         private IUserDb userDb;
-
-        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb)
+        private Logger logger;
+        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb, Logger logger)
         {
             this.rawRequest = rawRequest;
-            this.userDb = userDb;
             this.carDb = carDb;
+            this.userDb = userDb;
+            this.logger = logger;
         }
+
         public byte[] HandleRequest()
         {
-            Response r;
             try
             {
-                Request newRequest = Parse();
-                Validation isValid = Validator.ValidateRequest(newRequest);
+                Request newRequest = ParseRequest();
+                Validation isValid = ValidateRequest(newRequest);
                 if (isValid != Validation.OK)
-                    return MakeResponse(isValid).Format();
-                switch (newRequest.Method)
-                {
-                    case "GET":
-                        r = ProcessGet(newRequest);
-                        break;
-                    case "POST":
-                        r = ProcessPost(newRequest);
-                        break;
-                    default:
-                        r = ProcessDelete(newRequest);
-                        break;
-                }
+                    r = MakeResponse(isValid);
+                else
+                    switch (newRequest.Method)
+                    {
+                        case "GET":
+                            ProcessGet(newRequest);
+                            break;
+                        case "POST":
+                            ProcessPost(newRequest);
+                            break;
+                        case "DELETE":
+                            ProcessDelete(newRequest);
+                            break;
+                        default:
+                            r = MakeResponse(501, "");
+                            break;
+                    }
             }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is ArgumentException || e is ArgumentNullException)
             {
-                r = MakeResponse(400, "", e.ToString());
+                logger.LogException(e);
+                r = MakeResponse(400, "");
             }
             catch (Exception e)
             {
-                r = MakeResponse(500, "", e.ToString());
+                logger.LogException(e);
+                r = MakeResponse(500, "");
             }
 
             return r.Format();
         }
 
-        private Request Parse()
+        private Request ParseRequest()
         {
-            int methodEnd = rawRequest.IndexOf(" ");
-            String method = rawRequest.Substring(0, methodEnd);
-            method = method.ToUpper();
-            methodEnd++;
-            int resourceEnd = rawRequest.IndexOf(" ", methodEnd);
-            String resource = rawRequest.Substring(methodEnd, resourceEnd - methodEnd);
-            int versionEnd = rawRequest.IndexOf("\r\n");
-            resourceEnd++;
-            string httpVersion = rawRequest.Substring(resourceEnd, versionEnd - resourceEnd);
-            int resNameEnd = resource.IndexOf("?");
+            Regex regex = new Regex(@"^(?<method>[\w]+)\s(?<url>(https?:\/\/)?([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-]+))*))?\s(?<httpVersion>[\w\/\d\.]+)\r\n(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z\,\.:\/\?\d&_]+)\r\n)+\r\n(?<content>[\d\D]*)$");
+            if (!regex.IsMatch(rawRequest))
+                throw new ArgumentException("Invalid request");
+            GroupCollection groups = regex.Matches(rawRequest)[0].Groups;
+            string method = groups["method"].Value.ToUpper();
+            string url = groups["url"].Value;
+            string resource = groups["resource"].Value;
+            CaptureCollection names = groups["queryName"].Captures;
+            CaptureCollection values = groups["queryValue"].Captures;
             Dictionary<string, string> queries = new Dictionary<string, string>();
-            if (resNameEnd == -1)
-                resNameEnd = resource.Length;
-            else
-                queries = SeparateQueries(resource.Substring(resNameEnd + 1, resource.Length - resNameEnd - 1));
-            string resName = resource.Substring(0, resNameEnd);
-            int headersEnd = rawRequest.IndexOf("\r\n\r\n");
-            String content = rawRequest.Substring(headersEnd + 4, rawRequest.Length - headersEnd - 4);
-            List<Header> headers = SeparateHeaders(rawRequest.Substring(versionEnd + 2, headersEnd - versionEnd - 2));
-            Request parsing = new Request(method, resName, queries, httpVersion, headers, content);
+            for (int i = 0; i < names.Count; i++)
+                queries.Add(names[i].Value, values[i].Value);
+            string httpVersion = groups["httpVersion"].Value;
+            names = groups["headerName"].Captures;
+            values = groups["headerValue"].Captures;
+            List<Header> headers = new List<Header>();
+            for (int i = 0; i < names.Count; i++)
+                if (!Header.Contains(headers, names[i].Value))
+                    headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
+                else
+                    throw new ArgumentException("DuplicateHeader");
+            string content = groups["content"].Value;
+            Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
         }
 
-        private Response ProcessGet(Request req)
+        private Validation ValidateRequest(Request req)
         {
-            Response r;
+            if (req.HttpVersion != "HTTP/1.1")
+                return Validation.HttpVersionNotSupported;
+
+            // check Host header
+            List<Header> headers = req.Headers;
+            if (!Header.Contains(headers, "HOST"))
+                return Validation.NoHost;
+
+            // Host header validity
+            string hostValue = Header.GetValueByName(headers, "HOST");
+            Regex hostRegex = new Regex(@"^([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?$");
+            if (!hostRegex.IsMatch(hostValue))
+                return Validation.InvalidHost;
+
+            // if full URL was set in resource part, its Host header should match it
+            string url = req.Url;
+            if (url.StartsWith("http"))
+            {
+                int hostFromUrlIndex = url.IndexOf("://") + 3;
+                string hostFromUrl = url.Substring(hostFromUrlIndex, url.Length - hostFromUrlIndex);
+                if (hostFromUrl != hostValue)
+                    return Validation.HostMismatch;
+            }
+
+            if (req.Method == "POST" && !Header.Contains(headers, "CONTENT-LENGTH"))
+                return Validation.NoContentLength;
+
+            return Validation.OK;
+        }
+
+        private void ProcessGet(Request req)
+        {
             string res = req.Resource;
             switch (res)
             {
-                case "CARS":
-                    r = GetCars(req);
+                case "cars":
+                    GetCars(req.Queries);
                     break;
-                case "USERS":
-                    r = GetUsers(req);
+                case "cars/filtered":
+                    GetFilteredCars(req.Queries);
                     break;
-                case "CHECK_USER":
-                    r = CheckUser(req);
+                case "user":
+                    GetUser(req.Queries["username"]);
                     break;
                 default:
-                    r = MakeResponse(404, "", req.Resource);
+                    r = MakeResponse(404, "");
                     break;
             }
-            return r;
         }
 
-        private Response ProcessPost(Request req)
+        private void ProcessPost(Request req)
         {
-            Response r = MakeResponse(201, "");
+            bool result = false;
+            r = MakeResponse(200, "");
             switch (req.Resource)
             {
-                case "CARS":
-                    AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                case "car":
+                    result = AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
-                case "USERS":
-                    AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                case "signup":
+                    result = AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                    break;
+                case "login":
+                    //r = LogIn(req.Content);
                     break;
                 default:
-                    r = MakeResponse(404, "", req.Resource);
+                    r = MakeResponse(404, "");
                     break;
             }
-            return r;
+            if (result)
+                r = MakeResponse(201, "");
         }
 
-        private Response ProcessDelete(Request req)
+        private void ProcessDelete(Request req)
         {
-            Response r = MakeResponse(200, "");
-            int id = GetId(req);
+            r = MakeResponse(200, "");
             switch (req.Resource)
             {
-                case "CARS":
-                    DeleteCar(id);
+                case "car":
+                    DeleteCar(int.Parse(req.Queries["id"]));
                     break;
-                case "USERS":
-                    DeleteUser(/* TODO: supply username */);
+                case "user":
+                    DeleteUser(req.Queries["username"]);
                     break;
                 default:
-                    r = MakeResponse(404, "", req.Resource);
+                    r = MakeResponse(404, "");
                     break;
             }
-            return r;
         }
 
-        private Response GetCars(Request req)
+        private void GetCars(Dictionary<string, string> queries)
         {
             int id = -1, resultAmount = -1;
             bool getSorted = false, getById = false, amountSet = false;
             ArgumentException incompatible = new ArgumentException("Incompatible queries");
             Type enumType = typeof(SortingCriteria);
             SortingCriteria criteria = (SortingCriteria)Enum.Parse(enumType, "Unknown");
-            Dictionary<string, string> queries = req.Queries;
-            foreach (KeyValuePair<string, string> kvp in queries)
+            if (queries.ContainsKey("id"))
             {
-                switch (kvp.Key)
+                id = int.Parse(queries["id"]);
+                getById = true;
+            }
+            if (queries.ContainsKey("sortby"))
+            {
+                getSorted = true;
+                if (getById)
+                    throw incompatible;
+                string sortBy = queries["sortby"];
+                foreach (string name in SortingCriteria.GetNames(enumType))
                 {
-                    case "SORTBY":
-                        {
-                            if (getById)
-                                throw incompatible;
-                            getSorted = true;
-                            string sortBy = kvp.Value;
-                            foreach (string name in SortingCriteria.GetNames(enumType))
-                            {
-                                if (name == sortBy)
-                                {
-                                    criteria = (SortingCriteria)Enum.Parse(enumType, name);
-                                    break;
-                                }
-                            }
-                        }
+                    if (name == sortBy)
+                    {
+                        criteria = (SortingCriteria)Enum.Parse(enumType, name);
                         break;
-                    case "ID":
-                        {
-                            if (getSorted)
-                                throw incompatible;
-                            getById = true;
-                            id = int.Parse(kvp.Value);
-                        }
-                        break;
-                    case "RESULTAMOUNT":
-                        {
-                            if (getById)
-                                throw incompatible;
-                            resultAmount = int.Parse(kvp.Value);
-                            amountSet = true;
-                        }
-                        break;
-                    default:
-                        throw new ArgumentException($"Unknown query: {kvp.Key}");
+                    }
                 }
             }
+            if (queries.ContainsKey("resultamount"))
+            {
+                if (getById)
+                    throw incompatible;
+                resultAmount = int.Parse(queries["resultamount"]);
+                amountSet = true;
+            }
+
             byte[] responseBody;
             if (getById)
                 responseBody = carDb.GetCar(id);
@@ -195,88 +229,37 @@ namespace Server
             else
                 responseBody = carDb.GetCarList();
 
-            return MakeResponse(200, responseBody);
+            r = MakeResponse(200, responseBody);
         }
 
-        private Dictionary<string, string> SeparateQueries(string queryList)
+        private void GetUser(string username)
         {
-            string[] queries = queryList.Split('&', StringSplitOptions.None);
-            string[] pair;
-            Dictionary<string, string> separated = new Dictionary<string, string>();
-            foreach (string q in queries)
-                if (!string.IsNullOrEmpty(q))
-                {
-                    pair = q.Split('=', 2, StringSplitOptions.None);
-                    separated.Add(pair[0], pair[1]);
-                }
-            return separated;
+            byte[] responseBody = userDb.GetUser(username);
+            r = MakeResponse(200, responseBody);
         }
 
-        private int GetId(Request req)
+        private bool AddCar(byte[] carData)
         {
-            Dictionary<string, string> queries = req.Queries;
-            string idValue;
-            try
-            {
-                idValue = queries["ID"];
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new ArgumentException("ID is required");
-            }
-            int id = int.Parse(idValue);
-            return id;
+            return carDb.AddCar(carData);
         }
 
-        private Response GetUsers(Request req)
+        private bool AddUser(byte[] userData)
         {
-            int id = GetId(req);
-            byte[] responseBody = userDb.GetUser(/* TODO: supply username instead of id*/);
-            return MakeResponse(200, responseBody);
+            return userDb.AddUser(userData);
         }
 
-        private void AddCar(byte[] carData)
+        private bool DeleteCar(int id)
         {
-            carDb.AddCar(carData);
+            return carDb.DeleteCar(id);
         }
 
-        private void AddUser(byte[] userData)
+        private bool DeleteUser(string username)
         {
-            userDb.AddUser(userData);
-        }
-
-        private void DeleteCar(int id)
-        {
-            carDb.DeleteCar(id);
-        }
-
-        private void DeleteUser(string username)
-        {
-            userDb.DeleteUser(username);
-        }
-
-        private List<Header> SeparateHeaders(string headerList)
-        {
-            List<Header> headers = new List<Header>();
-            string[] fullHeaders = headerList.Split("\r\n", StringSplitOptions.None);
-            foreach (string h in fullHeaders)
-            {
-                int nameLength = h.IndexOf(":");
-                string name = h.Substring(0, nameLength);
-                name = name.ToUpper();
-                string body = h.Substring(nameLength + 1, h.Length - nameLength - 1);
-                body = System.Text.RegularExpressions.Regex.Replace(body, @"\s+", "");
-                if (!Header.Contains(headers, name))
-                    headers.Add(new Header(name, body));
-                else
-                    throw new ArgumentException("DuplicateHeader");
-            }
-            return headers;
+            return userDb.DeleteUser(username);
         }
 
         private Response MakeResponse(Validation v)
         {
-            string debugOutput = v.ToString();
             int statusCode = 0;
             if (v == Validation.HttpVersionNotSupported)
                 statusCode = 505;
@@ -284,14 +267,7 @@ namespace Server
                 statusCode = 411;
             else
                 statusCode = 400;
-            return MakeResponse(statusCode, "", debugOutput);
-        }
-
-        private Response MakeResponse(int statusCode, string content, string debugOutput)
-        {
-            if (debugMode)
-                Console.WriteLine(debugOutput);
-            return MakeResponse(statusCode, System.Text.Encoding.ASCII.GetBytes(content));
+            return MakeResponse(statusCode, "");
         }
 
         private Response MakeResponse(int statusCode, string content)
@@ -312,11 +288,39 @@ namespace Server
             return r;
         }
 
-        private Response CheckUser(Request req)
+
+        private Response LogIn(byte[] loginData)
         {
-            if (!req.Queries.ContainsKey("USERNAME"))
-                throw new ArgumentException("No username given");
-            return new Response(400);
+            string loginDataStr = System.Text.Encoding.ASCII.GetString(loginData);
+            return new Response(100);
         }
+
+        private void GetFilteredCars(Dictionary<string, string> queries)
+        {
+            CarFilters cf = new CarFilters();
+            if (queries.ContainsKey("priceFrom"))
+                cf.PriceFrom = int.Parse(queries["priceFrom"]);
+            if (queries.ContainsKey("priceTo"))
+                cf.PriceTo = int.Parse(queries["priceTo"]);
+            if (queries.ContainsKey("username"))
+                cf.Username = queries["username"];
+            if (queries.ContainsKey("yearFrom"))
+                cf.YearFrom = int.Parse(queries["yearFrom"]);
+            if (queries.ContainsKey("yearTo"))
+                cf.YearTo = int.Parse(queries["yearTo"]);
+            if (queries.ContainsKey("fuelType"))
+                cf.FuelType = (FuelType)Enum.Parse(typeof(FuelType), queries["fuelType"]);
+            r = MakeResponse(200, carDb.Filter(cf));
+        }
+
+        enum Validation
+        {
+            HttpVersionNotSupported,
+            InvalidHost,
+            HostMismatch,
+            NoContentLength,
+            NoHost,
+            OK
+        };
     }
 }
