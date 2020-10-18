@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-/*
- * change how i deal with exceptions
-*/
 
 namespace DataTypes
 {
@@ -14,7 +9,7 @@ namespace DataTypes
         public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, Month dateOfPurchase, Engine engine, FuelType fuelType,
             ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, string[] defects,
             SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, Month nextVehicleInspection,
-            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images,string comment)
+            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images, string comment)
         {
             Price = price;
             UploaderUsername = uploaderUsername;
@@ -125,7 +120,7 @@ namespace DataTypes
         public int hp { get; set; }
         public int kw { get; set; }
         public float volume { get; set; }
-        public Enginetype engineType{get;set;}
+        public Enginetype engineType { get; set; }
 
     }
 

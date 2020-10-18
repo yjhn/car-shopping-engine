@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace DataTypes
 {
@@ -15,10 +14,8 @@ namespace DataTypes
             Email = email;
         }
 
-        public User()
-        {
-            ;
-        }
+        public User() { }
+
         public string Username { get; set; }
         public long Phone1 { get; set; }
         public long Phone2 { get; set; }

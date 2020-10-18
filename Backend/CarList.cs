@@ -1,13 +1,12 @@
-﻿using System;
+﻿using DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
-using DataTypes;
 
 namespace Backend
 {
-    public class CarList
+    public class CarList : ICarDb
     {
         public List<Car> carList;
         private FileReader carDataReader;
@@ -24,19 +23,13 @@ namespace Backend
             lastCarId = carDataReader.lastCarId;
         }
 
-        private List<Car> GetCarList(int resultAmount = 50)
-        {
-            return carList.Take(resultAmount).ToList<Car>();
-        }
-
-
         // returns List<Car> serialized to JSON
-        public byte[] JsonGetCarList(int resultAmount = 50)
+        public byte[] GetCarList(int resultAmount = 50)
         {
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(GetCarList(resultAmount));
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Take(resultAmount).ToList<Car>());
         }
 
-        private List<Car> SortBy(SortingCriteria sortBy, int resultAmount = 50)
+        public byte[] SortBy(SortingCriteria sortBy, int resultAmount = 50)
         {
             switch (sortBy)
             {
@@ -61,67 +54,56 @@ namespace Backend
                 default:
                     throw new ArgumentException("Bad compare criteria");
             }
-            return carList.Take(resultAmount).ToList<Car>();
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Take(resultAmount).ToList<Car>());
         }
 
-        public byte[] JsonFilter(CarFilters filters)
+        public byte[] Filter(CarFilters filters)
         {
             List<Car> filteredCarList = carList;
 
-            if(filters.PriceFrom.HasValue && filters.PriceTo.HasValue)
+            if (filters.PriceFrom.HasValue && filters.PriceTo.HasValue)
                 filteredCarList = (from car in carList where (car.Price >= filters.PriceFrom && car.Price <= filters.PriceTo) select car).ToList();
-            if(!string.IsNullOrEmpty(filters.Username))
+            if (!string.IsNullOrEmpty(filters.Username))
                 filteredCarList = (from car in carList where car.UploaderUsername.Equals(filters.Username) select car).ToList();
-            if(filters.YearFrom.HasValue && filters.YearTo.HasValue)
+            if (filters.YearFrom.HasValue && filters.YearTo.HasValue)
                 filteredCarList = (from car in carList where (car.DateOfPurchase.year >= filters.YearFrom && car.DateOfPurchase.year <= filters.YearTo) select car).ToList();
-            if(filters.FuelType.HasValue)
+            if (filters.FuelType.HasValue)
                 filteredCarList = (from car in carList where car.FuelType == filters.FuelType select car).ToList();
 
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(filteredCarList);
         }
 
-        // returns List<Car> serialized to JSON
-        public byte[] JsonSortBy(SortingCriteria sortBy, int resultAmount = 50)
-        {
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(SortBy(sortBy, resultAmount));
-        }
-
-        // doesn't add car to the user's ad list
-        private void AddCar(Car car)
-        {
-            car.Id = lastCarId + 1;
-            lastCarId++;
-            carList.Add(car);
-            carDataWriter.WriteCarData(car);
-        }
-
         // params: Car serialized to JSON
-        public void JsonAddCar(byte[] car)
+        public bool AddCar(byte[] car)
         {
             try
             {
-                AddCar(JsonSerializer.Deserialize<Car>(car));
+                Car c = JsonSerializer.Deserialize<Car>(car);
+                c.Id = lastCarId + 1;
+                lastCarId++;
+                carList.Add(c);
+                carDataWriter.WriteCarData(c);
+                return true;
+            }
+            catch (JsonException e)
+            {
+                logger.LogException(new Exception("Failed to write car data due to bad serialization", e));
+                return false;
             }
             catch (Exception e)
             {
-                logger.LogException(new BackendException("Failed to write car due to bad serialization", e));
+                logger.LogException(e);
+                return false;
             }
         }
 
-
-
-        // returns null if not found
-        private Car GetCar(int id)
+        public byte[] GetCar(int id)
         {
-            return carList.Find(car => car.Id == id);
+            Car car = carList.Find(car => car.Id == id);
+            return car != null ? JsonSerializer.SerializeToUtf8Bytes<Car>(car) : null;
         }
 
-        public byte[] JsonGetCar(int id)
-        {
-            return JsonSerializer.SerializeToUtf8Bytes<Car>(GetCar(id));
-        }
-
-        public void DeleteCar(int id)
+        public bool DeleteCar(int id)
         {
             foreach (Car car in carList)
             {
@@ -129,14 +111,16 @@ namespace Backend
                 {
                     carList.Remove(car);
                     carDataWriter.DeleteCar(id);
+                    return true;
                 }
             }
+            return false;
         }
 
         public List<int> GetUserAdIds(string username)
         {
             List<int> ids = new List<int>();
-            foreach(Car car in carList)
+            foreach (Car car in carList)
             {
                 if (car.UploaderUsername.Equals(username))
                 {
@@ -160,8 +144,8 @@ namespace Backend
 
     public class CarFilters
     {
-        public decimal? PriceFrom { get; set; }
-        public decimal? PriceTo { get; set; }
+        public int? PriceFrom { get; set; }
+        public int? PriceTo { get; set; }
         public string Username { get; set; }
         public int? YearFrom { get; set; }
         public int? YearTo { get; set; }
