@@ -64,7 +64,7 @@ namespace Server
 
         private Request ParseRequest()
         {
-            Regex regex = new Regex(@"^(?<method>[\w]+)\s(?<url>(https?:\/\/)?([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-]+))*))?\s(?<httpVersion>[\w\/\d\.]+)\r\n(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z\,\.:\/\?\d&_]+)\r\n)+\r\n(?<content>[\d\D]*)$");
+            Regex regex = new Regex(@"^(?<method>[\w]+)\s(?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-]+))*))?\s(?<httpVersion>[\w\/\d\.]+)\r\n(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z\,\.:\/\?\d&_]+)\r\n)+\r\n(?<content>[\d\D]*)$");
             if (!regex.IsMatch(rawRequest))
                 throw new ArgumentException("Invalid request");
             GroupCollection groups = regex.Matches(rawRequest)[0].Groups;
@@ -171,7 +171,6 @@ namespace Server
         {
             //if (!Verify(req))
             //return;
-            r = MakeResponse(200);
             bool result = true;
             switch (req.Resource)
             {
@@ -186,7 +185,9 @@ namespace Server
                     break;
             }
             if (!result)
-                r.Content = SetContent("Deletion failed");
+                r = MakeResponse(200, SetContent("Deletion failed"), "text/plain");
+            else
+                r = MakeResponse(200);
         }
 
         private void GetCars(Dictionary<string, string> queries)
@@ -282,14 +283,16 @@ namespace Server
             return MakeResponse(statusCode, SetContent(""));
         }
 
-        private Response MakeResponse(int statusCode, byte[] content)
+        private Response MakeResponse(int statusCode, byte[] content, string contentType = "application/json")
         {
             Response r = new Response(statusCode);
             r.Content = content;
             List<Header> headers = new List<Header>();
             headers.Add(new Header("Connection", "close"));
-            headers.Add(new Header("Date", DateTime.UtcNow.ToString()));
+            headers.Add(new Header("Date", DateTime.Now.ToUniversalTime().ToString("r")));
             headers.Add(new Header("Server", "UnquestionableSolutions"));
+            if (content.Length > 0)
+                headers.Add(new Header("Content-Type", contentType));
             headers.Add(new Header("Content-Length", content.Length.ToString()));
             r.Headers = headers;
             return r;
@@ -343,4 +346,5 @@ namespace Server
             OK
         };
     }
+
 }
