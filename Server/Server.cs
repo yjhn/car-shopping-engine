@@ -19,13 +19,17 @@ namespace Server
         private const string certFileName = @"..\..\..\ssl-certificate.pfx";
         private X509Certificate serverCertificate;
         private const string password = "burbulometodas";
-        public Server(String ip, int port, Logger logger, ICarDb carDb, IUserDb userDb)
+        private string host, protocol = "https";
+        private int port;
+        public Server(String host, int port, Logger logger, ICarDb carDb, IUserDb userDb)
         {
             this.logger = logger;
             this.carDb = carDb;
             this.userDb = userDb;
+            this.host = host;
+            this.port = port;
 
-            IPAddress localAddr = IPAddress.Parse(ip);
+            IPAddress localAddr = IPAddress.Parse(host);
             tcpServer = new TcpListener(localAddr, port);
             tcpServer.Start();
             startListener();
@@ -76,7 +80,7 @@ namespace Server
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
                 // Process the data sent by the client and make a response.
-                byte[] msg = new RequestHandler(data, carDb, userDb, logger).HandleRequest();
+                byte[] msg = new RequestHandler(data, carDb, userDb, logger, protocol, host, port).HandleRequest();
 
                 // Send back a response.
                 sslStream.Write(msg, 0, msg.Length);

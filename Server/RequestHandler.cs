@@ -15,12 +15,17 @@ namespace Server
         private ICarDb carDb;
         private IUserDb userDb;
         private Logger logger;
-        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb, Logger logger)
+        private string protocol, host;
+        private int port;
+        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb, Logger logger, string protocol, string host, int port)
         {
             this.rawRequest = rawRequest;
             this.carDb = carDb;
             this.userDb = userDb;
             this.logger = logger;
+            this.protocol = protocol;
+            this.host = host;
+            this.port = port;
         }
 
         public byte[] HandleRequest()
@@ -144,17 +149,15 @@ namespace Server
 
         private void ProcessPost(Request req)
         {
-            bool result = false;
-            r = MakeResponse(200);
             switch (req.Resource)
             {
                 case "car":
                     //if (!Verify(req))
                     //return;
-                    result = AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                    AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
                 case "signup":
-                    result = AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                    AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
                 case "login":
                     if (req.Queries.ContainsKey("username") && req.Queries.ContainsKey("hashedpassword"))
@@ -166,8 +169,6 @@ namespace Server
                     r = MakeResponse(404);
                     break;
             }
-            if (result)
-                r = MakeResponse(201);
         }
 
         private void ProcessDelete(Request req)
@@ -249,14 +250,26 @@ namespace Server
             r = MakeResponse(200, responseBody);
         }
 
-        private bool AddCar(byte[] carData)
+        private void AddCar(byte[] carData)
         {
-            return carDb.AddCar(carData);
+            bool result = carDb.AddCar(carData);
+            if (result)
+            {
+                r = MakeResponse(201);
+                int id = new CarList(logger).lastCarId;
+                r.Headers.Add(new Header("Location", "{protocol}://{host}:{port}/cars/{id}"));
+            }
+            else
+                r = MakeResponse(200);
         }
 
-        private bool AddUser(byte[] userData)
+        private void AddUser(byte[] userData)
         {
-            return userDb.AddUser(userData);
+            bool result = userDb.AddUser(userData);
+            if (result)
+                r = MakeResponse(201);
+            else
+                r = MakeResponse(200);
         }
 
         private bool DeleteCar(int id)
@@ -295,7 +308,7 @@ namespace Server
             headers.Add(new Header("Date", DateTime.Now.ToUniversalTime().ToString("r")));
             headers.Add(new Header("Server", "UnquestionableSolutions"));
             if (content.Length > 0)
-                headers.Add(new Header("Content-Type", contentType));
+                headers.Add(new Header("Content-Type", "{contentType}; charset=utf-8"));
             headers.Add(new Header("Content-Length", content.Length.ToString()));
             r.Headers = headers;
             return r;
@@ -308,7 +321,7 @@ namespace Server
                 r = MakeResponse(400);
             else
                 r = MakeResponse(201);
-                    }
+        }
 
         private void GetFilteredCars(Dictionary<string, string> queries)
         {

@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
-namespace Server
+namespace DataTypes
 {
     public class Request
     {
         public string Method
-        { get; }
+        { get; set;}
         public string Url
         { get; set; }
         public string Resource
         { get; set; }
         public Dictionary<string, string> Queries
-        { get; }
+        { get; set; }
         public string HttpVersion
-        { get; }
+        { get; set;}
         public List<Header> Headers
-        { get; }
+        { get; set;}
         public String Content
-        { get; }
+        { get; set;}
         public Request(string method, string url, string resource, Dictionary<string, string> queries, string httpVersion, List<Header> headers, string content)
         {
             Method = method;
