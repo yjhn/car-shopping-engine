@@ -157,7 +157,10 @@ namespace Server
                     result = AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
                 case "login":
-                    //LogIn(req.Content);
+                    if (req.Queries.ContainsKey("username") && req.Queries.ContainsKey("hashedpassword"))
+                        Login(req.Queries["username"], req.Queries["hashedpassword"]);
+                    else
+                        r = MakeResponse(400);
                     break;
                 default:
                     r = MakeResponse(404);
@@ -298,12 +301,14 @@ namespace Server
             return r;
         }
 
-
-        private Response LogIn(byte[] loginData)
+        private void Login(string username, string hashedPassword)
         {
-            string loginDataStr = System.Text.Encoding.ASCII.GetString(loginData);
-            return new Response(100);
-        }
+            bool success = userDb.Authenticate(username, hashedPassword);
+            if (!success)
+                r = MakeResponse(400);
+            else
+                r = MakeResponse(201);
+                    }
 
         private void GetFilteredCars(Dictionary<string, string> queries)
         {
