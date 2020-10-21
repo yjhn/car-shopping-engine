@@ -63,5 +63,10 @@ namespace Backend
         {
             return userList.Exists(user => user.Username.Equals(username));
         }
+
+        public bool Authenticate(string username, string hashedPassword)
+        {
+            return userList.Exists((user) => user.Username.Equals(username) && user.HashedPassword.Equals(hashedPassword));
+        }
     }
 }

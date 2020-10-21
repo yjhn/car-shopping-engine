@@ -13,5 +13,8 @@
 
         // returns: true, if user already exists, false otherwise
         public bool CheckIfExists(string username);
+
+        // returns: true, if such a user exists, false otherwise
+        public bool Authenticate(string username, string hashedPassword);
     }
 }
