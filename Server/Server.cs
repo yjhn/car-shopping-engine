@@ -1,18 +1,24 @@
-﻿using Backend;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Net.Security;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using Backend;
 namespace Server
 {
 
     public class Server
     {
-        TcpListener tcpServer = null;
+        private TcpListener tcpServer = null;
         private const int maxBufferLength = 5000;
         private Logger logger;
         private ICarDb carDb;
         private IUserDb userDb;
+        private const string certFileName = @"..\..\..\ssl-certificate.pfx";
+        private X509Certificate serverCertificate;
+        private const string password = "burbulometodas";
         public Server(String ip, int port, Logger logger, ICarDb carDb, IUserDb userDb)
         {
             this.logger = logger;
@@ -43,7 +49,7 @@ namespace Server
                     t.Start(tcpClient);
                 }
             }
-            catch (SocketException e)
+            catch (Exception e)
             {
                 logger.LogException(e);
                 tcpServer.Stop();
@@ -54,16 +60,18 @@ namespace Server
         private void ReceiveRequests(Object clientObj)
         {
             TcpClient client = (TcpClient)clientObj;
-
-            // Get a stream object for reading and writing
-            NetworkStream stream = client.GetStream();
-
-            String data = null;
-            byte[] bytes = new Byte[maxBufferLength];
-
+            SslStream sslStream = new SslStream(client.GetStream(), false);
             try
             {
-                int i = stream.Read(bytes, 0, bytes.Length);
+                serverCertificate = new X509Certificate(certFileName, password);
+                sslStream.AuthenticateAsServer(serverCertificate, clientCertificateRequired: false, checkCertificateRevocation: true);
+                sslStream.ReadTimeout = 5000;
+                sslStream.WriteTimeout = 5000;
+
+                String data = null;
+                byte[] bytes = new Byte[maxBufferLength];
+
+                int i = sslStream.Read(bytes, 0, bytes.Length);
                 // Translate data bytes to a ASCII string.
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
@@ -71,16 +79,19 @@ namespace Server
                 byte[] msg = new RequestHandler(data, carDb, userDb, logger).HandleRequest();
 
                 // Send back a response.
-                stream.Write(msg, 0, msg.Length);
+                sslStream.Write(msg, 0, msg.Length);
             }
-            catch (SocketException e)
+            catch (Exception e)
             {
                 logger.LogException(e);
+                if (e.InnerException != null)
+                    logger.LogException(e.InnerException);
             }
 
             // Shutdown and end connection
             finally
             {
+                sslStream.Close();
                 client.Close();
             }
         }
