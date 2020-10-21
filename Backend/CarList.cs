@@ -50,7 +50,7 @@ namespace Backend
                     break;
                 case (SortingCriteria.OriginalPurchaseCountry):
                     carList.Sort((x, y) => x.OriginalPurchaseCountry.CompareTo(y.OriginalPurchaseCountry));
-                    break; ;
+                    break;
                 default:
                     throw new ArgumentException("Bad compare criteria");
             }
@@ -129,26 +129,5 @@ namespace Backend
             }
             return ids;
         }
-    }
-
-    public enum SortingCriteria
-    {
-        UploadDateOrId,
-        Price,
-        DateOfPurchase,
-        TotalKilometersDriven,
-        NextVehicleInspection,
-        OriginalPurchaseCountry,
-        Unknown
-    };
-
-    public class CarFilters
-    {
-        public int? PriceFrom { get; set; }
-        public int? PriceTo { get; set; }
-        public string Username { get; set; }
-        public int? YearFrom { get; set; }
-        public int? YearTo { get; set; }
-        public FuelType? FuelType { get; set; }
     }
 }
