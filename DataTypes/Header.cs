@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace Server
+namespace DataTypes
 {
     public class Header
     {
