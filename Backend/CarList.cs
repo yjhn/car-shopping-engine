@@ -11,7 +11,7 @@ namespace Backend
         public List<Car> carList;
         private FileReader carDataReader;
         private FileWriter carDataWriter;
-        public int lastCarId { get; internal set; }
+        public uint lastCarId { get; internal set; }
         private Logger logger;
 
         public CarList(Logger logger, string carDbPath = null)
@@ -97,13 +97,13 @@ namespace Backend
             }
         }
 
-        public byte[] GetCar(int id)
+        public byte[] GetCar(uint id)
         {
             Car car = carList.Find(car => car.Id == id);
             return car != null ? JsonSerializer.SerializeToUtf8Bytes<Car>(car) : null;
         }
 
-        public bool DeleteCar(int id)
+        public bool DeleteCar(uint id)
         {
             foreach (Car car in carList)
             {
@@ -117,9 +117,9 @@ namespace Backend
             return false;
         }
 
-        public List<int> GetUserAdIds(string username)
+        public List<uint> GetUserAdIds(string username)
         {
-            List<int> ids = new List<int>();
+            List<uint> ids = new List<uint>();
             foreach (Car car in carList)
             {
                 if (car.UploaderUsername.Equals(username))

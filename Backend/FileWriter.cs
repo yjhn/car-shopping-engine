@@ -62,7 +62,7 @@ namespace Backend
             }
         }
 
-        internal bool DeleteCar(int Id)
+        internal bool DeleteCar(uint Id)
         {
             string fileName = carDatabasePath + Id + ".json";
 

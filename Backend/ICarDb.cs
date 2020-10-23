@@ -13,10 +13,10 @@ namespace Backend
 
         public bool AddCar(byte[] car);
 
-        public byte[] GetCar(int id);
+        public byte[] GetCar(uint id);
 
-        public bool DeleteCar(int id);
+        public bool DeleteCar(uint id);
 
-        public List<int> GetUserAdIds(string username);
+        public List<uint> GetUserAdIds(string username);
     }
 }
