@@ -11,8 +11,7 @@ namespace DataTypes
         DateOfPurchase,
         TotalKilometersDriven,
         NextVehicleInspection,
-        OriginalPurchaseCountry,
-        Unknown
+        OriginalPurchaseCountry
     };
 
     public class CarFilters
