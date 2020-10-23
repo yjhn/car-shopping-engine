@@ -256,6 +256,8 @@ namespace Server
             if (result)
             {
                 r = MakeResponse(201);
+
+                // This is bad. Although it will probably work, by doing so you are making CarList read the whole database from disk
                 int id = new CarList(logger).lastCarId;
                 r.Headers.Add(new Header("Location", "{protocol}://{host}:{port}/cars/{id}"));
             }
