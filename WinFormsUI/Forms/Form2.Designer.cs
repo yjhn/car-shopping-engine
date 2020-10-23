@@ -57,20 +57,21 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(144, 520);
+            this.panel1.Size = new System.Drawing.Size(126, 550);
             this.panel1.TabIndex = 0;
             // 
             // favoritesButton
             // 
             this.favoritesButton.BackColor = System.Drawing.Color.Transparent;
             this.favoritesButton.FlatAppearance.BorderSize = 0;
+            this.favoritesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.favoritesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.favoritesButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.favoritesButton.ForeColor = System.Drawing.Color.Transparent;
-            this.favoritesButton.Location = new System.Drawing.Point(0, 413);
+            this.favoritesButton.Location = new System.Drawing.Point(0, 310);
             this.favoritesButton.Margin = new System.Windows.Forms.Padding(2);
             this.favoritesButton.Name = "favoritesButton";
-            this.favoritesButton.Size = new System.Drawing.Size(144, 107);
+            this.favoritesButton.Size = new System.Drawing.Size(126, 80);
             this.favoritesButton.TabIndex = 0;
             this.favoritesButton.Text = "favorites";
             this.favoritesButton.UseVisualStyleBackColor = false;
@@ -80,13 +81,14 @@
             // 
             this.uploadButton.BackColor = System.Drawing.Color.Transparent;
             this.uploadButton.FlatAppearance.BorderSize = 0;
+            this.uploadButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.uploadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.uploadButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.uploadButton.ForeColor = System.Drawing.Color.Transparent;
-            this.uploadButton.Location = new System.Drawing.Point(0, 301);
+            this.uploadButton.Location = new System.Drawing.Point(0, 226);
             this.uploadButton.Margin = new System.Windows.Forms.Padding(2);
             this.uploadButton.Name = "uploadButton";
-            this.uploadButton.Size = new System.Drawing.Size(144, 107);
+            this.uploadButton.Size = new System.Drawing.Size(126, 80);
             this.uploadButton.TabIndex = 0;
             this.uploadButton.Text = "upload";
             this.uploadButton.UseVisualStyleBackColor = false;
@@ -96,14 +98,15 @@
             // 
             this.searchButton.BackColor = System.Drawing.Color.Transparent;
             this.searchButton.FlatAppearance.BorderSize = 0;
+            this.searchButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.searchButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.searchButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.searchButton.ForeColor = System.Drawing.Color.Transparent;
-            this.searchButton.Location = new System.Drawing.Point(0, 189);
+            this.searchButton.Location = new System.Drawing.Point(0, 142);
             this.searchButton.Margin = new System.Windows.Forms.Padding(2);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(144, 107);
-            this.searchButton.TabIndex = 0;
+            this.searchButton.Size = new System.Drawing.Size(126, 80);
+            this.searchButton.TabIndex = 1;
             this.searchButton.Text = "search";
             this.searchButton.UseVisualStyleBackColor = false;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
@@ -112,13 +115,14 @@
             // 
             this.browseButton.BackColor = System.Drawing.Color.Transparent;
             this.browseButton.FlatAppearance.BorderSize = 0;
+            this.browseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseButton.ForeColor = System.Drawing.Color.Transparent;
-            this.browseButton.Location = new System.Drawing.Point(0, 77);
+            this.browseButton.Location = new System.Drawing.Point(0, 58);
             this.browseButton.Margin = new System.Windows.Forms.Padding(2);
             this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(144, 107);
+            this.browseButton.Size = new System.Drawing.Size(126, 80);
             this.browseButton.TabIndex = 0;
             this.browseButton.Text = "browse";
             this.browseButton.UseVisualStyleBackColor = false;
@@ -127,10 +131,10 @@
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(144, 0);
+            this.panel2.Location = new System.Drawing.Point(126, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(821, 35);
+            this.panel2.Size = new System.Drawing.Size(712, 26);
             this.panel2.TabIndex = 1;
             // 
             // panel3
@@ -140,10 +144,10 @@
             this.panel3.Controls.Add(this.searchPage1);
             this.panel3.Controls.Add(this.browsePage1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(144, 35);
+            this.panel3.Location = new System.Drawing.Point(126, 26);
             this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(821, 485);
+            this.panel3.Size = new System.Drawing.Size(712, 550);
             this.panel3.TabIndex = 2;
             // 
             // favoritePage1
@@ -152,7 +156,7 @@
             this.favoritePage1.Location = new System.Drawing.Point(0, 0);
             this.favoritePage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.favoritePage1.Name = "favoritePage1";
-            this.favoritePage1.Size = new System.Drawing.Size(821, 485);
+            this.favoritePage1.Size = new System.Drawing.Size(712, 550);
             this.favoritePage1.TabIndex = 3;
             // 
             // uploadPage1
@@ -161,16 +165,18 @@
             this.uploadPage1.Location = new System.Drawing.Point(0, 0);
             this.uploadPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.uploadPage1.Name = "uploadPage1";
-            this.uploadPage1.Size = new System.Drawing.Size(821, 485);
+            this.uploadPage1.Size = new System.Drawing.Size(712, 550);
             this.uploadPage1.TabIndex = 2;
             // 
             // searchPage1
             // 
+            this.searchPage1.AccessibleDescription = "vehicle search page";
+            this.searchPage1.AccessibleName = "search page";
             this.searchPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.searchPage1.Location = new System.Drawing.Point(0, 0);
-            this.searchPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.searchPage1.Margin = new System.Windows.Forms.Padding(2);
             this.searchPage1.Name = "searchPage1";
-            this.searchPage1.Size = new System.Drawing.Size(821, 485);
+            this.searchPage1.Size = new System.Drawing.Size(712, 550);
             this.searchPage1.TabIndex = 1;
             // 
             // browsePage1
@@ -179,15 +185,15 @@
             this.browsePage1.Location = new System.Drawing.Point(0, 0);
             this.browsePage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.browsePage1.Name = "browsePage1";
-            this.browsePage1.Size = new System.Drawing.Size(821, 485);
+            this.browsePage1.Size = new System.Drawing.Size(712, 550);
             this.browsePage1.TabIndex = 0;
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(965, 520);
+            this.ClientSize = new System.Drawing.Size(838, 550);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
