@@ -7,9 +7,9 @@ namespace Backend
     {
         public byte[] GetCarList(int resultAmount = 50);
 
-        public byte[] SortBy(SortingCriteria sortBy, int resultAmount = 50);
+        public byte[] SortBy(SortingCriteria sortBy, int resultAmount = 50, List<Car> carListToSort = null);
 
-        public byte[] Filter(CarFilters filters);
+        public byte[] Filter(CarFilters filters, SortingCriteria sortBy = SortingCriteria.UploadDate, int resultAmount = 50);
 
         public bool AddCar(byte[] car);
 

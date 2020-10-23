@@ -6,7 +6,7 @@ namespace DataTypes
 {
     public enum SortingCriteria
     {
-        UploadDateOrId,
+        UploadDate,
         Price,
         DateOfPurchase,
         TotalKilometersDriven,

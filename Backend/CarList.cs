@@ -29,48 +29,52 @@ namespace Backend
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Take(resultAmount).ToList<Car>());
         }
 
-        public byte[] SortBy(SortingCriteria sortBy, int resultAmount = 50)
+        public byte[] SortBy(SortingCriteria sortBy, int resultAmount = 50, List<Car> carListToSort = null)
         {
+            if(carListToSort == null)
+            {
+                carListToSort = carList;
+            }
             switch (sortBy)
             {
-                case (SortingCriteria.UploadDateOrId):
-                    carList.Sort((x, y) => x.Id.CompareTo(y.Id));
+                case (SortingCriteria.UploadDate):
+                    carListToSort.Sort((x, y) => x.Id.CompareTo(y.Id));
                     break;
                 case (SortingCriteria.Price):
-                    carList.Sort((x, y) => x.Price.CompareTo(y.Price));
+                    carListToSort.Sort((x, y) => x.Price.CompareTo(y.Price));
                     break;
                 case (SortingCriteria.DateOfPurchase):
-                    carList.Sort((x, y) => x.DateOfPurchase.CompareTo(y.DateOfPurchase));
+                    carListToSort.Sort((x, y) => x.DateOfPurchase.CompareTo(y.DateOfPurchase));
                     break;
                 case (SortingCriteria.TotalKilometersDriven):
-                    carList.Sort((x, y) => x.TotalKilometersDriven.CompareTo(y.TotalKilometersDriven));
+                    carListToSort.Sort((x, y) => x.TotalKilometersDriven.CompareTo(y.TotalKilometersDriven));
                     break;
                 case (SortingCriteria.NextVehicleInspection):
-                    carList.Sort((x, y) => x.NextVehicleInspection.CompareTo(y.NextVehicleInspection));
+                    carListToSort.Sort((x, y) => x.NextVehicleInspection.CompareTo(y.NextVehicleInspection));
                     break;
                 case (SortingCriteria.OriginalPurchaseCountry):
-                    carList.Sort((x, y) => x.OriginalPurchaseCountry.CompareTo(y.OriginalPurchaseCountry));
+                    carListToSort.Sort((x, y) => x.OriginalPurchaseCountry.CompareTo(y.OriginalPurchaseCountry));
                     break;
                 default:
                     throw new ArgumentException("Bad compare criteria");
             }
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Take(resultAmount).ToList<Car>());
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Take(resultAmount).ToList<Car>());
         }
 
-        public byte[] Filter(CarFilters filters)
+        public byte[] Filter(CarFilters filters, SortingCriteria sortBy = SortingCriteria.UploadDate, int resultAmount = 50)
         {
             List<Car> filteredCarList = carList;
 
             if (filters.PriceFrom.HasValue && filters.PriceTo.HasValue)
-                filteredCarList = (from car in carList where (car.Price >= filters.PriceFrom && car.Price <= filters.PriceTo) select car).ToList();
+                filteredCarList = (from car in filteredCarList where (car.Price >= filters.PriceFrom && car.Price <= filters.PriceTo) select car).ToList();
             if (!string.IsNullOrEmpty(filters.Username))
-                filteredCarList = (from car in carList where car.UploaderUsername.Equals(filters.Username) select car).ToList();
+                filteredCarList = (from car in filteredCarList where car.UploaderUsername.Equals(filters.Username) select car).ToList();
             if (filters.YearFrom.HasValue && filters.YearTo.HasValue)
-                filteredCarList = (from car in carList where (car.DateOfPurchase.year >= filters.YearFrom && car.DateOfPurchase.year <= filters.YearTo) select car).ToList();
+                filteredCarList = (from car in filteredCarList where (car.DateOfPurchase.year >= filters.YearFrom && car.DateOfPurchase.year <= filters.YearTo) select car).ToList();
             if (filters.FuelType.HasValue)
-                filteredCarList = (from car in carList where car.FuelType == filters.FuelType select car).ToList();
+                filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
 
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(filteredCarList);
+            return SortBy(sortBy, resultAmount, filteredCarList);
         }
 
         // params: Car serialized to JSON
