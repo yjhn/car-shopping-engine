@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Server\Server.csproj" />
     <ProjectReference Include="..\WinFormsUI\CarEngine.csproj" />
   </ItemGroup>
 
