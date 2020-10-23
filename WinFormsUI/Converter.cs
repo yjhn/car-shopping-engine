@@ -17,7 +17,6 @@ namespace CarEngine
             {
                 image = Image.FromStream(ms);
             }
-
             return image;
         }
 
