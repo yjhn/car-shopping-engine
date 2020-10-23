@@ -6,7 +6,7 @@ namespace DataTypes
     {
         // unique db key = Id
 
-        public Car(string uploaderUsername, DateTime uploadDate, uint price, string brand, string model, Month dateOfPurchase, Engine engine, FuelType fuelType,
+        public Car(string uploaderUsername, DateTime uploadDate, uint price, string brand, string model, bool used, Month dateOfPurchase, Engine engine, FuelType fuelType,
             ChassisType chassisType, string color, GearboxType gearboxType, uint totalKilometersDriven, DriveWheels driveWheels, string[] defects,
             SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, uint numberOfCylinders, uint numberOfGears, uint seats, Month nextVehicleInspection,
             string wheelSize, uint weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images, string comment)
@@ -16,6 +16,7 @@ namespace DataTypes
             UploadDate = uploadDate;
             Brand = brand;
             Model = model;
+            Used = used;
             DateOfPurchase = dateOfPurchase;
             Engine = engine;
             FuelType = fuelType;
@@ -52,6 +53,7 @@ namespace DataTypes
         public DateTime UploadDate { get; set; }
         public string Brand { get; set; }
         public string Model { get; set; }
+        public bool Used { get; set; }
         public Month DateOfPurchase { get; set; }
         public Engine Engine { get; set; }
         public FuelType FuelType { get; set; }
@@ -123,41 +125,6 @@ namespace DataTypes
         public Enginetype engineType { get; set; }
 
     }
-
-    public enum Enginetype
-    {
-        I4,
-        V6,
-        V8,
-        W3,
-        W8,
-        W12,
-        W16,
-        Other
-    };
-
-    public enum FuelType
-    {
-        gasoline,
-        diesel,
-        electricity,
-        hybrid
-    };
-
-    public enum ChassisType
-    {
-        station_wagon,
-        hatchback,
-        sedan,
-        suv,
-        minivan,
-        coupe,
-        convertible,
-        passenger_minibus,
-        combi_minibus,
-        freight_minibus,
-        commercial
-    };
 
     public enum GearboxType
     {
