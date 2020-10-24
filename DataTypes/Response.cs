@@ -8,7 +8,8 @@ namespace DataTypes
     {
         private const string HttpVersion = "HTTP/1.1";
         private string headersDelimitor = "\r\n";
-        private int statusCode;
+        public int StatusCode
+        { get; }
         private string statusText;
         public List<Header> Headers
         { set; get; }
@@ -17,7 +18,7 @@ namespace DataTypes
 
         public Response(int statusCode)
         {
-            this.statusCode = statusCode;
+            StatusCode = statusCode;
             switch (statusCode)
             {
                 case 200:
@@ -25,6 +26,9 @@ namespace DataTypes
                     break;
                 case 201:
                     statusText = "Created";
+                    break;
+                case 204:
+                    statusText = "No Content";
                     break;
                 case 400:
                     statusText = "Bad Request";
@@ -35,6 +39,12 @@ namespace DataTypes
                 case 404:
                     statusText = "Not Found";
                     break;
+                case 411:
+                    statusText = "Length Required";
+                    break;
+                case 415:
+                    statusText = "Unsupported Media Type";
+                    break;
                 case 500:
                     statusText = "Internal Server Error";
                     break;
@@ -44,9 +54,6 @@ namespace DataTypes
                 case 505:
                     statusText = "HTTP Version Not Supported";
                     break;
-                case 411:
-                    statusText = "Length Required";
-                    break;
                 default:
                     statusText = "Unknown";
                     break;
@@ -55,7 +62,7 @@ namespace DataTypes
 
         public byte[] Format()
         {
-            StringBuilder output = new StringBuilder($"{HttpVersion} {statusCode} {statusText}{headersDelimitor}");
+            StringBuilder output = new StringBuilder($"{HttpVersion} {StatusCode} {statusText}{headersDelimitor}");
             foreach (Header h in Headers)
             {
                 output.Append($"{h.Name}: {h.Value}{headersDelimitor}");

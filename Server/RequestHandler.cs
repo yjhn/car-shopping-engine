@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 using Backend;
 using DataTypes;
 
@@ -120,10 +121,19 @@ namespace Server
                 if (hostFromUrl != hostValue)
                     return Validation.HostMismatch;
             }
+            if (Header.Contains(headers, "CONTENT-LENGTH"))
+            {
+                int contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
+                if (req.Content.Length > contentLength)
+                    req.Content = req.Content.Substring(0, contentLength);
+                else
+                    return Validation.NoFullContent;
+            }
 
+            if (!string.IsNullOrEmpty(req.Content) && !Header.Contains(headers, "CONTENT-LENGTH"))
+                return Validation.NoContentLength;
             if (req.Method == "POST" && !Header.Contains(headers, "CONTENT-LENGTH"))
                 return Validation.NoContentLength;
-
             return Validation.OK;
         }
 
@@ -133,12 +143,12 @@ namespace Server
             switch (res)
             {
                 case "cars":
-                    GetCars(req.Queries);
+                    GetCars(req);
                     break;
-                case "cars/filtered":
+                case "cars/filters":
                     GetFilteredCars(req.Queries);
                     break;
-                case "user":
+                case "users":
                     GetUser(req.Queries["username"]);
                     break;
                 default:
@@ -149,21 +159,36 @@ namespace Server
 
         private void ProcessPost(Request req)
         {
+            string contentType = "x-www-form-urlencoded";
+            if (Header.Contains(req.Headers, "CONTENT-TYPE"))
+                contentType = Header.GetValueByName(req.Headers, "CONTENT-TYPE");
+            r = MakeResponse(415);
             switch (req.Resource)
             {
-                case "car":
+                case "cars":
                     //if (!Verify(req))
                     //return;
-                    AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                    if (contentType.StartsWith("application/json"))
+                        AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
-                case "signup":
-                    AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                case "users":
+                    if (contentType.StartsWith("application/json"))
+                        AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
                     break;
                 case "login":
-                    if (req.Queries.ContainsKey("username") && req.Queries.ContainsKey("hashedpassword"))
-                        Login(req.Queries["username"], req.Queries["hashedpassword"]);
-                    else
-                        r = MakeResponse(400);
+                    if (contentType.StartsWith("application/x-www-form-urlencoded"))
+                    {
+                        Regex loginValidation = new Regex(@"^username=(?<username>[a-zA-Z]+)&hashed_password=(?<hashedPassword>[\d\D]+)$");
+                        if (!loginValidation.IsMatch(req.Content))
+                            r = MakeResponse(400);
+                        else
+                        {
+                            GroupCollection groups = loginValidation.Matches(req.Content)[0].Groups;
+                            string username = groups["username"].Value;
+                            string hashedPassword = groups["hashedPassword"].Value;
+                            Login(username, hashedPassword);
+                        }
+                    }
                     break;
                 default:
                     r = MakeResponse(404);
@@ -178,10 +203,10 @@ namespace Server
             bool result = true;
             switch (req.Resource)
             {
-                case "car":
-                    result = DeleteCar(int.Parse(req.Queries["id"]));
+                case "cars":
+                    result = DeleteCar(uint.Parse(req.Queries["id"]));
                     break;
-                case "user":
+                case "users":
                     result = DeleteUser(req.Queries["username"]);
                     break;
                 default:
@@ -194,50 +219,50 @@ namespace Server
                 r = MakeResponse(200);
         }
 
-        private void GetCars(Dictionary<string, string> queries)
+        private void GetCars(Request req)
         {
-            int id = -1, resultAmount = -1;
-            bool getSorted = false, getById = false, amountSet = false;
+            Dictionary<string, string> queries = req.Queries;
+            uint? id = null, resultAmount = null;
             ArgumentException incompatible = new ArgumentException("Incompatible queries");
-            Type enumType = typeof(SortingCriteria);
-            SortingCriteria criteria = (SortingCriteria)Enum.Parse(enumType, "Unknown");
+            SortingCriteria? criteria = null;
             if (queries.ContainsKey("id"))
+                id = uint.Parse(queries["id"]);
+            if (queries.ContainsKey("sort_by"))
             {
-                id = int.Parse(queries["id"]);
-                getById = true;
-            }
-            if (queries.ContainsKey("sortby"))
-            {
-                getSorted = true;
-                if (getById)
+                if (id != null)
                     throw incompatible;
-                string sortBy = queries["sortby"];
-                foreach (string name in SortingCriteria.GetNames(enumType))
-                {
-                    if (name == sortBy)
-                    {
-                        criteria = (SortingCriteria)Enum.Parse(enumType, name);
-                        break;
-                    }
-                }
+                criteria = GetSortingCriteria(queries["sort_by"]);
             }
-            if (queries.ContainsKey("resultamount"))
+            if (queries.ContainsKey("result_amount"))
             {
-                if (getById)
+                if (id != null)
                     throw incompatible;
-                resultAmount = int.Parse(queries["resultamount"]);
-                amountSet = true;
+                resultAmount = uint.Parse(queries["resultamount"]);
             }
 
+            List<Car> carList = null;
             byte[] responseBody;
-            if (getById)
-                responseBody = carDb.GetCar(id);
-            else if (getSorted && amountSet)
-                responseBody = carDb.SortBy(criteria, resultAmount);
-            else if (getSorted)
-                responseBody = carDb.SortBy(criteria);
-            else if (amountSet)
-                responseBody = carDb.GetCarList(resultAmount);
+            if (id != null)
+                responseBody = carDb.GetCar((uint)id);
+            else if (criteria != null)
+            {
+                if (!string.IsNullOrEmpty(req.Content))
+                {
+                    if (Header.Contains(req.Headers, "CONTENT-TYPE") & Header.GetValueByName(req.Headers, "CONTENT-TYPE").StartsWith("application/json"))
+                        carList = JsonSerializer.Deserialize<List<Car>>(req.Content);
+                    else
+                    {
+                        r = MakeResponse(415);
+                        return;
+                    }
+                }
+                if (resultAmount != null)
+                    responseBody = carDb.SortBy((SortingCriteria)criteria, (int)resultAmount, carList);
+                else
+                    responseBody = carDb.SortBy((SortingCriteria)criteria, carListToSort: carList);
+            }
+            else if (resultAmount != null)
+                responseBody = carDb.GetCarList((int)resultAmount);
             else
                 responseBody = carDb.GetCarList();
 
@@ -256,13 +281,12 @@ namespace Server
             if (result)
             {
                 r = MakeResponse(201);
-
-                // This is bad. Although it will probably work, by doing so you are making CarList read the whole database from disk
-                int id = new CarList(logger).lastCarId;
-                r.Headers.Add(new Header("Location", "{protocol}://{host}:{port}/cars/{id}"));
+                CarList cs = (CarList)carDb;
+                uint id = cs.lastCarId;
+                r.Headers.Add(new Header("Location", $"{protocol}://{host}:{port}/cars/{id}"));
             }
             else
-                r = MakeResponse(200);
+                r = MakeResponse(204);
         }
 
         private void AddUser(byte[] userData)
@@ -271,10 +295,10 @@ namespace Server
             if (result)
                 r = MakeResponse(201);
             else
-                r = MakeResponse(200);
+                r = MakeResponse(204);
         }
 
-        private bool DeleteCar(int id)
+        private bool DeleteCar(uint id)
         {
             return carDb.DeleteCar(id);
         }
@@ -327,20 +351,39 @@ namespace Server
 
         private void GetFilteredCars(Dictionary<string, string> queries)
         {
+            SortingCriteria? criteria = null;
+            int? resultAmount = null;
             CarFilters cf = new CarFilters();
-            if (queries.ContainsKey("priceFrom"))
-                cf.PriceFrom = int.Parse(queries["priceFrom"]);
-            if (queries.ContainsKey("priceTo"))
-                cf.PriceTo = int.Parse(queries["priceTo"]);
+            if (queries.ContainsKey("brand"))
+                cf.Brand = queries["brand"];
+            if (queries.ContainsKey("model"))
+                cf.Model = queries["model"];
+            if (queries.ContainsKey("used"))
+                cf.Used = bool.Parse(queries["used"]);
+            if (queries.ContainsKey("price_from"))
+                cf.PriceFrom = uint.Parse(queries["priceFrom"]);
+            if (queries.ContainsKey("price_to"))
+                cf.PriceTo = uint.Parse(queries["priceTo"]);
             if (queries.ContainsKey("username"))
                 cf.Username = queries["username"];
-            if (queries.ContainsKey("yearFrom"))
-                cf.YearFrom = int.Parse(queries["yearFrom"]);
-            if (queries.ContainsKey("yearTo"))
-                cf.YearTo = int.Parse(queries["yearTo"]);
-            if (queries.ContainsKey("fuelType"))
+            if (queries.ContainsKey("year_from"))
+                cf.YearFrom = uint.Parse(queries["yearFrom"]);
+            if (queries.ContainsKey("year_to"))
+                cf.YearTo = uint.Parse(queries["yearTo"]);
+            if (queries.ContainsKey("fuel_type"))
                 cf.FuelType = (FuelType)Enum.Parse(typeof(FuelType), queries["fuelType"]);
-            r = MakeResponse(200, carDb.Filter(cf));
+            if (queries.ContainsKey("result_amount"))
+                resultAmount = int.Parse(queries["result_amount"]);
+            if (queries.ContainsKey("sort_by"))
+                criteria = GetSortingCriteria(queries["sort_by"]);
+            if (resultAmount != null && criteria != null)
+                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, (int)resultAmount));
+            else if (resultAmount == null)
+                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria));
+            else if (criteria == null)
+                r = MakeResponse(200, carDb.Filter(cf, resultAmount: (int)resultAmount));
+            else
+                r = MakeResponse(200, carDb.Filter(cf));
         }
 
         private byte[] SetContent(string output)
@@ -356,15 +399,30 @@ namespace Server
             return verified;
         }
 
-        enum Validation
+        private SortingCriteria? GetSortingCriteria(string criteriaString)
         {
-            HttpVersionNotSupported,
-            InvalidHost,
-            HostMismatch,
-            NoContentLength,
-            NoHost,
-            OK
-        };
+            SortingCriteria? criteria = null;
+            Type sortingType = typeof(SortingCriteria);
+            foreach (string name in SortingCriteria.GetNames(sortingType))
+            {
+                if (name == criteriaString)
+                {
+                    criteria = (SortingCriteria)Enum.Parse(sortingType, name);
+                    break;
+                }
+            }
+            return criteria;
+        }
     }
 
+    enum Validation
+    {
+        HttpVersionNotSupported,
+        InvalidHost,
+        HostMismatch,
+        NoContentLength,
+        NoHost,
+        NoFullContent,
+        OK
+    };
 }

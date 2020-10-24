@@ -5,7 +5,7 @@ namespace DataTypes
     public class Request
     {
         public string Method
-        { get; set;}
+        { get; set; }
         public string Url
         { get; set; }
         public string Resource
@@ -13,11 +13,14 @@ namespace DataTypes
         public Dictionary<string, string> Queries
         { get; set; }
         public string HttpVersion
-        { get; set;}
+        { get; set; }
         public List<Header> Headers
-        { get; set;}
+        { get; set; }
         public String Content
-        { get; set;}
+        { get; set; }
+
+        public Request() { }
+
         public Request(string method, string url, string resource, Dictionary<string, string> queries, string httpVersion, List<Header> headers, string content)
         {
             Method = method;
