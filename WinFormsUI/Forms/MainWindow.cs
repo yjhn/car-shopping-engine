@@ -4,18 +4,20 @@ using System.Windows.Forms;
 
 namespace Test1
 {
-    public partial class Form2 : Form
+    public partial class MainWindow : Form
     {
-        Color activeSidebarButtonColor = Color.AntiqueWhite;
-        Color activeSidebarButtonTextColor = Color.Black;
-        Color inactiveSidebarButtonColor = Color.Transparent;
-        Color inactiveSidebarButtonTextColor = Color.Transparent;
+        // create default colors for (in)active sidebar buttons
+        readonly Color activeSidebarButtonColor = Color.AntiqueWhite;
+        readonly Color activeSidebarButtonTextColor = Color.Black;
+        readonly Color inactiveSidebarButtonColor = Color.Transparent;
+        readonly Color inactiveSidebarButtonTextColor = Color.Transparent;
 
-        public Form2()
+        public MainWindow()
         {
             InitializeComponent();
-            Load += Form2_load;
 
+            // set window title
+            Text = "Car Shopping Engine";
 
             // add event handler to sidebar buttons to make them change colour once clicked
             browseButton.Click += new System.EventHandler(sidebarButton_Click);
@@ -24,11 +26,15 @@ namespace Test1
             favoritesButton.Click += new System.EventHandler(sidebarButton_Click);
         }
 
-        private void Form2_load(object sender, EventArgs e)
+        private void MainWindow_Load(object sender, EventArgs e)
         {
             // this will probably cause the app to lock up while it fetches data from server
-            SetActivePanel(browsePage1);
+            SetActivePanel(browsePage);
+
+            // disable the "clicked" button
             browseButton.Enabled = false;
+
+            // manually set the color of the button since I don't know how to raise button click event from here
             browseButton.ForeColor = activeSidebarButtonTextColor;
             browseButton.BackColor = activeSidebarButtonColor;
         }
@@ -40,28 +46,25 @@ namespace Test1
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            SetActivePanel(browsePage1);
-            browseButton.Enabled = false;
+            SetActivePanel(browsePage);
         }
 
         private void searchButton_Click(object sender, EventArgs e)
         {
-            SetActivePanel(searchPage1);
-            searchButton.Enabled = false;
+            SetActivePanel(searchPage);
         }
 
         private void uploadButton_Click(object sender, EventArgs e)
         {
-            SetActivePanel(uploadPage1);
-            uploadButton.Enabled = false;
+            SetActivePanel(uploadPage);
         }
 
         private void favoritesButton_Click(object sender, EventArgs e)
         {
-            SetActivePanel(favoritePage1);
-            favoritesButton.Enabled = false;
+            SetActivePanel(favoritePage);
         }
 
+        // this method must be called when any sidebar button is clicked as it set button colors
         private void sidebarButton_Click(object sender, EventArgs e)
         {
             browseButton.ForeColor = inactiveSidebarButtonTextColor;
@@ -75,17 +78,20 @@ namespace Test1
 
             ((Button)sender).ForeColor = activeSidebarButtonTextColor;
             ((Button)sender).BackColor = activeSidebarButtonColor;
+
+            // this is OK as this method is called after SetActivePanel (since this was added to button click eventhandler later than button_Click)
+            ((Button)sender).Enabled = false;
         }
 
         private void SetActivePanel(UserControl control)
         {
             // disable all panels
-            searchPage1.Visible = false;
-            browsePage1.Visible = false;
-            uploadPage1.Visible = false;
-            favoritePage1.Visible = false;
+            searchPage.Visible = false;
+            browsePage.Visible = false;
+            uploadPage.Visible = false;
+            favoritePage.Visible = false;
 
-            // enable all buttons, the callee must disable its own button after this method
+            // enable all buttons, the callee must disable its own button after calling this method
             browseButton.Enabled = true;
             searchButton.Enabled = true;
             uploadButton.Enabled = true;

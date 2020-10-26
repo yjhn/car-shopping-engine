@@ -325,6 +325,7 @@ namespace CarEngine
             this.radioButtonUsed.Name = "radioButtonUsed";
             this.radioButtonUsed.Size = new System.Drawing.Size(51, 19);
             this.radioButtonUsed.TabIndex = 1;
+            this.radioButtonUsed.TabStop = true;
             this.radioButtonUsed.Text = "Used";
             this.radioButtonUsed.UseVisualStyleBackColor = true;
             // 
@@ -458,7 +459,7 @@ namespace CarEngine
             this.typeOfVehicleTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.typeOfVehicleTextBox.Name = "typeOfVehicleTextBox";
             this.typeOfVehicleTextBox.Size = new System.Drawing.Size(246, 23);
-            this.typeOfVehicleTextBox.TabIndex = 1;
+            this.typeOfVehicleTextBox.TabIndex = 0;
             // 
             // SearchPage
             // 
@@ -466,6 +467,8 @@ namespace CarEngine
             this.AccessibleName = "search page";
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.Controls.Add(this.typeOfVehicleTextBox);
             this.Controls.Add(this.typeOfVehicleLabel);
             this.Controls.Add(this.resetSearchButton);

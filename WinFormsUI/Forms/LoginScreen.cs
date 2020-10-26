@@ -16,7 +16,7 @@ namespace Test1
         {
             if(usernameTextBox.Text == "vienas" && passwordTextBox.Text == "du")
             {
-                new Form2().Show();
+                new MainWindow().Show();
                 this.Hide();
             }
             else

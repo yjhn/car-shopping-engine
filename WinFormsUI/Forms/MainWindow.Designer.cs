@@ -1,6 +1,6 @@
 ﻿namespace Test1
 {
-    partial class Form2
+    partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -29,36 +29,37 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.sidebarPanel = new System.Windows.Forms.Panel();
             this.favoritesButton = new System.Windows.Forms.Button();
             this.uploadButton = new System.Windows.Forms.Button();
             this.searchButton = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.favoritePage1 = new CarEngine.Pages.FavoritePage();
-            this.uploadPage1 = new CarEngine.Pages.UploadPage();
-            this.searchPage1 = new CarEngine.SearchPage();
-            this.browsePage1 = new CarEngine.BrowsePage();
+            this.topPanel = new System.Windows.Forms.Panel();
+            this.pagePanel = new System.Windows.Forms.Panel();
+            this.browsePage = new CarEngine.BrowsePage();
+            this.uploadPage = new CarEngine.Pages.UploadPage();
+            this.searchPage = new CarEngine.SearchPage();
+            this.favoritePage = new CarEngine.Pages.FavoritePage();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.panel1.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.sidebarPanel.SuspendLayout();
+            this.pagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel1
+            // sidebarPanel
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(64)))), ((int)(((byte)(89)))));
-            this.panel1.Controls.Add(this.favoritesButton);
-            this.panel1.Controls.Add(this.uploadButton);
-            this.panel1.Controls.Add(this.searchButton);
-            this.panel1.Controls.Add(this.browseButton);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(126, 550);
-            this.panel1.TabIndex = 0;
+            this.sidebarPanel.AutoScroll = true;
+            this.sidebarPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(64)))), ((int)(((byte)(89)))));
+            this.sidebarPanel.Controls.Add(this.favoritesButton);
+            this.sidebarPanel.Controls.Add(this.uploadButton);
+            this.sidebarPanel.Controls.Add(this.searchButton);
+            this.sidebarPanel.Controls.Add(this.browseButton);
+            this.sidebarPanel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.sidebarPanel.Location = new System.Drawing.Point(0, 0);
+            this.sidebarPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.sidebarPanel.Name = "sidebarPanel";
+            this.sidebarPanel.Size = new System.Drawing.Size(126, 581);
+            this.sidebarPanel.TabIndex = 0;
             // 
             // favoritesButton
             // 
@@ -72,7 +73,7 @@
             this.favoritesButton.Margin = new System.Windows.Forms.Padding(2);
             this.favoritesButton.Name = "favoritesButton";
             this.favoritesButton.Size = new System.Drawing.Size(126, 80);
-            this.favoritesButton.TabIndex = 0;
+            this.favoritesButton.TabIndex = 4;
             this.favoritesButton.Text = "favorites";
             this.favoritesButton.UseVisualStyleBackColor = false;
             this.favoritesButton.Click += new System.EventHandler(this.favoritesButton_Click);
@@ -89,7 +90,7 @@
             this.uploadButton.Margin = new System.Windows.Forms.Padding(2);
             this.uploadButton.Name = "uploadButton";
             this.uploadButton.Size = new System.Drawing.Size(126, 80);
-            this.uploadButton.TabIndex = 0;
+            this.uploadButton.TabIndex = 3;
             this.uploadButton.Text = "upload";
             this.uploadButton.UseVisualStyleBackColor = false;
             this.uploadButton.Click += new System.EventHandler(this.uploadButton_Click);
@@ -106,7 +107,7 @@
             this.searchButton.Margin = new System.Windows.Forms.Padding(2);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(126, 80);
-            this.searchButton.TabIndex = 1;
+            this.searchButton.TabIndex = 2;
             this.searchButton.Text = "search";
             this.searchButton.UseVisualStyleBackColor = false;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
@@ -123,86 +124,98 @@
             this.browseButton.Margin = new System.Windows.Forms.Padding(2);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(126, 80);
-            this.browseButton.TabIndex = 0;
+            this.browseButton.TabIndex = 1;
             this.browseButton.Text = "browse";
             this.browseButton.UseVisualStyleBackColor = false;
             this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
-            // panel2
+            // topPanel
             // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(126, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(712, 26);
-            this.panel2.TabIndex = 1;
+            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel.Location = new System.Drawing.Point(126, 0);
+            this.topPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Size = new System.Drawing.Size(747, 26);
+            this.topPanel.TabIndex = 1;
             // 
-            // panel3
+            // pagePanel
             // 
-            this.panel3.Controls.Add(this.favoritePage1);
-            this.panel3.Controls.Add(this.uploadPage1);
-            this.panel3.Controls.Add(this.searchPage1);
-            this.panel3.Controls.Add(this.browsePage1);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(126, 26);
-            this.panel3.Margin = new System.Windows.Forms.Padding(2);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(712, 550);
-            this.panel3.TabIndex = 2;
+            this.pagePanel.AutoScroll = true;
+            this.pagePanel.Controls.Add(this.browsePage);
+            this.pagePanel.Controls.Add(this.uploadPage);
+            this.pagePanel.Controls.Add(this.searchPage);
+            this.pagePanel.Controls.Add(this.favoritePage);
+            this.pagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pagePanel.Location = new System.Drawing.Point(126, 26);
+            this.pagePanel.Margin = new System.Windows.Forms.Padding(2);
+            this.pagePanel.Name = "pagePanel";
+            this.pagePanel.Size = new System.Drawing.Size(747, 555);
+            this.pagePanel.TabIndex = 2;
             // 
-            // favoritePage1
+            // browsePage
             // 
-            this.favoritePage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.favoritePage1.Location = new System.Drawing.Point(0, 0);
-            this.favoritePage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.favoritePage1.Name = "favoritePage1";
-            this.favoritePage1.Size = new System.Drawing.Size(712, 550);
-            this.favoritePage1.TabIndex = 3;
+            this.browsePage.AutoScroll = true;
+            this.browsePage.AutoSize = true;
+            this.browsePage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browsePage.Location = new System.Drawing.Point(0, 0);
+            this.browsePage.Margin = new System.Windows.Forms.Padding(2);
+            this.browsePage.Name = "browsePage";
+            this.browsePage.Size = new System.Drawing.Size(747, 555);
+            this.browsePage.TabIndex = 0;
             // 
-            // uploadPage1
+            // uploadPage
             // 
-            this.uploadPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uploadPage1.Location = new System.Drawing.Point(0, 0);
-            this.uploadPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.uploadPage1.Name = "uploadPage1";
-            this.uploadPage1.Size = new System.Drawing.Size(712, 550);
-            this.uploadPage1.TabIndex = 2;
+            this.uploadPage.AutoScroll = true;
+            this.uploadPage.AutoSize = true;
+            this.uploadPage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uploadPage.Location = new System.Drawing.Point(0, 0);
+            this.uploadPage.Margin = new System.Windows.Forms.Padding(2);
+            this.uploadPage.Name = "uploadPage";
+            this.uploadPage.Size = new System.Drawing.Size(747, 555);
+            this.uploadPage.TabIndex = 2;
             // 
-            // searchPage1
+            // searchPage
             // 
-            this.searchPage1.AccessibleDescription = "vehicle search page";
-            this.searchPage1.AccessibleName = "search page";
-            this.searchPage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.searchPage1.Location = new System.Drawing.Point(0, 0);
-            this.searchPage1.Margin = new System.Windows.Forms.Padding(2);
-            this.searchPage1.Name = "searchPage1";
-            this.searchPage1.Size = new System.Drawing.Size(712, 550);
-            this.searchPage1.TabIndex = 1;
+            this.searchPage.AccessibleDescription = "vehicle search page";
+            this.searchPage.AccessibleName = "search page";
+            this.searchPage.AutoScroll = true;
+            this.searchPage.AutoSize = true;
+            this.searchPage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.searchPage.Location = new System.Drawing.Point(0, 0);
+            this.searchPage.Margin = new System.Windows.Forms.Padding(2);
+            this.searchPage.Name = "searchPage";
+            this.searchPage.Size = new System.Drawing.Size(747, 555);
+            this.searchPage.TabIndex = 1;
             // 
-            // browsePage1
+            // favoritePage
             // 
-            this.browsePage1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.browsePage1.Location = new System.Drawing.Point(0, 0);
-            this.browsePage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.browsePage1.Name = "browsePage1";
-            this.browsePage1.Size = new System.Drawing.Size(712, 550);
-            this.browsePage1.TabIndex = 0;
+            this.favoritePage.AutoScroll = true;
+            this.favoritePage.AutoSize = true;
+            this.favoritePage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.favoritePage.Location = new System.Drawing.Point(0, 0);
+            this.favoritePage.Margin = new System.Windows.Forms.Padding(2);
+            this.favoritePage.Name = "favoritePage";
+            this.favoritePage.Size = new System.Drawing.Size(747, 555);
+            this.favoritePage.TabIndex = 3;
             // 
-            // Form2
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(838, 550);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(873, 581);
+            this.Controls.Add(this.pagePanel);
+            this.Controls.Add(this.topPanel);
+            this.Controls.Add(this.sidebarPanel);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form2";
+            this.Name = "MainWindow";
             this.Text = "Form2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
-            this.panel1.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.sidebarPanel.ResumeLayout(false);
+            this.pagePanel.ResumeLayout(false);
+            this.pagePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
@@ -210,17 +223,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel sidebarPanel;
         private System.Windows.Forms.Button browseButton;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.Button favoritesButton;
         private System.Windows.Forms.Button uploadButton;
         private System.Windows.Forms.Button searchButton;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel pagePanel;
         private System.Windows.Forms.BindingSource bindingSource1;
-        private CarEngine.SearchPage searchPage1;
-        private CarEngine.BrowsePage browsePage1;
-        private CarEngine.Pages.FavoritePage favoritePage1;
-        private CarEngine.Pages.UploadPage uploadPage1;
+        private CarEngine.SearchPage searchPage;
+        private CarEngine.BrowsePage browsePage;
+        private CarEngine.Pages.FavoritePage favoritePage;
+        private CarEngine.Pages.UploadPage uploadPage;
     }
 }
