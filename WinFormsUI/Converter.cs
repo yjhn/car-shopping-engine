@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.IO;
 
+// this should be moved to Frontend project
+
 namespace CarEngine
 {
     internal static class Converter

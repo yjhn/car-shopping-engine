@@ -1,7 +1,78 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DataTypes
 {
+    public static class Algorithms
+    {
+        public static void SortBy(this List<Car> carListToSort, SortingCriteria sortBy, bool sortAscending)
+        {
+            switch (sortBy)
+            {
+                case SortingCriteria.UploadDate:
+                    if (sortAscending)
+                    {
+                        carListToSort.Sort((a, b) => a.UploadDate.CompareTo(b.UploadDate));
+                    }
+                    else
+                    {
+                        carListToSort.Sort((a, b) => b.UploadDate.CompareTo(a.UploadDate));
+                    }
+                    break;
+                case SortingCriteria.Price:
+                    if (sortAscending)
+                    {
+                        carListToSort.Sort((a, b) => a.Price.CompareTo(b.Price));
+                    }
+                    else
+                    {
+                        carListToSort.Sort((a, b) => b.Price.CompareTo(a.Price));
+                    }
+                    break;
+                case SortingCriteria.DateOfPurchase:
+                    if (sortAscending)
+                    {
+                        carListToSort.Sort((a, b) => a.DateOfPurchase.CompareTo(b.DateOfPurchase));
+                    }
+                    else
+                    {
+                        carListToSort.Sort((a, b) => b.DateOfPurchase.CompareTo(a.DateOfPurchase));
+                    }
+                    break;
+                case SortingCriteria.TotalKilometersDriven:
+                    if (sortAscending)
+                    {
+                        carListToSort.Sort((a, b) => a.TotalKilometersDriven.CompareTo(b.TotalKilometersDriven));
+                    }
+                    else
+                    {
+                        carListToSort.Sort((a, b) => b.TotalKilometersDriven.CompareTo(a.TotalKilometersDriven));
+                    }
+                    break;
+                case SortingCriteria.OriginalPurchaseCountry:
+                    if (sortAscending)
+                    {
+                        carListToSort.Sort((a, b) => a.OriginalPurchaseCountry.CompareTo(b.OriginalPurchaseCountry));
+                    }
+                    else
+                    {
+                        carListToSort.Sort((a, b) => b.OriginalPurchaseCountry.CompareTo(a.OriginalPurchaseCountry));
+                    }
+                    break;
+                default:
+                    if (sortAscending)
+                    {
+                        carListToSort.Sort((a, b) => a.DateOfPurchase.CompareTo(b.DateOfPurchase));
+                    }
+                    else
+                    {
+                        carListToSort.Sort((a, b) => b.DateOfPurchase.CompareTo(a.DateOfPurchase));
+                    }
+                    break;
+            }
+        }
+    }
+
     public class CarFilters
     {
         public string Brand { get; set; }
@@ -13,6 +84,7 @@ namespace DataTypes
         public uint? YearFrom { get; set; }
         public uint? YearTo { get; set; }
         public FuelType? FuelType { get; set; }
+        public ChassisType? ChassisType { get; set; }
     }
 
     [Flags]
@@ -42,7 +114,6 @@ namespace DataTypes
 
     public enum FuelType
     {
-        any,
         petrol,
         diesel,
         electricity,

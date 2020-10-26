@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DataTypes
 {
@@ -42,10 +43,7 @@ namespace DataTypes
             Comment = comment;
         }
 
-        public Car()
-        {
-            ;
-        }
+        public Car(){ }
 
         public uint Id { get; set; }
         public uint Price { get; set; }

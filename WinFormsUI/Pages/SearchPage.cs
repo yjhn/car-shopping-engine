@@ -13,10 +13,12 @@ namespace CarEngine
             InitializeComponent();
             // do other intialization code here, such as setting default selected values for comboboxes
 
+            // default vehicle type: any
+            vehicleTypeCombobox.SelectedIndex = 0;
             // default sorting: by upload date descending
-            this.sortByCombobox.SelectedIndex = 0;
+            sortByCombobox.SelectedIndex = 0;
             // default fuel type: any
-            this.fuelTypeComboBox.SelectedIndex = 0;
+            fuelTypeComboBox.SelectedIndex = 0;
 
             // make NumericUpDown appear empty
             lowerYearRangeTextBox.Text = "";
@@ -36,7 +38,7 @@ namespace CarEngine
             switch (fuelTypeComboBox.SelectedItem)
             {
                 case "any":
-                    fuelType = FuelType.any;
+                    fuelType = default;
                     break;
                 case "petrol":
                     fuelType = FuelType.petrol;
@@ -55,10 +57,57 @@ namespace CarEngine
                     break;
             }
 
+            ChassisType? vehicleType;
+            switch (vehicleTypeCombobox.SelectedItem)
+            {
+                case "any":
+                    vehicleType = default;
+                    break;
+                case "station wagon":
+                    vehicleType = ChassisType.station_wagon;
+                    break;
+                case "hatchback":
+                    vehicleType = ChassisType.hatchback;
+                    break;
+                case "sedan":
+                    vehicleType = ChassisType.sedan;
+                    break;
+                case "suv":
+                    vehicleType = ChassisType.suv;
+                    break;
+                case "minivan":
+                    vehicleType = ChassisType.minivan;
+                    break;
+                case "coupe":
+                    vehicleType = ChassisType.coupe;
+                    break;
+                case "convertible":
+                    vehicleType = ChassisType.convertible;
+                    break;
+                case "passenger minibus":
+                    vehicleType = ChassisType.passenger_minibus;
+                    break;
+                case "combi minibus":
+                    vehicleType = ChassisType.combi_minibus;
+                    break;
+                case "freight minibus":
+                    vehicleType = ChassisType.freight_minibus;
+                    break;
+                case "commercial":
+                    vehicleType = ChassisType.commercial;
+                    break;
+                default:
+                    vehicleType = default;
+                    break;
+            }
+
             // filtering
 
             CarFilters filters = new CarFilters()
             {
+                ChassisType = vehicleType,
+                Brand = (brandTextBox.Text == "") ? null : brandTextBox.Text,
+                Model = (modelTextBox.Text == "") ? null : modelTextBox.Text,
                 PriceFrom = (lowerPriceTextBox.Value == lowerPriceTextBox.Minimum) ? default(uint?) : Convert.ToUInt32(lowerPriceTextBox.Value),
                 PriceTo = (upperPriceTextBox.Value == upperPriceTextBox.Minimum) ? default(uint?) : Convert.ToUInt32(upperPriceTextBox.Value),
                 Used = radioButtonUsed.Checked ? true : (radioButtonNew.Checked ? false : default(bool?)),
@@ -103,10 +152,14 @@ namespace CarEngine
 
             // call frontend with search data
             List<Car> carsToDisplay = Api.SearchCars(filters, sortBy);
+
+            // after we get the results back from server, we show them
+            //searchResultsPage.Visible = true;
         }
 
         private void resetSearchButton_Click(object sender, EventArgs e)
         {
+            vehicleTypeCombobox.SelectedIndex = 0;
             brandTextBox.ResetText();
             modelTextBox.ResetText();
             lowerPriceTextBox.ResetText();
@@ -119,6 +172,14 @@ namespace CarEngine
             sortByCombobox.SelectedIndex = 0;
             radioButtonAscending.Checked = false;
             radioButtonDescending.Checked = true;
+        }
+
+        private void SearchPage_VisibleChanged(object sender, EventArgs e)
+        {
+            if (Visible)
+            {
+                vehicleTypeCombobox.Focus();
+            }
         }
     }
 }
