@@ -76,7 +76,7 @@ namespace Frontend
 
         public static Response FromStringToResponse(string rawResponse)
         {
-            Regex regex = new Regex(@$"^{ServerConstants.HttpVersion} (?<statusCode>\d\d\d) [a-zA-Z]+{ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z,\.:\/\?\d&_\-; =]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
+            Regex regex = new Regex(@$"^{ServerConstants.HttpVersion} (?<statusCode>\d\d\d) [a-zA-Z ]+{ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z,\.:\/\?\d&_\-; =]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
             if (string.IsNullOrEmpty(rawResponse) || !regex.IsMatch(rawResponse))
                 return null;
             GroupCollection groups = regex.Matches(rawResponse)[0].Groups;

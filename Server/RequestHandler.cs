@@ -255,10 +255,13 @@ namespace Server
                         return;
                     }
                 }
+                bool ascending = true;
+                if (queries.ContainsKey("ascending"))
+                    ascending = bool.Parse(queries["ascending"]);
                 if (resultAmount != null)
-                    responseBody = carDb.SortBy((SortingCriteria)criteria, (int)resultAmount, carList);
+                    responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, (int)resultAmount, carList);
                 else
-                    responseBody = carDb.SortBy((SortingCriteria)criteria, carListToSort: carList);
+                    responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, carListToSort: carList);
             }
             else if (resultAmount != null)
                 responseBody = carDb.GetCarList((int)resultAmount);
@@ -377,14 +380,13 @@ namespace Server
                 resultAmount = int.Parse(queries["result_amount"]);
             if (queries.ContainsKey("sort_by"))
                 criteria = GetSortingCriteria(queries["sort_by"]);
-            if (resultAmount != null && criteria != null)
-                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, (int)resultAmount));
-            else if (resultAmount == null && criteria == null)
-                r = MakeResponse(200, carDb.Filter(cf));
-            else if (resultAmount == null)
-                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria));
+            bool ascending = true;
+            if (queries.ContainsKey("ascending"))
+                ascending = bool.Parse(queries["ascending"]);
+            if (resultAmount != null)
+                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, (int)resultAmount));
             else
-                r = MakeResponse(200, carDb.Filter(cf, resultAmount: (int)resultAmount));
+                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending));
         }
 
         private byte[] SetContent(string output)
