@@ -29,39 +29,17 @@ namespace Backend
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Take(resultAmount).ToList<Car>());
         }
 
-        public byte[] SortBy(SortingCriteria sortBy, int resultAmount = 50, List<Car> carListToSort = null)
+        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int resultAmount = 50, List<Car> carListToSort = null)
         {
-            if(carListToSort == null)
+            if (carListToSort == null)
             {
                 carListToSort = carList;
             }
-            switch (sortBy)
-            {
-                case (SortingCriteria.UploadDate):
-                    carListToSort.Sort((x, y) => x.Id.CompareTo(y.Id));
-                    break;
-                case (SortingCriteria.Price):
-                    carListToSort.Sort((x, y) => x.Price.CompareTo(y.Price));
-                    break;
-                case (SortingCriteria.DateOfPurchase):
-                    carListToSort.Sort((x, y) => x.DateOfPurchase.CompareTo(y.DateOfPurchase));
-                    break;
-                case (SortingCriteria.TotalKilometersDriven):
-                    carListToSort.Sort((x, y) => x.TotalKilometersDriven.CompareTo(y.TotalKilometersDriven));
-                    break;
-                case (SortingCriteria.NextVehicleInspection):
-                    carListToSort.Sort((x, y) => x.NextVehicleInspection.CompareTo(y.NextVehicleInspection));
-                    break;
-                case (SortingCriteria.OriginalPurchaseCountry):
-                    carListToSort.Sort((x, y) => x.OriginalPurchaseCountry.CompareTo(y.OriginalPurchaseCountry));
-                    break;
-                default:
-                    throw new ArgumentException("Bad compare criteria");
-            }
+            carListToSort.SortBy(sortBy, sortAscending);
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Take(resultAmount).ToList<Car>());
         }
 
-        public byte[] Filter(CarFilters filters, SortingCriteria sortBy = SortingCriteria.UploadDate, int resultAmount = 50)
+        public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int resultAmount = 50)
         {
             List<Car> filteredCarList = carList;
 
@@ -74,7 +52,7 @@ namespace Backend
             if (filters.FuelType.HasValue)
                 filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
 
-            return SortBy(sortBy, resultAmount, filteredCarList);
+            return SortBy(sortBy, sortAscending, resultAmount, filteredCarList);
         }
 
         // params: Car serialized to JSON
