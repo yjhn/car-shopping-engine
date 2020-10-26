@@ -1,6 +1,8 @@
 ﻿using DataTypes;
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using Frontend;
 
 namespace CarEngine
 {
@@ -100,7 +102,7 @@ namespace CarEngine
             }
 
             // call frontend with search data
-            //List<Car> carsToDisplay = Frontend.SearchCars(filters, sortBy);
+            List<Car> carsToDisplay = Api.SearchCars(filters, sortBy);
         }
 
         private void resetSearchButton_Click(object sender, EventArgs e)

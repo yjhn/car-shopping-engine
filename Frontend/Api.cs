@@ -1,38 +1,31 @@
-using DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text;
+using DataTypes;
 
 namespace Frontend
 {
-
     public class Api
     {
-        private Response r = null;
-        public List<Car> GetCars()
+        public static List<Car> GetCars()
         {
-            Request req = new Request();
-            req.Method = "GET";
-            req.Resource = "cars";
-            r = GetResponse(req);
+            Request req = reqInnit("GET", "cars");
+            Response r = GetResponse(req);
             return JsonSerializer.Deserialize<List<Car>>(r.Content);
         }
 
-        public List<Car> GetCars(int resultAmount)
+        public static List<Car> GetCars(int resultAmount)
         {
-            Request req = new Request();
-            req.Method = "GET";
-            req.Resource = "cars";
+            Request req = reqInnit("GET", "cars");
             req.Queries.Add("result_amount", resultAmount.ToString());
-            r = GetResponse(req);
+            Response r = GetResponse(req);
             return JsonSerializer.Deserialize<List<Car>>(r.Content);
         }
 
-        public List<Car> SortBy(SortingCriteria sortBy, int? resultAmount = null, List<Car> carListToSort = null)
+        public static List<Car> SortBy(SortingCriteria sortBy, int? resultAmount = null, List<Car> carListToSort = null)
         {
-            Request req = new Request();
-            req.Method = "GET";
-            req.Resource = "cars";
+            Request req = reqInnit("GET", "cars");
             req.Queries.Add("sortby", sortBy.ToString());
             if (resultAmount != null)
                 req.Queries.Add("result_amount", resultAmount.ToString());
@@ -41,17 +34,15 @@ namespace Frontend
                 req.Headers.Add(new Header("Content-type", MakeType("json")));
                 byte[] listContent = JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort);
                 req.Headers.Add(new Header("Content-length", listContent.Length.ToString()));
-                req.Content = Encoding.ASCII.GetString(listContent);
+                req.Content = listContent;
             }
-            r = GetResponse(req);
+            Response r = GetResponse(req);
             return JsonSerializer.Deserialize<List<Car>>(r.Content);
         }
 
-        public List<Car> Filter(CarFilters filters, SortingCriteria? sortBy = null, int? resultAmount = null)
+        public static List<Car> SearchCars(CarFilters filters, SortingCriteria? sortBy = null, int? resultAmount = null)
         {
-            Request req = new Request();
-            req.Method = "GET";
-            req.Resource = "cars/filters";
+            Request req = reqInnit("GET", "cars/filters");
             if (resultAmount != null)
                 req.Queries.Add("result_amount", resultAmount.ToString());
             if (sortBy != null)
@@ -74,30 +65,26 @@ namespace Frontend
                 req.Queries.Add("year_to", filters.YearTo.ToString());
             if (filters.FuelType.HasValue)
                 req.Queries.Add("fuel_type", filters.FuelType.ToString());
-            r = GetResponse(req);
+            Response r = GetResponse(req);
             return JsonSerializer.Deserialize<List<Car>>(r.Content);
         }
 
-        public Car GetCar(int id)
+        public static Car GetCar(int id)
         {
-            Request req = new Request();
-            req.Method = "GET";
-            req.Resource = "cars";
+            Request req = reqInnit("GET", "cars");
             req.Queries.Add("id", id.ToString());
-            r = GetResponse(req);
+            Response r = GetResponse(req);
             return JsonSerializer.Deserialize<Car>(r.Content);
         }
 
-        public int? AddCar(Car car)
+        public static int? AddCar(Car car)
         {
-            Request req = new Request();
-            req.Method = "POST";
-            req.Resource = "cars";
+            Request req = reqInnit("POST", "cars");
             req.Headers.Add(new Header("Content-type", MakeType("json")));
             byte[] carContent = JsonSerializer.SerializeToUtf8Bytes<Car>(car);
             req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
-            req.Content = Encoding.ASCII.GetString(carContent);
-            r = GetResponse(req);
+            req.Content = carContent;
+            Response r = GetResponse(req);
             int? id;
             switch (r.StatusCode)
             {
@@ -114,66 +101,53 @@ namespace Frontend
             return id;
         }
 
-        public bool DeleteCar(int id)
+        public static bool DeleteCar(int id)
         {
-            Request req = new Request();
-            req.Method = "DELETE";
-            req.Resource = "cars";
+            Request req = reqInnit("DELETE", "cars");
             req.Queries.Add("id", id.ToString());
-            r = GetResponse(req);
+            Response r = GetResponse(req);
             bool result;
-            if (string.IsNullOrEmpty(req.Content))
+            if (r.Content.Length > 0)
                 result = true;
             else
                 result = false;
             return result;
         }
 
-        public bool AddUser(User user)
+        public static bool AddUser(User user)
         {
-            Request req = new Request();
-            req.Method = "POST";
-            req.Resource = "users";
+            Request req = reqInnit("POST", "users");
             byte[] userContent = JsonSerializer.SerializeToUtf8Bytes<User>(user);
-            req.Content = userContent.ToString();
-            req.Queries.Add("Content-type", MakeType("json"));
-            req.Queries.Add("Content-length", userContent.Length.ToString());
-            r = GetResponse(req);
+            req.Content = userContent;
+            req.Headers.Add(new Header("Content-type", MakeType("json")));
+            req.Headers.Add(new Header("Content-length", userContent.Length.ToString()));
+            Response r = GetResponse(req);
             bool added = false;
             if (r.StatusCode == 201)
                 added = true;
             return added;
         }
 
-        public bool DeleteUser(string username)
+        public static bool DeleteUser(string username)
         {
-            Request req = new Request();
-            req.Method = "DELETE";
-            req.Resource = "cars";
+            Request req = reqInnit("DELETE", "cars");
             req.Queries.Add("username", username);
-            r = GetResponse(req);
+            Response r = GetResponse(req);
             bool deleted = false;
-            if (string.IsNullOrEmpty(Encoding.ASCII.GetString(r.Content)))
+            if (r.Content.Length == 0)
                 deleted = true;
             return deleted;
         }
 
-        public User GetUser(string username)
+        public static User GetUser(string username)
         {
-            Request req = new Request();
-            req.Method = "GET";
-            req.Resource = "users";
+            Request req = reqInnit("GET", "users");
             req.Queries.Add("username", username);
-            r = GetResponse(req);
+            Response r = GetResponse(req);
             return JsonSerializer.Deserialize<User>(r.Content);
         }
 
-        private Response GetResponse(Request req)
-        {
-            return Client.FromString2Response(Client.GetRawResponse(req));
-        }
-
-        private string MakeType(string key)
+        private static string MakeType(string key)
         {
             string contentType;
             switch (key)
@@ -189,5 +163,19 @@ namespace Frontend
             return contentType;
         }
 
+        private static Request reqInnit(string method, string resource)
+        {
+            Request req = new Request();
+            req.Method = method;
+            req.Resource = resource;
+            req.Queries = new Dictionary<string, string>();
+            req.Headers = new List<Header>();
+            return req;
+        }
+
+        private static Response GetResponse(Request req)
+        {
+            return Client.FromStringToResponse(Client.GetRawResponse(req));
+        }
     }
 }
