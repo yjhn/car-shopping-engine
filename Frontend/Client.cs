@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
+﻿using DataTypes;
+using System;
+using System.Collections.Generic;
 using System.Net.Security;
+using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using DataTypes;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
+
 namespace Frontend
 {
     public class Client
