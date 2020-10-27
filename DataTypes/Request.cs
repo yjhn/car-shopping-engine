@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 namespace DataTypes
 {
     public class Request
@@ -16,12 +17,18 @@ namespace DataTypes
         { get; set; }
         public List<Header> Headers
         { get; set; }
-        public String Content
+        public byte[] Content
+        { get; set; }
+        public string Username
+        { get; set; }
+        public string Password
         { get; set; }
 
-        public Request() { }
+        public Request()
+        {
+        }
 
-        public Request(string method, string url, string resource, Dictionary<string, string> queries, string httpVersion, List<Header> headers, string content)
+        public Request(string method, string url, string resource, Dictionary<string, string> queries, string httpVersion, List<Header> headers, byte[] content)
         {
             Method = method;
             Url = url;

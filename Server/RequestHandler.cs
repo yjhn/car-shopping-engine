@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text.Json;
+using System.Net;
 using Backend;
 using DataTypes;
 
@@ -16,17 +17,12 @@ namespace Server
         private ICarDb carDb;
         private IUserDb userDb;
         private Logger logger;
-        private string protocol, host;
-        private int port;
-        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb, Logger logger, string protocol, string host, int port)
+        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb, Logger logger)
         {
             this.rawRequest = rawRequest;
             this.carDb = carDb;
             this.userDb = userDb;
             this.logger = logger;
-            this.protocol = protocol;
-            this.host = host;
-            this.port = port;
         }
 
         public byte[] HandleRequest()
@@ -64,13 +60,12 @@ namespace Server
                 logger.LogException(e);
                 r = MakeResponse(500);
             }
-
             return r.Format();
         }
 
         private Request ParseRequest()
         {
-            Regex regex = new Regex(@"^(?<method>[\w]+)\s(?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-]+))*))?\s(?<httpVersion>[\w\/\d\.]+)\r\n(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z\,\.:\/\?\d&_]+)\r\n)+\r\n(?<content>[\d\D]*)$");
+            Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+){ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z,\.:\/\?\d&_\-; =]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
             if (!regex.IsMatch(rawRequest))
                 throw new ArgumentException("Invalid request");
             GroupCollection groups = regex.Matches(rawRequest)[0].Groups;
@@ -81,24 +76,24 @@ namespace Server
             CaptureCollection values = groups["queryValue"].Captures;
             Dictionary<string, string> queries = new Dictionary<string, string>();
             for (int i = 0; i < names.Count; i++)
-                queries.Add(names[i].Value, values[i].Value);
+                queries.Add(names[i].Value, WebUtility.UrlDecode(values[i].Value));
             string httpVersion = groups["httpVersion"].Value;
             names = groups["headerName"].Captures;
             values = groups["headerValue"].Captures;
             List<Header> headers = new List<Header>();
             for (int i = 0; i < names.Count; i++)
-                if (!Header.Contains(headers, names[i].Value))
+                if (!Header.Contains(headers, names[i].Value.ToUpper()))
                     headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
                 else
                     throw new ArgumentException("DuplicateHeader");
-            string content = groups["content"].Value;
+            byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
             Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
         }
 
         private Validation ValidateRequest(Request req)
         {
-            if (req.HttpVersion != "HTTP/1.1")
+            if (req.HttpVersion != ServerConstants.HttpVersion)
                 return Validation.HttpVersionNotSupported;
 
             // check Host header
@@ -114,7 +109,7 @@ namespace Server
 
             // if full URL was set in resource part, its Host header should match it
             string url = req.Url;
-            if (url.StartsWith("http"))
+            if (!string.IsNullOrEmpty(url))
             {
                 int hostFromUrlIndex = url.IndexOf("://") + 3;
                 string hostFromUrl = url.Substring(hostFromUrlIndex, url.Length - hostFromUrlIndex);
@@ -125,12 +120,16 @@ namespace Server
             {
                 int contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
                 if (req.Content.Length > contentLength)
-                    req.Content = req.Content.Substring(0, contentLength);
-                else
-                    return Validation.NoFullContent;
+                {
+                    string contentString = Encoding.ASCII.GetString(req.Content);
+                    contentString = contentString.Substring(0, contentLength);
+                    req.Content = Encoding.ASCII.GetBytes(contentString);
+                }
+                else if (req.Content.Length < contentLength)
+                    return Validation.RequestTimeout;
             }
 
-            if (!string.IsNullOrEmpty(req.Content) && !Header.Contains(headers, "CONTENT-LENGTH"))
+            if (req.Content.Length > 0 && !Header.Contains(headers, "CONTENT-LENGTH"))
                 return Validation.NoContentLength;
             if (req.Method == "POST" && !Header.Contains(headers, "CONTENT-LENGTH"))
                 return Validation.NoContentLength;
@@ -169,21 +168,21 @@ namespace Server
                     //if (!Verify(req))
                     //return;
                     if (contentType.StartsWith("application/json"))
-                        AddCar(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                        AddCar(req.Content);
                     break;
                 case "users":
                     if (contentType.StartsWith("application/json"))
-                        AddUser(System.Text.Encoding.ASCII.GetBytes(req.Content));
+                        AddUser(req.Content);
                     break;
                 case "login":
                     if (contentType.StartsWith("application/x-www-form-urlencoded"))
                     {
                         Regex loginValidation = new Regex(@"^username=(?<username>[a-zA-Z]+)&hashed_password=(?<hashedPassword>[\d\D]+)$");
-                        if (!loginValidation.IsMatch(req.Content))
+                        if (!loginValidation.IsMatch(Encoding.ASCII.GetString(req.Content)))
                             r = MakeResponse(400);
                         else
                         {
-                            GroupCollection groups = loginValidation.Matches(req.Content)[0].Groups;
+                            GroupCollection groups = loginValidation.Matches(Encoding.ASCII.GetString(req.Content))[0].Groups;
                             string username = groups["username"].Value;
                             string hashedPassword = groups["hashedPassword"].Value;
                             Login(username, hashedPassword);
@@ -237,7 +236,7 @@ namespace Server
             {
                 if (id != null)
                     throw incompatible;
-                resultAmount = uint.Parse(queries["resultamount"]);
+                resultAmount = uint.Parse(queries["result_amount"]);
             }
 
             List<Car> carList = null;
@@ -246,20 +245,23 @@ namespace Server
                 responseBody = carDb.GetCar((uint)id);
             else if (criteria != null)
             {
-                if (!string.IsNullOrEmpty(req.Content))
+                if (req.Content.Length > 0)
                 {
                     if (Header.Contains(req.Headers, "CONTENT-TYPE") & Header.GetValueByName(req.Headers, "CONTENT-TYPE").StartsWith("application/json"))
-                        carList = JsonSerializer.Deserialize<List<Car>>(req.Content);
+                        carList = JsonSerializer.Deserialize<List<Car>>(Encoding.ASCII.GetString(req.Content));
                     else
                     {
                         r = MakeResponse(415);
                         return;
                     }
                 }
+                bool ascending = true;
+                if (queries.ContainsKey("ascending"))
+                    ascending = bool.Parse(queries["ascending"]);
                 if (resultAmount != null)
-                    responseBody = carDb.SortBy((SortingCriteria)criteria, (int)resultAmount, carList);
+                    responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, (int)resultAmount, carList);
                 else
-                    responseBody = carDb.SortBy((SortingCriteria)criteria, carListToSort: carList);
+                    responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, carListToSort: carList);
             }
             else if (resultAmount != null)
                 responseBody = carDb.GetCarList((int)resultAmount);
@@ -283,7 +285,7 @@ namespace Server
                 r = MakeResponse(201);
                 CarList cs = (CarList)carDb;
                 uint id = cs.lastCarId;
-                r.Headers.Add(new Header("Location", $"{protocol}://{host}:{port}/cars/{id}"));
+                r.Headers.Add(new Header("Location", $"{ServerConstants.Scheme}://{ServerConstants.HostForClients}:{ServerConstants.Port}/cars/{id}"));
             }
             else
                 r = MakeResponse(204);
@@ -315,6 +317,8 @@ namespace Server
                 statusCode = 505;
             else if (v == Validation.NoContentLength)
                 statusCode = 411;
+            else if (v == Validation.RequestTimeout)
+                statusCode = 408;
             else
                 statusCode = 400;
             return MakeResponse(statusCode);
@@ -334,8 +338,8 @@ namespace Server
             headers.Add(new Header("Date", DateTime.Now.ToUniversalTime().ToString("r")));
             headers.Add(new Header("Server", "UnquestionableSolutions"));
             if (content.Length > 0)
-                headers.Add(new Header("Content-Type", "{contentType}; charset=utf-8"));
-            headers.Add(new Header("Content-Length", content.Length.ToString()));
+                headers.Add(new Header("Content-type", $"{contentType}; charset=utf-8"));
+            headers.Add(new Header("Content-length", content.Length.ToString()));
             r.Headers = headers;
             return r;
         }
@@ -361,29 +365,28 @@ namespace Server
             if (queries.ContainsKey("used"))
                 cf.Used = bool.Parse(queries["used"]);
             if (queries.ContainsKey("price_from"))
-                cf.PriceFrom = uint.Parse(queries["priceFrom"]);
+                cf.PriceFrom = uint.Parse(queries["price_from"]);
             if (queries.ContainsKey("price_to"))
-                cf.PriceTo = uint.Parse(queries["priceTo"]);
+                cf.PriceTo = uint.Parse(queries["price_to"]);
             if (queries.ContainsKey("username"))
                 cf.Username = queries["username"];
             if (queries.ContainsKey("year_from"))
-                cf.YearFrom = uint.Parse(queries["yearFrom"]);
+                cf.YearFrom = uint.Parse(queries["year_from"]);
             if (queries.ContainsKey("year_to"))
-                cf.YearTo = uint.Parse(queries["yearTo"]);
+                cf.YearTo = uint.Parse(queries["year_to"]);
             if (queries.ContainsKey("fuel_type"))
-                cf.FuelType = (FuelType)Enum.Parse(typeof(FuelType), queries["fuelType"]);
+                cf.FuelType = (FuelType)Enum.Parse(typeof(FuelType), queries["fuel_type"]);
             if (queries.ContainsKey("result_amount"))
                 resultAmount = int.Parse(queries["result_amount"]);
             if (queries.ContainsKey("sort_by"))
                 criteria = GetSortingCriteria(queries["sort_by"]);
-            if (resultAmount != null && criteria != null)
-                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, (int)resultAmount));
-            else if (resultAmount == null)
-                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria));
-            else if (criteria == null)
-                r = MakeResponse(200, carDb.Filter(cf, resultAmount: (int)resultAmount));
+            bool ascending = true;
+            if (queries.ContainsKey("ascending"))
+                ascending = bool.Parse(queries["ascending"]);
+            if (resultAmount != null)
+                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, (int)resultAmount));
             else
-                r = MakeResponse(200, carDb.Filter(cf));
+                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending));
         }
 
         private byte[] SetContent(string output)
@@ -422,7 +425,7 @@ namespace Server
         HostMismatch,
         NoContentLength,
         NoHost,
-        NoFullContent,
+        RequestTimeout,
         OK
     };
 }

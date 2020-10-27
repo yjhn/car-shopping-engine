@@ -6,8 +6,6 @@ namespace DataTypes
 {
     public class Response
     {
-        private const string HttpVersion = "HTTP/1.1";
-        private string headersDelimitor = "\r\n";
         public int StatusCode
         { get; }
         private string statusText;
@@ -39,6 +37,9 @@ namespace DataTypes
                 case 404:
                     statusText = "Not Found";
                     break;
+                case 408:
+                    statusText = "Request Timeout";
+                    break;
                 case 411:
                     statusText = "Length Required";
                     break;
@@ -62,12 +63,12 @@ namespace DataTypes
 
         public byte[] Format()
         {
-            StringBuilder output = new StringBuilder($"{HttpVersion} {StatusCode} {statusText}{headersDelimitor}");
+            StringBuilder output = new StringBuilder($"{ServerConstants.HttpVersion} {StatusCode} {statusText}{ServerConstants.HeaderSeparator}");
             foreach (Header h in Headers)
             {
-                output.Append($"{h.Name}: {h.Value}{headersDelimitor}");
+                output.Append($"{h.Name}: {h.Value}{ServerConstants.HeaderSeparator}");
             }
-            output.Append(headersDelimitor);
+            output.Append(ServerConstants.HeaderSeparator);
             byte[] finalOutput = Encoding.ASCII.GetBytes(output.ToString());
             int outputSize = finalOutput.Length;
             Array.Resize<byte>(ref finalOutput, outputSize + Content.Length);
