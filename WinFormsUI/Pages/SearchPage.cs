@@ -1,15 +1,31 @@
 ﻿using DataTypes;
 using System;
 using System.Windows.Forms;
+using Frontend;
+using System.Collections.Generic;
 
 namespace CarEngine
 {
     public partial class SearchPage : UserControl
     {
+        private List<Car> resultList;
+
         public SearchPage()
         {
             InitializeComponent();
             // do other intialization code here, such as setting default selected values for comboboxes
+
+            // set min and max allowed manufacture years
+            lowerYearRangeTextBox.Minimum = VehiclePropertyConstants.minVehicleManufactureYear;
+            lowerYearRangeTextBox.Maximum = VehiclePropertyConstants.maxVehicleManufactureYear;
+            upperYearRangeTextBox.Minimum = VehiclePropertyConstants.minVehicleManufactureYear;
+            upperYearRangeTextBox.Maximum = VehiclePropertyConstants.maxVehicleManufactureYear;
+
+            // set min and max allowed price
+            lowerPriceTextBox.Minimum = VehiclePropertyConstants.minVehiclePrice;
+            lowerPriceTextBox.Maximum = VehiclePropertyConstants.maxVehiclePrice;
+            upperPriceTextBox.Minimum = VehiclePropertyConstants.minVehiclePrice;
+            upperPriceTextBox.Maximum = VehiclePropertyConstants.maxVehiclePrice;
 
             // default vehicle type: any
             vehicleTypeCombobox.SelectedIndex = 0;
@@ -28,9 +44,7 @@ namespace CarEngine
         private void searchButton_Click(object sender, EventArgs e)
         {
             // formulate a query to the frontend to search for cars
-            // frontend should save the query for use if user goes back to this screen
-
-            // should move all this to frontend, just supply all this info
+            // frontend should save the query for use if user goes back to this screen - or maybe not, as information will not be removed from the form
 
             FuelType? fuelType;
             switch (fuelTypeComboBox.SelectedItem)
@@ -99,57 +113,22 @@ namespace CarEngine
                     break;
             }
 
-            // filtering
+            SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortByCombobox.SelectedItem);
 
-            CarFilters filters = new CarFilters()
-            {
-                ChassisType = vehicleType,
-                Brand = (brandTextBox.Text == "") ? null : brandTextBox.Text,
-                Model = (modelTextBox.Text == "") ? null : modelTextBox.Text,
-                PriceFrom = (lowerPriceTextBox.Value == lowerPriceTextBox.Minimum) ? default(uint?) : Convert.ToUInt32(lowerPriceTextBox.Value),
-                PriceTo = (upperPriceTextBox.Value == upperPriceTextBox.Minimum) ? default(uint?) : Convert.ToUInt32(upperPriceTextBox.Value),
-                Used = radioButtonUsed.Checked ? true : (radioButtonNew.Checked ? false : default(bool?)),
-                YearFrom = (lowerYearRangeTextBox.Value == lowerYearRangeTextBox.Minimum) ? default(uint?) : Convert.ToUInt32(lowerYearRangeTextBox.Value),
-                YearTo = (upperYearRangeTextBox.Value == upperYearRangeTextBox.Maximum) ? default(uint?) : Convert.ToUInt32(upperYearRangeTextBox.Value),
-                FuelType = fuelType
-                // add more filters
-            };
+            bool sortAscending = radioButtonAscending.Checked;
 
-            // sorting
-
-            SortingCriteria sortBy;
-            switch (sortByCombobox.SelectedItem)
-            {
-                case "upload date":
-                    sortBy = SortingCriteria.UploadDate;
-                    break;
-                case "price":
-                    sortBy = SortingCriteria.Price;
-                    break;
-                case "date of purchase":
-                    sortBy = SortingCriteria.DateOfPurchase;
-                    break;
-                case "total kilometers driven":
-                    sortBy = SortingCriteria.TotalKilometersDriven;
-                    break;
-                case "original purchase country":
-                    sortBy = SortingCriteria.OriginalPurchaseCountry;
-                    break;
-                default:
-                    sortBy = SortingCriteria.UploadDate;
-                    break;
-            }
-            if (radioButtonDescending.Checked)
-            {
-                sortBy |= SortingCriteria.SortDescending;
-            }
-            else
-            {
-                sortBy |= SortingCriteria.SortAscending;
-            }
-
-            // call frontend with search data
-            //List<Car> carsToDisplay = Frontend.SearchCars(filters, sortBy);
+            resultList = VehicleSearch.searchVehicles(brandTextBox.Text,
+                                                      modelTextBox.Text,
+                                                      fuelType,
+                                                      vehicleType,
+                                                      sortBy,
+                                                      sortAscending,
+                                                      radioButtonUsed.Checked,
+                                                      radioButtonNew.Checked,
+                                                      Convert.ToUInt32(lowerPriceTextBox.Value),
+                                                      Convert.ToUInt32(upperPriceTextBox.Value),
+                                                      Convert.ToInt32(lowerYearRangeTextBox.Value),
+                                                      Convert.ToInt32(upperYearRangeTextBox.Value));
 
             // after we get the results back from server, we show them
             //searchResultsPage.Visible = true;
@@ -157,6 +136,7 @@ namespace CarEngine
 
         private void resetSearchButton_Click(object sender, EventArgs e)
         {
+            // reset everything on page to default values
             vehicleTypeCombobox.SelectedIndex = 0;
             brandTextBox.ResetText();
             modelTextBox.ResetText();
