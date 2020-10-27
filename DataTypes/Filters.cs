@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DataTypes
 {
@@ -81,23 +80,20 @@ namespace DataTypes
         public uint? PriceFrom { get; set; }
         public uint? PriceTo { get; set; }
         public string Username { get; set; }
-        public uint? YearFrom { get; set; }
-        public uint? YearTo { get; set; }
+        public int? YearFrom { get; set; }
+        public int? YearTo { get; set; }
         public FuelType? FuelType { get; set; }
         public ChassisType? ChassisType { get; set; }
     }
 
-    [Flags]
     public enum SortingCriteria
     {
-        UploadDate = 1,
-        Price = 2,
-        DateOfPurchase = 4,
-        TotalKilometersDriven = 8,
-        NextVehicleInspection = 16,
-        OriginalPurchaseCountry = 32,
-        SortAscending = 64,
-        SortDescending = 128
+        UploadDate,
+        Price,
+        DateOfPurchase,
+        TotalKilometersDriven,
+        NextVehicleInspection,
+        OriginalPurchaseCountry
     }
 
     public enum Enginetype
