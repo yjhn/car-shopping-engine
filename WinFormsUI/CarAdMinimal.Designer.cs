@@ -70,7 +70,6 @@
             this.carImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.carImage.TabIndex = 1;
             this.carImage.TabStop = false;
-            this.carImage.Click += new System.EventHandler(this.carImage_Click);
             // 
             // price
             // 
@@ -101,6 +100,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "CarAdMinimal";
             this.Size = new System.Drawing.Size(239, 352);
+            this.Click += new System.EventHandler(this.CarAdMinimal_Click);
             this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.carImage)).EndInit();
             this.ResumeLayout(false);

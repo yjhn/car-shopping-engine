@@ -32,12 +32,12 @@ namespace CarEngine
                 carImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
             }
         }
-         
-        private void carImage_Click(object sender, EventArgs e)
+        
+
+        private void CarAdMinimal_Click(object sender, EventArgs e)
         {
             CarForm form = new CarForm(carInfo);
             form.Show();
-
         }
     }
 }
