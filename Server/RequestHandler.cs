@@ -371,18 +371,20 @@ namespace Server
             if (queries.ContainsKey("username"))
                 cf.Username = queries["username"];
             if (queries.ContainsKey("year_from"))
-                cf.YearFrom = uint.Parse(queries["year_from"]);
+                cf.YearFrom = int.Parse(queries["year_from"]);
             if (queries.ContainsKey("year_to"))
-                cf.YearTo = uint.Parse(queries["year_to"]);
+                cf.YearTo = int.Parse(queries["year_to"]);
             if (queries.ContainsKey("fuel_type"))
                 cf.FuelType = (FuelType)Enum.Parse(typeof(FuelType), queries["fuel_type"]);
+            if (queries.ContainsKey("chassis_type"))
+                cf.ChassisType = (ChassisType)Enum.Parse(typeof(ChassisType), queries["chassis_type"]);
             if (queries.ContainsKey("result_amount"))
                 resultAmount = int.Parse(queries["result_amount"]);
             if (queries.ContainsKey("sort_by"))
                 criteria = GetSortingCriteria(queries["sort_by"]);
             bool ascending = true;
-            if (queries.ContainsKey("ascending"))
-                ascending = bool.Parse(queries["ascending"]);
+            if (queries.ContainsKey("sort_ascending"))
+                ascending = bool.Parse(queries["sort_ascending"]);
             if (resultAmount != null)
                 r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, (int)resultAmount));
             else

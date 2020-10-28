@@ -10,22 +10,22 @@ namespace Frontend
     {
         public static List<Car> GetCars()
         {
-            Request req = reqInnit("GET", "cars");
+            Request req = reqInit("GET", "cars");
             Response r = GetResponse(req);
-            return JsonSerializer.Deserialize<List<Car>>(r.Content);
+            return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
         public static List<Car> GetCars(int resultAmount)
         {
-            Request req = reqInnit("GET", "cars");
+            Request req = reqInit("GET", "cars");
             req.Queries.Add("result_amount", resultAmount.ToString());
             Response r = GetResponse(req);
-            return JsonSerializer.Deserialize<List<Car>>(r.Content);
+            return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
         public static List<Car> SortBy(SortingCriteria sortBy, int? resultAmount = null, List<Car> carListToSort = null)
         {
-            Request req = reqInnit("GET", "cars");
+            Request req = reqInit("GET", "cars");
             req.Queries.Add("sortby", sortBy.ToString());
             if (resultAmount != null)
                 req.Queries.Add("result_amount", resultAmount.ToString());
@@ -37,16 +37,16 @@ namespace Frontend
                 req.Content = listContent;
             }
             Response r = GetResponse(req);
-            return JsonSerializer.Deserialize<List<Car>>(r.Content);
+            return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
-        public static List<Car> SearchCars(CarFilters filters, SortingCriteria? sortBy = null, int? resultAmount = null)
+        public static List<Car> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int? resultAmount = null)
         {
-            Request req = reqInnit("GET", "cars/filters");
+            Request req = reqInit("GET", "cars/filters");
             if (resultAmount != null)
                 req.Queries.Add("result_amount", resultAmount.ToString());
-            if (sortBy != null)
-                req.Queries.Add("sort_by", sortBy.ToString());
+            req.Queries.Add("sort_by", sortBy.ToString());
+            req.Queries.Add("sort_ascending", sortAscending.ToString());
             if (!string.IsNullOrEmpty(filters.Brand))
                 req.Queries.Add("brand", filters.Brand);
             if (!string.IsNullOrEmpty(filters.Model))
@@ -57,6 +57,8 @@ namespace Frontend
                 req.Queries.Add("price_from", filters.PriceFrom.ToString());
             if (filters.PriceTo.HasValue)
                 req.Queries.Add("price_to", filters.PriceTo.ToString());
+            if (filters.Used.HasValue)
+                req.Queries.Add("used", filters.Used.ToString());
             if (!string.IsNullOrEmpty(filters.Username))
                 req.Queries.Add("username", filters.Username);
             if (filters.YearFrom.HasValue)
@@ -65,21 +67,23 @@ namespace Frontend
                 req.Queries.Add("year_to", filters.YearTo.ToString());
             if (filters.FuelType.HasValue)
                 req.Queries.Add("fuel_type", filters.FuelType.ToString());
+            if (filters.ChassisType.HasValue)
+                req.Queries.Add("chassis_type", filters.ChassisType.ToString());
             Response r = GetResponse(req);
-            return JsonSerializer.Deserialize<List<Car>>(r.Content);
+            return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
         public static Car GetCar(int id)
         {
-            Request req = reqInnit("GET", "cars");
+            Request req = reqInit("GET", "cars");
             req.Queries.Add("id", id.ToString());
             Response r = GetResponse(req);
-            return JsonSerializer.Deserialize<Car>(r.Content);
+            return r.Content.Length > 0 ? JsonSerializer.Deserialize<Car>(r.Content) : null;
         }
 
         public static int? AddCar(Car car)
         {
-            Request req = reqInnit("POST", "cars");
+            Request req = reqInit("POST", "cars");
             req.Headers.Add(new Header("Content-type", MakeType("json")));
             byte[] carContent = JsonSerializer.SerializeToUtf8Bytes<Car>(car);
             req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
@@ -103,7 +107,7 @@ namespace Frontend
 
         public static bool DeleteCar(int id)
         {
-            Request req = reqInnit("DELETE", "cars");
+            Request req = reqInit("DELETE", "cars");
             req.Queries.Add("id", id.ToString());
             Response r = GetResponse(req);
             bool result;
@@ -116,7 +120,7 @@ namespace Frontend
 
         public static bool AddUser(User user)
         {
-            Request req = reqInnit("POST", "users");
+            Request req = reqInit("POST", "users");
             byte[] userContent = JsonSerializer.SerializeToUtf8Bytes<User>(user);
             req.Content = userContent;
             req.Headers.Add(new Header("Content-type", MakeType("json")));
@@ -130,7 +134,7 @@ namespace Frontend
 
         public static bool DeleteUser(string username)
         {
-            Request req = reqInnit("DELETE", "cars");
+            Request req = reqInit("DELETE", "cars");
             req.Queries.Add("username", username);
             Response r = GetResponse(req);
             bool deleted = false;
@@ -141,10 +145,10 @@ namespace Frontend
 
         public static User GetUser(string username)
         {
-            Request req = reqInnit("GET", "users");
+            Request req = reqInit("GET", "users");
             req.Queries.Add("username", username);
             Response r = GetResponse(req);
-            return JsonSerializer.Deserialize<User>(r.Content);
+            return r.Content.Length > 0 ? JsonSerializer.Deserialize<User>(r.Content) : null;
         }
 
         private static string MakeType(string key)
@@ -160,10 +164,11 @@ namespace Frontend
                     break;
             }
             contentType += "; charset=utf-8";
+            System.Diagnostics.Debug.WriteLine(contentType);
             return contentType;
         }
 
-        private static Request reqInnit(string method, string resource)
+        private static Request reqInit(string method, string resource)
         {
             Request req = new Request();
             req.Method = method;

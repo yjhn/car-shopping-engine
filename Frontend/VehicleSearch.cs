@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Frontend
 {
-    // should this be static?
     public static class VehicleSearch
     {
         public static List<Car> searchVehicles(string brand,
@@ -31,10 +30,7 @@ namespace Frontend
                 YearTo = (upperYearRange == VehiclePropertyConstants.maxVehicleManufactureYear) ? default(int?) : upperYearRange,
                 FuelType = fuelType
             };
-
-            // until required functionality is implemented in the frontend
-            return null;
-            // initiate search
+            return Api.SearchVehicles(filters, sorting, sortAscending);
         }
     }
 }
