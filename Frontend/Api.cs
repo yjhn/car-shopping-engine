@@ -92,16 +92,18 @@ namespace Frontend
             req.Headers.Add(new Header("Content-type", MakeType("json")));
             byte[] carContent = JsonSerializer.SerializeToUtf8Bytes<Car>(car);
             req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
+            System.Diagnostics.Debug.WriteLine("ilgis" + carContent.Length);
             req.Content = carContent;
             Response r = GetResponse(req);
+            System.Diagnostics.Debug.WriteLine(System.Text.Encoding.ASCII.GetString(r.Format()));
             int? id;
             switch (r.StatusCode)
             {
                 case 201:
                     string locationValue = Header.GetValueByName(r.Headers, "location");
-                    int lastSlash = locationValue.LastIndexOf("/");
-                    string idInString = locationValue.Substring(lastSlash, locationValue.Length - lastSlash - 1);
-                    id = int.Parse(idInString);
+ //                   int lastSlash = locationValue.LastIndexOf("/");
+ //                   string idInString = locationValue.Substring(lastSlash, locationValue.Length - lastSlash - 1);
+ //                   id = int.Parse(idInString);
                     break;
                 default:
                     id = null;
