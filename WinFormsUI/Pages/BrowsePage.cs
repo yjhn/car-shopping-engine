@@ -48,6 +48,7 @@ namespace CarEngine
                 // test
                 CarAdMinimal[] carAds = GenerateAds(carAmount);
                 // test
+
                 minimalAdList.Add(carAds);
             }
 
