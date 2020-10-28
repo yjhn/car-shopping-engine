@@ -11,7 +11,7 @@ namespace Backend
         public List<Car> carList;
         private FileReader carDataReader;
         private FileWriter carDataWriter;
-        public uint lastCarId { get; internal set; }
+        public int lastCarId { get; internal set; }
         private Logger logger;
 
         public CarList(Logger logger, string carDbPath = null)
@@ -99,9 +99,9 @@ namespace Backend
             return false;
         }
 
-        public List<uint> GetUserAdIds(string username)
+        public List<int> GetUserAdIds(string username)
         {
-            List<uint> ids = new List<uint>();
+            List<int> ids = new List<int>();
             foreach (Car car in carList)
             {
                 if (car.UploaderUsername.Equals(username))

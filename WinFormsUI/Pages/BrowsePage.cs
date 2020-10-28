@@ -120,7 +120,7 @@ namespace CarEngine
             Car newCar = new Car();
             newCar.Model = carModels[rnd.Next(0, carModels.Length)];
             newCar.Brand = carBrands[rnd.Next(0, carBrands.Length)];
-            newCar.Price = (uint) rnd.Next(1000, 20000);
+            newCar.Price = rnd.Next(1000, 20000);
             newCar.Engine = new Engine();
             newCar.Comment = "Komentaras";
             newCar.Images = images;

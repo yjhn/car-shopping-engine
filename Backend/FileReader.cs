@@ -12,7 +12,7 @@ namespace Backend
         private string userDatabasePath;
         private string carDatabasePath;
         private Logger logger;
-        internal uint lastCarId { get; private set; } = 0;
+        internal int lastCarId { get; private set; } = 0;
 
         internal FileReader(Logger logger, string carDbPath = null, string userDbPath = null)
         {
@@ -36,7 +36,7 @@ namespace Backend
             }
         }
 
-        internal Car GetCarData(uint Id)
+        internal Car GetCarData(int Id)
         {
             if (Directory.Exists(carDatabasePath))
             {
