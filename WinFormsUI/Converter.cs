@@ -22,6 +22,14 @@ namespace CarEngine
             return image;
         }
 
-
+        public static string ConvertImageToBase64(Image file)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                file.Save(memoryStream, file.RawFormat);
+                byte[] imageBytes = memoryStream.ToArray();
+                return Convert.ToBase64String(imageBytes);
+            }
+        }
     }
 }
