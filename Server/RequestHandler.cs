@@ -241,7 +241,7 @@ namespace Server
             List<Car> carList = null;
             byte[] responseBody;
             if (id != null)
-                responseBody = carDb.GetCar((uint)id);
+                responseBody = carDb.GetCar((int)id);
             else if (criteria != null)
             {
                 if (req.Content.Length > 0)
@@ -296,7 +296,7 @@ namespace Server
                 r = MakeResponse(204);
         }
 
-        private bool DeleteCar(uint id)
+        private bool DeleteCar(int id)
         {
             return carDb.DeleteCar(id);
         }

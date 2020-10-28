@@ -1,4 +1,5 @@
 using DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -6,12 +7,20 @@ namespace Frontend
 {
     public class Api
     {
+        // event to tell the UI that there is no connection to server
+        public static event Action noServerResponse = delegate {};
+
         public static List<Car> GetCars(int startIndex, int amount)
         {
             // TODO: adapt to server API changes
             Request req = reqInit("GET", "cars");
             req.Queries.Add("amount", amount.ToString());
             Response r = GetResponse(req);
+            if(r == null)
+            {
+                noServerResponse.Invoke();
+                return null;
+            }
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 

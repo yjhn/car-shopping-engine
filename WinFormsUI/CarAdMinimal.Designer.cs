@@ -29,44 +29,45 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CarAdMinimal));
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.vehicleAdPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.carModel = new System.Windows.Forms.Label();
             this.carImage = new System.Windows.Forms.PictureBox();
             this.price = new System.Windows.Forms.Label();
             this.additionInfo = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.vehicleAdPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.carImage)).BeginInit();
             this.SuspendLayout();
             // 
-            // flowLayoutPanel1
+            // vehicleAdPanel
             // 
-            this.flowLayoutPanel1.Controls.Add(this.carModel);
-            this.flowLayoutPanel1.Controls.Add(this.carImage);
-            this.flowLayoutPanel1.Controls.Add(this.price);
-            this.flowLayoutPanel1.Controls.Add(this.additionInfo);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(239, 352);
-            this.flowLayoutPanel1.TabIndex = 0;
+            this.vehicleAdPanel.Controls.Add(this.carModel);
+            this.vehicleAdPanel.Controls.Add(this.carImage);
+            this.vehicleAdPanel.Controls.Add(this.price);
+            this.vehicleAdPanel.Controls.Add(this.additionInfo);
+            this.vehicleAdPanel.Location = new System.Drawing.Point(0, 0);
+            this.vehicleAdPanel.Name = "vehicleAdPanel";
+            this.vehicleAdPanel.Size = new System.Drawing.Size(209, 264);
+            this.vehicleAdPanel.TabIndex = 0;
             // 
             // carModel
             // 
+            this.carModel.BackColor = System.Drawing.Color.Transparent;
             this.carModel.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.carModel.Location = new System.Drawing.Point(3, 0);
             this.carModel.Name = "carModel";
-            this.carModel.Size = new System.Drawing.Size(235, 55);
+            this.carModel.Size = new System.Drawing.Size(206, 41);
             this.carModel.TabIndex = 0;
             this.carModel.Text = "Volvo V60";
             this.carModel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.carModel.Click += new System.EventHandler(this.carModel_Click);
             // 
             // carImage
             // 
+            this.carImage.BackColor = System.Drawing.Color.Transparent;
             this.carImage.Image = ((System.Drawing.Image)(resources.GetObject("carImage.Image")));
-            this.carImage.Location = new System.Drawing.Point(3, 59);
-            this.carImage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.carImage.Location = new System.Drawing.Point(3, 44);
             this.carImage.Name = "carImage";
-            this.carImage.Size = new System.Drawing.Size(235, 187);
+            this.carImage.Size = new System.Drawing.Size(206, 140);
             this.carImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.carImage.TabIndex = 1;
             this.carImage.TabStop = false;
@@ -74,34 +75,35 @@
             // 
             // price
             // 
-            this.price.BackColor = System.Drawing.SystemColors.Control;
+            this.price.BackColor = System.Drawing.Color.Transparent;
             this.price.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.price.Location = new System.Drawing.Point(3, 250);
+            this.price.Location = new System.Drawing.Point(3, 187);
             this.price.Name = "price";
-            this.price.Size = new System.Drawing.Size(235, 44);
+            this.price.Size = new System.Drawing.Size(206, 33);
             this.price.TabIndex = 2;
             this.price.Text = "13 500€";
             this.price.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.price.Click += new System.EventHandler(this.price_Click);
             // 
             // additionInfo
             // 
-            this.additionInfo.BackColor = System.Drawing.SystemColors.Control;
+            this.additionInfo.BackColor = System.Drawing.Color.Transparent;
             this.additionInfo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.additionInfo.Location = new System.Drawing.Point(3, 294);
+            this.additionInfo.Location = new System.Drawing.Point(3, 220);
             this.additionInfo.Name = "additionInfo";
-            this.additionInfo.Size = new System.Drawing.Size(235, 59);
+            this.additionInfo.Size = new System.Drawing.Size(206, 44);
             this.additionInfo.TabIndex = 2;
             this.additionInfo.Text = "2.2l V8 \"Vairavo kunigas\"";
+            this.additionInfo.Click += new System.EventHandler(this.additionInfo_Click);
             // 
             // CarAdMinimal
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.flowLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Controls.Add(this.vehicleAdPanel);
             this.Name = "CarAdMinimal";
-            this.Size = new System.Drawing.Size(239, 352);
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.Size = new System.Drawing.Size(209, 264);
+            this.vehicleAdPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.carImage)).EndInit();
             this.ResumeLayout(false);
 
@@ -109,7 +111,7 @@
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel vehicleAdPanel;
         private System.Windows.Forms.Label carModel;
         private System.Windows.Forms.PictureBox carImage;
         private System.Windows.Forms.Label additionInfo;

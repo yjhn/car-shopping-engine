@@ -79,13 +79,13 @@ namespace Backend
             }
         }
 
-        public byte[] GetCar(uint id)
+        public byte[] GetCar(int id)
         {
             Car car = carList.Find(car => car.Id == id);
             return car != null ? JsonSerializer.SerializeToUtf8Bytes<Car>(car) : null;
         }
 
-        public bool DeleteCar(uint id)
+        public bool DeleteCar(int id)
         {
             foreach (Car car in carList)
             {
