@@ -117,7 +117,15 @@ namespace CarEngine
             string[] carBrands = { "BMW", "Audi", "Fiat" };
             string[] carModels = { "Vienas", "Du", "Trys" };
             string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
-            Car newCar = new Car();
+            //Car newCar = new Car();
+            Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
+                brand: "alfa", model: "beta", true, dateOfPurchase: new Month { year = 2000, month = 10 }, engine: new Engine { hp = 100, kw = 60, volume = 1.2f },
+                fuelType: FuelType.petrol, chassisType: ChassisType.station_wagon, color: "juoda", gearboxType: GearboxType.automatic, totalKilometersDriven: 100000,
+                driveWheels: DriveWheels.rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.left,
+                numberOfDoors: NumberOfDoors.fourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new Month { year = 2022, month = 5 },
+                wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
+                additionalProperties: new string[] { "a", "b" }, images: new string[] { "0" }, comment: "my comment");
+
             newCar.Model = carModels[rnd.Next(0, carModels.Length)];
             newCar.Brand = carBrands[rnd.Next(0, carBrands.Length)];
             newCar.Price = rnd.Next(1000, 20000);
