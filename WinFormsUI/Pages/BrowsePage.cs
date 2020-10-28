@@ -183,5 +183,11 @@ namespace CarEngine
             ShowCarList(1);
             pageNumber = 1;
         }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            minimalAdList = new List<CarAdMinimal[]>();
+            ShowCarList(1);
+        }
     }
 }
