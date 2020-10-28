@@ -45,7 +45,7 @@ namespace CarEngine.Forms
                 age.Visible = false;
             }
 
-            if (carInfo.Price != null)
+            if (carInfo.Price != 0)
             {
                 price.Text = carInfo.Price.ToString() + "€";
             }
@@ -87,7 +87,7 @@ namespace CarEngine.Forms
                 gearBoxType.Visible = false;
             }
 
-            if (carInfo.Weight != null)
+            if (carInfo.Weight != 0)
             {
                 weight.Text = carInfo.Weight.ToString();
             } else
