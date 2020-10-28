@@ -1,34 +1,26 @@
-using System;
+using DataTypes;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Text;
-using DataTypes;
 
 namespace Frontend
 {
     public class Api
     {
-        public static List<Car> GetCars()
+        public static List<Car> GetCars(int startIndex, int amount)
         {
+            // TODO: adapt to server API changes
             Request req = reqInit("GET", "cars");
+            req.Queries.Add("amount", amount.ToString());
             Response r = GetResponse(req);
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
-        public static List<Car> GetCars(int resultAmount)
+        public static List<Car> SortBy(SortingCriteria sortBy, int startIndex, int amount, List<Car> carListToSort = null)
         {
-            Request req = reqInit("GET", "cars");
-            req.Queries.Add("result_amount", resultAmount.ToString());
-            Response r = GetResponse(req);
-            return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
-        }
-
-        public static List<Car> SortBy(SortingCriteria sortBy, int? resultAmount = null, List<Car> carListToSort = null)
-        {
+            // TODO: adapt to server API changes
             Request req = reqInit("GET", "cars");
             req.Queries.Add("sortby", sortBy.ToString());
-            if (resultAmount != null)
-                req.Queries.Add("result_amount", resultAmount.ToString());
+            req.Queries.Add("amount", amount.ToString());
             if (carListToSort != null)
             {
                 req.Headers.Add(new Header("Content-type", MakeType("json")));
@@ -40,11 +32,11 @@ namespace Frontend
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
-        public static List<Car> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int? resultAmount = null)
+        public static List<Car> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
+            // TODO: adapt to server API changes
             Request req = reqInit("GET", "cars/filters");
-            if (resultAmount != null)
-                req.Queries.Add("result_amount", resultAmount.ToString());
+            req.Queries.Add("amount", amount.ToString());
             req.Queries.Add("sort_by", sortBy.ToString());
             req.Queries.Add("sort_ascending", sortAscending.ToString());
             if (!string.IsNullOrEmpty(filters.Brand))
@@ -73,7 +65,7 @@ namespace Frontend
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
-        public static Car GetCar(int id)
+        public static Car GetCar(uint id)
         {
             Request req = reqInit("GET", "cars");
             req.Queries.Add("id", id.ToString());
@@ -81,7 +73,7 @@ namespace Frontend
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<Car>(r.Content) : null;
         }
 
-        public static int? AddCar(Car car)
+        public static uint? AddCar(Car car)
         {
             Request req = reqInit("POST", "cars");
             req.Headers.Add(new Header("Content-type", MakeType("json")));
@@ -89,14 +81,14 @@ namespace Frontend
             req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
             req.Content = carContent;
             Response r = GetResponse(req);
-            int? id;
+            uint? id;
             switch (r.StatusCode)
             {
                 case 201:
                     string locationValue = Header.GetValueByName(r.Headers, "location");
                     int lastSlash = locationValue.LastIndexOf("/");
                     string idInString = locationValue.Substring(lastSlash, locationValue.Length - lastSlash - 1);
-                    id = int.Parse(idInString);
+                    id = uint.Parse(idInString);
                     break;
                 default:
                     id = null;
@@ -105,7 +97,7 @@ namespace Frontend
             return id;
         }
 
-        public static bool DeleteCar(int id)
+        public static bool DeleteCar(uint id)
         {
             Request req = reqInit("DELETE", "cars");
             req.Queries.Add("id", id.ToString());
