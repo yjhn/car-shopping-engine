@@ -65,7 +65,7 @@ namespace Frontend
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
-        public static Car GetCar(uint id)
+        public static Car GetCar(int id)
         {
             Request req = reqInit("GET", "cars");
             req.Queries.Add("id", id.ToString());
@@ -73,7 +73,7 @@ namespace Frontend
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<Car>(r.Content) : null;
         }
 
-        public static uint? AddCar(Car car)
+        public static int? AddCar(Car car)
         {
             Request req = reqInit("POST", "cars");
             req.Headers.Add(new Header("Content-type", MakeType("json")));
@@ -81,14 +81,14 @@ namespace Frontend
             req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
             req.Content = carContent;
             Response r = GetResponse(req);
-            uint? id;
+            int? id;
             switch (r.StatusCode)
             {
                 case 201:
                     string locationValue = Header.GetValueByName(r.Headers, "location");
                     int lastSlash = locationValue.LastIndexOf("/");
                     string idInString = locationValue.Substring(lastSlash, locationValue.Length - lastSlash - 1);
-                    id = uint.Parse(idInString);
+                    id = int.Parse(idInString);
                     break;
                 default:
                     id = null;
@@ -97,7 +97,7 @@ namespace Frontend
             return id;
         }
 
-        public static bool DeleteCar(uint id)
+        public static bool DeleteCar(int id)
         {
             Request req = reqInit("DELETE", "cars");
             req.Queries.Add("id", id.ToString());

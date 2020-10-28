@@ -13,8 +13,8 @@ namespace Frontend
                                                bool sortAscending,
                                                bool isUsed,
                                                bool isNew,
-                                               uint lowerPriceRange,
-                                               uint upperPriceRange,
+                                               int lowerPriceRange,
+                                               int upperPriceRange,
                                                int lowerYearRange,
                                                int upperYearRange)
         {
@@ -23,8 +23,8 @@ namespace Frontend
                 ChassisType = vehicleType,
                 Brand = (brand == string.Empty) ? null : brand,
                 Model = (model == string.Empty) ? null : model,
-                PriceFrom = (lowerPriceRange == VehiclePropertyConstants.minVehiclePrice) ? default(uint?) : lowerPriceRange,
-                PriceTo = (upperPriceRange == VehiclePropertyConstants.maxVehiclePrice) ? default(uint?) : upperPriceRange,
+                PriceFrom = (lowerPriceRange == VehiclePropertyConstants.minVehiclePrice) ? default(int?) : lowerPriceRange,
+                PriceTo = (upperPriceRange == VehiclePropertyConstants.maxVehiclePrice) ? default(int?) : upperPriceRange,
                 Used = isUsed ? true : (isNew ? false : default(bool?)),
                 YearFrom = (lowerYearRange == VehiclePropertyConstants.minVehicleManufactureYear) ? default(int?) : lowerYearRange,
                 YearTo = (upperYearRange == VehiclePropertyConstants.maxVehicleManufactureYear) ? default(int?) : upperYearRange,

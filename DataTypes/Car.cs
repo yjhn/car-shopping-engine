@@ -7,10 +7,10 @@ namespace DataTypes
     {
         // unique db key = Id
 
-        public Car(string uploaderUsername, DateTime uploadDate, uint price, string brand, string model, bool used, Month dateOfPurchase, Engine engine, FuelType fuelType,
-            ChassisType chassisType, string color, GearboxType gearboxType, uint totalKilometersDriven, DriveWheels driveWheels, string[] defects,
-            SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, uint numberOfCylinders, uint numberOfGears, uint seats, Month nextVehicleInspection,
-            string wheelSize, uint weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images, string comment)
+        public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, bool used, Month dateOfPurchase, Engine engine, FuelType fuelType,
+            ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, string[] defects,
+            SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, Month nextVehicleInspection,
+            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images, string comment)
         {
             Price = price;
             UploaderUsername = uploaderUsername;
@@ -45,8 +45,8 @@ namespace DataTypes
 
         public Car(){ }
 
-        public uint Id { get; set; }
-        public uint Price { get; set; }
+        public int Id { get; set; }
+        public int Price { get; set; }
         public string UploaderUsername { get; set; }
         public DateTime UploadDate { get; set; }
         public string Brand { get; set; }
@@ -58,17 +58,17 @@ namespace DataTypes
         public ChassisType ChassisType { get; set; }
         public string Color { get; set; }
         public GearboxType GearboxType { get; set; }
-        public uint TotalKilometersDriven { get; set; }
+        public int TotalKilometersDriven { get; set; }
         public DriveWheels DriveWheels { get; set; }
         public string[] Defects { get; set; }
         public SteeringWheelPosition SteeringWheelPosition { get; set; }
         public NumberOfDoors NumberOfDoors { get; set; }
-        public uint NumberOfCylinders { get; set; }
-        public uint NumberOfGears { get; set; }
-        public uint Seats { get; set; }
+        public int NumberOfCylinders { get; set; }
+        public int NumberOfGears { get; set; }
+        public int Seats { get; set; }
         public Month NextVehicleInspection { get; set; }
         public string WheelSize { get; set; }
-        public uint Weight { get; set; }
+        public int Weight { get; set; }
         public EuroStandard EuroStandard { get; set; }
         public string OriginalPurchaseCountry { get; set; }
         public string Vin { get; set; }
@@ -84,8 +84,8 @@ namespace DataTypes
 
     public class Month : IComparable<Month>
     {
-        public uint year { get; set; }
-        public uint month { get; set; }
+        public int year { get; set; }
+        public int month { get; set; }
 
         public int CompareTo(Month other)
         {
@@ -117,8 +117,8 @@ namespace DataTypes
 
     public class Engine
     {
-        public uint hp { get; set; }
-        public uint kw { get; set; }
+        public int hp { get; set; }
+        public int kw { get; set; }
         public float volume { get; set; }
         public Enginetype engineType { get; set; }
 

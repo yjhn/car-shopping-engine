@@ -202,7 +202,7 @@ namespace Server
             switch (req.Resource)
             {
                 case "cars":
-                    result = DeleteCar(uint.Parse(req.Queries["id"]));
+                    result = DeleteCar(int.Parse(req.Queries["id"]));
                     break;
                 case "users":
                     result = DeleteUser(req.Queries["username"]);
@@ -220,11 +220,12 @@ namespace Server
         private void GetCars(Request req)
         {
             Dictionary<string, string> queries = req.Queries;
-            uint? id = null, amount = null;
+            int? id = null;
+            int amount = 50, startIndex = 0;
             ArgumentException incompatible = new ArgumentException("Incompatible queries");
             SortingCriteria? criteria = null;
             if (queries.ContainsKey("id"))
-                id = uint.Parse(queries["id"]);
+                id = int.Parse(queries["id"]);
             if (queries.ContainsKey("sort_by"))
             {
                 if (id != null)
@@ -235,13 +236,18 @@ namespace Server
             {
                 if (id != null)
                     throw incompatible;
-                amount = uint.Parse(queries["amount"]);
+                amount = int.Parse(queries["amount"]);
             }
-
-            List<Car> carList = null;
+            if (queries.ContainsKey("start_index"))
+            {
+                if (id != null)
+                    throw incompatible;
+                startIndex = int.Parse(queries["start_index"]);
+            }
+                        List<Car> carList = null;
             byte[] responseBody;
             if (id != null)
-                responseBody = carDb.GetCar((uint)id);
+                responseBody = carDb.GetCar((int)id);
             else if (criteria != null)
             {
                 if (req.Content.Length > 0)
@@ -257,11 +263,11 @@ namespace Server
                 bool ascending = true;
                 if (queries.ContainsKey("ascending"))
                     ascending = bool.Parse(queries["ascending"]);
-                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, /*TODO*/, (int)amount, carList);
+                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, startIndex, amount, carList);
             }
             else
             {
-                responseBody = carDb.GetCarList(/*TODO*/, (int)amount);
+                responseBody = carDb.GetCarList(startIndex, amount);
             }
 
             r = MakeResponse(200, responseBody);
@@ -280,7 +286,7 @@ namespace Server
             {
                 r = MakeResponse(201);
                 CarList cs = (CarList)carDb;
-                uint id = cs.lastCarId;
+                int id = cs.lastCarId;
                 r.Headers.Add(new Header("Location", $"{ServerConstants.Scheme}://{ServerConstants.HostForClients}:{ServerConstants.Port}/cars/{id}"));
             }
             else
@@ -296,7 +302,7 @@ namespace Server
                 r = MakeResponse(204);
         }
 
-        private bool DeleteCar(uint id)
+        private bool DeleteCar(int id)
         {
             return carDb.DeleteCar(id);
         }
@@ -352,7 +358,7 @@ namespace Server
         private void GetFilteredCars(Dictionary<string, string> queries)
         {
             SortingCriteria? criteria = null;
-            int? amount = null;
+            int amount = 50, startIndex = 0;
             CarFilters cf = new CarFilters();
             if (queries.ContainsKey("brand"))
                 cf.Brand = queries["brand"];
@@ -361,9 +367,9 @@ namespace Server
             if (queries.ContainsKey("used"))
                 cf.Used = bool.Parse(queries["used"]);
             if (queries.ContainsKey("price_from"))
-                cf.PriceFrom = uint.Parse(queries["price_from"]);
+                cf.PriceFrom = int.Parse(queries["price_from"]);
             if (queries.ContainsKey("price_to"))
-                cf.PriceTo = uint.Parse(queries["price_to"]);
+                cf.PriceTo = int.Parse(queries["price_to"]);
             if (queries.ContainsKey("username"))
                 cf.Username = queries["username"];
             if (queries.ContainsKey("year_from"))
@@ -381,7 +387,9 @@ namespace Server
             bool ascending = true;
             if (queries.ContainsKey("sort_ascending"))
                 ascending = bool.Parse(queries["sort_ascending"]);
-            r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, /*TODO*/, (int)amount));
+            if (queries.ContainsKey("start_index"))
+                startIndex = int.Parse(queries["start_index"]);
+            r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, startIndex, amount));
         }
 
         private byte[] SetContent(string output)

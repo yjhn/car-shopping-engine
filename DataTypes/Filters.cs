@@ -77,8 +77,8 @@ namespace DataTypes
         public string Brand { get; set; }
         public string Model { get; set; }
         public bool? Used { get; set; }
-        public uint? PriceFrom { get; set; }
-        public uint? PriceTo { get; set; }
+        public int? PriceFrom { get; set; }
+        public int? PriceTo { get; set; }
         public string Username { get; set; }
         public int? YearFrom { get; set; }
         public int? YearTo { get; set; }

@@ -125,8 +125,8 @@ namespace CarEngine
                                                       sortAscending,
                                                       radioButtonUsed.Checked,
                                                       radioButtonNew.Checked,
-                                                      Convert.ToUInt32(lowerPriceTextBox.Value),
-                                                      Convert.ToUInt32(upperPriceTextBox.Value),
+                                                      Convert.ToInt32(lowerPriceTextBox.Value),
+                                                      Convert.ToInt32(upperPriceTextBox.Value),
                                                       Convert.ToInt32(lowerYearRangeTextBox.Value),
                                                       Convert.ToInt32(upperYearRangeTextBox.Value));
 

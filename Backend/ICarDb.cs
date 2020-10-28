@@ -9,14 +9,14 @@ namespace Backend
 
         public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null);
 
-        public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAsceding, int startIndex, int amount);
+        public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
         public bool AddCar(byte[] car);
 
-        public byte[] GetCar(uint id);
+        public byte[] GetCar(int id);
 
-        public bool DeleteCar(uint id);
+        public bool DeleteCar(int id);
 
-        public List<uint> GetUserAdIds(string username);
+        public List<int> GetUserAdIds(string username);
     }
 }
