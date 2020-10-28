@@ -1,12 +1,11 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Text.Json;
-using System.Net;
 using Backend;
 using DataTypes;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Server
 {
@@ -221,7 +220,7 @@ namespace Server
         private void GetCars(Request req)
         {
             Dictionary<string, string> queries = req.Queries;
-            uint? id = null, resultAmount = null;
+            uint? id = null, amount = null;
             ArgumentException incompatible = new ArgumentException("Incompatible queries");
             SortingCriteria? criteria = null;
             if (queries.ContainsKey("id"))
@@ -232,11 +231,11 @@ namespace Server
                     throw incompatible;
                 criteria = GetSortingCriteria(queries["sort_by"]);
             }
-            if (queries.ContainsKey("result_amount"))
+            if (queries.ContainsKey("amount"))
             {
                 if (id != null)
                     throw incompatible;
-                resultAmount = uint.Parse(queries["result_amount"]);
+                amount = uint.Parse(queries["amount"]);
             }
 
             List<Car> carList = null;
@@ -258,15 +257,12 @@ namespace Server
                 bool ascending = true;
                 if (queries.ContainsKey("ascending"))
                     ascending = bool.Parse(queries["ascending"]);
-                if (resultAmount != null)
-                    responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, (int)resultAmount, carList);
-                else
-                    responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, carListToSort: carList);
+                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, /*TODO*/, (int)amount, carList);
             }
-            else if (resultAmount != null)
-                responseBody = carDb.GetCarList((int)resultAmount);
             else
-                responseBody = carDb.GetCarList();
+            {
+                responseBody = carDb.GetCarList(/*TODO*/, (int)amount);
+            }
 
             r = MakeResponse(200, responseBody);
         }
@@ -356,7 +352,7 @@ namespace Server
         private void GetFilteredCars(Dictionary<string, string> queries)
         {
             SortingCriteria? criteria = null;
-            int? resultAmount = null;
+            int? amount = null;
             CarFilters cf = new CarFilters();
             if (queries.ContainsKey("brand"))
                 cf.Brand = queries["brand"];
@@ -378,17 +374,14 @@ namespace Server
                 cf.FuelType = (FuelType)Enum.Parse(typeof(FuelType), queries["fuel_type"]);
             if (queries.ContainsKey("chassis_type"))
                 cf.ChassisType = (ChassisType)Enum.Parse(typeof(ChassisType), queries["chassis_type"]);
-            if (queries.ContainsKey("result_amount"))
-                resultAmount = int.Parse(queries["result_amount"]);
+            if (queries.ContainsKey("amount"))
+                amount = int.Parse(queries["amount"]);
             if (queries.ContainsKey("sort_by"))
                 criteria = GetSortingCriteria(queries["sort_by"]);
             bool ascending = true;
             if (queries.ContainsKey("sort_ascending"))
                 ascending = bool.Parse(queries["sort_ascending"]);
-            if (resultAmount != null)
-                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, (int)resultAmount));
-            else
-                r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending));
+            r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, /*TODO*/, (int)amount));
         }
 
         private byte[] SetContent(string output)

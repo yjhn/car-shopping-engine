@@ -24,22 +24,22 @@ namespace Backend
         }
 
         // returns List<Car> serialized to JSON
-        public byte[] GetCarList(int resultAmount = 50)
+        public byte[] GetCarList(int startIndex, int amount)
         {
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Take(resultAmount).ToList<Car>());
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Skip(startIndex).Take(amount).ToList<Car>());
         }
 
-        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int resultAmount = 50, List<Car> carListToSort = null)
+        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {
             if (carListToSort == null)
             {
                 carListToSort = carList;
             }
             carListToSort.SortBy(sortBy, sortAscending);
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Take(resultAmount).ToList<Car>());
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Skip(startIndex).Take(amount).ToList<Car>());
         }
 
-        public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int resultAmount = 50)
+        public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             List<Car> filteredCarList = carList;
 
@@ -52,7 +52,7 @@ namespace Backend
             if (filters.FuelType.HasValue)
                 filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
 
-            return SortBy(sortBy, sortAscending, resultAmount, filteredCarList);
+            return SortBy(sortBy, sortAscending, startIndex, amount, filteredCarList);
         }
 
         // params: Car serialized to JSON
