@@ -24,19 +24,13 @@ namespace Frontend
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
-        public static List<Car> SortBy(SortingCriteria sortBy, int startIndex, int amount, List<Car> carListToSort = null)
+        public static List<Car> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool ascending)
         {
             // TODO: adapt to server API changes
             Request req = reqInit("GET", "cars");
             req.Queries.Add("sortby", sortBy.ToString());
             req.Queries.Add("amount", amount.ToString());
-            if (carListToSort != null)
-            {
-                req.Headers.Add(new Header("Content-type", MakeType("json")));
-                byte[] listContent = JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort);
-                req.Headers.Add(new Header("Content-length", listContent.Length.ToString()));
-                req.Content = listContent;
-            }
+            req.Queries.Add("ascending", ascending.ToString());
             Response r = GetResponse(req);
             if(r == null)
             {
@@ -92,16 +86,19 @@ namespace Frontend
             req.Headers.Add(new Header("Content-type", MakeType("json")));
             byte[] carContent = JsonSerializer.SerializeToUtf8Bytes<Car>(car);
             req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
+            System.Diagnostics.Debug.WriteLine("ilgis" + carContent.Length);
             req.Content = carContent;
             Response r = GetResponse(req);
+            System.Diagnostics.Debug.WriteLine(System.Text.Encoding.ASCII.GetString(r.Format()));
             int? id;
             switch (r.StatusCode)
             {
                 case 201:
                     string locationValue = Header.GetValueByName(r.Headers, "location");
-                    int lastSlash = locationValue.LastIndexOf("/");
-                    string idInString = locationValue.Substring(lastSlash, locationValue.Length - lastSlash - 1);
-                    id = int.Parse(idInString);
+                    //                   int lastSlash = locationValue.LastIndexOf("/");
+                    //                   string idInString = locationValue.Substring(lastSlash, locationValue.Length - lastSlash - 1);
+                    id = 1;
+                    //int.Parse(idInString);
                     break;
                 default:
                     id = null;

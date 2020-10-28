@@ -85,7 +85,8 @@ namespace Server
                     headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
                 else
                     throw new ArgumentException("DuplicateHeader");
-            byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
+            Console.WriteLine("content: "+groups["content"].Value+ groups["content"].Value.Length);
+                        byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
             Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
         }
@@ -118,6 +119,7 @@ namespace Server
             if (Header.Contains(headers, "CONTENT-LENGTH"))
             {
                 int contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
+                Console.WriteLine("given length: " + contentLength+" specified "+req.Content.Length);
                 if (req.Content.Length > contentLength)
                 {
                     string contentString = Encoding.ASCII.GetString(req.Content);
