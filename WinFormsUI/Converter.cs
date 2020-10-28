@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataTypes;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -30,6 +32,22 @@ namespace CarEngine
                 byte[] imageBytes = memoryStream.ToArray();
                 return Convert.ToBase64String(imageBytes);
             }
+        }
+
+        public static CarAdMinimal[] vehicleListToAds(List<Car> vehicleList)
+        {
+            if(vehicleList == null)
+            {
+                return null;
+            }
+            CarAdMinimal[] minimalAds = new CarAdMinimal[vehicleList.Count];
+
+            // might not get the amount of ads we asked for
+            for (int i = 0; i < vehicleList.Count; i++)
+            {
+                minimalAds[i] = new CarAdMinimal(vehicleList[i]);
+            }
+            return minimalAds;
         }
     }
 }
