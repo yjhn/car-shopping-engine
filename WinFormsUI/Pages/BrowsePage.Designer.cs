@@ -41,8 +41,9 @@
             this.mainPanel.AutoScroll = true;
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
+            this.mainPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(1000, 925);
+            this.mainPanel.Size = new System.Drawing.Size(700, 555);
             this.mainPanel.TabIndex = 1;
             // 
             // panel1
@@ -51,9 +52,10 @@
             this.panel1.Controls.Add(this.previousPageButton);
             this.panel1.Controls.Add(this.nextPageButton);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 867);
+            this.panel1.Location = new System.Drawing.Point(0, 520);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1000, 58);
+            this.panel1.Size = new System.Drawing.Size(700, 35);
             this.panel1.TabIndex = 2;
             // 
             // pageNumberLabel
@@ -61,9 +63,10 @@
             this.pageNumberLabel.AccessibleDescription = "current page number";
             this.pageNumberLabel.AccessibleName = "current page number";
             this.pageNumberLabel.AutoSize = true;
-            this.pageNumberLabel.Location = new System.Drawing.Point(462, 17);
+            this.pageNumberLabel.Location = new System.Drawing.Point(323, 10);
+            this.pageNumberLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pageNumberLabel.Name = "pageNumberLabel";
-            this.pageNumberLabel.Size = new System.Drawing.Size(22, 25);
+            this.pageNumberLabel.Size = new System.Drawing.Size(13, 15);
             this.pageNumberLabel.TabIndex = 1;
             this.pageNumberLabel.Text = "1";
             this.pageNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -72,9 +75,11 @@
             // 
             this.previousPageButton.AccessibleDescription = "button to change page number to a previous one";
             this.previousPageButton.AccessibleName = "previous page button";
-            this.previousPageButton.Location = new System.Drawing.Point(372, 12);
+            this.previousPageButton.Enabled = false;
+            this.previousPageButton.Location = new System.Drawing.Point(260, 7);
+            this.previousPageButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.previousPageButton.Name = "previousPageButton";
-            this.previousPageButton.Size = new System.Drawing.Size(67, 34);
+            this.previousPageButton.Size = new System.Drawing.Size(47, 20);
             this.previousPageButton.TabIndex = 0;
             this.previousPageButton.Text = "<";
             this.previousPageButton.UseVisualStyleBackColor = true;
@@ -84,9 +89,10 @@
             // 
             this.nextPageButton.AccessibleDescription = "button to change page number to next one";
             this.nextPageButton.AccessibleName = "next page button";
-            this.nextPageButton.Location = new System.Drawing.Point(510, 12);
+            this.nextPageButton.Location = new System.Drawing.Point(357, 7);
+            this.nextPageButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nextPageButton.Name = "nextPageButton";
-            this.nextPageButton.Size = new System.Drawing.Size(67, 34);
+            this.nextPageButton.Size = new System.Drawing.Size(47, 20);
             this.nextPageButton.TabIndex = 0;
             this.nextPageButton.Text = ">";
             this.nextPageButton.UseVisualStyleBackColor = true;
@@ -94,14 +100,15 @@
             // 
             // BrowsePage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.mainPanel);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "BrowsePage";
-            this.Size = new System.Drawing.Size(1000, 925);
+            this.Size = new System.Drawing.Size(700, 555);
             this.Load += new System.EventHandler(this.BrowsePage_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

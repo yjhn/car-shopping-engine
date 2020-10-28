@@ -17,23 +17,31 @@ namespace CarEngine
         public int carAmount = 15;
         public static int pageNumber = 1;
 
+        // a list to store all car ads in all pages
+        List<CarAdMinimal[]> minimalAdList = new List<CarAdMinimal[]>();
+
         public BrowsePage()
         {
             InitializeComponent();
         }
 
-        private void ShowCarList()
+        private void ShowCarList(int pageNr)
         {
             if (mainPanel.Controls.Count != 0)
             {
                 mainPanel.Controls.Clear();
             }
             //cia reiktu pakeist i GetCars per API vietoj GenerateAds()
-            //+ gettint cars turėtų pagal puslapio numerį (pageNumber)
-            CarAdMinimal[] carAds = GenerateAds(carAmount);
+            
+            if (pageNr > minimalAdList.Count)
+            {
+                CarAdMinimal[] carAds = GenerateAds(carAmount);
+                minimalAdList.Add(carAds);
+            }
+
             for (int i = 0; i < carAmount; i++)
             {
-                mainPanel.Controls.Add(carAds[i]);
+                mainPanel.Controls.Add(minimalAdList[pageNr - 1][i]);
             }
         }
 
@@ -68,15 +76,19 @@ namespace CarEngine
         private void BrowsePage_Load(object sender, EventArgs e)
         {
             rnd = new Random();
-            ShowCarList();
+            ShowCarList(1);
         }
 
         private void nextPageButton_Click(object sender, EventArgs e)
         {
+            if(pageNumber == 1)
+            {
+                previousPageButton.Enabled = true;
+            }
             mainPanel.AutoScrollPosition = new Point(0,0);
             pageNumber++;
             pageNumberLabel.Text = pageNumber.ToString();
-            ShowCarList();
+            ShowCarList(pageNumber);
         }
 
         private void previousPageButton_Click(object sender, EventArgs e)
@@ -85,8 +97,12 @@ namespace CarEngine
             {
                 mainPanel.AutoScrollPosition = new Point(0, 0);
                 pageNumber--;
+                if(pageNumber == 1)
+                {
+                    previousPageButton.Enabled = false;
+                }
                 pageNumberLabel.Text = pageNumber.ToString();
-                ShowCarList();
+                ShowCarList(pageNumber);
             }
         }
     }
