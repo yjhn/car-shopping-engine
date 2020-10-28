@@ -159,6 +159,7 @@
             this.browsePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browsePage.Location = new System.Drawing.Point(0, 0);
             this.browsePage.Margin = new System.Windows.Forms.Padding(2);
+            this.browsePage.MinimumSize = new System.Drawing.Size(700, 555);
             this.browsePage.Name = "browsePage";
             this.browsePage.Size = new System.Drawing.Size(747, 555);
             this.browsePage.TabIndex = 0;
@@ -209,6 +210,7 @@
             this.Controls.Add(this.topPanel);
             this.Controls.Add(this.sidebarPanel);
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(800, 550);
             this.Name = "MainWindow";
             this.Text = "Form2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
