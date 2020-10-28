@@ -38,6 +38,10 @@ namespace Frontend
                 req.Content = listContent;
             }
             Response r = GetResponse(req);
+            if(r == null)
+            {
+                return null;
+            }
             return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
         }
 
