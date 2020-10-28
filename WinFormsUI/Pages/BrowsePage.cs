@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
+﻿using CarEngine.Properties;
 using DataTypes;
-using CarEngine.Properties;
 using Frontend;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace CarEngine
 {
-    
+
     public partial class BrowsePage : UserControl
     {
         // need to add the ability to refresh page
@@ -27,6 +24,7 @@ namespace CarEngine
         public BrowsePage()
         {
             InitializeComponent();
+            sortResultsByCombobox.SelectedIndex = 0;
         }
 
         private void ShowCarList(int pageNr)
@@ -66,17 +64,11 @@ namespace CarEngine
         private CarAdMinimal[] GetMinimalVehicleAds(int startIndex, int amount)
         {
             List<Car> vehicleAds = Api.GetCars(startIndex, amount);
-            if(vehicleAds == null)
+            if (vehicleAds == null)
             {
                 return null;
             }
-            CarAdMinimal[] minimalAds = new CarAdMinimal[vehicleAds.Count];
-
-            // might not get the amount of ads we asked for
-            for (int i = 0; i < vehicleAds.Count; i++)
-            {
-                minimalAds[i] = new CarAdMinimal(vehicleAds[i]);
-            }
+            CarAdMinimal[] minimalAds = Converter.vehicleListToAds(vehicleAds);
             return minimalAds;
         }
 
@@ -144,11 +136,11 @@ namespace CarEngine
 
         private void nextPageButton_Click(object sender, EventArgs e)
         {
-            if(pageNumber == 1)
+            if (pageNumber == 1)
             {
                 previousPageButton.Enabled = true;
             }
-            mainPanel.AutoScrollPosition = new Point(0,0);
+            mainPanel.AutoScrollPosition = new Point(0, 0);
             pageNumber++;
             pageNumberLabel.Text = pageNumber.ToString();
             ShowCarList(pageNumber);
@@ -157,11 +149,11 @@ namespace CarEngine
 
         private void previousPageButton_Click(object sender, EventArgs e)
         {
-            if(pageNumber > 1)
+            if (pageNumber > 1)
             {
                 mainPanel.AutoScrollPosition = new Point(0, 0);
                 pageNumber--;
-                if(pageNumber == 1)
+                if (pageNumber == 1)
                 {
                     previousPageButton.Enabled = false;
                 }
@@ -169,6 +161,27 @@ namespace CarEngine
                 ShowCarList(pageNumber);
                 nextPageButton.Enabled = true;
             }
+        }
+
+        private void sortingChanged(object sender, EventArgs e)
+        {
+            // send new request to server
+            SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
+            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy/*, sortAscRadioButton.Checked*/, 0, 15));
+            if(adList == null)
+            {
+                return;
+            }
+            if (minimalAdList.Count == 0)
+            {
+                minimalAdList.Add(adList);
+            }
+            else
+            {
+                minimalAdList[0] = adList;
+            }
+            ShowCarList(1);
+            pageNumber = 1;
         }
     }
 }
