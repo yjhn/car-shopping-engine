@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using DataTypes;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using DataTypes;
 namespace CarEngine.Forms
 {
     public partial class CarForm : Form
@@ -17,14 +12,16 @@ namespace CarEngine.Forms
             if (carInfo.Brand != null)
             {
                 brand.Text = carInfo.Brand.ToUpper();
-            } else
+            }
+            else
             {
                 brand.Visible = false;
             }
             if (carInfo.Model != null)
             {
                 model.Text = carInfo.Model.ToLower();
-            }else
+            }
+            else
             {
                 model.Visible = false;
             }
@@ -32,7 +29,8 @@ namespace CarEngine.Forms
             if (carInfo.Engine != null)
             {
                 engine.Text = $"{carInfo.Engine.engineType.ToString()} {carInfo.Engine.volume.ToString()} {carInfo.Engine.kw.ToString()}";
-            } else
+            }
+            else
             {
                 engine.Visible = false;
             }
@@ -40,7 +38,8 @@ namespace CarEngine.Forms
             if (carInfo.DateOfPurchase != null)
             {
                 age.Text = carInfo.DateOfPurchase.year.ToString() + "-" + carInfo.DateOfPurchase.month.ToString();
-            } else
+            }
+            else
             {
                 age.Visible = false;
             }
@@ -53,60 +52,36 @@ namespace CarEngine.Forms
             {
                 price.Visible = false;
             }
-
-            if (carInfo.ChassisType != null)
-            {
-                chassisType.Text = carInfo.ChassisType.ToString();
-            } else
-            {
-                chassisType.Visible = false;
-            }
+            chassisType.Text = carInfo.ChassisType.ToString();
 
             if (carInfo.Color != null)
             {
                 color.Text = carInfo.Color;
-            } else
+            }
+            else
             {
                 color.Visible = false;
             }
 
-            if (carInfo.FuelType != null)
-            {
-                fuelType.Text = carInfo.FuelType.ToString();
-            }
-            else
-            {
-                fuelType.Visible = false;
-            }
+            fuelType.Text = carInfo.FuelType.ToString();
 
-            if (carInfo.GearboxType != null)
-            {
-                gearBoxType.Text = carInfo.GearboxType.ToString();
-            }else
-            {
-                gearBoxType.Visible = false;
-            }
+            gearBoxType.Text = carInfo.GearboxType.ToString();
 
             if (carInfo.Weight != 0)
             {
                 weight.Text = carInfo.Weight.ToString();
-            } else
+            }
+            else
             {
                 weight.Visible = false;
             }
-
-            if (carInfo.EuroStandard != null)
-            {
-                eurostandard.Text = carInfo.EuroStandard.ToString();
-            } else
-            {
-                eurostandard.Visible = false;
-            }
+            eurostandard.Text = carInfo.EuroStandard.ToString();
 
             if (carInfo.Vin != null)
             {
                 vin.Text = carInfo.Vin;
-            } else
+            }
+            else
             {
                 vin.Visible = false;
             }
@@ -114,7 +89,8 @@ namespace CarEngine.Forms
             if (carInfo.Comment != null)
             {
                 comment.Text = carInfo.Comment;
-            }else
+            }
+            else
             {
                 comment.Visible = false;
             }
@@ -122,10 +98,10 @@ namespace CarEngine.Forms
 
             if (carInfo.Images.Length > 0)
             {
-                foreach(var i in carInfo.Images)
+                foreach (var i in carInfo.Images)
                 {
                     PictureBox pic = new PictureBox();
-                    pic.Image= Converter.Base64ToImg(i);
+                    pic.Image = Converter.Base64ToImg(i);
                     pic.SizeMode = PictureBoxSizeMode.Zoom;//447; 407
                     pic.Size = new Size(447, 407);
                     flowLayoutPanel2.Controls.Add(pic);
