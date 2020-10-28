@@ -63,13 +63,13 @@ namespace CarEngine
 
         private CarAdMinimal[] GetMinimalVehicleAds(int startIndex, int amount)
         {
-            List<Car> vehicleAds = Api.GetCars(startIndex, amount);
-            if (vehicleAds == null)
+            SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
+            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy/*, sortAscRadioButton.Checked*/, startIndex, amount));
+            if (adList == null)
             {
                 return null;
             }
-            CarAdMinimal[] minimalAds = Converter.vehicleListToAds(vehicleAds);
-            return minimalAds;
+            return adList;
         }
 
         //private void ShowCarList(int pageNr)
@@ -163,12 +163,12 @@ namespace CarEngine
             }
         }
 
-        private void sortingChanged(object sender, EventArgs e)
+        private void sortingChanged()
         {
             // send new request to server
             SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy/*, sortAscRadioButton.Checked*/, 0, 15));
-            if(adList == null)
+            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy/*, sortAscRadioButton.Checked*/, 0, carAmount));
+            if (adList == null)
             {
                 return;
             }
@@ -183,11 +183,15 @@ namespace CarEngine
             ShowCarList(1);
             pageNumber = 1;
         }
+        private void sortingChanged(object sender, EventArgs e)
+        {
+            this.sortingChanged();
+        }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
             minimalAdList = new List<CarAdMinimal[]>();
-            ShowCarList(1);
+            sortingChanged();
         }
     }
 }

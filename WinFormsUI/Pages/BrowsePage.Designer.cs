@@ -30,6 +30,7 @@
         {
             this.mainPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.refreshButton = new System.Windows.Forms.Button();
             this.sortAscDescPanel = new System.Windows.Forms.Panel();
             this.sortAscRadioButton = new System.Windows.Forms.RadioButton();
             this.sortDescRadioButton = new System.Windows.Forms.RadioButton();
@@ -38,7 +39,6 @@
             this.pageNumberLabel = new System.Windows.Forms.Label();
             this.previousPageButton = new System.Windows.Forms.Button();
             this.nextPageButton = new System.Windows.Forms.Button();
-            this.refreshButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.sortAscDescPanel.SuspendLayout();
             this.SuspendLayout();
@@ -71,6 +71,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(700, 39);
             this.panel1.TabIndex = 2;
+            // 
+            // refreshButton
+            // 
+            this.refreshButton.AccessibleDescription = "refresh button";
+            this.refreshButton.AccessibleName = "refresh button";
+            this.refreshButton.Location = new System.Drawing.Point(10, 11);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(75, 23);
+            this.refreshButton.TabIndex = 12;
+            this.refreshButton.Text = "refresh";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // sortAscDescPanel
             // 
@@ -151,7 +163,7 @@
             this.pageNumberLabel.AccessibleDescription = "current page number";
             this.pageNumberLabel.AccessibleName = "current page number";
             this.pageNumberLabel.AutoSize = true;
-            this.pageNumberLabel.Location = new System.Drawing.Point(167, 13);
+            this.pageNumberLabel.Location = new System.Drawing.Point(167, 15);
             this.pageNumberLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pageNumberLabel.Name = "pageNumberLabel";
             this.pageNumberLabel.Size = new System.Drawing.Size(13, 15);
@@ -164,7 +176,7 @@
             this.previousPageButton.AccessibleDescription = "button to change page number to a previous one";
             this.previousPageButton.AccessibleName = "previous page button";
             this.previousPageButton.Enabled = false;
-            this.previousPageButton.Location = new System.Drawing.Point(104, 10);
+            this.previousPageButton.Location = new System.Drawing.Point(104, 11);
             this.previousPageButton.Margin = new System.Windows.Forms.Padding(2);
             this.previousPageButton.Name = "previousPageButton";
             this.previousPageButton.Size = new System.Drawing.Size(47, 20);
@@ -177,7 +189,7 @@
             // 
             this.nextPageButton.AccessibleDescription = "button to change page number to next one";
             this.nextPageButton.AccessibleName = "next page button";
-            this.nextPageButton.Location = new System.Drawing.Point(201, 10);
+            this.nextPageButton.Location = new System.Drawing.Point(201, 11);
             this.nextPageButton.Margin = new System.Windows.Forms.Padding(2);
             this.nextPageButton.Name = "nextPageButton";
             this.nextPageButton.Size = new System.Drawing.Size(47, 20);
@@ -185,18 +197,6 @@
             this.nextPageButton.Text = ">";
             this.nextPageButton.UseVisualStyleBackColor = true;
             this.nextPageButton.Click += new System.EventHandler(this.nextPageButton_Click);
-            // 
-            // refreshButton
-            // 
-            this.refreshButton.AccessibleDescription = "refresh button";
-            this.refreshButton.AccessibleName = "refresh button";
-            this.refreshButton.Location = new System.Drawing.Point(10, 8);
-            this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(75, 23);
-            this.refreshButton.TabIndex = 12;
-            this.refreshButton.Text = "refresh";
-            this.refreshButton.UseVisualStyleBackColor = true;
-            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // BrowsePage
             // 
