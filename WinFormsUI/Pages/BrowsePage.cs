@@ -64,7 +64,7 @@ namespace CarEngine
         private CarAdMinimal[] GetMinimalVehicleAds(int startIndex, int amount)
         {
             SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy/*, sortAscRadioButton.Checked*/, startIndex, amount));
+            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy, startIndex, amount, sortAscRadioButton.Checked));
             if (adList == null)
             {
                 return null;
@@ -167,7 +167,7 @@ namespace CarEngine
         {
             // send new request to server
             SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy/*, sortAscRadioButton.Checked*/, 0, carAmount));
+            var adList = Converter.vehicleListToAds(Api.SortBy(sortBy, 0, carAmount, sortAscRadioButton.Checked));
             if (adList == null)
             {
                 return;
