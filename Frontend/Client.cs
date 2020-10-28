@@ -45,9 +45,11 @@ namespace Frontend
             message.Append($"{ServerConstants.HeaderSeparator}{ServerConstants.HeaderSeparator}");
             byte[] sentData = Encoding.ASCII.GetBytes(message.ToString());
             int sentDataSize = sentData.Length;
-            Array.Resize<byte>(ref sentData, sentDataSize + req.Content.Length);
-            Array.Copy(req.Content, 0, sentData, sentDataSize, req.Content.Length);
-
+            if (!req.Content.IsNullOrEmpty()
+                            {
+                Array.Resize<byte>(ref sentData, sentDataSize + req.Content.Length);
+                Array.Copy(req.Content, 0, sentData, sentDataSize, req.Content.Length);
+            }
             StringBuilder rawResponse = new StringBuilder();
             try
             {
