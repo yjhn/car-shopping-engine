@@ -45,7 +45,7 @@ namespace Frontend
             message.Append($"{ServerConstants.HeaderSeparator}{ServerConstants.HeaderSeparator}");
             byte[] sentData = Encoding.ASCII.GetBytes(message.ToString());
             int sentDataSize = sentData.Length;
-            if (req.Content.Length >0)
+            if (req.Content != null)
                             {
                 Array.Resize<byte>(ref sentData, sentDataSize + req.Content.Length);
                 Array.Copy(req.Content, 0, sentData, sentDataSize, req.Content.Length);
