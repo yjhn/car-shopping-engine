@@ -220,7 +220,6 @@
             this.MinimumSize = new System.Drawing.Size(610, 555);
             this.Name = "BrowsePage";
             this.Size = new System.Drawing.Size(700, 555);
-            this.Load += new System.EventHandler(this.BrowsePage_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.sortAscDescPanel.ResumeLayout(false);
