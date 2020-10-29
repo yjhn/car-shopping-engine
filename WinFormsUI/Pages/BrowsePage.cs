@@ -1,5 +1,4 @@
-﻿using CarEngine.Properties;
-using DataTypes;
+﻿using DataTypes;
 using Frontend;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using System.Windows.Forms;
 
 namespace CarEngine
 {
-    // sgould prefetch one full page of ads in advance so that next page button can be disabled in advance
     public partial class BrowsePage : UserControl
     {
         //static Random rnd;
@@ -30,10 +28,10 @@ namespace CarEngine
         private void ShowCarList()
         {
             // clear main panel to load other ads
-            //if (mainPanel.Controls.Count != 0)
-            //{
-                mainPanel.Controls.Clear();
-            //}
+            mainPanel.Controls.Clear();
+
+            // enable next page button. It might get disabled later in the method, so we cannot do this later
+            nextPageButton.Enabled = true;
 
             // if we are one the first page for the first time
             if (minimalAdList.Count == 0)
@@ -41,7 +39,6 @@ namespace CarEngine
                 CarAdMinimal[] carAds = GetMinimalVehicleAds(0, carAmount);
                 if (carAds == null || carAds.Length == 0)
                 {
-                    //canShowMoreAds = false;
                     nextPageButton.Enabled = false;
                     // does Api return null if it gets an empty list from server?
                     // if not, then we should display network error
@@ -53,38 +50,26 @@ namespace CarEngine
             // since prefetch is happening, we need to check if we are on the last populated page to disable "next" button if neccessary
             if (currentPageNumber == minimalAdList.Count)
             {
-                // prefetch
-                // if we are on the last page, we need to fetch more vehicles to show
+                // if we are on the last page, we fetch more vehicles to show
                 CarAdMinimal[] carAds = GetMinimalVehicleAds(carAmount * currentPageNumber, carAmount);
                 if (carAds == null || carAds.Length == 0)
                 {
-                    //canShowMoreAds = false;
+                    // since the next page is empty, next page button should be disabled
                     nextPageButton.Enabled = false;
-                    return;
                 }
-
-                //CarAdMinimal[] carAds = GenerateAds(carAmount);
-
-                minimalAdList.Add(carAds);
+                else
+                {
+                    minimalAdList.Add(carAds);
+                }
             }
 
             CarAdMinimal[] pageToShow = minimalAdList[currentPageNumber - 1];
-
-            // cannot display more ads if the last page is not full, so the "next" button should be disabled -- probably don't need this anymore as it will be taken care of by prefetch
-            //canShowMoreAds = !(pageToShow.Length < carAmount);
-            //nextPageButton.Enabled = canShowMoreAds;
-            // try to display only as many ads as there are in the page
-            //for (int i = 0; i < pageToShow.Length; i++)
-            //{
-            //    mainPanel.Controls.Add(pageToShow[i]);
-            //}
 
             // try to display only as many ads as there are in the page
             foreach (CarAdMinimal ad in pageToShow)
             {
                 mainPanel.Controls.Add(ad);
             }
-            nextPageButton.Enabled = true;
         }
 
         private CarAdMinimal[] GetMinimalVehicleAds(int startIndex, int amount)
@@ -179,18 +164,8 @@ namespace CarEngine
 
         private void sortingChanged()
         {
-            // send new request to server -- nope, ShowCarList will take care of this
-            //SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-            //var adList = Converter.vehicleListToAds(Api.SortBy(sortBy, 0, carAmount, sortAscRadioButton.Checked));
-            //if (adList == null)
-            //{
-            //    // need to display network error
-            //    return;
-            //}
-
             // clear current ads, since they are obsolete
             minimalAdList.Clear();
-            //minimalAdList.Add(adList);
 
             // start from page 1
             currentPageNumber = 1;
