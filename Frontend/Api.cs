@@ -26,9 +26,10 @@ namespace Frontend
         public static List<Car> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
         {
             Request req = reqInit("GET", "cars");
-            req.Queries.Add("sortby", sortBy.ToString());
+            req.Queries.Add("sort_by", sortBy.ToString());
             req.Queries.Add("amount", amount.ToString());
             req.Queries.Add("sort_ascending", sortAscending.ToString());
+            req.Queries.Add("start_index", startIndex.ToString());
             Response r = GetResponse(req);
             if (r == null)
             {
@@ -44,6 +45,7 @@ namespace Frontend
             req.Queries.Add("amount", amount.ToString());
             req.Queries.Add("sort_by", sortBy.ToString());
             req.Queries.Add("sort_ascending", sortAscending.ToString());
+            req.Queries.Add("start_index", startIndex.ToString());
             if (!string.IsNullOrEmpty(filters.Brand))
                 req.Queries.Add("brand", filters.Brand);
             if (!string.IsNullOrEmpty(filters.Model))

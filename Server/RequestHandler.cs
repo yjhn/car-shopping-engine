@@ -84,7 +84,7 @@ namespace Server
                     headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
                 else
                     throw new ArgumentException("DuplicateHeader");
-                        byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
+            byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
             Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
         }
