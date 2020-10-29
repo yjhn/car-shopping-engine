@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Server
@@ -85,8 +84,8 @@ namespace Server
                     headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
                 else
                     throw new ArgumentException("DuplicateHeader");
-            Console.WriteLine("content: "+groups["content"].Value+ groups["content"].Value.Length);
-                        byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
+            Console.WriteLine("content: " + groups["content"].Value + groups["content"].Value.Length);
+            byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
             Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
         }
@@ -119,7 +118,7 @@ namespace Server
             if (Header.Contains(headers, "CONTENT-LENGTH"))
             {
                 int contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
-                Console.WriteLine("given length: " + contentLength+" specified "+req.Content.Length);
+                Console.WriteLine("given length: " + contentLength + " specified " + req.Content.Length);
                 if (req.Content.Length > contentLength)
                 {
                     string contentString = Encoding.ASCII.GetString(req.Content);
@@ -246,26 +245,27 @@ namespace Server
                     throw incompatible;
                 startIndex = int.Parse(queries["start_index"]);
             }
-                        List<Car> carList = null;
+            // carList is not needed here
+            //List<Car> carList = null;
             byte[] responseBody;
             if (id != null)
                 responseBody = carDb.GetCar((int)id);
             else if (criteria != null)
             {
-                if (req.Content.Length > 0)
-                {
-                    if (Header.Contains(req.Headers, "CONTENT-TYPE") & Header.GetValueByName(req.Headers, "CONTENT-TYPE").StartsWith("application/json"))
-                        carList = JsonSerializer.Deserialize<List<Car>>(Encoding.ASCII.GetString(req.Content));
-                    else
-                    {
-                        r = MakeResponse(415);
-                        return;
-                    }
-                }
+                //if (req.Content.Length > 0)
+                //{
+                //    if (Header.Contains(req.Headers, "CONTENT-TYPE") & Header.GetValueByName(req.Headers, "CONTENT-TYPE").StartsWith("application/json"))
+                //        carList = JsonSerializer.Deserialize<List<Car>>(Encoding.ASCII.GetString(req.Content));
+                //    else
+                //    {
+                //        r = MakeResponse(415);
+                //        return;
+                //    }
+                //}
                 bool ascending = true;
                 if (queries.ContainsKey("ascending"))
                     ascending = bool.Parse(queries["ascending"]);
-                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, startIndex, amount, carList);
+                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, startIndex, amount/*, carList*/);
             }
             else
             {
