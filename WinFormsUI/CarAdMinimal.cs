@@ -24,7 +24,7 @@ namespace CarEngine
             price.Text = carInfo.Price.ToString() + "€";
             additionInfo.Text = carInfo.Engine.kw.ToString() + "kW";
             additionInfo.Text += $" \"{carInfo.Comment}\"";
-            if (carInfo.Images.Length > 0)
+            if (carInfo.Images != null && carInfo.Images.Length > 0)
             {
                 carImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
             }
