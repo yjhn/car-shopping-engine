@@ -29,7 +29,7 @@ namespace Backend
 
         public void LogException(Exception e)
         {
-            byte[] info = new UTF8Encoding(true).GetBytes("[" + DateTime.Now.ToString("T") + "] " + e.ToString());
+            byte[] info = new UTF8Encoding(true).GetBytes($"[{DateTime.Now:T}] {e}\n\n");
             try
             {
                 LogFile.Write(info, 0, info.Length);
@@ -37,7 +37,7 @@ namespace Backend
             }
             catch (Exception exc)
             {
-                Console.WriteLine("Cannot write to log file\n" + exc.Message + "\n" + exc.ToString());
+                Console.WriteLine($"Cannot write to log file\n{exc}");
             }
         }
     }
