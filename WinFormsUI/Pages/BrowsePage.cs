@@ -36,15 +36,16 @@ namespace CarEngine
 
             if (pageNr > minimalAdList.Count)
             {
-                //CarAdMinimal[] carAds = GetMinimalVehicleAds(15 * (pageNr - 1), carAmount);
-                //if(carAds == null)
-                //{
-                //    canShowMoreAds = false;
-                //    return;
-                //}
+                CarAdMinimal[] carAds = GetMinimalVehicleAds(15 * (pageNr - 1), carAmount);
+                if (carAds == null)
+                {
+                    canShowMoreAds = false;
+                    nextPageButton.Enabled = false;
+                    return;
+                }
 
                 // test
-                CarAdMinimal[] carAds = GenerateAds(carAmount);
+                //CarAdMinimal[] carAds = GenerateAds(carAmount);
                 // test
 
                 minimalAdList.Add(carAds);
@@ -54,6 +55,7 @@ namespace CarEngine
 
             // cannot display more ads if the last page is not full, so the "next" button should be disabled
             canShowMoreAds = !(pageToShow.Length < carAmount);
+            nextPageButton.Enabled = canShowMoreAds;
             // try to display only as many ads as there are in the page
             for (int i = 0; i < pageToShow.Length; i++)
             {
@@ -117,7 +119,7 @@ namespace CarEngine
                 driveWheels: DriveWheels.rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.left,
                 numberOfDoors: NumberOfDoors.fourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new Month { year = 2022, month = 5 },
                 wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
-                additionalProperties: new string[] { "a", "b" }, images: new string[] { "0" }, comment: "my comment");
+                additionalProperties: new string[] { "a", "b" }, images: new string[] { }, comment: "my comment");
 
             newCar.Model = carModels[rnd.Next(0, carModels.Length)];
             newCar.Brand = carBrands[rnd.Next(0, carBrands.Length)];
