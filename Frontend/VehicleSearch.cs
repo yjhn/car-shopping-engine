@@ -30,7 +30,9 @@ namespace Frontend
                 YearTo = (upperYearRange == VehiclePropertyConstants.maxVehicleManufactureYear) ? default(int?) : upperYearRange,
                 FuelType = fuelType
             };
-            Generator.post();
+
+            // can be used for testing: adds random cars to DB
+            //Generator.post();
             return Api.SearchVehicles(filters, sorting, sortAscending, 0, 15);
         }
     }

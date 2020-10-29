@@ -84,8 +84,7 @@ namespace Server
                     headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
                 else
                     throw new ArgumentException("DuplicateHeader");
-            Console.WriteLine("content: " + groups["content"].Value + groups["content"].Value.Length);
-            byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
+                        byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
             Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
         }
@@ -118,7 +117,6 @@ namespace Server
             if (Header.Contains(headers, "CONTENT-LENGTH"))
             {
                 int contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
-                Console.WriteLine("given length: " + contentLength + " specified " + req.Content.Length);
                 if (req.Content.Length > contentLength)
                 {
                     string contentString = Encoding.ASCII.GetString(req.Content);
@@ -250,10 +248,10 @@ namespace Server
                 responseBody = carDb.GetCar((int)id);
             else if (criteria != null)
             {
-                bool ascending = true;
-                if (queries.ContainsKey("ascending"))
-                    ascending = bool.Parse(queries["ascending"]);
-                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, startIndex, amount);
+                bool sortAscending = true;
+                if (queries.ContainsKey("sort_ascending"))
+                    sortAscending = bool.Parse(queries["sort_ascending"]);
+                responseBody = carDb.SortBy((SortingCriteria)criteria, sortAscending, startIndex, amount);
             }
             else
             {
@@ -374,12 +372,12 @@ namespace Server
                 amount = int.Parse(queries["amount"]);
             if (queries.ContainsKey("sort_by"))
                 criteria = GetSortingCriteria(queries["sort_by"]);
-            bool ascending = true;
+            bool sortAscending = true;
             if (queries.ContainsKey("sort_ascending"))
-                ascending = bool.Parse(queries["sort_ascending"]);
+                sortAscending = bool.Parse(queries["sort_ascending"]);
             if (queries.ContainsKey("start_index"))
                 startIndex = int.Parse(queries["start_index"]);
-            r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, ascending, startIndex, amount));
+            r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
         }
 
         private byte[] SetContent(string output)

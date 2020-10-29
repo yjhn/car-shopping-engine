@@ -8,7 +8,7 @@ namespace Frontend
         {
             Random r = new Random();
             string[] colors = { "raudona", "zalia", "melyna", "geltona", "balta", "belekokia spalva", "purpurine", "alyvine", "tamsiai violetine" };
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Car c = new Car();
                 c.UploaderUsername = "user" + r.Next(0, 100);
