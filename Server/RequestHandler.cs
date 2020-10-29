@@ -245,27 +245,15 @@ namespace Server
                     throw incompatible;
                 startIndex = int.Parse(queries["start_index"]);
             }
-            // carList is not needed here
-            //List<Car> carList = null;
             byte[] responseBody;
             if (id != null)
                 responseBody = carDb.GetCar((int)id);
             else if (criteria != null)
             {
-                //if (req.Content.Length > 0)
-                //{
-                //    if (Header.Contains(req.Headers, "CONTENT-TYPE") & Header.GetValueByName(req.Headers, "CONTENT-TYPE").StartsWith("application/json"))
-                //        carList = JsonSerializer.Deserialize<List<Car>>(Encoding.ASCII.GetString(req.Content));
-                //    else
-                //    {
-                //        r = MakeResponse(415);
-                //        return;
-                //    }
-                //}
                 bool ascending = true;
                 if (queries.ContainsKey("ascending"))
                     ascending = bool.Parse(queries["ascending"]);
-                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, startIndex, amount/*, carList*/);
+                responseBody = carDb.SortBy((SortingCriteria)criteria, ascending, startIndex, amount);
             }
             else
             {
