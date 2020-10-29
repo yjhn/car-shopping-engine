@@ -96,7 +96,7 @@ namespace CarEngine.Forms
             }
 
 
-            if (carInfo.Images.Length > 0)
+            if (carInfo.Images != null && carInfo.Images.Length > 0)
             {
                 foreach (var i in carInfo.Images)
                 {
