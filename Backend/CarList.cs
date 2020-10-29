@@ -31,7 +31,7 @@ namespace Backend
 
         public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            return SortBy(sortBy, sortAscending, startIndex, amount);
+            return SortBy(sortBy, sortAscending, startIndex, amount, null);
         }
 
         private byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
