@@ -8,7 +8,7 @@ namespace Backend
 {
     public class CarList : ICarDb
     {
-        public List<Car> carList;
+        private List<Car> carList;
         private FileReader carDataReader;
         private FileWriter carDataWriter;
         public int lastCarId { get; internal set; }
@@ -29,7 +29,12 @@ namespace Backend
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Skip(startIndex).Take(amount).ToList<Car>());
         }
 
-        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
+        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        {
+            return SortBy(sortBy, sortAscending, startIndex, amount);
+        }
+
+        private byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {
             if (carListToSort == null)
             {

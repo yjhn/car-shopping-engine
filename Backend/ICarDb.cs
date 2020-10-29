@@ -7,7 +7,7 @@ namespace Backend
     {
         public byte[] GetCarList(int startIndex, int amount);
 
-        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null);
+        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
         public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
