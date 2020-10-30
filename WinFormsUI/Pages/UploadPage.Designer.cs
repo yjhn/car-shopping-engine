@@ -34,15 +34,12 @@
             this.uploadLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.uploadButton = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.typeComboBox = new System.Windows.Forms.ComboBox();
+            this.brandTextBox = new System.Windows.Forms.TextBox();
             this.brandLabel = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.modelTextBox = new System.Windows.Forms.TextBox();
             this.modelLabel = new System.Windows.Forms.Label();
             this.priceRangeLabel = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -55,22 +52,19 @@
             this.radioButton8 = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.radioButton9 = new System.Windows.Forms.RadioButton();
-            this.radioButton10 = new System.Windows.Forms.RadioButton();
-            this.radioButton11 = new System.Windows.Forms.RadioButton();
+            this.radioButtonUsed = new System.Windows.Forms.RadioButton();
+            this.radioButtonNew = new System.Windows.Forms.RadioButton();
             this.panel4 = new System.Windows.Forms.Panel();
             this.yearRangeLabel = new System.Windows.Forms.Label();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.yearBox = new System.Windows.Forms.NumericUpDown();
+            this.fuelTypeComboBox = new System.Windows.Forms.ComboBox();
             this.fuelTypeLabel = new System.Windows.Forms.Label();
             this.additionalImagesPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.priceBox = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yearBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.priceBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mainTitleLabel
@@ -136,13 +130,14 @@
             this.uploadButton.TabIndex = 5;
             this.uploadButton.Text = "Upload";
             this.uploadButton.UseVisualStyleBackColor = true;
+            this.uploadButton.Click += new System.EventHandler(this.uploadButton_Click);
             // 
-            // comboBox1
+            // typeComboBox
             // 
-            this.comboBox1.AccessibleDescription = "vehicle type combobox";
-            this.comboBox1.AccessibleName = "vehicle type combobox";
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.typeComboBox.AccessibleDescription = "vehicle type combobox";
+            this.typeComboBox.AccessibleName = "vehicle type combobox";
+            this.typeComboBox.FormattingEnabled = true;
+            this.typeComboBox.Items.AddRange(new object[] {
             "any",
             "station wagon",
             "hatchback",
@@ -155,20 +150,20 @@
             "combi minibus",
             "freight minibus",
             "commercial"});
-            this.comboBox1.Location = new System.Drawing.Point(449, 149);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(257, 33);
-            this.comboBox1.TabIndex = 0;
+            this.typeComboBox.Location = new System.Drawing.Point(449, 149);
+            this.typeComboBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.typeComboBox.Name = "typeComboBox";
+            this.typeComboBox.Size = new System.Drawing.Size(257, 33);
+            this.typeComboBox.TabIndex = 0;
             // 
-            // textBox2
+            // brandTextBox
             // 
-            this.textBox2.AccessibleDescription = "text box for brand of the vehicle";
-            this.textBox2.AccessibleName = "brand of the vehicle";
-            this.textBox2.Location = new System.Drawing.Point(448, 188);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(350, 31);
-            this.textBox2.TabIndex = 1;
+            this.brandTextBox.AccessibleDescription = "text box for brand of the vehicle";
+            this.brandTextBox.AccessibleName = "brand of the vehicle";
+            this.brandTextBox.Location = new System.Drawing.Point(448, 188);
+            this.brandTextBox.Name = "brandTextBox";
+            this.brandTextBox.Size = new System.Drawing.Size(350, 31);
+            this.brandTextBox.TabIndex = 1;
             // 
             // brandLabel
             // 
@@ -183,14 +178,14 @@
             this.brandLabel.TabIndex = 3;
             this.brandLabel.Text = "Brand:";
             // 
-            // textBox3
+            // modelTextBox
             // 
-            this.textBox3.AccessibleDescription = "text box for model of the vehicle";
-            this.textBox3.AccessibleName = "model of the vehicle";
-            this.textBox3.Location = new System.Drawing.Point(448, 226);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(350, 31);
-            this.textBox3.TabIndex = 2;
+            this.modelTextBox.AccessibleDescription = "text box for model of the vehicle";
+            this.modelTextBox.AccessibleName = "model of the vehicle";
+            this.modelTextBox.Location = new System.Drawing.Point(448, 226);
+            this.modelTextBox.Name = "modelTextBox";
+            this.modelTextBox.Size = new System.Drawing.Size(350, 31);
+            this.modelTextBox.TabIndex = 2;
             // 
             // modelLabel
             // 
@@ -217,57 +212,6 @@
             this.priceRangeLabel.Size = new System.Drawing.Size(172, 38);
             this.priceRangeLabel.TabIndex = 3;
             this.priceRangeLabel.Text = "Price range:";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.AccessibleDescription = "Lower price range text box";
-            this.numericUpDown1.AccessibleName = "Lower price range text box";
-            this.numericUpDown1.Increment = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Location = new System.Drawing.Point(449, 265);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(117, 31);
-            this.numericUpDown1.TabIndex = 3;
-            // 
-            // label2
-            // 
-            this.label2.AccessibleDescription = "dash";
-            this.label2.AccessibleName = "dash";
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(582, 260);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(24, 32);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "-";
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.AccessibleDescription = "Upper price range text box";
-            this.numericUpDown2.AccessibleName = "Upper price range text box";
-            this.numericUpDown2.Increment = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Location = new System.Drawing.Point(610, 265);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(117, 31);
-            this.numericUpDown2.TabIndex = 4;
             // 
             // radioButton1
             // 
@@ -401,39 +345,39 @@
             this.radioButton9.Size = new System.Drawing.Size(104, 24);
             this.radioButton9.TabIndex = 0;
             // 
-            // radioButton10
+            // radioButtonUsed
             // 
-            this.radioButton10.AccessibleDescription = "radio button for used car";
-            this.radioButton10.AccessibleName = "used car";
-            this.radioButton10.AutoSize = true;
-            this.radioButton10.Location = new System.Drawing.Point(47, 23);
-            this.radioButton10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.radioButton10.Name = "radioButton10";
-            this.radioButton10.Size = new System.Drawing.Size(77, 29);
-            this.radioButton10.TabIndex = 1;
-            this.radioButton10.TabStop = true;
-            this.radioButton10.Text = "Used";
-            this.radioButton10.UseVisualStyleBackColor = true;
+            this.radioButtonUsed.AccessibleDescription = "radio button for used car";
+            this.radioButtonUsed.AccessibleName = "used car";
+            this.radioButtonUsed.AutoSize = true;
+            this.radioButtonUsed.Location = new System.Drawing.Point(47, 23);
+            this.radioButtonUsed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButtonUsed.Name = "radioButtonUsed";
+            this.radioButtonUsed.Size = new System.Drawing.Size(77, 29);
+            this.radioButtonUsed.TabIndex = 1;
+            this.radioButtonUsed.TabStop = true;
+            this.radioButtonUsed.Text = "Used";
+            this.radioButtonUsed.UseVisualStyleBackColor = true;
             // 
-            // radioButton11
+            // radioButtonNew
             // 
-            this.radioButton11.AccessibleDescription = "radio button for new car";
-            this.radioButton11.AccessibleName = "new car";
-            this.radioButton11.AutoSize = true;
-            this.radioButton11.Location = new System.Drawing.Point(47, 65);
-            this.radioButton11.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.radioButton11.Name = "radioButton11";
-            this.radioButton11.Size = new System.Drawing.Size(72, 29);
-            this.radioButton11.TabIndex = 2;
-            this.radioButton11.Text = "New";
-            this.radioButton11.UseVisualStyleBackColor = true;
+            this.radioButtonNew.AccessibleDescription = "radio button for new car";
+            this.radioButtonNew.AccessibleName = "new car";
+            this.radioButtonNew.AutoSize = true;
+            this.radioButtonNew.Location = new System.Drawing.Point(47, 65);
+            this.radioButtonNew.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButtonNew.Name = "radioButtonNew";
+            this.radioButtonNew.Size = new System.Drawing.Size(72, 29);
+            this.radioButtonNew.TabIndex = 2;
+            this.radioButtonNew.Text = "New";
+            this.radioButtonNew.UseVisualStyleBackColor = true;
             // 
             // panel4
             // 
             this.panel4.AutoSize = true;
             this.panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel4.Controls.Add(this.radioButton10);
-            this.panel4.Controls.Add(this.radioButton11);
+            this.panel4.Controls.Add(this.radioButtonUsed);
+            this.panel4.Controls.Add(this.radioButtonNew);
             this.panel4.Location = new System.Drawing.Point(400, 304);
             this.panel4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel4.Name = "panel4";
@@ -453,81 +397,45 @@
             this.yearRangeLabel.TabIndex = 3;
             this.yearRangeLabel.Text = "Year range:";
             // 
-            // numericUpDown3
+            // yearBox
             // 
-            this.numericUpDown3.AccessibleDescription = "lower year range combo box";
-            this.numericUpDown3.AccessibleName = "lower year range combo box";
-            this.numericUpDown3.Location = new System.Drawing.Point(447, 409);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
+            this.yearBox.AccessibleDescription = "lower year range combo box";
+            this.yearBox.AccessibleName = "lower year range combo box";
+            this.yearBox.Location = new System.Drawing.Point(447, 409);
+            this.yearBox.Maximum = new decimal(new int[] {
             2020,
             0,
             0,
             0});
-            this.numericUpDown3.Minimum = new decimal(new int[] {
+            this.yearBox.Minimum = new decimal(new int[] {
             1900,
             0,
             0,
             0});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(66, 31);
-            this.numericUpDown3.TabIndex = 7;
-            this.numericUpDown3.Value = new decimal(new int[] {
+            this.yearBox.Name = "yearBox";
+            this.yearBox.Size = new System.Drawing.Size(66, 31);
+            this.yearBox.TabIndex = 7;
+            this.yearBox.Value = new decimal(new int[] {
             1900,
             0,
             0,
             0});
             // 
-            // label6
+            // fuelTypeComboBox
             // 
-            this.label6.AccessibleDescription = "dash";
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label6.Location = new System.Drawing.Point(519, 409);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(24, 32);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "-";
-            // 
-            // numericUpDown4
-            // 
-            this.numericUpDown4.AccessibleDescription = "upper year range combo box";
-            this.numericUpDown4.AccessibleName = "upper year range combo box";
-            this.numericUpDown4.Location = new System.Drawing.Point(549, 409);
-            this.numericUpDown4.Maximum = new decimal(new int[] {
-            2020,
-            0,
-            0,
-            0});
-            this.numericUpDown4.Minimum = new decimal(new int[] {
-            1900,
-            0,
-            0,
-            0});
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(66, 31);
-            this.numericUpDown4.TabIndex = 8;
-            this.numericUpDown4.Value = new decimal(new int[] {
-            2020,
-            0,
-            0,
-            0});
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.AccessibleDescription = "fuel type combo box";
-            this.comboBox2.AccessibleName = "fuel type combo box";
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.fuelTypeComboBox.AccessibleDescription = "fuel type combo box";
+            this.fuelTypeComboBox.AccessibleName = "fuel type combo box";
+            this.fuelTypeComboBox.FormattingEnabled = true;
+            this.fuelTypeComboBox.Items.AddRange(new object[] {
             "any",
             "petrol",
             "diesel",
             "electric",
             "hybrid"});
-            this.comboBox2.Location = new System.Drawing.Point(447, 446);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(183, 33);
-            this.comboBox2.TabIndex = 9;
+            this.fuelTypeComboBox.Location = new System.Drawing.Point(447, 446);
+            this.fuelTypeComboBox.Name = "fuelTypeComboBox";
+            this.fuelTypeComboBox.Size = new System.Drawing.Size(183, 33);
+            this.fuelTypeComboBox.TabIndex = 9;
             // 
             // fuelTypeLabel
             // 
@@ -551,6 +459,25 @@
             this.additionalImagesPanel.Size = new System.Drawing.Size(413, 119);
             this.additionalImagesPanel.TabIndex = 10;
             // 
+            // priceBox
+            // 
+            this.priceBox.AccessibleDescription = "price text box";
+            this.priceBox.AccessibleName = "price text box";
+            this.priceBox.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.priceBox.Location = new System.Drawing.Point(447, 265);
+            this.priceBox.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.priceBox.Name = "priceBox";
+            this.priceBox.Size = new System.Drawing.Size(117, 31);
+            this.priceBox.TabIndex = 3;
+            // 
             // UploadPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -558,23 +485,19 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Controls.Add(this.priceBox);
             this.Controls.Add(this.additionalImagesPanel);
             this.Controls.Add(this.fuelTypeLabel);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.numericUpDown4);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.numericUpDown3);
+            this.Controls.Add(this.fuelTypeComboBox);
+            this.Controls.Add(this.yearBox);
             this.Controls.Add(this.yearRangeLabel);
             this.Controls.Add(this.panel4);
-            this.Controls.Add(this.numericUpDown2);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.priceRangeLabel);
             this.Controls.Add(this.modelLabel);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.modelTextBox);
             this.Controls.Add(this.brandLabel);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.brandTextBox);
+            this.Controls.Add(this.typeComboBox);
             this.Controls.Add(this.uploadButton);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.uploadLabel);
@@ -584,12 +507,10 @@
             this.Name = "UploadPage";
             this.Size = new System.Drawing.Size(994, 833);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yearBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.priceBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -603,15 +524,12 @@
         private System.Windows.Forms.Label uploadLabel;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button uploadButton;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox typeComboBox;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label brandLabel;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label modelLabel;
         private System.Windows.Forms.Label priceRangeLabel;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.Panel panel1;
@@ -624,16 +542,18 @@
         private System.Windows.Forms.RadioButton radioButton8;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.RadioButton radioButton9;
-        private System.Windows.Forms.RadioButton radioButton10;
-        private System.Windows.Forms.RadioButton radioButton11;
+        private System.Windows.Forms.RadioButton radioButtonUsed;
+        private System.Windows.Forms.RadioButton radioButtonNew;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label yearRangeLabel;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown numericUpDown4;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.NumericUpDown yearBox;
+        private System.Windows.Forms.ComboBox fuelTypeComboBox;
         private System.Windows.Forms.Label fuelTypeLabel;
         private System.Windows.Forms.FlowLayoutPanel additionalImagePanel;
         private System.Windows.Forms.FlowLayoutPanel additionalImagesPanel;
+        private System.Windows.Forms.TextBox brandTextBox;
+        private System.Windows.Forms.TextBox modelTextBox;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.NumericUpDown priceBox;
     }
 }
