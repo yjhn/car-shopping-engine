@@ -9,6 +9,7 @@ using System.Linq;
 using DataTypes;
 using Frontend;
 using System.Windows.Forms.VisualStyles;
+using System.Security.Cryptography;
 
 namespace CarEngine.Pages
 {
@@ -17,6 +18,10 @@ namespace CarEngine.Pages
         public UploadPage()
         {
             InitializeComponent();
+            // default vehicle type: any
+            typeComboBox.SelectedIndex = 0;
+            // default fuel type: any
+            fuelTypeComboBox.SelectedIndex = 0;
         }
 
         private void browseButton_Click(object sender, EventArgs e)
@@ -47,8 +52,36 @@ namespace CarEngine.Pages
         private void uploadButton_Click(object sender, EventArgs e)
         {
             //temporary kokas :_)
-            Api.AddCar(GetAllCarInfo());
-            ClearSelections();
+            if (CheckIfFilled())
+            {
+                Api.AddCar(GetAllCarInfo());
+                ClearSelections();
+            }
+        }
+
+        private bool CheckIfFilled()
+        {
+            if (brandTextBox.Text.Length < 1)
+            {
+                DisplayErrorMessage("enter brand name");
+                return false;
+            }
+            else if (modelTextBox.Text.Length < 1)
+            {
+                DisplayErrorMessage("enter model name");
+                return false;
+            }
+            else if (!radioButtonNew.Checked && !radioButtonUsed.Checked)
+            {
+                DisplayErrorMessage("select whether its new or used");
+                return false;
+            }
+            else if (pictureBox1.Image == null)
+            {
+                DisplayErrorMessage("put some images");
+                return false;
+            }
+            return true;
         }
 
         //surenka info apie automobili is visu info lauku
@@ -166,6 +199,12 @@ namespace CarEngine.Pages
             fuelTypeComboBox.SelectedIndex = 0;
             additionalImagesPanel.Controls.Clear();
             pictureBox1.Image = null;
+        }
+
+        private void DisplayErrorMessage(string text)
+        {
+            MessageBox.Show(text, "Wrong Information Input",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
