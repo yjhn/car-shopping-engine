@@ -26,8 +26,6 @@ namespace CarEngine
             {
                 carImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
             }
-
-            //vehicleGraphics = CreateGraphics();
         }
 
         private void adWindowClosed(object sender, EventArgs e)

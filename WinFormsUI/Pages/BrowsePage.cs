@@ -12,7 +12,6 @@ namespace CarEngine
         //static Random rnd;
         public int carAmount = 15;
         private int currentPageNumber = 1;
-        //private bool canShowMoreAds = true;
 
         // a list to store all car ads in all pages
         List<CarAdMinimal[]> minimalAdList = new List<CarAdMinimal[]>();
@@ -78,61 +77,6 @@ namespace CarEngine
             return Converter.vehicleListToAds(Api.SortBy(sortBy, startIndex, amount, sortAscRadioButton.Checked));
         }
 
-        //private void ShowCarList(int pageNr)
-        //{
-        //    if (mainPanel.Controls.Count != 0)
-        //    {
-        //        mainPanel.Controls.Clear();
-        //    }
-
-        //    if (pageNr > minimalAdList.Count)
-        //    {
-        //        //cia reiktu pakeist i GetCars per API vietoj GenerateAds()
-        //        CarAdMinimal[] carAds = GenerateAds(carAmount);
-        //        minimalAdList.Add(carAds);
-        //    }
-
-        //    for (int i = 0; i < carAmount; i++)
-        //    {
-        //        mainPanel.Controls.Add(minimalAdList[pageNr - 1][i]);
-        //    }
-        //}
-
-        //Sugeneruoja caradminimal array is random ads - laikinas metodas
-        //private CarAdMinimal[] GenerateAds(int carAmount)
-        //{
-        //    CarAdMinimal[] carAds = new CarAdMinimal[carAmount];
-
-        //    for (int i = 0; i < carAmount; i++)
-        //    {
-        //        carAds[i] = new CarAdMinimal(GenerateRandomCar());
-        //    }
-        //    return carAds;
-        //}
-
-        //// generate random car ad
-        //private Car GenerateRandomCar()
-        //{
-        //    string[] carBrands = { "BMW", "Audi", "Fiat" };
-        //    string[] carModels = { "Vienas", "Du", "Trys" };
-        //    string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
-        //    Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
-        //        brand: "alfa", model: "beta", true, dateOfPurchase: new Month { year = 2000, month = 10 }, engine: new Engine { hp = 100, kw = 60, volume = 1.2f },
-        //        fuelType: FuelType.petrol, chassisType: ChassisType.station_wagon, color: "juoda", gearboxType: GearboxType.automatic, totalKilometersDriven: 100000,
-        //        driveWheels: DriveWheels.rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.left,
-        //        numberOfDoors: NumberOfDoors.fourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new Month { year = 2022, month = 5 },
-        //        wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
-        //        additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
-
-        //    newCar.Model = carModels[rnd.Next(0, carModels.Length)];
-        //    newCar.Brand = carBrands[rnd.Next(0, carBrands.Length)];
-        //    newCar.Price = rnd.Next(1000, 20000);
-        //    newCar.Engine = new Engine();
-        //    newCar.Comment = "Komentaras";
-        //    newCar.Images = images;
-        //    return newCar;
-        //}
-
         private void nextPageButton_Click(object sender, EventArgs e)
         {
             if (currentPageNumber == 1)
@@ -148,18 +92,19 @@ namespace CarEngine
 
         private void previousPageButton_Click(object sender, EventArgs e)
         {
-            if (currentPageNumber > 1)
+            // this is not needed as it is already enforced
+            //if (currentPageNumber > 1)
+            //{
+            mainPanel.AutoScrollPosition = new Point(0, 0);
+            currentPageNumber--;
+            if (currentPageNumber == 1)
             {
-                mainPanel.AutoScrollPosition = new Point(0, 0);
-                currentPageNumber--;
-                if (currentPageNumber == 1)
-                {
-                    previousPageButton.Enabled = false;
-                }
-                pageNumberLabel.Text = currentPageNumber.ToString();
-                ShowCarList();
-                //nextPageButton.Enabled = true;
+                previousPageButton.Enabled = false;
             }
+            pageNumberLabel.Text = currentPageNumber.ToString();
+            ShowCarList();
+            //nextPageButton.Enabled = true;
+            //}
         }
 
         private void sortingChanged()
@@ -182,3 +127,59 @@ namespace CarEngine
         }
     }
 }
+
+
+//private void ShowCarList(int pageNr)
+//{
+//    if (mainPanel.Controls.Count != 0)
+//    {
+//        mainPanel.Controls.Clear();
+//    }
+
+//    if (pageNr > minimalAdList.Count)
+//    {
+//        //cia reiktu pakeist i GetCars per API vietoj GenerateAds()
+//        CarAdMinimal[] carAds = GenerateAds(carAmount);
+//        minimalAdList.Add(carAds);
+//    }
+
+//    for (int i = 0; i < carAmount; i++)
+//    {
+//        mainPanel.Controls.Add(minimalAdList[pageNr - 1][i]);
+//    }
+//}
+
+//Sugeneruoja caradminimal array is random ads - laikinas metodas
+//private CarAdMinimal[] GenerateAds(int carAmount)
+//{
+//    CarAdMinimal[] carAds = new CarAdMinimal[carAmount];
+
+//    for (int i = 0; i < carAmount; i++)
+//    {
+//        carAds[i] = new CarAdMinimal(GenerateRandomCar());
+//    }
+//    return carAds;
+//}
+
+//// generate random car ad
+//private Car GenerateRandomCar()
+//{
+//    string[] carBrands = { "BMW", "Audi", "Fiat" };
+//    string[] carModels = { "Vienas", "Du", "Trys" };
+//    string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
+//    Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
+//        brand: "alfa", model: "beta", true, dateOfPurchase: new Month { year = 2000, month = 10 }, engine: new Engine { hp = 100, kw = 60, volume = 1.2f },
+//        fuelType: FuelType.petrol, chassisType: ChassisType.station_wagon, color: "juoda", gearboxType: GearboxType.automatic, totalKilometersDriven: 100000,
+//        driveWheels: DriveWheels.rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.left,
+//        numberOfDoors: NumberOfDoors.fourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new Month { year = 2022, month = 5 },
+//        wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
+//        additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
+
+//    newCar.Model = carModels[rnd.Next(0, carModels.Length)];
+//    newCar.Brand = carBrands[rnd.Next(0, carBrands.Length)];
+//    newCar.Price = rnd.Next(1000, 20000);
+//    newCar.Engine = new Engine();
+//    newCar.Comment = "Komentaras";
+//    newCar.Images = images;
+//    return newCar;
+//}

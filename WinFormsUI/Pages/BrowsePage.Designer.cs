@@ -52,7 +52,7 @@
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Margin = new System.Windows.Forms.Padding(2);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(700, 512);
+            this.mainPanel.Size = new System.Drawing.Size(700, 496);
             this.mainPanel.TabIndex = 1;
             // 
             // panel1
@@ -71,6 +71,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 500);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
+            this.panel1.MinimumSize = new System.Drawing.Size(660, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(700, 55);
             this.panel1.TabIndex = 2;
@@ -217,7 +218,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.mainPanel);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(610, 555);
+            this.MinimumSize = new System.Drawing.Size(660, 555);
             this.Name = "BrowsePage";
             this.Size = new System.Drawing.Size(700, 555);
             this.panel1.ResumeLayout(false);
