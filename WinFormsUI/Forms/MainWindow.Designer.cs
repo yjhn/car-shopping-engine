@@ -56,8 +56,9 @@
             this.sidebarPanel.Controls.Add(this.browseButton);
             this.sidebarPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.sidebarPanel.Location = new System.Drawing.Point(0, 0);
+            this.sidebarPanel.Margin = new System.Windows.Forms.Padding(2);
             this.sidebarPanel.Name = "sidebarPanel";
-            this.sidebarPanel.Size = new System.Drawing.Size(180, 968);
+            this.sidebarPanel.Size = new System.Drawing.Size(126, 581);
             this.sidebarPanel.TabIndex = 0;
             // 
             // favoritesButton
@@ -68,9 +69,10 @@
             this.favoritesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.favoritesButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.favoritesButton.ForeColor = System.Drawing.Color.Transparent;
-            this.favoritesButton.Location = new System.Drawing.Point(0, 517);
+            this.favoritesButton.Location = new System.Drawing.Point(0, 310);
+            this.favoritesButton.Margin = new System.Windows.Forms.Padding(2);
             this.favoritesButton.Name = "favoritesButton";
-            this.favoritesButton.Size = new System.Drawing.Size(180, 133);
+            this.favoritesButton.Size = new System.Drawing.Size(126, 80);
             this.favoritesButton.TabIndex = 4;
             this.favoritesButton.Text = "favorites";
             this.favoritesButton.UseVisualStyleBackColor = false;
@@ -84,9 +86,10 @@
             this.uploadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.uploadButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.uploadButton.ForeColor = System.Drawing.Color.Transparent;
-            this.uploadButton.Location = new System.Drawing.Point(0, 377);
+            this.uploadButton.Location = new System.Drawing.Point(0, 226);
+            this.uploadButton.Margin = new System.Windows.Forms.Padding(2);
             this.uploadButton.Name = "uploadButton";
-            this.uploadButton.Size = new System.Drawing.Size(180, 133);
+            this.uploadButton.Size = new System.Drawing.Size(126, 80);
             this.uploadButton.TabIndex = 3;
             this.uploadButton.Text = "upload";
             this.uploadButton.UseVisualStyleBackColor = false;
@@ -100,9 +103,10 @@
             this.searchButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.searchButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.searchButton.ForeColor = System.Drawing.Color.Transparent;
-            this.searchButton.Location = new System.Drawing.Point(0, 237);
+            this.searchButton.Location = new System.Drawing.Point(0, 142);
+            this.searchButton.Margin = new System.Windows.Forms.Padding(2);
             this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(180, 133);
+            this.searchButton.Size = new System.Drawing.Size(126, 80);
             this.searchButton.TabIndex = 2;
             this.searchButton.Text = "search";
             this.searchButton.UseVisualStyleBackColor = false;
@@ -116,9 +120,10 @@
             this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseButton.ForeColor = System.Drawing.Color.Transparent;
-            this.browseButton.Location = new System.Drawing.Point(0, 97);
+            this.browseButton.Location = new System.Drawing.Point(0, 58);
+            this.browseButton.Margin = new System.Windows.Forms.Padding(2);
             this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(180, 133);
+            this.browseButton.Size = new System.Drawing.Size(126, 80);
             this.browseButton.TabIndex = 1;
             this.browseButton.Text = "browse";
             this.browseButton.UseVisualStyleBackColor = false;
@@ -127,9 +132,10 @@
             // topPanel
             // 
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topPanel.Location = new System.Drawing.Point(180, 0);
+            this.topPanel.Location = new System.Drawing.Point(126, 0);
+            this.topPanel.Margin = new System.Windows.Forms.Padding(2);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(1067, 43);
+            this.topPanel.Size = new System.Drawing.Size(747, 26);
             this.topPanel.TabIndex = 1;
             // 
             // pagePanel
@@ -140,9 +146,10 @@
             this.pagePanel.Controls.Add(this.searchPage);
             this.pagePanel.Controls.Add(this.profilePage);
             this.pagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pagePanel.Location = new System.Drawing.Point(180, 43);
+            this.pagePanel.Location = new System.Drawing.Point(126, 26);
+            this.pagePanel.Margin = new System.Windows.Forms.Padding(2);
             this.pagePanel.Name = "pagePanel";
-            this.pagePanel.Size = new System.Drawing.Size(1067, 925);
+            this.pagePanel.Size = new System.Drawing.Size(747, 555);
             this.pagePanel.TabIndex = 2;
             // 
             // browsePage
@@ -151,9 +158,10 @@
             this.browsePage.AutoSize = true;
             this.browsePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browsePage.Location = new System.Drawing.Point(0, 0);
-            this.browsePage.MinimumSize = new System.Drawing.Size(1000, 925);
+            this.browsePage.Margin = new System.Windows.Forms.Padding(1);
+            this.browsePage.MinimumSize = new System.Drawing.Size(650, 555);
             this.browsePage.Name = "browsePage";
-            this.browsePage.Size = new System.Drawing.Size(1067, 925);
+            this.browsePage.Size = new System.Drawing.Size(747, 555);
             this.browsePage.TabIndex = 0;
             this.browsePage.TabStop = false;
             // 
@@ -164,8 +172,9 @@
             this.uploadPage.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.uploadPage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uploadPage.Location = new System.Drawing.Point(0, 0);
+            this.uploadPage.Margin = new System.Windows.Forms.Padding(1);
             this.uploadPage.Name = "uploadPage";
-            this.uploadPage.Size = new System.Drawing.Size(1067, 925);
+            this.uploadPage.Size = new System.Drawing.Size(747, 555);
             this.uploadPage.TabIndex = 2;
             // 
             // searchPage
@@ -176,8 +185,9 @@
             this.searchPage.AutoSize = true;
             this.searchPage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.searchPage.Location = new System.Drawing.Point(0, 0);
+            this.searchPage.Margin = new System.Windows.Forms.Padding(1);
             this.searchPage.Name = "searchPage";
-            this.searchPage.Size = new System.Drawing.Size(1067, 925);
+            this.searchPage.Size = new System.Drawing.Size(747, 555);
             this.searchPage.TabIndex = 1;
             // 
             // profilePage
@@ -186,21 +196,23 @@
             this.profilePage.AutoSize = true;
             this.profilePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.profilePage.Location = new System.Drawing.Point(0, 0);
+            this.profilePage.Margin = new System.Windows.Forms.Padding(1);
             this.profilePage.Name = "profilePage";
-            this.profilePage.Size = new System.Drawing.Size(1067, 925);
+            this.profilePage.Size = new System.Drawing.Size(747, 555);
             this.profilePage.TabIndex = 3;
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(1247, 968);
+            this.ClientSize = new System.Drawing.Size(873, 581);
             this.Controls.Add(this.pagePanel);
             this.Controls.Add(this.topPanel);
             this.Controls.Add(this.sidebarPanel);
-            this.MinimumSize = new System.Drawing.Size(1133, 879);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(850, 600);
             this.Name = "MainWindow";
             this.Text = "Form2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
