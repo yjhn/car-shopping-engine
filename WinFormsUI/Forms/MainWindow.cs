@@ -61,7 +61,7 @@ namespace Test1
 
         private void favoritesButton_Click(object sender, EventArgs e)
         {
-            SetActivePanel(favoritePage);
+            SetActivePanel(profilePage);
         }
 
         // this method must be called when any sidebar button is clicked as it set button colors
@@ -89,7 +89,7 @@ namespace Test1
             searchPage.Visible = false;
             browsePage.Visible = false;
             uploadPage.Visible = false;
-            favoritePage.Visible = false;
+            profilePage.Visible = false;
 
             // enable all buttons, the callee must disable its own button after calling this method
             browseButton.Enabled = true;

@@ -69,5 +69,15 @@ namespace CarEngine.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PikPng_com_profile_icon_png_805068 {
+            get {
+                object obj = ResourceManager.GetObject("PikPng.com_profile-icon-png_805068", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
