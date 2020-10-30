@@ -12,7 +12,7 @@ namespace Test1
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             if(usernameTextBox.Text == "vienas" && passwordTextBox.Text == "du")
             {
@@ -27,7 +27,7 @@ namespace Test1
             }
         }
 
-        private void usernameTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void UsernameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
             {
@@ -35,7 +35,7 @@ namespace Test1
             }
         }
 
-        private void passwordTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

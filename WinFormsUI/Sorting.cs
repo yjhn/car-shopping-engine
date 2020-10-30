@@ -6,7 +6,7 @@ namespace CarEngine
     static internal class Sorting
     {
         // this method is ONLY for sorting based on sorting crteria that are available in SearhPage sortByCombobox
-        static internal SortingCriteria getSortingCriteria(string name)
+        static internal SortingCriteria GetSortingCriteria(string name)
         {
             // need to move those strings to a centrally stored list
             SortingCriteria criteria;
@@ -37,7 +37,7 @@ namespace CarEngine
             return criteria;
         }
 
-        static internal object getSortObj(SortingCriteria sorting)
+        static internal object GetSortObj(SortingCriteria sorting)
         {
             string sortObj;
             switch (sorting)

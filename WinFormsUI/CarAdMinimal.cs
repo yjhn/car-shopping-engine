@@ -8,15 +8,15 @@ namespace CarEngine
 {
     public partial class CarAdMinimal : UserControl
     {
-        Car carInfo;
-        Color selectedAdColor = Color.Aquamarine;
-        Color normalAdColor = Color.FloralWhite;
+        private readonly Car _carInfo;
+        private readonly Color _selectedAdColor = Color.Aquamarine;
+        private readonly Color _normalAdColor = Color.FloralWhite;
 
         public CarAdMinimal(Car carInfo)
         {
             InitializeComponent();
-            this.carInfo = carInfo;
-            BackColor = normalAdColor;
+            _carInfo = carInfo;
+            BackColor = _normalAdColor;
 
             carModel.Text = $"{carInfo.Brand} {carInfo.Model}";
             price.Text = carInfo.Price.ToString() + "€";
@@ -28,37 +28,37 @@ namespace CarEngine
             }
         }
 
-        private void adWindowClosed(object sender, EventArgs e)
+        private void AdWindowClosed(object sender, EventArgs e)
         {
-            BackColor = normalAdColor;
+            BackColor = _normalAdColor;
         }
 
-        private void openCarWindow()
+        private void OpenCarWindow()
         {
-            BackColor = selectedAdColor;
-            CarForm form = new CarForm(carInfo);
-            form.FormClosed += adWindowClosed;
+            BackColor = _selectedAdColor;
+            CarForm form = new CarForm(_carInfo);
+            form.FormClosed += AdWindowClosed;
             form.Show();
         }
 
-        private void carImage_Click(object sender, EventArgs e)
+        private void CarImage_Click(object sender, EventArgs e)
         {
-            openCarWindow();
+            OpenCarWindow();
         }
 
-        private void carModel_Click(object sender, EventArgs e)
+        private void CarModel_Click(object sender, EventArgs e)
         {
-            openCarWindow();
+            OpenCarWindow();
         }
 
-        private void price_Click(object sender, EventArgs e)
+        private void Price_Click(object sender, EventArgs e)
         {
-            openCarWindow();
+            OpenCarWindow();
         }
 
-        private void additionInfo_Click(object sender, EventArgs e)
+        private void AdditionInfo_Click(object sender, EventArgs e)
         {
-            openCarWindow();
+            OpenCarWindow();
         }
     }
 }

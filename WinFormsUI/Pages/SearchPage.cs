@@ -8,7 +8,7 @@ namespace CarEngine
 {
     public partial class SearchPage : UserControl
     {
-        private List<Car> resultList;
+        private List<Car> _resultList;
 
         public SearchPage()
         {
@@ -113,11 +113,11 @@ namespace CarEngine
                     break;
             }
 
-            SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortByCombobox.SelectedItem);
+            SortingCriteria sortBy = Sorting.GetSortingCriteria((string)sortByCombobox.SelectedItem);
 
             bool sortAscending = radioButtonAscending.Checked;
 
-            resultList = VehicleSearch.searchVehicles(brandTextBox.Text,
+            _resultList = VehicleSearch.searchVehicles(brandTextBox.Text,
                                                       modelTextBox.Text,
                                                       fuelType,
                                                       vehicleType,

@@ -100,13 +100,15 @@ namespace CarEngine.Forms
             {
                 foreach (var i in carInfo.Images)
                 {
-                    PictureBox pic = new PictureBox();
-                    pic.Image = Converter.Base64ToImg(i);
-                    pic.SizeMode = PictureBoxSizeMode.Zoom;//447; 407
-                    pic.Size = new Size(447, 407);
+                    PictureBox pic = new PictureBox
+                    {
+                        Image = Converter.Base64ToImg(i),
+                        SizeMode = PictureBoxSizeMode.Zoom,//447; 407
+                        Size = new Size(447, 407)
+                    };
                     flowLayoutPanel2.Controls.Add(pic);
                 }
-                //carMainImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
+                carMainImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
             }
 
         }

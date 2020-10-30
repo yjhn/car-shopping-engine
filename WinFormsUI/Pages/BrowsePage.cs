@@ -11,44 +11,46 @@ namespace CarEngine
     {
         // need to prepare this for use as a search results page
 
-        private CarFilters filters;
-        private SortingCriteria sorting;
-        private bool sortAsc;
+        private readonly CarFilters _filters;
+        private SortingCriteria _sorting;
+        private bool _sortAsc;
         //static Random rnd;
-        public int carAmount = 15;
-        private int currentPageNumber = 1;
+        public int AdsInPage = 15;
+        private int _currentPageNumber = 1;
 
         // a list to store all car ads in all pages
-        List<CarAdMinimal[]> minimalAdList = new List<CarAdMinimal[]>();
+        private readonly List<CarAdMinimal[]> _adList = new List<CarAdMinimal[]>();
 
-        //public BrowsePage()
-        //{
-        //    InitializeComponent();
-        //    sortResultsByCombobox.SelectedIndex = 0;
-        //    ShowCarList();
-        //}
 
-        public BrowsePage(CarFilters carFilters = null, SortingCriteria? sortBy = default, bool? sortAsc = default)
+        public BrowsePage()
         {
-            filters = carFilters;
-
             InitializeComponent();
-
-            if (sortBy != default)
-            {
-                sorting = (SortingCriteria)sortBy;
-                sortResultsByCombobox.SelectedItem = Sorting.getSortObj(sorting);
-                if(sortAsc != default)
-                {
-                    this.sortAsc = (bool)sortAsc;
-                }
-            }
-            else
-            {
-                sortResultsByCombobox.SelectedIndex = 0;
-            }
-            sortingChanged();
+            sortResultsByCombobox.SelectedIndex = 0;
+            SortingChanged();
         }
+
+
+        //public BrowsePage(CarFilters carFilters = null, SortingCriteria? sortBy = default, bool? sortAsc = default)
+        //{
+        //    filters = carFilters;
+
+        //    InitializeComponent();
+
+        //    if (sortBy != default)
+        //    {
+        //        sorting = (SortingCriteria)sortBy;
+        //        sortResultsByCombobox.SelectedItem = Sorting.GetSortObj(sorting);
+        //        if(sortAsc != default)
+        //        {
+        //            this.sortAsc = (bool)sortAsc;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        sortResultsByCombobox.SelectedIndex = 0;
+        //    }
+        //    sortingChanged();
+        //}
 
         // this method sets nextPageButton.Enabled property
         private void ShowCarList()
@@ -60,9 +62,9 @@ namespace CarEngine
             nextPageButton.Enabled = true;
 
             // if we are one the first page for the first time
-            if (minimalAdList.Count == 0)
+            if (_adList.Count == 0)
             {
-                CarAdMinimal[] carAds = GetMinimalVehicleAds(0, carAmount);
+                CarAdMinimal[] carAds = GetMinimalVehicleAds(0, AdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     nextPageButton.Enabled = false;
@@ -70,14 +72,14 @@ namespace CarEngine
                     // if not, then we should display network error
                     return;
                 }
-                minimalAdList.Add(carAds);
+                _adList.Add(carAds);
             }
 
             // since prefetch is happening, we need to check if we are on the last populated page to disable "next" button if neccessary
-            if (currentPageNumber == minimalAdList.Count)
+            if (_currentPageNumber == _adList.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                CarAdMinimal[] carAds = GetMinimalVehicleAds(carAmount * currentPageNumber, carAmount);
+                CarAdMinimal[] carAds = GetMinimalVehicleAds(AdsInPage * _currentPageNumber, AdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
@@ -85,11 +87,11 @@ namespace CarEngine
                 }
                 else
                 {
-                    minimalAdList.Add(carAds);
+                    _adList.Add(carAds);
                 }
             }
 
-            CarAdMinimal[] pageToShow = minimalAdList[currentPageNumber - 1];
+            CarAdMinimal[] pageToShow = _adList[_currentPageNumber - 1];
 
             // try to display only as many ads as there are in the page
             foreach (CarAdMinimal ad in pageToShow)
@@ -101,69 +103,69 @@ namespace CarEngine
         private CarAdMinimal[] GetMinimalVehicleAds(int startIndex, int amount)
         {
             List<Car> vehicles;
-            if (filters != null)
+            if (_filters != null)
             {
-                vehicles = Api.SearchVehicles(filters, sorting, sortAsc, startIndex, amount);
+                vehicles = Api.SearchVehicles(_filters, _sorting, _sortAsc, startIndex, amount);
             }
             else
             {
                 //sorting = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-                vehicles = Api.SortBy(sorting, startIndex, amount, sortAsc);
+                vehicles = Api.SortBy(_sorting, startIndex, amount, _sortAsc);
             }
             return Converter.vehicleListToAds(vehicles);
         }
 
-        private void nextPageButton_Click(object sender, EventArgs e)
+        private void NextPageButton_Click(object sender, EventArgs e)
         {
-            if (currentPageNumber == 1)
+            if (_currentPageNumber == 1)
             {
                 previousPageButton.Enabled = true;
             }
             mainPanel.AutoScrollPosition = new Point(0, 0);
-            currentPageNumber++;
-            pageNumberLabel.Text = currentPageNumber.ToString();
+            _currentPageNumber++;
+            pageNumberLabel.Text = _currentPageNumber.ToString();
             ShowCarList();
             //nextPageButton.Enabled = canShowMoreAds;
         }
 
-        private void previousPageButton_Click(object sender, EventArgs e)
+        private void PreviousPageButton_Click(object sender, EventArgs e)
         {
             // this is not needed as it is already enforced
             //if (currentPageNumber > 1)
             //{
             mainPanel.AutoScrollPosition = new Point(0, 0);
-            currentPageNumber--;
-            if (currentPageNumber == 1)
+            _currentPageNumber--;
+            if (_currentPageNumber == 1)
             {
                 previousPageButton.Enabled = false;
             }
-            pageNumberLabel.Text = currentPageNumber.ToString();
+            pageNumberLabel.Text = _currentPageNumber.ToString();
             ShowCarList();
             //nextPageButton.Enabled = true;
             //}
         }
 
-        private void sortingChanged()
+        private void SortingChanged()
         {
             // set SortingCriteria and sortAsc
-            sorting = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-            sortAsc = sortAscRadioButton.Checked;
+            _sorting = Sorting.GetSortingCriteria((string)sortResultsByCombobox.SelectedItem);
+            _sortAsc = sortAscRadioButton.Checked;
 
             // clear current ads, since they are obsolete
-            minimalAdList.Clear();
+            _adList.Clear();
 
             // start from page 1
-            currentPageNumber = 1;
+            _currentPageNumber = 1;
             ShowCarList();
         }
-        private void sortingChanged(object sender, EventArgs e)
+        private void SortingChanged(object sender, EventArgs e)
         {
-            sortingChanged();
+            SortingChanged();
         }
 
-        private void refreshButton_Click(object sender, EventArgs e)
+        private void RefreshButton_Click(object sender, EventArgs e)
         {
-            sortingChanged();
+            SortingChanged();
         }
     }
 }

@@ -94,7 +94,7 @@
             this.sortResultsByCombobox.Name = "sortResultsByCombobox";
             this.sortResultsByCombobox.Size = new System.Drawing.Size(160, 23);
             this.sortResultsByCombobox.TabIndex = 10;
-            this.sortResultsByCombobox.SelectedIndexChanged += new System.EventHandler(this.sortingChanged);
+            this.sortResultsByCombobox.SelectedIndexChanged += new System.EventHandler(this.SortingChanged);
             // 
             // refreshButton
             // 
@@ -107,7 +107,7 @@
             this.refreshButton.TabIndex = 12;
             this.refreshButton.Text = "refresh";
             this.refreshButton.UseVisualStyleBackColor = true;
-            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
             // sortAscDescPanel
             // 
@@ -122,7 +122,7 @@
             this.sortAscDescPanel.Name = "sortAscDescPanel";
             this.sortAscDescPanel.Size = new System.Drawing.Size(123, 52);
             this.sortAscDescPanel.TabIndex = 11;
-            this.sortAscDescPanel.Click += new System.EventHandler(this.sortingChanged);
+            this.sortAscDescPanel.Click += new System.EventHandler(this.SortingChanged);
             // 
             // sortAscRadioButton
             // 
@@ -135,7 +135,7 @@
             this.sortAscRadioButton.TabIndex = 1;
             this.sortAscRadioButton.Text = "Ascending";
             this.sortAscRadioButton.UseVisualStyleBackColor = true;
-            this.sortAscRadioButton.CheckedChanged += new System.EventHandler(this.sortingChanged);
+            this.sortAscRadioButton.CheckedChanged += new System.EventHandler(this.SortingChanged);
             // 
             // sortDescRadioButton
             // 
@@ -194,7 +194,7 @@
             this.previousPageButton.TabIndex = 0;
             this.previousPageButton.Text = "<";
             this.previousPageButton.UseVisualStyleBackColor = true;
-            this.previousPageButton.Click += new System.EventHandler(this.previousPageButton_Click);
+            this.previousPageButton.Click += new System.EventHandler(this.PreviousPageButton_Click);
             // 
             // nextPageButton
             // 
@@ -208,7 +208,7 @@
             this.nextPageButton.TabIndex = 0;
             this.nextPageButton.Text = ">";
             this.nextPageButton.UseVisualStyleBackColor = true;
-            this.nextPageButton.Click += new System.EventHandler(this.nextPageButton_Click);
+            this.nextPageButton.Click += new System.EventHandler(this.NextPageButton_Click);
             // 
             // BrowsePage
             // 

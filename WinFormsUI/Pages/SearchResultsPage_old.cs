@@ -28,7 +28,7 @@ namespace CarEngine.Pages
 
         private void sortResultsByCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SortingCriteria criteria = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
+            SortingCriteria criteria = Sorting.GetSortingCriteria((string)sortResultsByCombobox.SelectedItem);
             resultList.SortBy(criteria, sortResultsAscRadioBtn.Checked);
 
             // display the sorted results (maybe this isn't needed?)

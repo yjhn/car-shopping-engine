@@ -59,7 +59,7 @@
             this.carModel.TabIndex = 0;
             this.carModel.Text = "Volvo V60";
             this.carModel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.carModel.Click += new System.EventHandler(this.carModel_Click);
+            this.carModel.Click += new System.EventHandler(this.CarModel_Click);
             // 
             // carImage
             // 
@@ -71,7 +71,7 @@
             this.carImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.carImage.TabIndex = 1;
             this.carImage.TabStop = false;
-            this.carImage.Click += new System.EventHandler(this.carImage_Click);
+            this.carImage.Click += new System.EventHandler(this.CarImage_Click);
             // 
             // price
             // 
@@ -83,7 +83,7 @@
             this.price.TabIndex = 2;
             this.price.Text = "13 500€";
             this.price.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.price.Click += new System.EventHandler(this.price_Click);
+            this.price.Click += new System.EventHandler(this.Price_Click);
             // 
             // additionInfo
             // 
@@ -94,7 +94,7 @@
             this.additionInfo.Size = new System.Drawing.Size(206, 44);
             this.additionInfo.TabIndex = 2;
             this.additionInfo.Text = "2.2l V8 \"Vairavo kunigas\"";
-            this.additionInfo.Click += new System.EventHandler(this.additionInfo_Click);
+            this.additionInfo.Click += new System.EventHandler(this.AdditionInfo_Click);
             // 
             // CarAdMinimal
             // 

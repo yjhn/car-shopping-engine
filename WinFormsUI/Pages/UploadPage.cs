@@ -24,7 +24,7 @@ namespace CarEngine.Pages
             fuelTypeComboBox.SelectedIndex = 0;
         }
 
-        private void browseButton_Click(object sender, EventArgs e)
+        private void BrowseButton_Click(object sender, EventArgs e)
         {
             additionalImagesPanel.Controls.Clear();
             OpenFileDialog dialog = new OpenFileDialog();
@@ -49,7 +49,7 @@ namespace CarEngine.Pages
             }
         }
 
-        private void uploadButton_Click(object sender, EventArgs e)
+        private void UploadButton_Click(object sender, EventArgs e)
         {
             //temporary kokas :_)
             if (CheckIfFilled())

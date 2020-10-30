@@ -96,7 +96,7 @@
             this.browseButton.TabIndex = 3;
             this.browseButton.Text = "browse";
             this.browseButton.UseVisualStyleBackColor = true;
-            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // uploadLabel
             // 
@@ -130,7 +130,7 @@
             this.uploadButton.TabIndex = 5;
             this.uploadButton.Text = "Upload";
             this.uploadButton.UseVisualStyleBackColor = true;
-            this.uploadButton.Click += new System.EventHandler(this.uploadButton_Click);
+            this.uploadButton.Click += new System.EventHandler(this.UploadButton_Click);
             // 
             // typeComboBox
             // 

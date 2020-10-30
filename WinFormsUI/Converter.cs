@@ -26,12 +26,10 @@ namespace CarEngine
 
         public static string ConvertImageToBase64(Image file)
         {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                file.Save(memoryStream, file.RawFormat);
-                byte[] imageBytes = memoryStream.ToArray();
-                return Convert.ToBase64String(imageBytes);
-            }
+            using MemoryStream memoryStream = new MemoryStream();
+            file.Save(memoryStream, file.RawFormat);
+            byte[] imageBytes = memoryStream.ToArray();
+            return Convert.ToBase64String(imageBytes);
         }
 
         public static CarAdMinimal[] vehicleListToAds(List<Car> vehicleList)

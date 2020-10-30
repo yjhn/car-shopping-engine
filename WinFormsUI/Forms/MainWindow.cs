@@ -7,10 +7,10 @@ namespace Test1
     public partial class MainWindow : Form
     {
         // create default colors for (in)active sidebar buttons
-        readonly Color activeSidebarButtonColor = Color.AntiqueWhite;
-        readonly Color activeSidebarButtonTextColor = Color.Black;
-        readonly Color inactiveSidebarButtonColor = Color.Transparent;
-        readonly Color inactiveSidebarButtonTextColor = Color.Transparent;
+        private readonly Color _activeSidebarButtonColor = Color.AntiqueWhite;
+        private readonly Color _activeSidebarButtonTextColor = Color.Black;
+        private readonly Color _inactiveSidebarButtonColor = Color.Transparent;
+        private readonly Color _inactiveSidebarButtonTextColor = Color.Transparent;
 
         public MainWindow()
         {
@@ -18,69 +18,67 @@ namespace Test1
 
             // set window title
             Text = "Car Shopping Engine";
-
-            // add event handler to sidebar buttons to make them change colour once clicked
-            browseButton.Click += new System.EventHandler(sidebarButton_Click);
-            searchButton.Click += new System.EventHandler(sidebarButton_Click);
-            uploadButton.Click += new System.EventHandler(sidebarButton_Click);
-            favoritesButton.Click += new System.EventHandler(sidebarButton_Click);
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            // this will probably cause the app to lock up while it fetches data from server
+            // this causes the app to lock up while it fetches data from server
             SetActivePanel(browsePage);
 
-            // disable the "clicked" button
-            browseButton.Enabled = false;
+            // browse button is "clicked"
+            sidebarButton_Click(browseButton);
 
             // manually set the color of the button since I don't know how to raise button click event from here
-            browseButton.ForeColor = activeSidebarButtonTextColor;
-            browseButton.BackColor = activeSidebarButtonColor;
+            browseButton.ForeColor = _activeSidebarButtonTextColor;
+            browseButton.BackColor = _activeSidebarButtonColor;
         }
 
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
         }
 
-        private void browseButton_Click(object sender, EventArgs e)
+        private void BrowseButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(browsePage);
+            sidebarButton_Click(browseButton);
         }
 
-        private void searchButton_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(searchPage);
+            sidebarButton_Click(searchButton);
         }
 
-        private void uploadButton_Click(object sender, EventArgs e)
+        private void UploadButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(uploadPage);
+            sidebarButton_Click(uploadButton);
         }
 
-        private void favoritesButton_Click(object sender, EventArgs e)
+        private void FavoritesButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(profilePage);
+            sidebarButton_Click(favoritesButton);
         }
 
         // this method must be called when any sidebar button is clicked as it set button colors
-        private void sidebarButton_Click(object sender, EventArgs e)
+        private void sidebarButton_Click(Button button/*, EventArgs e*/)
         {
-            browseButton.ForeColor = inactiveSidebarButtonTextColor;
-            browseButton.BackColor = inactiveSidebarButtonColor;
-            searchButton.ForeColor = inactiveSidebarButtonTextColor;
-            searchButton.BackColor = inactiveSidebarButtonColor;
-            uploadButton.ForeColor = inactiveSidebarButtonTextColor;
-            uploadButton.BackColor = inactiveSidebarButtonColor;
-            favoritesButton.ForeColor = inactiveSidebarButtonTextColor;
-            favoritesButton.BackColor = inactiveSidebarButtonColor;
+            browseButton.ForeColor = _inactiveSidebarButtonTextColor;
+            browseButton.BackColor = _inactiveSidebarButtonColor;
+            searchButton.ForeColor = _inactiveSidebarButtonTextColor;
+            searchButton.BackColor = _inactiveSidebarButtonColor;
+            uploadButton.ForeColor = _inactiveSidebarButtonTextColor;
+            uploadButton.BackColor = _inactiveSidebarButtonColor;
+            favoritesButton.ForeColor = _inactiveSidebarButtonTextColor;
+            favoritesButton.BackColor = _inactiveSidebarButtonColor;
 
-            ((Button)sender).ForeColor = activeSidebarButtonTextColor;
-            ((Button)sender).BackColor = activeSidebarButtonColor;
+            button.ForeColor = _activeSidebarButtonTextColor;
+            button.BackColor = _activeSidebarButtonColor;
 
             // this is OK as this method is called after SetActivePanel (since this was added to button click eventhandler later than button_Click)
-            ((Button)sender).Enabled = false;
+            button.Enabled = false;
         }
 
         private void SetActivePanel(UserControl control)

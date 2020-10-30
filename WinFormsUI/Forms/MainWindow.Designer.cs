@@ -76,7 +76,7 @@
             this.favoritesButton.TabIndex = 4;
             this.favoritesButton.Text = "favorites";
             this.favoritesButton.UseVisualStyleBackColor = false;
-            this.favoritesButton.Click += new System.EventHandler(this.favoritesButton_Click);
+            this.favoritesButton.Click += new System.EventHandler(this.FavoritesButton_Click);
             // 
             // uploadButton
             // 
@@ -93,7 +93,7 @@
             this.uploadButton.TabIndex = 3;
             this.uploadButton.Text = "upload";
             this.uploadButton.UseVisualStyleBackColor = false;
-            this.uploadButton.Click += new System.EventHandler(this.uploadButton_Click);
+            this.uploadButton.Click += new System.EventHandler(this.UploadButton_Click);
             // 
             // searchButton
             // 
@@ -110,7 +110,7 @@
             this.searchButton.TabIndex = 2;
             this.searchButton.Text = "search";
             this.searchButton.UseVisualStyleBackColor = false;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            this.searchButton.Click += new System.EventHandler(this.SearchButton_Click);
             // 
             // browseButton
             // 
@@ -127,7 +127,7 @@
             this.browseButton.TabIndex = 1;
             this.browseButton.Text = "browse";
             this.browseButton.UseVisualStyleBackColor = false;
-            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // topPanel
             // 
@@ -215,7 +215,7 @@
             this.MinimumSize = new System.Drawing.Size(850, 600);
             this.Name = "MainWindow";
             this.Text = "Form2";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.sidebarPanel.ResumeLayout(false);
             this.pagePanel.ResumeLayout(false);
