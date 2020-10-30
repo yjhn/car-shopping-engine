@@ -1,6 +1,6 @@
 ﻿namespace CarEngine.Pages
 {
-    partial class SearchResultsPage
+    partial class SearchResultsPage_old
     {
         /// <summary> 
         /// Required designer variable.

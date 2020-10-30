@@ -87,7 +87,8 @@
             "price",
             "date of purchase",
             "total kilometers driven",
-            "original purchase country"});
+            "original purchase country",
+            "next vehicle inspection"});
             this.sortResultsByCombobox.Location = new System.Drawing.Point(445, 17);
             this.sortResultsByCombobox.Margin = new System.Windows.Forms.Padding(2);
             this.sortResultsByCombobox.Name = "sortResultsByCombobox";

@@ -5,10 +5,10 @@ using System.Windows.Forms;
 
 namespace CarEngine.Pages
 {
-    public partial class SearchResultsPage : UserControl
+    public partial class SearchResultsPage_old : UserControl
     {
         private List<Car> resultList;
-        public SearchResultsPage()
+        public SearchResultsPage_old()
         {
             InitializeComponent();
         }

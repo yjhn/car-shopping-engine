@@ -135,7 +135,7 @@
             this.topPanel.Location = new System.Drawing.Point(126, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(2);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(747, 26);
+            this.topPanel.Size = new System.Drawing.Size(708, 26);
             this.topPanel.TabIndex = 1;
             // 
             // pagePanel
@@ -149,7 +149,7 @@
             this.pagePanel.Location = new System.Drawing.Point(126, 26);
             this.pagePanel.Margin = new System.Windows.Forms.Padding(2);
             this.pagePanel.Name = "pagePanel";
-            this.pagePanel.Size = new System.Drawing.Size(747, 555);
+            this.pagePanel.Size = new System.Drawing.Size(708, 555);
             this.pagePanel.TabIndex = 2;
             // 
             // browsePage
@@ -161,7 +161,7 @@
             this.browsePage.Margin = new System.Windows.Forms.Padding(1);
             this.browsePage.MinimumSize = new System.Drawing.Size(650, 555);
             this.browsePage.Name = "browsePage";
-            this.browsePage.Size = new System.Drawing.Size(747, 555);
+            this.browsePage.Size = new System.Drawing.Size(708, 555);
             this.browsePage.TabIndex = 0;
             this.browsePage.TabStop = false;
             // 
@@ -174,7 +174,7 @@
             this.uploadPage.Location = new System.Drawing.Point(0, 0);
             this.uploadPage.Margin = new System.Windows.Forms.Padding(1);
             this.uploadPage.Name = "uploadPage";
-            this.uploadPage.Size = new System.Drawing.Size(747, 555);
+            this.uploadPage.Size = new System.Drawing.Size(708, 555);
             this.uploadPage.TabIndex = 2;
             // 
             // searchPage
@@ -187,7 +187,7 @@
             this.searchPage.Location = new System.Drawing.Point(0, 0);
             this.searchPage.Margin = new System.Windows.Forms.Padding(1);
             this.searchPage.Name = "searchPage";
-            this.searchPage.Size = new System.Drawing.Size(747, 555);
+            this.searchPage.Size = new System.Drawing.Size(708, 555);
             this.searchPage.TabIndex = 1;
             // 
             // profilePage
@@ -198,7 +198,7 @@
             this.profilePage.Location = new System.Drawing.Point(0, 0);
             this.profilePage.Margin = new System.Windows.Forms.Padding(1);
             this.profilePage.Name = "profilePage";
-            this.profilePage.Size = new System.Drawing.Size(747, 555);
+            this.profilePage.Size = new System.Drawing.Size(708, 555);
             this.profilePage.TabIndex = 3;
             // 
             // MainWindow
@@ -207,7 +207,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(873, 581);
+            this.ClientSize = new System.Drawing.Size(834, 581);
             this.Controls.Add(this.pagePanel);
             this.Controls.Add(this.topPanel);
             this.Controls.Add(this.sidebarPanel);

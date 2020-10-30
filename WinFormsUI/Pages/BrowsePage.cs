@@ -9,6 +9,11 @@ namespace CarEngine
 {
     public partial class BrowsePage : UserControl
     {
+        // need to prepare this for use as a search results page
+
+        private CarFilters filters;
+        private SortingCriteria sorting;
+        private bool sortAsc;
         //static Random rnd;
         public int carAmount = 15;
         private int currentPageNumber = 1;
@@ -16,11 +21,33 @@ namespace CarEngine
         // a list to store all car ads in all pages
         List<CarAdMinimal[]> minimalAdList = new List<CarAdMinimal[]>();
 
-        public BrowsePage()
+        //public BrowsePage()
+        //{
+        //    InitializeComponent();
+        //    sortResultsByCombobox.SelectedIndex = 0;
+        //    ShowCarList();
+        //}
+
+        public BrowsePage(CarFilters carFilters = null, SortingCriteria? sortBy = default, bool? sortAsc = default)
         {
+            filters = carFilters;
+
             InitializeComponent();
-            sortResultsByCombobox.SelectedIndex = 0;
-            ShowCarList();
+
+            if (sortBy != default)
+            {
+                sorting = (SortingCriteria)sortBy;
+                sortResultsByCombobox.SelectedItem = Sorting.getSortObj(sorting);
+                if(sortAsc != default)
+                {
+                    this.sortAsc = (bool)sortAsc;
+                }
+            }
+            else
+            {
+                sortResultsByCombobox.SelectedIndex = 0;
+            }
+            sortingChanged();
         }
 
         // this method sets nextPageButton.Enabled property
@@ -29,7 +56,7 @@ namespace CarEngine
             // clear main panel to load other ads
             mainPanel.Controls.Clear();
 
-            // enable next page button. It might get disabled later in the method, so we cannot do this later
+            // enable "next page" button. It might get disabled later in the method, so we cannot do this later
             nextPageButton.Enabled = true;
 
             // if we are one the first page for the first time
@@ -73,8 +100,17 @@ namespace CarEngine
 
         private CarAdMinimal[] GetMinimalVehicleAds(int startIndex, int amount)
         {
-            SortingCriteria sortBy = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-            return Converter.vehicleListToAds(Api.SortBy(sortBy, startIndex, amount, sortAscRadioButton.Checked));
+            List<Car> vehicles;
+            if (filters != null)
+            {
+                vehicles = Api.SearchVehicles(filters, sorting, sortAsc, startIndex, amount);
+            }
+            else
+            {
+                //sorting = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
+                vehicles = Api.SortBy(sorting, startIndex, amount, sortAsc);
+            }
+            return Converter.vehicleListToAds(vehicles);
         }
 
         private void nextPageButton_Click(object sender, EventArgs e)
@@ -109,6 +145,10 @@ namespace CarEngine
 
         private void sortingChanged()
         {
+            // set SortingCriteria and sortAsc
+            sorting = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
+            sortAsc = sortAscRadioButton.Checked;
+
             // clear current ads, since they are obsolete
             minimalAdList.Clear();
 
