@@ -6,20 +6,20 @@ namespace Backend
 {
     public class Logger
     {
-        private string LogPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\logs\" + DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToLongTimeString().Replace(":", "-") + ".txt";
-        private FileStream LogFile;
+        private readonly string _logPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\logs\" + DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToLongTimeString().Replace(":", "-") + ".txt";
+        private readonly FileStream _logFile;
 
         public Logger(string logPath = null)
         {
             if (logPath != null)
             {
-                this.LogPath = logPath;
+                _logPath = logPath;
             }
 
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(this.LogPath));
-                LogFile = File.OpenWrite(this.LogPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(this._logPath));
+                _logFile = File.OpenWrite(this._logPath);
             }
             catch (Exception e)
             {
@@ -32,8 +32,8 @@ namespace Backend
             byte[] info = new UTF8Encoding(true).GetBytes($"[{DateTime.Now:T}] {e}\n\n");
             try
             {
-                LogFile.Write(info, 0, info.Length);
-                LogFile.Flush();
+                _logFile.Write(info, 0, info.Length);
+                _logFile.Flush();
             }
             catch (Exception exc)
             {

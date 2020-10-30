@@ -8,39 +8,39 @@ namespace Backend
 {
     internal class FileReader
     {
-        private string databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
-        private string userDatabasePath;
-        private string carDatabasePath;
-        private Logger logger;
-        internal int lastCarId { get; private set; } = 0;
+        private readonly string _databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
+        private readonly string _userDatabasePath;
+        private readonly string _carDatabasePath;
+        private readonly Logger _logger;
+        internal int LastCarId { get; private set; } = 0;
 
         internal FileReader(Logger logger, string carDbPath = null, string userDbPath = null)
         {
-            this.logger = logger;
+            _logger = logger;
 
             if (carDbPath != null)
             {
-                this.carDatabasePath = carDbPath;
+                _carDatabasePath = carDbPath;
             }
             else
             {
-                carDatabasePath = databasePath + @"cars\";
+                _carDatabasePath = _databasePath + @"cars\";
             }
             if (userDbPath != null)
             {
-                this.userDatabasePath = userDbPath;
+                _userDatabasePath = userDbPath;
             }
             else
             {
-                userDatabasePath = databasePath + @"users\";
+                _userDatabasePath = _databasePath + @"users\";
             }
         }
 
         internal Car GetCarData(int Id)
         {
-            if (Directory.Exists(carDatabasePath))
+            if (Directory.Exists(_carDatabasePath))
             {
-                string fileName = databasePath + Id + ".json";
+                string fileName = _databasePath + Id + ".json";
                 try
                 {
                     byte[] jsonBytes = File.ReadAllBytes(fileName);
@@ -50,7 +50,7 @@ namespace Backend
                 }
                 catch (Exception e)
                 {
-                    logger.LogException(e);
+                    _logger.LogException(e);
                 }
             }
             return null;
@@ -58,9 +58,9 @@ namespace Backend
 
         internal User GetUserData(string username)
         {
-            if (Directory.Exists(userDatabasePath))
+            if (Directory.Exists(_userDatabasePath))
             {
-                string fileName = userDatabasePath + username + ".json";
+                string fileName = _userDatabasePath + username + ".json";
                 try
                 {
                     byte[] jsonBytes = File.ReadAllBytes(fileName);
@@ -70,7 +70,7 @@ namespace Backend
                 }
                 catch (Exception e)
                 {
-                    logger.LogException(e);
+                    _logger.LogException(e);
                 }
             }
             return null;
@@ -79,25 +79,25 @@ namespace Backend
         internal List<Car> GetAllCarData()
         {
             List<Car> cars = new List<Car>();
-            if (Directory.Exists(carDatabasePath))
+            if (Directory.Exists(_carDatabasePath))
             {
-                foreach (string file in Directory.EnumerateFiles(carDatabasePath, "*.json"))
+                foreach (string file in Directory.EnumerateFiles(_carDatabasePath, "*.json"))
                 {
                     try
                     {
                         byte[] jsonBytes = File.ReadAllBytes(file);
                         var utf8Reader = new Utf8JsonReader(jsonBytes);
                         Car car = JsonSerializer.Deserialize<Car>(ref utf8Reader);
-                        if (car.Id > lastCarId)
+                        if (car.Id > LastCarId)
                         {
-                            lastCarId = car.Id;
+                            LastCarId = car.Id;
                         }
                         cars.Add(car);
                     }
                     catch (Exception e)
                     {
                         // ignore files that do not hold cars
-                        logger.LogException(new Exception("Garbage file in car database directory", e));
+                        _logger.LogException(new Exception("Garbage file in car database directory", e));
                     }
                 }
                 return cars;
@@ -108,9 +108,9 @@ namespace Backend
         internal List<User> GetAllUserData()
         {
             List<User> users = new List<User>();
-            if (Directory.Exists(userDatabasePath))
+            if (Directory.Exists(_userDatabasePath))
             {
-                foreach (string file in Directory.EnumerateFiles(userDatabasePath, "*.json"))
+                foreach (string file in Directory.EnumerateFiles(_userDatabasePath, "*.json"))
                 {
                     try
                     {
@@ -123,7 +123,7 @@ namespace Backend
                     catch (Exception e)
                     {
                         // ignore files that do not hold users
-                        logger.LogException(new Exception("Garbage file in user database directory", e));
+                        _logger.LogException(new Exception("Garbage file in user database directory", e));
                     }
                 }
             }

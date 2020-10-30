@@ -7,10 +7,10 @@ namespace Backend
 {
     internal class FileWriter
     {
-        private string databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
-        private Logger logger;
-        private string userDatabasePath;
-        private string carDatabasePath;
+        private readonly string _databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
+        private readonly Logger _logger;
+        private readonly string _userDatabasePath;
+        private readonly string _carDatabasePath;
 
         JsonSerializerOptions options = new JsonSerializerOptions
         {
@@ -19,29 +19,29 @@ namespace Backend
 
         internal FileWriter(Logger logger, string carDbPath = null, string userDbPath = null)
         {
-            this.logger = logger;
+            _logger = logger;
 
             if (carDbPath != null)
             {
-                this.carDatabasePath = carDbPath;
+                _carDatabasePath = carDbPath;
             }
             else
             {
-                carDatabasePath = databasePath + @"cars\";
+                _carDatabasePath = _databasePath + @"cars\";
             }
             if (userDbPath != null)
             {
-                this.userDatabasePath = userDbPath;
+                _userDatabasePath = userDbPath;
             }
             else
             {
-                userDatabasePath = databasePath + @"users\";
+                _userDatabasePath = _databasePath + @"users\";
             }
         }
 
         internal bool WriteCarData(Car car)
         {
-            string fileName = carDatabasePath + car.Id + ".json";
+            string fileName = _carDatabasePath + car.Id + ".json";
 
             byte[] jsonUtf8Bytes;
             jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(car, options);
@@ -57,14 +57,14 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.LogException(e);
+                _logger.LogException(e);
                 return false;
             }
         }
 
         internal bool DeleteCar(int Id)
         {
-            string fileName = carDatabasePath + Id + ".json";
+            string fileName = _carDatabasePath + Id + ".json";
 
             try
             {
@@ -73,14 +73,14 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.LogException(e);
+                _logger.LogException(e);
                 return false;
             }
         }
 
         internal bool WriteUserData(User user)
         {
-            string fileName = userDatabasePath + user.Username + ".json";
+            string fileName = _userDatabasePath + user.Username + ".json";
 
             byte[] jsonUtf8Bytes;
             jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(user, options);
@@ -96,14 +96,14 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.LogException(e);
+                _logger.LogException(e);
                 return false;
             }
         }
 
         internal bool DeleteUser(string username)
         {
-            string fileName = userDatabasePath + username + ".json";
+            string fileName = _userDatabasePath + username + ".json";
 
             try
             {
@@ -112,7 +112,7 @@ namespace Backend
             }
             catch (Exception e)
             {
-                logger.LogException(e);
+                _logger.LogException(e);
                 return false;
             }
         }

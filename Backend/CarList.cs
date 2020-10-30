@@ -8,25 +8,26 @@ namespace Backend
 {
     public class CarList : ICarDb
     {
-        private List<Car> carList;
-        private FileReader carDataReader;
-        private FileWriter carDataWriter;
-        public int lastCarId { get; internal set; }
-        private Logger logger;
+        private readonly List<Car> _carList;
+        private readonly FileReader _carDataReader;
+        private readonly FileWriter _carDataWriter;
+        public int LastCarId { get; private set; }
+        private readonly Logger _logger;
 
         public CarList(Logger logger, string carDbPath = null)
         {
-            this.logger = logger;
-            carDataReader = new FileReader(logger, carDbPath);
-            carDataWriter = new FileWriter(logger, carDbPath);
-            carList = carDataReader.GetAllCarData();
-            lastCarId = carDataReader.lastCarId;
+            _logger = logger;
+            _carDataReader = new FileReader(logger, carDbPath);
+            _carDataWriter = new FileWriter(logger, carDbPath);
+            _carList = _carDataReader.GetAllCarData();
+            LastCarId = _carDataReader.LastCarId;
         }
 
         // returns List<Car> serialized to JSON
         public byte[] GetCarList(int startIndex, int amount)
         {
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carList.Skip(startIndex).Take(amount).ToList<Car>());
+            // convert this to string
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(_carList.Skip(startIndex).Take(amount).ToList<Car>());
         }
 
         public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
@@ -38,7 +39,7 @@ namespace Backend
         {
             if (carListToSort == null)
             {
-                carListToSort = carList;
+                carListToSort = _carList;
             }
             carListToSort.SortBy(sortBy, sortAscending);
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Skip(startIndex).Take(amount).ToList<Car>());
@@ -46,7 +47,7 @@ namespace Backend
 
         public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            List<Car> filteredCarList = carList;
+            List<Car> filteredCarList = _carList;
 
             if (filters.PriceFrom.HasValue && filters.PriceTo.HasValue)
                 filteredCarList = (from car in filteredCarList where (car.Price >= filters.PriceFrom && car.Price <= filters.PriceTo) select car).ToList();
@@ -66,38 +67,38 @@ namespace Backend
             try
             {
                 Car c = JsonSerializer.Deserialize<Car>(car);
-                c.Id = lastCarId + 1;
-                lastCarId++;
-                carList.Add(c);
-                carDataWriter.WriteCarData(c);
+                c.Id = LastCarId + 1;
+                LastCarId++;
+                _carList.Add(c);
+                _carDataWriter.WriteCarData(c);
                 return true;
             }
             catch (JsonException e)
             {
-                logger.LogException(new Exception("Failed to write car data due to bad serialization", e));
+                _logger.LogException(new Exception("Failed to write car data due to bad serialization", e));
                 return false;
             }
             catch (Exception e)
             {
-                logger.LogException(e);
+                _logger.LogException(e);
                 return false;
             }
         }
 
         public byte[] GetCar(int id)
         {
-            Car car = carList.Find(car => car.Id == id);
+            Car car = _carList.Find(car => car.Id == id);
             return car != null ? JsonSerializer.SerializeToUtf8Bytes<Car>(car) : null;
         }
 
         public bool DeleteCar(int id)
         {
-            foreach (Car car in carList)
+            foreach (Car car in _carList)
             {
                 if (car.Id == id)
                 {
-                    carList.Remove(car);
-                    carDataWriter.DeleteCar(id);
+                    _carList.Remove(car);
+                    _carDataWriter.DeleteCar(id);
                     return true;
                 }
             }
@@ -107,7 +108,7 @@ namespace Backend
         public List<int> GetUserAdIds(string username)
         {
             List<int> ids = new List<int>();
-            foreach (Car car in carList)
+            foreach (Car car in _carList)
             {
                 if (car.UploaderUsername.Equals(username))
                 {

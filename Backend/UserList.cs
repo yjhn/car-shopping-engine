@@ -7,23 +7,23 @@ namespace Backend
 {
     public class UserList : IUserDb
     {
-        private List<User> userList;
-        private FileReader userDataReader;
-        private FileWriter userDataWriter;
-        private Logger logger;
+        private readonly List<User> _userList;
+        private readonly FileReader _userDataReader;
+        private readonly FileWriter _userDataWriter;
+        private readonly Logger _logger;
 
         public UserList(Logger logger, string userDbPath = null)
         {
-            this.logger = logger;
-            userDataReader = new FileReader(logger, userDbPath);
-            userDataWriter = new FileWriter(logger, userDbPath);
-            userList = userDataReader.GetAllUserData();
+            _logger = logger;
+            _userDataReader = new FileReader(logger, userDbPath);
+            _userDataWriter = new FileWriter(logger, userDbPath);
+            _userList = _userDataReader.GetAllUserData();
         }
 
         // returns null if not found
         public byte[] GetUser(string username)
         {
-            User user = userList.Find(user => user.Username == username);
+            User user = _userList.Find(user => user.Username == username);
             return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
         }
 
@@ -34,8 +34,8 @@ namespace Backend
                 User u = JsonSerializer.Deserialize<User>(user);
                 if (!CheckIfExists(u.Username))
                 {
-                    userList.Add(u);
-                    return userDataWriter.WriteUserData(u); // make filewriter be able to write serialized data
+                    _userList.Add(u);
+                    return _userDataWriter.WriteUserData(u); // make filewriter be able to write serialized data
                 }
                 else
                 {
@@ -44,29 +44,29 @@ namespace Backend
             }
             catch (JsonException e)
             {
-                logger.LogException(new Exception("Cannot add user due to bad serialization", e));
+                _logger.LogException(new Exception("Cannot add user due to bad serialization", e));
                 return false;
             }
             catch (Exception e)
             {
-                logger.LogException(e);
+                _logger.LogException(e);
                 return false;
             }
         }
 
         public bool DeleteUser(string username)
         {
-            return userList.RemoveAll(user => user.Username == username) == 1 && userDataWriter.DeleteUser(username);
+            return _userList.RemoveAll(user => user.Username == username) == 1 && _userDataWriter.DeleteUser(username);
         }
 
         public bool CheckIfExists(string username)
         {
-            return userList.Exists(user => user.Username.Equals(username));
+            return _userList.Exists(user => user.Username.Equals(username));
         }
 
         public bool Authenticate(string username, string hashedPassword)
         {
-            return userList.Exists((user) => user.Username.Equals(username) && user.HashedPassword.Equals(hashedPassword));
+            return _userList.Exists((user) => user.Username.Equals(username) && user.HashedPassword.Equals(hashedPassword));
         }
     }
 }

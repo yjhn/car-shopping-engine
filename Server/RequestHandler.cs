@@ -274,7 +274,7 @@ namespace Server
             {
                 r = MakeResponse(201);
                 CarList cs = (CarList)carDb;
-                int id = cs.lastCarId;
+                int id = cs.LastCarId;
                 r.Headers.Add(new Header("Location", $"{ServerConstants.Scheme}://{ServerConstants.HostForClients}:{ServerConstants.Port}/cars/{id}"));
             }
             else
