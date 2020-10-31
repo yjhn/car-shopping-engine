@@ -17,10 +17,10 @@ namespace Frontend
         {
             return Task.Run<List<Car>>(() =>
             {
-                Request req = reqInit("GET", "cars");
+                Request req = ReqInit("GET", "cars");
                 req.Queries.Add("amount", amount.ToString());
                 req.Queries.Add("start_index", startIndex.ToString());
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -35,12 +35,12 @@ namespace Frontend
             // to be able to await a task we first need to create it
             return Task.Run<List<Car>>(() =>
             {
-                Request req = reqInit("GET", "cars");
+                Request req = ReqInit("GET", "cars");
                 req.Queries.Add("sort_by", sortBy.ToString());
                 req.Queries.Add("amount", amount.ToString());
                 req.Queries.Add("sort_ascending", sortAscending.ToString());
                 req.Queries.Add("start_index", startIndex.ToString());
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -54,7 +54,7 @@ namespace Frontend
         {
             return Task.Run<List<Car>>(() =>
             {
-                Request req = reqInit("GET", "cars/filters");
+                Request req = ReqInit("GET", "cars/filters");
                 req.Queries.Add("amount", amount.ToString());
                 req.Queries.Add("sort_by", sortBy.ToString());
                 req.Queries.Add("sort_ascending", sortAscending.ToString());
@@ -81,7 +81,7 @@ namespace Frontend
                     req.Queries.Add("fuel_type", filters.FuelType.ToString());
                 if (filters.ChassisType.HasValue)
                     req.Queries.Add("chassis_type", filters.ChassisType.ToString());
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -95,9 +95,9 @@ namespace Frontend
         {
             return Task.Run<Car>(() =>
             {
-                Request req = reqInit("GET", "cars");
+                Request req = ReqInit("GET", "cars");
                 req.Queries.Add("id", id.ToString());
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -111,12 +111,12 @@ namespace Frontend
         {
             return Task.Run<int?>(() =>
             {
-                Request req = reqInit("POST", "cars");
-                req.Headers.Add(new Header("Content-type", makeType("json")));
+                Request req = ReqInit("POST", "cars");
+                req.Headers.Add(new Header("Content-type", MakeType("json")));
                 byte[] carContent = JsonSerializer.SerializeToUtf8Bytes<Car>(car);
                 req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
                 req.Content = carContent;
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -143,9 +143,9 @@ namespace Frontend
         {
             return Task.Run<bool?>(() =>
             {
-                Request req = reqInit("DELETE", "cars");
+                Request req = ReqInit("DELETE", "cars");
                 req.Queries.Add("id", id.ToString());
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -164,12 +164,12 @@ namespace Frontend
         {
             return Task.Run<bool?>(() =>
             {
-                Request req = reqInit("POST", "users");
+                Request req = ReqInit("POST", "users");
                 byte[] userContent = JsonSerializer.SerializeToUtf8Bytes<User>(user);
                 req.Content = userContent;
-                req.Headers.Add(new Header("Content-type", makeType("json")));
+                req.Headers.Add(new Header("Content-type", MakeType("json")));
                 req.Headers.Add(new Header("Content-length", userContent.Length.ToString()));
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -186,9 +186,9 @@ namespace Frontend
         {
             return Task.Run<bool?>(() =>
             {
-                Request req = reqInit("DELETE", "cars");
+                Request req = ReqInit("DELETE", "cars");
                 req.Queries.Add("username", username);
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -205,9 +205,9 @@ namespace Frontend
         {
             return Task.Run<User>(() =>
             {
-                Request req = reqInit("GET", "users");
+                Request req = ReqInit("GET", "users");
                 req.Queries.Add("username", username);
-                Response r = getResponse(req);
+                Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -217,7 +217,7 @@ namespace Frontend
             });
         }
 
-        private string makeType(string key)
+        private string MakeType(string key)
         {
             string contentType;
             switch (key)
@@ -233,7 +233,7 @@ namespace Frontend
             return contentType;
         }
 
-        private Request reqInit(string method, string resource)
+        private Request ReqInit(string method, string resource)
         {
             Request req = new Request
             {
@@ -245,7 +245,7 @@ namespace Frontend
             return req;
         }
 
-        private Response getResponse(Request req)
+        private Response GetResponse(Request req)
         {
             return Client.FromStringToResponse(Client.GetRawResponse(req));
         }
