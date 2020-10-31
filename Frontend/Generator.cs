@@ -4,7 +4,14 @@ namespace Frontend
 {
     public class Generator
     {
-        public static void Post()
+        public Api FrontendApi
+        { get; private set; }
+        public Generator(Api frontendApi)
+        {
+            FrontendApi = frontendApi;
+        }
+
+        public void post()
         {
             Random r = new Random();
             string[] colors = { "raudona", "zalia", "melyna", "geltona", "balta", "belekokia spalva", "purpurine", "alyvine", "tamsiai violetine" };
@@ -29,7 +36,7 @@ namespace Frontend
                     Defects = new string[] { "luzusi dureliu rankena", "isdauzti trys langai" },
                     SteeringWheelPosition = SteeringWheelPosition.Left
                 };
-                Api.AddCar(c);
+                FrontendApi.AddCar(c);
             }
         }
     }

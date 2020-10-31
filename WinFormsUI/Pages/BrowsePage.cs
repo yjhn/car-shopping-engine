@@ -24,7 +24,8 @@ namespace CarEngine
 
         // a list to store all car ads in all pages
         private readonly List<CarAdMinimal[]> _adList = new List<CarAdMinimal[]>();
-
+        // instance of API
+        private Api _frontendApi = new Api();
 
         public BrowsePage()
         {
@@ -123,12 +124,12 @@ namespace CarEngine
             List<Car> vehicles;
             if (_filters != null)
             {
-                vehicles = await Api.SearchVehicles(_filters, _sorting, _sortAsc, startIndex, amount);
+                vehicles = await _frontendApi.SearchVehicles(_filters, _sorting, _sortAsc, startIndex, amount);
             }
             else
             {
                 //sorting = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-                vehicles = await Api.SortBy(_sorting, startIndex, amount, _sortAsc);
+                vehicles = await _frontendApi.SortBy(_sorting, startIndex, amount, _sortAsc);
             }
             return Converter.vehicleListToAds(vehicles);
         }
