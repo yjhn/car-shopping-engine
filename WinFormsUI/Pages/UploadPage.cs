@@ -15,6 +15,8 @@ namespace CarEngine.Pages
 {
     public partial class UploadPage : UserControl
     {
+        private Api _frontendApi = new Api();
+
         public UploadPage()
         {
             InitializeComponent();
@@ -54,7 +56,7 @@ namespace CarEngine.Pages
             //temporary kokas :_)
             if (CheckIfFilled())
             {
-                Api.AddCar(GetAllCarInfo());
+                _frontendApi.AddCar(GetAllCarInfo());
                 ClearSelections();
             }
         }

@@ -4,9 +4,16 @@ using System.Threading.Tasks;
 
 namespace Frontend
 {
-    public static class VehicleSearch
+    public class VehicleSearch
     {
-        public static async Task<List<Car>> SearchVehicles(string brand,
+        public Api FrontendApi
+        { get; private set; }
+        public VehicleSearch(Api frontendApi)
+        {
+            FrontendApi = frontendApi;
+        }
+
+        public async Task<List<Car>> searchVehicles(string brand,
                                                string model,
                                                FuelType? fuelType,
                                                ChassisType? vehicleType,
@@ -33,8 +40,8 @@ namespace Frontend
             };
 
             // can be used for testing: adds random cars to DB
-            //Generator.Post();
-            return await Api.SearchVehicles(filters, sorting, sortAscending, 0, 15);
+            //Generator.post();
+            return await FrontendApi.SearchVehicles(filters, sorting, sortAscending, 0, 15);
         }
     }
 }

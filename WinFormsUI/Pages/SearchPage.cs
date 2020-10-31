@@ -9,6 +9,7 @@ namespace CarEngine
     public partial class SearchPage : UserControl
     {
         private List<Car> _resultList;
+        private Api _frontendApi = new Api();
 
         public SearchPage()
         {
@@ -117,7 +118,7 @@ namespace CarEngine
 
             bool sortAscending = radioButtonAscending.Checked;
 
-            _resultList = await VehicleSearch.SearchVehicles(brandTextBox.Text,
+            _resultList = await new VehicleSearch(_frontendApi).searchVehicles(brandTextBox.Text,
                                                       modelTextBox.Text,
                                                       fuelType,
                                                       vehicleType,

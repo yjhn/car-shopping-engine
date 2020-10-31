@@ -9,18 +9,18 @@ namespace Frontend
     public class Api
     {
         // event to tell the UI that there is no connection to server
-        public static event Action NoServerResponse = delegate { };
+        public event Action NoServerResponse = delegate { };
 
 
         // this class should not be static
-        public static Task<List<Car>> GetCars(int startIndex, int amount)
+        public Task<List<Car>> GetCars(int startIndex, int amount)
         {
             return Task.Run<List<Car>>(() =>
             {
-                Request req = ReqInit("GET", "cars");
+                Request req = reqInit("GET", "cars");
                 req.Queries.Add("amount", amount.ToString());
                 req.Queries.Add("start_index", startIndex.ToString());
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -30,17 +30,17 @@ namespace Frontend
             });
         }
 
-        public static Task<List<Car>> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
+        public Task<List<Car>> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
         {
             // to be able to await a task we first need to create it
-            return Task.Run<List<Car>>(()=>
+            return Task.Run<List<Car>>(() =>
             {
-                Request req = ReqInit("GET", "cars");
+                Request req = reqInit("GET", "cars");
                 req.Queries.Add("sort_by", sortBy.ToString());
                 req.Queries.Add("amount", amount.ToString());
                 req.Queries.Add("sort_ascending", sortAscending.ToString());
                 req.Queries.Add("start_index", startIndex.ToString());
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -50,11 +50,11 @@ namespace Frontend
             });
         }
 
-        public static Task<List<Car>> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public Task<List<Car>> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             return Task.Run<List<Car>>(() =>
             {
-                Request req = ReqInit("GET", "cars/filters");
+                Request req = reqInit("GET", "cars/filters");
                 req.Queries.Add("amount", amount.ToString());
                 req.Queries.Add("sort_by", sortBy.ToString());
                 req.Queries.Add("sort_ascending", sortAscending.ToString());
@@ -81,7 +81,7 @@ namespace Frontend
                     req.Queries.Add("fuel_type", filters.FuelType.ToString());
                 if (filters.ChassisType.HasValue)
                     req.Queries.Add("chassis_type", filters.ChassisType.ToString());
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -91,13 +91,13 @@ namespace Frontend
             });
         }
 
-        public static Task<Car> GetCar(int id)
+        public Task<Car> GetCar(int id)
         {
             return Task.Run<Car>(() =>
             {
-                Request req = ReqInit("GET", "cars");
+                Request req = reqInit("GET", "cars");
                 req.Queries.Add("id", id.ToString());
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -107,16 +107,16 @@ namespace Frontend
             });
         }
 
-        public static Task<int?> AddCar(Car car)
+        public Task<int?> AddCar(Car car)
         {
             return Task.Run<int?>(() =>
             {
-                Request req = ReqInit("POST", "cars");
-                req.Headers.Add(new Header("Content-type", MakeType("json")));
+                Request req = reqInit("POST", "cars");
+                req.Headers.Add(new Header("Content-type", makeType("json")));
                 byte[] carContent = JsonSerializer.SerializeToUtf8Bytes<Car>(car);
                 req.Headers.Add(new Header("Content-length", carContent.Length.ToString()));
                 req.Content = carContent;
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -139,13 +139,13 @@ namespace Frontend
             });
         }
 
-        public static Task<bool?> DeleteCar(int id)
+        public Task<bool?> DeleteCar(int id)
         {
             return Task.Run<bool?>(() =>
             {
-                Request req = ReqInit("DELETE", "cars");
+                Request req = reqInit("DELETE", "cars");
                 req.Queries.Add("id", id.ToString());
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -160,16 +160,16 @@ namespace Frontend
             });
         }
 
-        public static Task<bool?> AddUser(User user)
+        public Task<bool?> AddUser(User user)
         {
             return Task.Run<bool?>(() =>
             {
-                Request req = ReqInit("POST", "users");
+                Request req = reqInit("POST", "users");
                 byte[] userContent = JsonSerializer.SerializeToUtf8Bytes<User>(user);
                 req.Content = userContent;
-                req.Headers.Add(new Header("Content-type", MakeType("json")));
+                req.Headers.Add(new Header("Content-type", makeType("json")));
                 req.Headers.Add(new Header("Content-length", userContent.Length.ToString()));
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -182,13 +182,13 @@ namespace Frontend
             });
         }
 
-        public static Task<bool?> DeleteUser(string username)
+        public Task<bool?> DeleteUser(string username)
         {
             return Task.Run<bool?>(() =>
             {
-                Request req = ReqInit("DELETE", "cars");
+                Request req = reqInit("DELETE", "cars");
                 req.Queries.Add("username", username);
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -201,13 +201,13 @@ namespace Frontend
             });
         }
 
-        public static Task<User> GetUser(string username)
+        public Task<User> GetUser(string username)
         {
             return Task.Run<User>(() =>
             {
-                Request req = ReqInit("GET", "users");
+                Request req = reqInit("GET", "users");
                 req.Queries.Add("username", username);
-                Response r = GetResponse(req);
+                Response r = getResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
@@ -217,7 +217,7 @@ namespace Frontend
             });
         }
 
-        private static string MakeType(string key)
+        private string makeType(string key)
         {
             string contentType;
             switch (key)
@@ -233,7 +233,7 @@ namespace Frontend
             return contentType;
         }
 
-        private static Request ReqInit(string method, string resource)
+        private Request reqInit(string method, string resource)
         {
             Request req = new Request
             {
@@ -245,7 +245,7 @@ namespace Frontend
             return req;
         }
 
-        private static Response GetResponse(Request req)
+        private Response getResponse(Request req)
         {
             return Client.FromStringToResponse(Client.GetRawResponse(req));
         }
