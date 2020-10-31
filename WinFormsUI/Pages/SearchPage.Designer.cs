@@ -32,424 +32,164 @@ namespace CarEngine
         /// </summary>
         private void InitializeComponent()
         {
-            this.mainTitleLabel = new System.Windows.Forms.Label();
-            this.modelTextBox = new System.Windows.Forms.TextBox();
-            this.lowerPriceTextBox = new System.Windows.Forms.NumericUpDown();
-            this.brandLabel = new System.Windows.Forms.Label();
-            this.priceRangeLabel = new System.Windows.Forms.Label();
-            this.upperPriceTextBox = new System.Windows.Forms.NumericUpDown();
-            this.dashLabel1 = new System.Windows.Forms.Label();
-            this.yearRangeLabel = new System.Windows.Forms.Label();
-            this.dashLabel2 = new System.Windows.Forms.Label();
-            this.fuelTypeLabel = new System.Windows.Forms.Label();
-            this.fuelTypeComboBox = new System.Windows.Forms.ComboBox();
-            this.searchButton = new System.Windows.Forms.Button();
-            this.lowerYearRangeTextBox = new System.Windows.Forms.NumericUpDown();
-            this.upperYearRangeTextBox = new System.Windows.Forms.NumericUpDown();
-            this.brandTextBox = new System.Windows.Forms.TextBox();
-            this.modelLabel = new System.Windows.Forms.Label();
-            this.radioButtonUsed = new System.Windows.Forms.RadioButton();
-            this.radioButtonNew = new System.Windows.Forms.RadioButton();
-            this.usedNewRadioButtonPanel = new System.Windows.Forms.Panel();
-            this.sortByLabel = new System.Windows.Forms.Label();
-            this.sortByCombobox = new System.Windows.Forms.ComboBox();
-            this.radioButtonAscending = new System.Windows.Forms.RadioButton();
-            this.radioButtonDescending = new System.Windows.Forms.RadioButton();
-            this.sortAscendingDescendingRadioButtonPanel = new System.Windows.Forms.Panel();
-            this.resetSearchButton = new System.Windows.Forms.Button();
-            this.typeOfVehicleLabel = new System.Windows.Forms.Label();
+            this.searchAndResultsTabs = new System.Windows.Forms.TabControl();
+            this.searchTab = new System.Windows.Forms.TabPage();
+            this.sortAscDescPanel = new System.Windows.Forms.Panel();
+            this.sortAscRadioBtn = new System.Windows.Forms.RadioButton();
+            this.sortDescRadioBtn = new System.Windows.Forms.RadioButton();
+            this.usedNewPanel = new System.Windows.Forms.Panel();
+            this.usedRadioBtn = new System.Windows.Forms.RadioButton();
+            this.newRadioBtn = new System.Windows.Forms.RadioButton();
             this.vehicleTypeCombobox = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this.lowerPriceTextBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperPriceTextBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lowerYearRangeTextBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperYearRangeTextBox)).BeginInit();
-            this.usedNewRadioButtonPanel.SuspendLayout();
-            this.sortAscendingDescendingRadioButtonPanel.SuspendLayout();
+            this.lowerYearTextbox = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.resetSearchBtn = new System.Windows.Forms.Button();
+            this.sortByCombobox = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.brandTextbox = new System.Windows.Forms.TextBox();
+            this.upperYearTextbox = new System.Windows.Forms.NumericUpDown();
+            this.searchBtn = new System.Windows.Forms.Button();
+            this.modelTextbox = new System.Windows.Forms.TextBox();
+            this.fuelTypeCombobox = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.upperPriceTextbox = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lowerPriceTextbox = new System.Windows.Forms.NumericUpDown();
+            this.titleLabel = new System.Windows.Forms.Label();
+            this.searchAndResultsTabs.SuspendLayout();
+            this.searchTab.SuspendLayout();
+            this.sortAscDescPanel.SuspendLayout();
+            this.usedNewPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lowerYearTextbox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.upperYearTextbox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.upperPriceTextbox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowerPriceTextbox)).BeginInit();
             this.SuspendLayout();
             // 
-            // mainTitleLabel
+            // searchAndResultsTabs
             // 
-            this.mainTitleLabel.AutoSize = true;
-            this.mainTitleLabel.Font = new System.Drawing.Font("Segoe UI Black", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.mainTitleLabel.Location = new System.Drawing.Point(168, 0);
-            this.mainTitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.mainTitleLabel.Name = "mainTitleLabel";
-            this.mainTitleLabel.Size = new System.Drawing.Size(391, 38);
-            this.mainTitleLabel.TabIndex = 0;
-            this.mainTitleLabel.Text = "Search for specific vehicles";
+            this.searchAndResultsTabs.Controls.Add(this.searchTab);
+            this.searchAndResultsTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.searchAndResultsTabs.Location = new System.Drawing.Point(0, 0);
+            this.searchAndResultsTabs.Name = "searchAndResultsTabs";
+            this.searchAndResultsTabs.SelectedIndex = 0;
+            this.searchAndResultsTabs.Size = new System.Drawing.Size(696, 563);
+            this.searchAndResultsTabs.TabIndex = 14;
             // 
-            // modelTextBox
+            // searchTab
             // 
-            this.modelTextBox.AccessibleDescription = "text box for model of the vehicle";
-            this.modelTextBox.AccessibleName = "model of the vehicle";
-            this.modelTextBox.Location = new System.Drawing.Point(277, 139);
-            this.modelTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.modelTextBox.Name = "modelTextBox";
-            this.modelTextBox.Size = new System.Drawing.Size(246, 23);
-            this.modelTextBox.TabIndex = 2;
+            this.searchTab.AutoScroll = true;
+            this.searchTab.Controls.Add(this.sortAscDescPanel);
+            this.searchTab.Controls.Add(this.usedNewPanel);
+            this.searchTab.Controls.Add(this.vehicleTypeCombobox);
+            this.searchTab.Controls.Add(this.lowerYearTextbox);
+            this.searchTab.Controls.Add(this.label10);
+            this.searchTab.Controls.Add(this.resetSearchBtn);
+            this.searchTab.Controls.Add(this.sortByCombobox);
+            this.searchTab.Controls.Add(this.label9);
+            this.searchTab.Controls.Add(this.label8);
+            this.searchTab.Controls.Add(this.brandTextbox);
+            this.searchTab.Controls.Add(this.upperYearTextbox);
+            this.searchTab.Controls.Add(this.searchBtn);
+            this.searchTab.Controls.Add(this.modelTextbox);
+            this.searchTab.Controls.Add(this.fuelTypeCombobox);
+            this.searchTab.Controls.Add(this.label7);
+            this.searchTab.Controls.Add(this.label6);
+            this.searchTab.Controls.Add(this.label5);
+            this.searchTab.Controls.Add(this.label4);
+            this.searchTab.Controls.Add(this.upperPriceTextbox);
+            this.searchTab.Controls.Add(this.label3);
+            this.searchTab.Controls.Add(this.label2);
+            this.searchTab.Controls.Add(this.lowerPriceTextbox);
+            this.searchTab.Controls.Add(this.titleLabel);
+            this.searchTab.Location = new System.Drawing.Point(4, 24);
+            this.searchTab.Name = "searchTab";
+            this.searchTab.Padding = new System.Windows.Forms.Padding(3);
+            this.searchTab.Size = new System.Drawing.Size(688, 535);
+            this.searchTab.TabIndex = 0;
+            this.searchTab.Text = "search";
+            this.searchTab.UseVisualStyleBackColor = true;
             // 
-            // lowerPriceTextBox
+            // sortAscDescPanel
             // 
-            this.lowerPriceTextBox.AccessibleDescription = "Lower price range text box";
-            this.lowerPriceTextBox.AccessibleName = "Lower price range text box";
-            this.lowerPriceTextBox.Increment = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.lowerPriceTextBox.Location = new System.Drawing.Point(277, 173);
-            this.lowerPriceTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.lowerPriceTextBox.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.lowerPriceTextBox.Name = "lowerPriceTextBox";
-            this.lowerPriceTextBox.Size = new System.Drawing.Size(82, 23);
-            this.lowerPriceTextBox.TabIndex = 3;
+            this.sortAscDescPanel.AutoSize = true;
+            this.sortAscDescPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.sortAscDescPanel.BackColor = System.Drawing.Color.Transparent;
+            this.sortAscDescPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.sortAscDescPanel.Controls.Add(this.sortAscRadioBtn);
+            this.sortAscDescPanel.Controls.Add(this.sortDescRadioBtn);
+            this.sortAscDescPanel.Location = new System.Drawing.Point(226, 388);
+            this.sortAscDescPanel.Name = "sortAscDescPanel";
+            this.sortAscDescPanel.Size = new System.Drawing.Size(155, 61);
+            this.sortAscDescPanel.TabIndex = 11;
             // 
-            // brandLabel
+            // sortAscRadioBtn
             // 
-            this.brandLabel.AccessibleDescription = "brand of the vehicle label";
-            this.brandLabel.AccessibleName = "brand of the vehicle label";
-            this.brandLabel.AutoSize = true;
-            this.brandLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.brandLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.brandLabel.Location = new System.Drawing.Point(200, 95);
-            this.brandLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.brandLabel.Name = "brandLabel";
-            this.brandLabel.Size = new System.Drawing.Size(71, 25);
-            this.brandLabel.TabIndex = 3;
-            this.brandLabel.Text = "Brand:";
+            this.sortAscRadioBtn.AccessibleDescription = "sortAscendingRadioButton";
+            this.sortAscRadioBtn.AccessibleName = "sortAscendingRadioButton";
+            this.sortAscRadioBtn.AutoSize = true;
+            this.sortAscRadioBtn.Location = new System.Drawing.Point(65, 14);
+            this.sortAscRadioBtn.Name = "sortAscRadioBtn";
+            this.sortAscRadioBtn.Size = new System.Drawing.Size(81, 19);
+            this.sortAscRadioBtn.TabIndex = 1;
+            this.sortAscRadioBtn.Text = "Ascending";
+            this.sortAscRadioBtn.UseVisualStyleBackColor = true;
             // 
-            // priceRangeLabel
+            // sortDescRadioBtn
             // 
-            this.priceRangeLabel.AccessibleDescription = "price range:";
-            this.priceRangeLabel.AccessibleName = "price range:";
-            this.priceRangeLabel.AutoSize = true;
-            this.priceRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.priceRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.priceRangeLabel.Location = new System.Drawing.Point(153, 171);
-            this.priceRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.priceRangeLabel.Name = "priceRangeLabel";
-            this.priceRangeLabel.Size = new System.Drawing.Size(118, 25);
-            this.priceRangeLabel.TabIndex = 3;
-            this.priceRangeLabel.Text = "Price range:";
+            this.sortDescRadioBtn.AccessibleDescription = "sortDescendingRadioButton";
+            this.sortDescRadioBtn.AccessibleName = "sortDescendingRadioButton";
+            this.sortDescRadioBtn.AutoSize = true;
+            this.sortDescRadioBtn.Checked = true;
+            this.sortDescRadioBtn.Location = new System.Drawing.Point(65, 39);
+            this.sortDescRadioBtn.Name = "sortDescRadioBtn";
+            this.sortDescRadioBtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.sortDescRadioBtn.Size = new System.Drawing.Size(87, 19);
+            this.sortDescRadioBtn.TabIndex = 2;
+            this.sortDescRadioBtn.TabStop = true;
+            this.sortDescRadioBtn.Text = "Descending";
+            this.sortDescRadioBtn.UseVisualStyleBackColor = true;
             // 
-            // upperPriceTextBox
+            // usedNewPanel
             // 
-            this.upperPriceTextBox.AccessibleDescription = "Upper price range text box";
-            this.upperPriceTextBox.AccessibleName = "Upper price range text box";
-            this.upperPriceTextBox.Increment = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.upperPriceTextBox.Location = new System.Drawing.Point(390, 173);
-            this.upperPriceTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.upperPriceTextBox.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.upperPriceTextBox.Name = "upperPriceTextBox";
-            this.upperPriceTextBox.Size = new System.Drawing.Size(82, 23);
-            this.upperPriceTextBox.TabIndex = 4;
+            this.usedNewPanel.AutoSize = true;
+            this.usedNewPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.usedNewPanel.Controls.Add(this.usedRadioBtn);
+            this.usedNewPanel.Controls.Add(this.newRadioBtn);
+            this.usedNewPanel.Location = new System.Drawing.Point(226, 210);
+            this.usedNewPanel.Name = "usedNewPanel";
+            this.usedNewPanel.Size = new System.Drawing.Size(119, 61);
+            this.usedNewPanel.TabIndex = 5;
             // 
-            // dashLabel1
+            // usedRadioBtn
             // 
-            this.dashLabel1.AccessibleDescription = "dash";
-            this.dashLabel1.AccessibleName = "dash";
-            this.dashLabel1.AutoSize = true;
-            this.dashLabel1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dashLabel1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.dashLabel1.Location = new System.Drawing.Point(370, 170);
-            this.dashLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.dashLabel1.Name = "dashLabel1";
-            this.dashLabel1.Size = new System.Drawing.Size(16, 21);
-            this.dashLabel1.TabIndex = 3;
-            this.dashLabel1.Text = "-";
+            this.usedRadioBtn.AccessibleDescription = "radio button for used car";
+            this.usedRadioBtn.AccessibleName = "used car";
+            this.usedRadioBtn.AutoSize = true;
+            this.usedRadioBtn.Location = new System.Drawing.Point(65, 14);
+            this.usedRadioBtn.Name = "usedRadioBtn";
+            this.usedRadioBtn.Size = new System.Drawing.Size(51, 19);
+            this.usedRadioBtn.TabIndex = 1;
+            this.usedRadioBtn.TabStop = true;
+            this.usedRadioBtn.Text = "Used";
+            this.usedRadioBtn.UseVisualStyleBackColor = true;
             // 
-            // yearRangeLabel
+            // newRadioBtn
             // 
-            this.yearRangeLabel.AccessibleDescription = "year range:";
-            this.yearRangeLabel.AccessibleName = "year range:";
-            this.yearRangeLabel.AutoSize = true;
-            this.yearRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.yearRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.yearRangeLabel.Location = new System.Drawing.Point(159, 274);
-            this.yearRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.yearRangeLabel.Name = "yearRangeLabel";
-            this.yearRangeLabel.Size = new System.Drawing.Size(112, 25);
-            this.yearRangeLabel.TabIndex = 3;
-            this.yearRangeLabel.Text = "Year range:";
-            // 
-            // dashLabel2
-            // 
-            this.dashLabel2.AccessibleDescription = "dash";
-            this.dashLabel2.AutoSize = true;
-            this.dashLabel2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dashLabel2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.dashLabel2.Location = new System.Drawing.Point(327, 276);
-            this.dashLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.dashLabel2.Name = "dashLabel2";
-            this.dashLabel2.Size = new System.Drawing.Size(16, 21);
-            this.dashLabel2.TabIndex = 3;
-            this.dashLabel2.Text = "-";
-            // 
-            // fuelTypeLabel
-            // 
-            this.fuelTypeLabel.AccessibleDescription = "fuel type:";
-            this.fuelTypeLabel.AccessibleName = "fuel type:";
-            this.fuelTypeLabel.AutoSize = true;
-            this.fuelTypeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.fuelTypeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fuelTypeLabel.Location = new System.Drawing.Point(173, 312);
-            this.fuelTypeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.fuelTypeLabel.Name = "fuelTypeLabel";
-            this.fuelTypeLabel.Size = new System.Drawing.Size(98, 25);
-            this.fuelTypeLabel.TabIndex = 3;
-            this.fuelTypeLabel.Text = "Fuel type:";
-            // 
-            // fuelTypeComboBox
-            // 
-            this.fuelTypeComboBox.AccessibleDescription = "fuel type combo box";
-            this.fuelTypeComboBox.AccessibleName = "fuel type combo box";
-            this.fuelTypeComboBox.FormattingEnabled = true;
-            this.fuelTypeComboBox.Items.AddRange(new object[] {
-            "any",
-            "petrol",
-            "diesel",
-            "electric",
-            "hybrid"});
-            this.fuelTypeComboBox.Location = new System.Drawing.Point(277, 317);
-            this.fuelTypeComboBox.Margin = new System.Windows.Forms.Padding(2);
-            this.fuelTypeComboBox.Name = "fuelTypeComboBox";
-            this.fuelTypeComboBox.Size = new System.Drawing.Size(129, 23);
-            this.fuelTypeComboBox.TabIndex = 9;
-            // 
-            // searchButton
-            // 
-            this.searchButton.AccessibleDescription = "search button";
-            this.searchButton.AccessibleName = "search button";
-            this.searchButton.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.searchButton.Location = new System.Drawing.Point(261, 456);
-            this.searchButton.Margin = new System.Windows.Forms.Padding(2);
-            this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(174, 34);
-            this.searchButton.TabIndex = 12;
-            this.searchButton.Text = "Search";
-            this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.SearchButton_Click);
-            // 
-            // lowerYearRangeTextBox
-            // 
-            this.lowerYearRangeTextBox.AccessibleDescription = "lower year range combo box";
-            this.lowerYearRangeTextBox.AccessibleName = "lower year range combo box";
-            this.lowerYearRangeTextBox.Location = new System.Drawing.Point(277, 276);
-            this.lowerYearRangeTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.lowerYearRangeTextBox.Maximum = new decimal(new int[] {
-            2020,
-            0,
-            0,
-            0});
-            this.lowerYearRangeTextBox.Minimum = new decimal(new int[] {
-            1900,
-            0,
-            0,
-            0});
-            this.lowerYearRangeTextBox.Name = "lowerYearRangeTextBox";
-            this.lowerYearRangeTextBox.Size = new System.Drawing.Size(46, 23);
-            this.lowerYearRangeTextBox.TabIndex = 7;
-            this.lowerYearRangeTextBox.Value = new decimal(new int[] {
-            1900,
-            0,
-            0,
-            0});
-            // 
-            // upperYearRangeTextBox
-            // 
-            this.upperYearRangeTextBox.AccessibleDescription = "upper year range combo box";
-            this.upperYearRangeTextBox.AccessibleName = "upper year range combo box";
-            this.upperYearRangeTextBox.Location = new System.Drawing.Point(347, 276);
-            this.upperYearRangeTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.upperYearRangeTextBox.Maximum = new decimal(new int[] {
-            2020,
-            0,
-            0,
-            0});
-            this.upperYearRangeTextBox.Minimum = new decimal(new int[] {
-            1900,
-            0,
-            0,
-            0});
-            this.upperYearRangeTextBox.Name = "upperYearRangeTextBox";
-            this.upperYearRangeTextBox.Size = new System.Drawing.Size(46, 23);
-            this.upperYearRangeTextBox.TabIndex = 8;
-            this.upperYearRangeTextBox.Value = new decimal(new int[] {
-            2020,
-            0,
-            0,
-            0});
-            // 
-            // brandTextBox
-            // 
-            this.brandTextBox.AccessibleDescription = "text box for brand of the vehicle";
-            this.brandTextBox.AccessibleName = "brand of the vehicle";
-            this.brandTextBox.Location = new System.Drawing.Point(277, 97);
-            this.brandTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.brandTextBox.Name = "brandTextBox";
-            this.brandTextBox.Size = new System.Drawing.Size(246, 23);
-            this.brandTextBox.TabIndex = 1;
-            // 
-            // modelLabel
-            // 
-            this.modelLabel.AccessibleDescription = "model of the vehicle";
-            this.modelLabel.AccessibleName = "model of the vehicle";
-            this.modelLabel.AutoSize = true;
-            this.modelLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.modelLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.modelLabel.Location = new System.Drawing.Point(197, 137);
-            this.modelLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.modelLabel.Name = "modelLabel";
-            this.modelLabel.Size = new System.Drawing.Size(74, 25);
-            this.modelLabel.TabIndex = 3;
-            this.modelLabel.Text = "Model:";
-            // 
-            // radioButtonUsed
-            // 
-            this.radioButtonUsed.AccessibleDescription = "radio button for used car";
-            this.radioButtonUsed.AccessibleName = "used car";
-            this.radioButtonUsed.AutoSize = true;
-            this.radioButtonUsed.Location = new System.Drawing.Point(33, 14);
-            this.radioButtonUsed.Name = "radioButtonUsed";
-            this.radioButtonUsed.Size = new System.Drawing.Size(51, 19);
-            this.radioButtonUsed.TabIndex = 1;
-            this.radioButtonUsed.TabStop = true;
-            this.radioButtonUsed.Text = "Used";
-            this.radioButtonUsed.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonNew
-            // 
-            this.radioButtonNew.AccessibleDescription = "radio button for new car";
-            this.radioButtonNew.AccessibleName = "new car";
-            this.radioButtonNew.AutoSize = true;
-            this.radioButtonNew.Location = new System.Drawing.Point(33, 39);
-            this.radioButtonNew.Name = "radioButtonNew";
-            this.radioButtonNew.Size = new System.Drawing.Size(49, 19);
-            this.radioButtonNew.TabIndex = 2;
-            this.radioButtonNew.Text = "New";
-            this.radioButtonNew.UseVisualStyleBackColor = true;
-            // 
-            // usedNewRadioButtonPanel
-            // 
-            this.usedNewRadioButtonPanel.AutoSize = true;
-            this.usedNewRadioButtonPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.usedNewRadioButtonPanel.Controls.Add(this.radioButtonUsed);
-            this.usedNewRadioButtonPanel.Controls.Add(this.radioButtonNew);
-            this.usedNewRadioButtonPanel.Location = new System.Drawing.Point(251, 202);
-            this.usedNewRadioButtonPanel.Name = "usedNewRadioButtonPanel";
-            this.usedNewRadioButtonPanel.Size = new System.Drawing.Size(87, 61);
-            this.usedNewRadioButtonPanel.TabIndex = 5;
-            // 
-            // sortByLabel
-            // 
-            this.sortByLabel.AccessibleDescription = "sort by label";
-            this.sortByLabel.AccessibleName = "sort by label";
-            this.sortByLabel.AutoSize = true;
-            this.sortByLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.sortByLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.sortByLabel.Location = new System.Drawing.Point(188, 352);
-            this.sortByLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.sortByLabel.Name = "sortByLabel";
-            this.sortByLabel.Size = new System.Drawing.Size(83, 25);
-            this.sortByLabel.TabIndex = 3;
-            this.sortByLabel.Text = "Sort by:";
-            // 
-            // sortByCombobox
-            // 
-            this.sortByCombobox.AccessibleDescription = "sort by combo box";
-            this.sortByCombobox.AccessibleName = "sort by combo box";
-            this.sortByCombobox.FormattingEnabled = true;
-            this.sortByCombobox.Items.AddRange(new object[] {
-            "upload date",
-            "price",
-            "date of purchase",
-            "total kilometers driven",
-            "original purchase country"});
-            this.sortByCombobox.Location = new System.Drawing.Point(277, 352);
-            this.sortByCombobox.Margin = new System.Windows.Forms.Padding(2);
-            this.sortByCombobox.Name = "sortByCombobox";
-            this.sortByCombobox.Size = new System.Drawing.Size(160, 23);
-            this.sortByCombobox.TabIndex = 10;
-            // 
-            // radioButtonAscending
-            // 
-            this.radioButtonAscending.AccessibleDescription = "sortAscendingRadioButton";
-            this.radioButtonAscending.AccessibleName = "sortAscendingRadioButton";
-            this.radioButtonAscending.AutoSize = true;
-            this.radioButtonAscending.Location = new System.Drawing.Point(33, 14);
-            this.radioButtonAscending.Name = "radioButtonAscending";
-            this.radioButtonAscending.Size = new System.Drawing.Size(81, 19);
-            this.radioButtonAscending.TabIndex = 1;
-            this.radioButtonAscending.Text = "Ascending";
-            this.radioButtonAscending.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonDescending
-            // 
-            this.radioButtonDescending.AccessibleDescription = "sortDescendingRadioButton";
-            this.radioButtonDescending.AccessibleName = "sortDescendingRadioButton";
-            this.radioButtonDescending.AutoSize = true;
-            this.radioButtonDescending.Checked = true;
-            this.radioButtonDescending.Location = new System.Drawing.Point(33, 39);
-            this.radioButtonDescending.Name = "radioButtonDescending";
-            this.radioButtonDescending.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.radioButtonDescending.Size = new System.Drawing.Size(87, 19);
-            this.radioButtonDescending.TabIndex = 2;
-            this.radioButtonDescending.TabStop = true;
-            this.radioButtonDescending.Text = "Descending";
-            this.radioButtonDescending.UseVisualStyleBackColor = true;
-            // 
-            // sortAscendingDescendingRadioButtonPanel
-            // 
-            this.sortAscendingDescendingRadioButtonPanel.AutoSize = true;
-            this.sortAscendingDescendingRadioButtonPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.sortAscendingDescendingRadioButtonPanel.BackColor = System.Drawing.Color.Transparent;
-            this.sortAscendingDescendingRadioButtonPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.sortAscendingDescendingRadioButtonPanel.Controls.Add(this.radioButtonAscending);
-            this.sortAscendingDescendingRadioButtonPanel.Controls.Add(this.radioButtonDescending);
-            this.sortAscendingDescendingRadioButtonPanel.Location = new System.Drawing.Point(251, 380);
-            this.sortAscendingDescendingRadioButtonPanel.Name = "sortAscendingDescendingRadioButtonPanel";
-            this.sortAscendingDescendingRadioButtonPanel.Size = new System.Drawing.Size(123, 61);
-            this.sortAscendingDescendingRadioButtonPanel.TabIndex = 11;
-            // 
-            // resetSearchButton
-            // 
-            this.resetSearchButton.AccessibleDescription = "reset search criteria";
-            this.resetSearchButton.AccessibleName = "reset search criteria";
-            this.resetSearchButton.AutoSize = true;
-            this.resetSearchButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.resetSearchButton.Location = new System.Drawing.Point(639, 464);
-            this.resetSearchButton.Name = "resetSearchButton";
-            this.resetSearchButton.Size = new System.Drawing.Size(42, 25);
-            this.resetSearchButton.TabIndex = 13;
-            this.resetSearchButton.Text = "reset";
-            this.resetSearchButton.UseVisualStyleBackColor = true;
-            this.resetSearchButton.Click += new System.EventHandler(this.ResetSearchButton_Click);
-            // 
-            // typeOfVehicleLabel
-            // 
-            this.typeOfVehicleLabel.AccessibleDescription = "type of the vehicle label";
-            this.typeOfVehicleLabel.AccessibleName = "type of the vehicle label";
-            this.typeOfVehicleLabel.AutoSize = true;
-            this.typeOfVehicleLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.typeOfVehicleLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.typeOfVehicleLabel.Location = new System.Drawing.Point(212, 53);
-            this.typeOfVehicleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.typeOfVehicleLabel.Name = "typeOfVehicleLabel";
-            this.typeOfVehicleLabel.Size = new System.Drawing.Size(59, 25);
-            this.typeOfVehicleLabel.TabIndex = 3;
-            this.typeOfVehicleLabel.Text = "Type:";
+            this.newRadioBtn.AccessibleDescription = "radio button for new car";
+            this.newRadioBtn.AccessibleName = "new car";
+            this.newRadioBtn.AutoSize = true;
+            this.newRadioBtn.Location = new System.Drawing.Point(65, 39);
+            this.newRadioBtn.Name = "newRadioBtn";
+            this.newRadioBtn.Size = new System.Drawing.Size(49, 19);
+            this.newRadioBtn.TabIndex = 2;
+            this.newRadioBtn.Text = "New";
+            this.newRadioBtn.UseVisualStyleBackColor = true;
             // 
             // vehicleTypeCombobox
             // 
@@ -469,10 +209,320 @@ namespace CarEngine
             "combi minibus",
             "freight minibus",
             "commercial"});
-            this.vehicleTypeCombobox.Location = new System.Drawing.Point(277, 54);
+            this.vehicleTypeCombobox.Location = new System.Drawing.Point(252, 62);
             this.vehicleTypeCombobox.Name = "vehicleTypeCombobox";
             this.vehicleTypeCombobox.Size = new System.Drawing.Size(181, 23);
             this.vehicleTypeCombobox.TabIndex = 0;
+            // 
+            // lowerYearTextbox
+            // 
+            this.lowerYearTextbox.AccessibleDescription = "lower year range combo box";
+            this.lowerYearTextbox.AccessibleName = "lower year range combo box";
+            this.lowerYearTextbox.Location = new System.Drawing.Point(252, 284);
+            this.lowerYearTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.lowerYearTextbox.Maximum = new decimal(new int[] {
+            2020,
+            0,
+            0,
+            0});
+            this.lowerYearTextbox.Minimum = new decimal(new int[] {
+            1900,
+            0,
+            0,
+            0});
+            this.lowerYearTextbox.Name = "lowerYearTextbox";
+            this.lowerYearTextbox.Size = new System.Drawing.Size(46, 23);
+            this.lowerYearTextbox.TabIndex = 7;
+            this.lowerYearTextbox.Value = new decimal(new int[] {
+            1900,
+            0,
+            0,
+            0});
+            // 
+            // label10
+            // 
+            this.label10.AccessibleDescription = "type of the vehicle label";
+            this.label10.AccessibleName = "type of the vehicle label";
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label10.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label10.Location = new System.Drawing.Point(187, 61);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(59, 25);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "Type:";
+            // 
+            // resetSearchBtn
+            // 
+            this.resetSearchBtn.AccessibleDescription = "reset search criteria";
+            this.resetSearchBtn.AccessibleName = "reset search criteria";
+            this.resetSearchBtn.AutoSize = true;
+            this.resetSearchBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.resetSearchBtn.Location = new System.Drawing.Point(614, 472);
+            this.resetSearchBtn.Name = "resetSearchBtn";
+            this.resetSearchBtn.Size = new System.Drawing.Size(42, 25);
+            this.resetSearchBtn.TabIndex = 13;
+            this.resetSearchBtn.Text = "reset";
+            this.resetSearchBtn.UseVisualStyleBackColor = true;
+            this.resetSearchBtn.Click += new System.EventHandler(this.ResetSearchButton_Click);
+            // 
+            // sortByCombobox
+            // 
+            this.sortByCombobox.AccessibleDescription = "sort by combo box";
+            this.sortByCombobox.AccessibleName = "sort by combo box";
+            this.sortByCombobox.FormattingEnabled = true;
+            this.sortByCombobox.Items.AddRange(new object[] {
+            "upload date",
+            "price",
+            "date of purchase",
+            "total kilometers driven",
+            "original purchase country"});
+            this.sortByCombobox.Location = new System.Drawing.Point(252, 360);
+            this.sortByCombobox.Margin = new System.Windows.Forms.Padding(2);
+            this.sortByCombobox.Name = "sortByCombobox";
+            this.sortByCombobox.Size = new System.Drawing.Size(160, 23);
+            this.sortByCombobox.TabIndex = 10;
+            // 
+            // label9
+            // 
+            this.label9.AccessibleDescription = "sort by label";
+            this.label9.AccessibleName = "sort by label";
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label9.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label9.Location = new System.Drawing.Point(163, 360);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(83, 25);
+            this.label9.TabIndex = 3;
+            this.label9.Text = "Sort by:";
+            // 
+            // label8
+            // 
+            this.label8.AccessibleDescription = "model of the vehicle";
+            this.label8.AccessibleName = "model of the vehicle";
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label8.Location = new System.Drawing.Point(172, 145);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(74, 25);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "Model:";
+            // 
+            // brandTextbox
+            // 
+            this.brandTextbox.AccessibleDescription = "text box for brand of the vehicle";
+            this.brandTextbox.AccessibleName = "brand of the vehicle";
+            this.brandTextbox.Location = new System.Drawing.Point(252, 105);
+            this.brandTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.brandTextbox.Name = "brandTextbox";
+            this.brandTextbox.Size = new System.Drawing.Size(246, 23);
+            this.brandTextbox.TabIndex = 1;
+            // 
+            // upperYearTextbox
+            // 
+            this.upperYearTextbox.AccessibleDescription = "upper year range combo box";
+            this.upperYearTextbox.AccessibleName = "upper year range combo box";
+            this.upperYearTextbox.Location = new System.Drawing.Point(322, 284);
+            this.upperYearTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.upperYearTextbox.Maximum = new decimal(new int[] {
+            2020,
+            0,
+            0,
+            0});
+            this.upperYearTextbox.Minimum = new decimal(new int[] {
+            1900,
+            0,
+            0,
+            0});
+            this.upperYearTextbox.Name = "upperYearTextbox";
+            this.upperYearTextbox.Size = new System.Drawing.Size(46, 23);
+            this.upperYearTextbox.TabIndex = 8;
+            this.upperYearTextbox.Value = new decimal(new int[] {
+            2020,
+            0,
+            0,
+            0});
+            // 
+            // searchBtn
+            // 
+            this.searchBtn.AccessibleDescription = "search button";
+            this.searchBtn.AccessibleName = "search button";
+            this.searchBtn.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.searchBtn.Location = new System.Drawing.Point(236, 464);
+            this.searchBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.searchBtn.Name = "searchBtn";
+            this.searchBtn.Size = new System.Drawing.Size(174, 34);
+            this.searchBtn.TabIndex = 12;
+            this.searchBtn.Text = "Search";
+            this.searchBtn.UseVisualStyleBackColor = true;
+            this.searchBtn.Click += new System.EventHandler(this.SearchButton_Click);
+            // 
+            // modelTextbox
+            // 
+            this.modelTextbox.AccessibleDescription = "text box for model of the vehicle";
+            this.modelTextbox.AccessibleName = "model of the vehicle";
+            this.modelTextbox.Location = new System.Drawing.Point(252, 147);
+            this.modelTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.modelTextbox.Name = "modelTextbox";
+            this.modelTextbox.Size = new System.Drawing.Size(246, 23);
+            this.modelTextbox.TabIndex = 2;
+            // 
+            // fuelTypeCombobox
+            // 
+            this.fuelTypeCombobox.AccessibleDescription = "fuel type combo box";
+            this.fuelTypeCombobox.AccessibleName = "fuel type combo box";
+            this.fuelTypeCombobox.FormattingEnabled = true;
+            this.fuelTypeCombobox.Items.AddRange(new object[] {
+            "any",
+            "petrol",
+            "diesel",
+            "electric",
+            "hybrid"});
+            this.fuelTypeCombobox.Location = new System.Drawing.Point(252, 325);
+            this.fuelTypeCombobox.Margin = new System.Windows.Forms.Padding(2);
+            this.fuelTypeCombobox.Name = "fuelTypeCombobox";
+            this.fuelTypeCombobox.Size = new System.Drawing.Size(129, 23);
+            this.fuelTypeCombobox.TabIndex = 9;
+            // 
+            // label7
+            // 
+            this.label7.AccessibleDescription = "fuel type:";
+            this.label7.AccessibleName = "fuel type:";
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label7.Location = new System.Drawing.Point(148, 320);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(98, 25);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "Fuel type:";
+            // 
+            // label6
+            // 
+            this.label6.AccessibleDescription = "dash";
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label6.Location = new System.Drawing.Point(302, 284);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(16, 21);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "-";
+            // 
+            // label5
+            // 
+            this.label5.AccessibleDescription = "year range:";
+            this.label5.AccessibleName = "year range:";
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label5.Location = new System.Drawing.Point(134, 282);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(112, 25);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Year range:";
+            // 
+            // label4
+            // 
+            this.label4.AccessibleDescription = "dash";
+            this.label4.AccessibleName = "dash";
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label4.Location = new System.Drawing.Point(345, 178);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(16, 21);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "-";
+            // 
+            // upperPriceTextbox
+            // 
+            this.upperPriceTextbox.AccessibleDescription = "Upper price range text box";
+            this.upperPriceTextbox.AccessibleName = "Upper price range text box";
+            this.upperPriceTextbox.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.upperPriceTextbox.Location = new System.Drawing.Point(365, 181);
+            this.upperPriceTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.upperPriceTextbox.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.upperPriceTextbox.Name = "upperPriceTextbox";
+            this.upperPriceTextbox.Size = new System.Drawing.Size(82, 23);
+            this.upperPriceTextbox.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AccessibleDescription = "price range:";
+            this.label3.AccessibleName = "price range:";
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label3.Location = new System.Drawing.Point(128, 179);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(118, 25);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Price range:";
+            // 
+            // label2
+            // 
+            this.label2.AccessibleDescription = "brand of the vehicle label";
+            this.label2.AccessibleName = "brand of the vehicle label";
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label2.Location = new System.Drawing.Point(175, 103);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 25);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Brand:";
+            // 
+            // lowerPriceTextbox
+            // 
+            this.lowerPriceTextbox.AccessibleDescription = "Lower price range text box";
+            this.lowerPriceTextbox.AccessibleName = "Lower price range text box";
+            this.lowerPriceTextbox.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.lowerPriceTextbox.Location = new System.Drawing.Point(252, 181);
+            this.lowerPriceTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.lowerPriceTextbox.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.lowerPriceTextbox.Name = "lowerPriceTextbox";
+            this.lowerPriceTextbox.Size = new System.Drawing.Size(82, 23);
+            this.lowerPriceTextbox.TabIndex = 3;
+            // 
+            // titleLabel
+            // 
+            this.titleLabel.AccessibleDescription = "title label";
+            this.titleLabel.AccessibleName = "title label";
+            this.titleLabel.AutoSize = true;
+            this.titleLabel.Font = new System.Drawing.Font("Segoe UI Black", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.titleLabel.Location = new System.Drawing.Point(143, 8);
+            this.titleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(391, 38);
+            this.titleLabel.TabIndex = 0;
+            this.titleLabel.Text = "Search for specific vehicles";
             // 
             // SearchPage
             // 
@@ -482,74 +532,56 @@ namespace CarEngine
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.Controls.Add(this.vehicleTypeCombobox);
-            this.Controls.Add(this.typeOfVehicleLabel);
-            this.Controls.Add(this.resetSearchButton);
-            this.Controls.Add(this.sortAscendingDescendingRadioButtonPanel);
-            this.Controls.Add(this.sortByCombobox);
-            this.Controls.Add(this.sortByLabel);
-            this.Controls.Add(this.usedNewRadioButtonPanel);
-            this.Controls.Add(this.modelLabel);
-            this.Controls.Add(this.brandTextBox);
-            this.Controls.Add(this.upperYearRangeTextBox);
-            this.Controls.Add(this.lowerYearRangeTextBox);
-            this.Controls.Add(this.searchButton);
-            this.Controls.Add(this.fuelTypeComboBox);
-            this.Controls.Add(this.fuelTypeLabel);
-            this.Controls.Add(this.dashLabel2);
-            this.Controls.Add(this.yearRangeLabel);
-            this.Controls.Add(this.dashLabel1);
-            this.Controls.Add(this.upperPriceTextBox);
-            this.Controls.Add(this.priceRangeLabel);
-            this.Controls.Add(this.brandLabel);
-            this.Controls.Add(this.lowerPriceTextBox);
-            this.Controls.Add(this.modelTextBox);
-            this.Controls.Add(this.mainTitleLabel);
+            this.Controls.Add(this.searchAndResultsTabs);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SearchPage";
-            this.Size = new System.Drawing.Size(696, 500);
+            this.Size = new System.Drawing.Size(696, 563);
             this.VisibleChanged += new System.EventHandler(this.SearchPage_VisibleChanged);
-            ((System.ComponentModel.ISupportInitialize)(this.lowerPriceTextBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperPriceTextBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lowerYearRangeTextBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperYearRangeTextBox)).EndInit();
-            this.usedNewRadioButtonPanel.ResumeLayout(false);
-            this.usedNewRadioButtonPanel.PerformLayout();
-            this.sortAscendingDescendingRadioButtonPanel.ResumeLayout(false);
-            this.sortAscendingDescendingRadioButtonPanel.PerformLayout();
+            this.searchAndResultsTabs.ResumeLayout(false);
+            this.searchTab.ResumeLayout(false);
+            this.searchTab.PerformLayout();
+            this.sortAscDescPanel.ResumeLayout(false);
+            this.sortAscDescPanel.PerformLayout();
+            this.usedNewPanel.ResumeLayout(false);
+            this.usedNewPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lowerYearTextbox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.upperYearTextbox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.upperPriceTextbox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowerPriceTextbox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label mainTitleLabel;
-        private System.Windows.Forms.TextBox modelTextBox;
-        private System.Windows.Forms.NumericUpDown lowerPriceTextBox;
-        private System.Windows.Forms.Label brandLabel;
-        private System.Windows.Forms.Label priceRangeLabel;
-        private System.Windows.Forms.NumericUpDown upperPriceTextBox;
-        private System.Windows.Forms.Label dashLabel1;
-        private System.Windows.Forms.Label yearRangeLabel;
-        private System.Windows.Forms.Label dashLabel2;
-        private System.Windows.Forms.Label fuelTypeLabel;
-        private System.Windows.Forms.ComboBox fuelTypeComboBox;
-        private System.Windows.Forms.Button searchButton;
-        private System.Windows.Forms.NumericUpDown lowerYearRangeTextBox;
-        private System.Windows.Forms.NumericUpDown upperYearRangeTextBox;
-        private TextBox brandTextBox;
-        private Label modelLabel;
-        private RadioButton radioButtonUsed;
-        private RadioButton radioButtonNew;
-        private Panel usedNewRadioButtonPanel;
-        private Label sortByLabel;
-        private ComboBox sortByCombobox;
-        private RadioButton radioButtonAscending;
-        private RadioButton radioButtonDescending;
-        private Panel sortAscendingDescendingRadioButtonPanel;
-        private Button resetSearchButton;
-        private Label typeOfVehicleLabel;
+        private TabControl searchAndResultsTabs;
+        private TabPage searchTab;
+        private Panel sortAscDescPanel;
+        private RadioButton sortAscRadioBtn;
+        private RadioButton sortDescRadioBtn;
+        private Panel usedNewPanel;
+        private RadioButton usedRadioBtn;
+        private RadioButton newRadioBtn;
         private ComboBox vehicleTypeCombobox;
+        private NumericUpDown lowerYearTextbox;
+        private Label label10;
+        private Button resetSearchBtn;
+        private ComboBox sortByCombobox;
+        private Label label9;
+        private Label label8;
+        private TextBox brandTextbox;
+        private NumericUpDown upperYearTextbox;
+        private Button searchBtn;
+        private TextBox modelTextbox;
+        private ComboBox fuelTypeCombobox;
+        private Label label7;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private NumericUpDown upperPriceTextbox;
+        private Label label3;
+        private Label label2;
+        private NumericUpDown lowerPriceTextbox;
+        private Label titleLabel;
     }
 }
