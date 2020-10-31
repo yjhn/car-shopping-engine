@@ -7,7 +7,7 @@ namespace Backend
 {
     public class UserList : IUserDb
     {
-        private readonly List<User> _userList;
+        private List<User> _userList;
         private readonly FileReader _userDataReader;
         private readonly FileWriter _userDataWriter;
         private readonly Logger _logger;
@@ -17,17 +17,22 @@ namespace Backend
             _logger = logger;
             _userDataReader = new FileReader(logger, userDbPath);
             _userDataWriter = new FileWriter(logger, userDbPath);
-            _userList = _userDataReader.GetAllUserData();
+            LoadAllUserData();
+        }
+
+        private async void LoadAllUserData()
+        {
+            _userList = await _userDataReader.GetAllUserData();
         }
 
         // returns null if not found
-        public byte[] GetUser(string username)
+        public byte[] GetUserJson(string username)
         {
             User user = _userList.Find(user => user.Username == username);
             return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
         }
 
-        public bool AddUser(byte[] user)
+        public bool AddUserJson(byte[] user)
         {
             try
             {

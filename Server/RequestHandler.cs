@@ -245,17 +245,17 @@ namespace Server
             }
             byte[] responseBody;
             if (id != null)
-                responseBody = carDb.GetCar((int)id);
+                responseBody = carDb.GetCarJson((int)id);
             else if (criteria != null)
             {
                 bool sortAscending = true;
                 if (queries.ContainsKey("sort_ascending"))
                     sortAscending = bool.Parse(queries["sort_ascending"]);
-                responseBody = carDb.SortBy((SortingCriteria)criteria, sortAscending, startIndex, amount);
+                responseBody = carDb.GetSortedCarsJson((SortingCriteria)criteria, sortAscending, startIndex, amount);
             }
             else
             {
-                responseBody = carDb.GetCarList(startIndex, amount);
+                responseBody = carDb.GetCarListJson(startIndex, amount);
             }
 
             r = MakeResponse(200, responseBody);
@@ -263,13 +263,13 @@ namespace Server
 
         private void GetUser(string username)
         {
-            byte[] responseBody = userDb.GetUser(username);
+            byte[] responseBody = userDb.GetUserJson(username);
             r = MakeResponse(200, responseBody);
         }
 
         private void AddCar(byte[] carData)
         {
-            bool result = carDb.AddCar(carData);
+            bool result = carDb.AddCarJson(carData);
             if (result)
             {
                 r = MakeResponse(201);
@@ -283,7 +283,7 @@ namespace Server
 
         private void AddUser(byte[] userData)
         {
-            bool result = userDb.AddUser(userData);
+            bool result = userDb.AddUserJson(userData);
             if (result)
                 r = MakeResponse(201);
             else
@@ -377,7 +377,7 @@ namespace Server
                 sortAscending = bool.Parse(queries["sort_ascending"]);
             if (queries.ContainsKey("start_index"))
                 startIndex = int.Parse(queries["start_index"]);
-            r = MakeResponse(200, carDb.Filter(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
+            r = MakeResponse(200, carDb.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
         }
 
         private byte[] SetContent(string output)

@@ -8,7 +8,7 @@ namespace Backend
 {
     public class CarList : ICarDb
     {
-        private readonly List<Car> _carList;
+        private List<Car> _carList;
         private readonly FileReader _carDataReader;
         private readonly FileWriter _carDataWriter;
         public int LastCarId { get; private set; }
@@ -19,23 +19,29 @@ namespace Backend
             _logger = logger;
             _carDataReader = new FileReader(logger, carDbPath);
             _carDataWriter = new FileWriter(logger, carDbPath);
-            _carList = _carDataReader.GetAllCarData();
+            LoadAllCarData();
+        }
+
+        private async void LoadAllCarData()
+        {
+            _carList = await _carDataReader.GetAllCarData();
             LastCarId = _carDataReader.LastCarId;
         }
 
         // returns List<Car> serialized to JSON
-        public byte[] GetCarList(int startIndex, int amount)
+        public byte[] GetCarListJson(int startIndex, int amount)
         {
-            // convert this to string
+            // convert this to string -- not sure about this as it would mean double conversion a the other end
+            // we could pass all information as strings, but it would have some overhead (JsonSerializer can do this)
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(_carList.Skip(startIndex).Take(amount).ToList<Car>());
         }
 
-        public byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public byte[] GetSortedCarsJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            return SortBy(sortBy, sortAscending, startIndex, amount, null);
+            return GetSortedCarsJson(sortBy, sortAscending, startIndex, amount, null);
         }
 
-        private byte[] SortBy(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
+        private byte[] GetSortedCarsJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {
             if (carListToSort == null)
             {
@@ -45,7 +51,7 @@ namespace Backend
             return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Skip(startIndex).Take(amount).ToList<Car>());
         }
 
-        public byte[] Filter(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public byte[] GetFilteredCarsJson(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             List<Car> filteredCarList = _carList;
 
@@ -58,11 +64,11 @@ namespace Backend
             if (filters.FuelType.HasValue)
                 filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
 
-            return SortBy(sortBy, sortAscending, startIndex, amount, filteredCarList);
+            return GetSortedCarsJson(sortBy, sortAscending, startIndex, amount, filteredCarList);
         }
 
         // params: Car serialized to JSON
-        public bool AddCar(byte[] car)
+        public bool AddCarJson(byte[] car)
         {
             try
             {
@@ -85,7 +91,7 @@ namespace Backend
             }
         }
 
-        public byte[] GetCar(int id)
+        public byte[] GetCarJson(int id)
         {
             Car car = _carList.Find(car => car.Id == id);
             return car != null ? JsonSerializer.SerializeToUtf8Bytes<Car>(car) : null;
