@@ -1,11 +1,12 @@
 ﻿using DataTypes;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Frontend
 {
     public static class VehicleSearch
     {
-        public static List<Car> searchVehicles(string brand,
+        public static async Task<List<Car>> searchVehicles(string brand,
                                                string model,
                                                FuelType? fuelType,
                                                ChassisType? vehicleType,
@@ -33,7 +34,7 @@ namespace Frontend
 
             // can be used for testing: adds random cars to DB
             //Generator.post();
-            return Api.SearchVehicles(filters, sorting, sortAscending, 0, 15);
+            return await Api.SearchVehicles(filters, sorting, sortAscending, 0, 15);
         }
     }
 }

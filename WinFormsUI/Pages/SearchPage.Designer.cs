@@ -240,7 +240,7 @@ namespace CarEngine
             this.searchButton.TabIndex = 12;
             this.searchButton.Text = "Search";
             this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            this.searchButton.Click += new System.EventHandler(this.SearchButton_Click);
             // 
             // lowerYearRangeTextBox
             // 
@@ -435,7 +435,7 @@ namespace CarEngine
             this.resetSearchButton.TabIndex = 13;
             this.resetSearchButton.Text = "reset";
             this.resetSearchButton.UseVisualStyleBackColor = true;
-            this.resetSearchButton.Click += new System.EventHandler(this.resetSearchButton_Click);
+            this.resetSearchButton.Click += new System.EventHandler(this.ResetSearchButton_Click);
             // 
             // typeOfVehicleLabel
             // 

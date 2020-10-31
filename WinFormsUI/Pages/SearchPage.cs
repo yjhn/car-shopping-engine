@@ -1,8 +1,8 @@
 ﻿using DataTypes;
-using System;
-using System.Windows.Forms;
 using Frontend;
+using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CarEngine
 {
@@ -41,7 +41,7 @@ namespace CarEngine
             upperPriceTextBox.Text = "";
         }
 
-        private void searchButton_Click(object sender, EventArgs e)
+        private async void SearchButton_Click(object sender, EventArgs e)
         {
             // formulate a query to the frontend to search for cars
             // frontend should save the query for use if user goes back to this screen - or maybe not, as information will not be removed from the form
@@ -117,7 +117,7 @@ namespace CarEngine
 
             bool sortAscending = radioButtonAscending.Checked;
 
-            _resultList = VehicleSearch.searchVehicles(brandTextBox.Text,
+            _resultList = await VehicleSearch.searchVehicles(brandTextBox.Text,
                                                       modelTextBox.Text,
                                                       fuelType,
                                                       vehicleType,
@@ -134,7 +134,7 @@ namespace CarEngine
             //searchResultsPage.Visible = true;
         }
 
-        private void resetSearchButton_Click(object sender, EventArgs e)
+        private void ResetSearchButton_Click(object sender, EventArgs e)
         {
             // reset everything on page to default values
             vehicleTypeCombobox.SelectedIndex = 0;

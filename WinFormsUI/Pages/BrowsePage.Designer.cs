@@ -30,6 +30,7 @@
         {
             this.mainPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.sortbutton = new System.Windows.Forms.Button();
             this.sortResultsByCombobox = new System.Windows.Forms.ComboBox();
             this.refreshButton = new System.Windows.Forms.Button();
             this.sortAscDescPanel = new System.Windows.Forms.Panel();
@@ -61,6 +62,7 @@
             this.panel1.AutoSize = true;
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.panel1.Controls.Add(this.sortbutton);
             this.panel1.Controls.Add(this.sortResultsByCombobox);
             this.panel1.Controls.Add(this.refreshButton);
             this.panel1.Controls.Add(this.sortAscDescPanel);
@@ -76,6 +78,19 @@
             this.panel1.Size = new System.Drawing.Size(700, 55);
             this.panel1.TabIndex = 2;
             // 
+            // sortbutton
+            // 
+            this.sortbutton.AccessibleDescription = "sort button";
+            this.sortbutton.AccessibleName = "sort button";
+            this.sortbutton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.sortbutton.Location = new System.Drawing.Point(332, 16);
+            this.sortbutton.Name = "sortbutton";
+            this.sortbutton.Size = new System.Drawing.Size(37, 23);
+            this.sortbutton.TabIndex = 13;
+            this.sortbutton.Text = "sort";
+            this.sortbutton.UseVisualStyleBackColor = true;
+            this.sortbutton.Click += new System.EventHandler(this.SortButton_Click);
+            // 
             // sortResultsByCombobox
             // 
             this.sortResultsByCombobox.AccessibleDescription = "sort by combo box";
@@ -89,19 +104,18 @@
             "total kilometers driven",
             "original purchase country",
             "next vehicle inspection"});
-            this.sortResultsByCombobox.Location = new System.Drawing.Point(445, 17);
+            this.sortResultsByCombobox.Location = new System.Drawing.Point(441, 16);
             this.sortResultsByCombobox.Margin = new System.Windows.Forms.Padding(2);
             this.sortResultsByCombobox.Name = "sortResultsByCombobox";
             this.sortResultsByCombobox.Size = new System.Drawing.Size(160, 23);
             this.sortResultsByCombobox.TabIndex = 10;
-            this.sortResultsByCombobox.SelectedIndexChanged += new System.EventHandler(this.SortingChanged);
             // 
             // refreshButton
             // 
             this.refreshButton.AccessibleDescription = "refresh button";
             this.refreshButton.AccessibleName = "refresh button";
             this.refreshButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.refreshButton.Location = new System.Drawing.Point(18, 14);
+            this.refreshButton.Location = new System.Drawing.Point(14, 16);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(75, 23);
             this.refreshButton.TabIndex = 12;
@@ -122,7 +136,6 @@
             this.sortAscDescPanel.Name = "sortAscDescPanel";
             this.sortAscDescPanel.Size = new System.Drawing.Size(123, 52);
             this.sortAscDescPanel.TabIndex = 11;
-            this.sortAscDescPanel.Click += new System.EventHandler(this.SortingChanged);
             // 
             // sortAscRadioButton
             // 
@@ -135,7 +148,6 @@
             this.sortAscRadioButton.TabIndex = 1;
             this.sortAscRadioButton.Text = "Ascending";
             this.sortAscRadioButton.UseVisualStyleBackColor = true;
-            this.sortAscRadioButton.CheckedChanged += new System.EventHandler(this.SortingChanged);
             // 
             // sortDescRadioButton
             // 
@@ -173,7 +185,7 @@
             this.pageNumberLabel.AccessibleName = "current page number";
             this.pageNumberLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pageNumberLabel.AutoSize = true;
-            this.pageNumberLabel.Location = new System.Drawing.Point(234, 17);
+            this.pageNumberLabel.Location = new System.Drawing.Point(192, 20);
             this.pageNumberLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pageNumberLabel.Name = "pageNumberLabel";
             this.pageNumberLabel.Size = new System.Drawing.Size(13, 15);
@@ -187,10 +199,10 @@
             this.previousPageButton.AccessibleName = "previous page button";
             this.previousPageButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.previousPageButton.Enabled = false;
-            this.previousPageButton.Location = new System.Drawing.Point(171, 14);
+            this.previousPageButton.Location = new System.Drawing.Point(129, 16);
             this.previousPageButton.Margin = new System.Windows.Forms.Padding(2);
             this.previousPageButton.Name = "previousPageButton";
-            this.previousPageButton.Size = new System.Drawing.Size(47, 20);
+            this.previousPageButton.Size = new System.Drawing.Size(47, 23);
             this.previousPageButton.TabIndex = 0;
             this.previousPageButton.Text = "<";
             this.previousPageButton.UseVisualStyleBackColor = true;
@@ -201,10 +213,10 @@
             this.nextPageButton.AccessibleDescription = "button to change page number to next one";
             this.nextPageButton.AccessibleName = "next page button";
             this.nextPageButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.nextPageButton.Location = new System.Drawing.Point(261, 14);
+            this.nextPageButton.Location = new System.Drawing.Point(219, 16);
             this.nextPageButton.Margin = new System.Windows.Forms.Padding(2);
             this.nextPageButton.Name = "nextPageButton";
-            this.nextPageButton.Size = new System.Drawing.Size(47, 20);
+            this.nextPageButton.Size = new System.Drawing.Size(47, 23);
             this.nextPageButton.TabIndex = 0;
             this.nextPageButton.Text = ">";
             this.nextPageButton.UseVisualStyleBackColor = true;
@@ -243,5 +255,6 @@
         private System.Windows.Forms.ComboBox sortResultsByCombobox;
         private System.Windows.Forms.Label sortByLabel;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.Button sortbutton;
     }
 }

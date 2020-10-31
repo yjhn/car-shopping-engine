@@ -3,6 +3,7 @@ using Frontend;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CarEngine
@@ -53,7 +54,7 @@ namespace CarEngine
         //}
 
         // this method sets nextPageButton.Enabled property
-        private void ShowCarList()
+        private async void ShowCarList()
         {
             // clear main panel to load other ads
             mainPanel.Controls.Clear();
@@ -64,7 +65,8 @@ namespace CarEngine
             // if we are one the first page for the first time
             if (_adList.Count == 0)
             {
-                CarAdMinimal[] carAds = GetMinimalVehicleAds(0, AdsInPage);
+                //Task<CarAdMinimal[]> ads = GetMinimalVehicleAds(0, AdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalVehicleAds(0, AdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     nextPageButton.Enabled = false;
@@ -79,7 +81,8 @@ namespace CarEngine
             if (_currentPageNumber == _adList.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                CarAdMinimal[] carAds = GetMinimalVehicleAds(AdsInPage * _currentPageNumber, AdsInPage);
+                //Task<CarAdMinimal[]> ads = GetMinimalVehicleAds(AdsInPage * _currentPageNumber, AdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalVehicleAds(AdsInPage * _currentPageNumber, AdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
@@ -100,17 +103,17 @@ namespace CarEngine
             }
         }
 
-        private CarAdMinimal[] GetMinimalVehicleAds(int startIndex, int amount)
+        private async Task<CarAdMinimal[]> GetMinimalVehicleAds(int startIndex, int amount)
         {
             List<Car> vehicles;
             if (_filters != null)
             {
-                vehicles = Api.SearchVehicles(_filters, _sorting, _sortAsc, startIndex, amount);
+                vehicles = await Api.SearchVehicles(_filters, _sorting, _sortAsc, startIndex, amount);
             }
             else
             {
                 //sorting = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-                vehicles = Api.SortBy(_sorting, startIndex, amount, _sortAsc);
+                vehicles = await Api.SortBy(_sorting, startIndex, amount, _sortAsc);
             }
             return Converter.vehicleListToAds(vehicles);
         }
@@ -158,12 +161,13 @@ namespace CarEngine
             _currentPageNumber = 1;
             ShowCarList();
         }
-        private void SortingChanged(object sender, EventArgs e)
+
+        private void RefreshButton_Click(object sender, EventArgs e)
         {
             SortingChanged();
         }
 
-        private void RefreshButton_Click(object sender, EventArgs e)
+        private void SortButton_Click(object sender, EventArgs e)
         {
             SortingChanged();
         }
