@@ -8,7 +8,7 @@ namespace DataTypes
     {
         public int StatusCode
         { get; }
-        private string statusText;
+        private string _statusText;
         public List<Header> Headers
         { set; get; }
         public byte[] Content
@@ -20,50 +20,50 @@ namespace DataTypes
             switch (statusCode)
             {
                 case 200:
-                    statusText = "OK";
+                    _statusText = "OK";
                     break;
                 case 201:
-                    statusText = "Created";
+                    _statusText = "Created";
                     break;
                 case 204:
-                    statusText = "No Content";
+                    _statusText = "No Content";
                     break;
                 case 400:
-                    statusText = "Bad Request";
+                    _statusText = "Bad Request";
                     break;
                 case 401:
-                    statusText = "Unauthorized";
+                    _statusText = "Unauthorized";
                     break;
                 case 404:
-                    statusText = "Not Found";
+                    _statusText = "Not Found";
                     break;
                 case 408:
-                    statusText = "Request Timeout";
+                    _statusText = "Request Timeout";
                     break;
                 case 411:
-                    statusText = "Length Required";
+                    _statusText = "Length Required";
                     break;
                 case 415:
-                    statusText = "Unsupported Media Type";
+                    _statusText = "Unsupported Media Type";
                     break;
                 case 500:
-                    statusText = "Internal Server Error";
+                    _statusText = "Internal Server Error";
                     break;
                 case 501:
-                    statusText = "Not Implemented";
+                    _statusText = "Not Implemented";
                     break;
                 case 505:
-                    statusText = "HTTP Version Not Supported";
+                    _statusText = "HTTP Version Not Supported";
                     break;
                 default:
-                    statusText = "Unknown";
+                    _statusText = "Unknown";
                     break;
             }
         }
 
         public byte[] Format()
         {
-            StringBuilder output = new StringBuilder($"{ServerConstants.HttpVersion} {StatusCode} {statusText}{ServerConstants.HeaderSeparator}");
+            StringBuilder output = new StringBuilder($"{ServerConstants.HttpVersion} {StatusCode} {_statusText}{ServerConstants.HeaderSeparator}");
             foreach (Header h in Headers)
             {
                 output.Append($"{h.Name}: {h.Value}{ServerConstants.HeaderSeparator}");

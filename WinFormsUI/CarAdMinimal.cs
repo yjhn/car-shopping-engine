@@ -20,7 +20,7 @@ namespace CarEngine
 
             carModel.Text = $"{carInfo.Brand} {carInfo.Model}";
             price.Text = carInfo.Price.ToString() + "€";
-            additionInfo.Text = carInfo.Engine.kw.ToString() + "kW";
+            additionInfo.Text = carInfo.Engine.Kw.ToString() + "kW";
             additionInfo.Text += $" \"{carInfo.Comment}\"";
             if (carInfo.Images != null && carInfo.Images.Length > 0)
             {

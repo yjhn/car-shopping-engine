@@ -6,7 +6,7 @@ namespace Frontend
 {
     public static class VehicleSearch
     {
-        public static async Task<List<Car>> searchVehicles(string brand,
+        public static async Task<List<Car>> SearchVehicles(string brand,
                                                string model,
                                                FuelType? fuelType,
                                                ChassisType? vehicleType,
@@ -24,16 +24,16 @@ namespace Frontend
                 ChassisType = vehicleType,
                 Brand = (brand == string.Empty) ? null : brand,
                 Model = (model == string.Empty) ? null : model,
-                PriceFrom = (lowerPriceRange == VehiclePropertyConstants.minVehiclePrice) ? default(int?) : lowerPriceRange,
-                PriceTo = (upperPriceRange == VehiclePropertyConstants.maxVehiclePrice) ? default(int?) : upperPriceRange,
+                PriceFrom = (lowerPriceRange == VehiclePropertyConstants.MinVehiclePrice) ? default(int?) : lowerPriceRange,
+                PriceTo = (upperPriceRange == VehiclePropertyConstants.MaxVehiclePrice) ? default(int?) : upperPriceRange,
                 Used = isUsed ? true : (isNew ? false : default(bool?)),
-                YearFrom = (lowerYearRange == VehiclePropertyConstants.minVehicleManufactureYear) ? default(int?) : lowerYearRange,
-                YearTo = (upperYearRange == VehiclePropertyConstants.maxVehicleManufactureYear) ? default(int?) : upperYearRange,
+                YearFrom = (lowerYearRange == VehiclePropertyConstants.MinVehicleManufactureYear) ? default(int?) : lowerYearRange,
+                YearTo = (upperYearRange == VehiclePropertyConstants.MaxVehicleManufactureYear) ? default(int?) : upperYearRange,
                 FuelType = fuelType
             };
 
             // can be used for testing: adds random cars to DB
-            //Generator.post();
+            //Generator.Post();
             return await Api.SearchVehicles(filters, sorting, sortAscending, 0, 15);
         }
     }

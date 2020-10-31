@@ -121,37 +121,37 @@ namespace CarEngine.Pages
                     vehicleType = default;
                     break;
                 case "station wagon":
-                    vehicleType = ChassisType.station_wagon;
+                    vehicleType = ChassisType.Station_wagon;
                     break;
                 case "hatchback":
-                    vehicleType = ChassisType.hatchback;
+                    vehicleType = ChassisType.Hatchback;
                     break;
                 case "sedan":
-                    vehicleType = ChassisType.sedan;
+                    vehicleType = ChassisType.Sedan;
                     break;
                 case "suv":
-                    vehicleType = ChassisType.suv;
+                    vehicleType = ChassisType.Suv;
                     break;
                 case "minivan":
-                    vehicleType = ChassisType.minivan;
+                    vehicleType = ChassisType.Minivan;
                     break;
                 case "coupe":
-                    vehicleType = ChassisType.coupe;
+                    vehicleType = ChassisType.Coupe;
                     break;
                 case "convertible":
-                    vehicleType = ChassisType.convertible;
+                    vehicleType = ChassisType.Convertible;
                     break;
                 case "passenger minibus":
-                    vehicleType = ChassisType.passenger_minibus;
+                    vehicleType = ChassisType.Passenger_minibus;
                     break;
                 case "combi minibus":
-                    vehicleType = ChassisType.combi_minibus;
+                    vehicleType = ChassisType.Combi_minibus;
                     break;
                 case "freight minibus":
-                    vehicleType = ChassisType.freight_minibus;
+                    vehicleType = ChassisType.Freight_minibus;
                     break;
                 case "commercial":
-                    vehicleType = ChassisType.commercial;
+                    vehicleType = ChassisType.Commercial;
                     break;
                 default:
                     vehicleType = default;
@@ -169,16 +169,16 @@ namespace CarEngine.Pages
                     fuelType = default;
                     break;
                 case "petrol":
-                    fuelType = FuelType.petrol;
+                    fuelType = FuelType.Petrol;
                     break;
                 case "diesel":
-                    fuelType = FuelType.diesel;
+                    fuelType = FuelType.Diesel;
                     break;
                 case "electric":
-                    fuelType = FuelType.electricity;
+                    fuelType = FuelType.Electricity;
                     break;
                 case "hybrid":
-                    fuelType = FuelType.hybrid;
+                    fuelType = FuelType.Hybrid;
                     break;
                 default:
                     fuelType = default;

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using DataTypes;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Net;
-using DataTypes;
 
 namespace Frontend
 {
@@ -46,7 +46,7 @@ namespace Frontend
             byte[] sentData = Encoding.ASCII.GetBytes(message.ToString());
             int sentDataSize = sentData.Length;
             if (req.Content != null)
-                            {
+            {
                 Array.Resize<byte>(ref sentData, sentDataSize + req.Content.Length);
                 Array.Copy(req.Content, 0, sentData, sentDataSize, req.Content.Length);
             }
@@ -56,7 +56,7 @@ namespace Frontend
                 TcpClient client = new TcpClient();
                 if (!client.ConnectAsync(ServerConstants.HostForClients, ServerConstants.Port).Wait(ServerConstants.ConnectTimeout))
                     return null;
-                    SslStream sslStream = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
+                SslStream sslStream = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
                 sslStream.AuthenticateAsClient(ServerConstants.HostForClients);
                 sslStream.ReadTimeout = ServerConstants.ClientTimeout;
                 sslStream.WriteTimeout = ServerConstants.ClientTimeout;

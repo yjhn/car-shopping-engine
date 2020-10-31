@@ -28,7 +28,7 @@ namespace CarEngine.Forms
 
             if (carInfo.Engine != null)
             {
-                engine.Text = $"{carInfo.Engine.engineType.ToString()} {carInfo.Engine.volume.ToString()} {carInfo.Engine.kw.ToString()}";
+                engine.Text = $"{carInfo.Engine.EngineType.ToString()} {carInfo.Engine.Volume.ToString()} {carInfo.Engine.Kw.ToString()}";
             }
             else
             {
@@ -37,7 +37,7 @@ namespace CarEngine.Forms
 
             if (carInfo.DateOfPurchase != null)
             {
-                age.Text = carInfo.DateOfPurchase.year.ToString() + "-" + carInfo.DateOfPurchase.month.ToString();
+                age.Text = carInfo.DateOfPurchase.Year.ToString() + "-" + carInfo.DateOfPurchase.Month.ToString();
             }
             else
             {

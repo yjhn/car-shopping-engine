@@ -16,16 +16,16 @@ namespace CarEngine
             // do other intialization code here, such as setting default selected values for comboboxes
 
             // set min and max allowed manufacture years
-            lowerYearRangeTextBox.Minimum = VehiclePropertyConstants.minVehicleManufactureYear;
-            lowerYearRangeTextBox.Maximum = VehiclePropertyConstants.maxVehicleManufactureYear;
-            upperYearRangeTextBox.Minimum = VehiclePropertyConstants.minVehicleManufactureYear;
-            upperYearRangeTextBox.Maximum = VehiclePropertyConstants.maxVehicleManufactureYear;
+            lowerYearRangeTextBox.Minimum = VehiclePropertyConstants.MinVehicleManufactureYear;
+            lowerYearRangeTextBox.Maximum = VehiclePropertyConstants.MaxVehicleManufactureYear;
+            upperYearRangeTextBox.Minimum = VehiclePropertyConstants.MinVehicleManufactureYear;
+            upperYearRangeTextBox.Maximum = VehiclePropertyConstants.MaxVehicleManufactureYear;
 
             // set min and max allowed price
-            lowerPriceTextBox.Minimum = VehiclePropertyConstants.minVehiclePrice;
-            lowerPriceTextBox.Maximum = VehiclePropertyConstants.maxVehiclePrice;
-            upperPriceTextBox.Minimum = VehiclePropertyConstants.minVehiclePrice;
-            upperPriceTextBox.Maximum = VehiclePropertyConstants.maxVehiclePrice;
+            lowerPriceTextBox.Minimum = VehiclePropertyConstants.MinVehiclePrice;
+            lowerPriceTextBox.Maximum = VehiclePropertyConstants.MaxVehiclePrice;
+            upperPriceTextBox.Minimum = VehiclePropertyConstants.MinVehiclePrice;
+            upperPriceTextBox.Maximum = VehiclePropertyConstants.MaxVehiclePrice;
 
             // default vehicle type: any
             vehicleTypeCombobox.SelectedIndex = 0;
@@ -53,16 +53,16 @@ namespace CarEngine
                     fuelType = default;
                     break;
                 case "petrol":
-                    fuelType = FuelType.petrol;
+                    fuelType = FuelType.Petrol;
                     break;
                 case "diesel":
-                    fuelType = FuelType.diesel;
+                    fuelType = FuelType.Diesel;
                     break;
                 case "electric":
-                    fuelType = FuelType.electricity;
+                    fuelType = FuelType.Electricity;
                     break;
                 case "hybrid":
-                    fuelType = FuelType.hybrid;
+                    fuelType = FuelType.Hybrid;
                     break;
                 default:
                     fuelType = default;
@@ -76,37 +76,37 @@ namespace CarEngine
                     vehicleType = default;
                     break;
                 case "station wagon":
-                    vehicleType = ChassisType.station_wagon;
+                    vehicleType = ChassisType.Station_wagon;
                     break;
                 case "hatchback":
-                    vehicleType = ChassisType.hatchback;
+                    vehicleType = ChassisType.Hatchback;
                     break;
                 case "sedan":
-                    vehicleType = ChassisType.sedan;
+                    vehicleType = ChassisType.Sedan;
                     break;
                 case "suv":
-                    vehicleType = ChassisType.suv;
+                    vehicleType = ChassisType.Suv;
                     break;
                 case "minivan":
-                    vehicleType = ChassisType.minivan;
+                    vehicleType = ChassisType.Minivan;
                     break;
                 case "coupe":
-                    vehicleType = ChassisType.coupe;
+                    vehicleType = ChassisType.Coupe;
                     break;
                 case "convertible":
-                    vehicleType = ChassisType.convertible;
+                    vehicleType = ChassisType.Convertible;
                     break;
                 case "passenger minibus":
-                    vehicleType = ChassisType.passenger_minibus;
+                    vehicleType = ChassisType.Passenger_minibus;
                     break;
                 case "combi minibus":
-                    vehicleType = ChassisType.combi_minibus;
+                    vehicleType = ChassisType.Combi_minibus;
                     break;
                 case "freight minibus":
-                    vehicleType = ChassisType.freight_minibus;
+                    vehicleType = ChassisType.Freight_minibus;
                     break;
                 case "commercial":
-                    vehicleType = ChassisType.commercial;
+                    vehicleType = ChassisType.Commercial;
                     break;
                 default:
                     vehicleType = default;
@@ -117,7 +117,7 @@ namespace CarEngine
 
             bool sortAscending = radioButtonAscending.Checked;
 
-            _resultList = await VehicleSearch.searchVehicles(brandTextBox.Text,
+            _resultList = await VehicleSearch.SearchVehicles(brandTextBox.Text,
                                                       modelTextBox.Text,
                                                       fuelType,
                                                       vehicleType,

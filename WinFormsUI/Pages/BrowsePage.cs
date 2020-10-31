@@ -19,6 +19,9 @@ namespace CarEngine
         public int AdsInPage = 15;
         private int _currentPageNumber = 1;
 
+        // this is used to track whether "next page" button should be enabled 
+        private bool _nextPageButtonEnabled = false;
+
         // a list to store all car ads in all pages
         private readonly List<CarAdMinimal[]> _adList = new List<CarAdMinimal[]>();
 
@@ -56,11 +59,15 @@ namespace CarEngine
         // this method sets nextPageButton.Enabled property
         private async void ShowCarList()
         {
+            // disable "refresh" and "sort" buttons for the duration of the load so that they cannot be abused
+            refreshButton.Enabled = false;
+            sortButton.Enabled = false;
+
             // clear main panel to load other ads
             mainPanel.Controls.Clear();
 
             // enable "next page" button. It might get disabled later in the method, so we cannot do this later
-            nextPageButton.Enabled = true;
+            _nextPageButtonEnabled = true;
 
             // if we are one the first page for the first time
             if (_adList.Count == 0)
@@ -69,11 +76,13 @@ namespace CarEngine
                 CarAdMinimal[] carAds = await GetMinimalVehicleAds(0, AdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
+                    _nextPageButtonEnabled = false;
                     nextPageButton.Enabled = false;
                     // does Api return null if it gets an empty list from server?
                     // if not, then we should display network error
                     return;
                 }
+                _nextPageButtonEnabled = true;
                 _adList.Add(carAds);
             }
 
@@ -86,10 +95,11 @@ namespace CarEngine
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
-                    nextPageButton.Enabled = false;
+                    _nextPageButtonEnabled = false;
                 }
                 else
                 {
+                    _nextPageButtonEnabled = true;
                     _adList.Add(carAds);
                 }
             }
@@ -101,6 +111,11 @@ namespace CarEngine
             {
                 mainPanel.Controls.Add(ad);
             }
+            nextPageButton.Enabled = _nextPageButtonEnabled;
+
+            // re-enable "refrexh" and "sort" buttons
+            refreshButton.Enabled = true;
+            sortButton.Enabled = true;
         }
 
         private async Task<CarAdMinimal[]> GetMinimalVehicleAds(int startIndex, int amount)
@@ -144,7 +159,7 @@ namespace CarEngine
             }
             pageNumberLabel.Text = _currentPageNumber.ToString();
             ShowCarList();
-            //nextPageButton.Enabled = true;
+            nextPageButton.Enabled = true;
             //}
         }
 
@@ -214,10 +229,10 @@ namespace CarEngine
 //    string[] carModels = { "Vienas", "Du", "Trys" };
 //    string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
 //    Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
-//        brand: "alfa", model: "beta", true, dateOfPurchase: new Month { year = 2000, month = 10 }, engine: new Engine { hp = 100, kw = 60, volume = 1.2f },
-//        fuelType: FuelType.petrol, chassisType: ChassisType.station_wagon, color: "juoda", gearboxType: GearboxType.automatic, totalKilometersDriven: 100000,
-//        driveWheels: DriveWheels.rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.left,
-//        numberOfDoors: NumberOfDoors.fourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new Month { year = 2022, month = 5 },
+//        brand: "alfa", model: "beta", true, dateOfPurchase: new YearMonth { Year = 2000, Month = 10 }, engine: new Engine { Hp = 100, Kw = 60, Volume = 1.2f },
+//        fuelType: FuelType.Petrol, chassisType: ChassisType.Station_wagon, color: "juoda", gearboxType: GearboxType.Automatic, totalKilometersDriven: 100000,
+//        driveWheels: DriveWheels.Rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.Left,
+//        numberOfDoors: NumberOfDoors.FourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new YearMonth { Year = 2022, Month = 5 },
 //        wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
 //        additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
 

@@ -30,7 +30,7 @@
         {
             this.mainPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.sortbutton = new System.Windows.Forms.Button();
+            this.sortButton = new System.Windows.Forms.Button();
             this.sortResultsByCombobox = new System.Windows.Forms.ComboBox();
             this.refreshButton = new System.Windows.Forms.Button();
             this.sortAscDescPanel = new System.Windows.Forms.Panel();
@@ -62,7 +62,7 @@
             this.panel1.AutoSize = true;
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.panel1.Controls.Add(this.sortbutton);
+            this.panel1.Controls.Add(this.sortButton);
             this.panel1.Controls.Add(this.sortResultsByCombobox);
             this.panel1.Controls.Add(this.refreshButton);
             this.panel1.Controls.Add(this.sortAscDescPanel);
@@ -78,18 +78,18 @@
             this.panel1.Size = new System.Drawing.Size(700, 55);
             this.panel1.TabIndex = 2;
             // 
-            // sortbutton
+            // sortButton
             // 
-            this.sortbutton.AccessibleDescription = "sort button";
-            this.sortbutton.AccessibleName = "sort button";
-            this.sortbutton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.sortbutton.Location = new System.Drawing.Point(332, 16);
-            this.sortbutton.Name = "sortbutton";
-            this.sortbutton.Size = new System.Drawing.Size(37, 23);
-            this.sortbutton.TabIndex = 13;
-            this.sortbutton.Text = "sort";
-            this.sortbutton.UseVisualStyleBackColor = true;
-            this.sortbutton.Click += new System.EventHandler(this.SortButton_Click);
+            this.sortButton.AccessibleDescription = "sort button";
+            this.sortButton.AccessibleName = "sort button";
+            this.sortButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.sortButton.Location = new System.Drawing.Point(332, 16);
+            this.sortButton.Name = "sortButton";
+            this.sortButton.Size = new System.Drawing.Size(37, 23);
+            this.sortButton.TabIndex = 13;
+            this.sortButton.Text = "sort";
+            this.sortButton.UseVisualStyleBackColor = true;
+            this.sortButton.Click += new System.EventHandler(this.SortButton_Click);
             // 
             // sortResultsByCombobox
             // 
@@ -213,6 +213,7 @@
             this.nextPageButton.AccessibleDescription = "button to change page number to next one";
             this.nextPageButton.AccessibleName = "next page button";
             this.nextPageButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.nextPageButton.Enabled = false;
             this.nextPageButton.Location = new System.Drawing.Point(219, 16);
             this.nextPageButton.Margin = new System.Windows.Forms.Padding(2);
             this.nextPageButton.Name = "nextPageButton";
@@ -255,6 +256,6 @@
         private System.Windows.Forms.ComboBox sortResultsByCombobox;
         private System.Windows.Forms.Label sortByLabel;
         private System.Windows.Forms.Button refreshButton;
-        private System.Windows.Forms.Button sortbutton;
+        private System.Windows.Forms.Button sortButton;
     }
 }

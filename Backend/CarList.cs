@@ -54,7 +54,7 @@ namespace Backend
             if (!string.IsNullOrEmpty(filters.Username))
                 filteredCarList = (from car in filteredCarList where car.UploaderUsername.Equals(filters.Username) select car).ToList();
             if (filters.YearFrom.HasValue && filters.YearTo.HasValue)
-                filteredCarList = (from car in filteredCarList where (car.DateOfPurchase.year >= filters.YearFrom && car.DateOfPurchase.year <= filters.YearTo) select car).ToList();
+                filteredCarList = (from car in filteredCarList where (car.DateOfPurchase.Year >= filters.YearFrom && car.DateOfPurchase.Year <= filters.YearTo) select car).ToList();
             if (filters.FuelType.HasValue)
                 filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
 

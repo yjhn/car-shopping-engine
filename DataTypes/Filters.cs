@@ -110,24 +110,24 @@ namespace DataTypes
 
     public enum FuelType
     {
-        petrol,
-        diesel,
-        electricity,
-        hybrid
+        Petrol,
+        Diesel,
+        Electricity,
+        Hybrid
     };
 
     public enum ChassisType
     {
-        station_wagon,
-        hatchback,
-        sedan,
-        suv,
-        minivan,
-        coupe,
-        convertible,
-        passenger_minibus,
-        combi_minibus,
-        freight_minibus,
-        commercial
+        Station_wagon,
+        Hatchback,
+        Sedan,
+        Suv,
+        Minivan,
+        Coupe,
+        Convertible,
+        Passenger_minibus,
+        Combi_minibus,
+        Freight_minibus,
+        Commercial
     };
 }

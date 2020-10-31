@@ -7,9 +7,9 @@ namespace DataTypes
     {
         // unique db key = Id
 
-        public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, bool used, Month dateOfPurchase, Engine engine, FuelType fuelType,
+        public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, bool used, YearMonth dateOfPurchase, Engine engine, FuelType fuelType,
             ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, string[] defects,
-            SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, Month nextVehicleInspection,
+            SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, YearMonth nextVehicleInspection,
             string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images, string comment)
         {
             Price = price;
@@ -52,7 +52,7 @@ namespace DataTypes
         public string Brand { get; set; }
         public string Model { get; set; }
         public bool Used { get; set; }
-        public Month DateOfPurchase { get; set; }
+        public YearMonth DateOfPurchase { get; set; }
         public Engine Engine { get; set; }
         public FuelType FuelType { get; set; }
         public ChassisType ChassisType { get; set; }
@@ -66,7 +66,7 @@ namespace DataTypes
         public int NumberOfCylinders { get; set; }
         public int NumberOfGears { get; set; }
         public int Seats { get; set; }
-        public Month NextVehicleInspection { get; set; }
+        public YearMonth NextVehicleInspection { get; set; }
         public string WheelSize { get; set; }
         public int Weight { get; set; }
         public EuroStandard EuroStandard { get; set; }
@@ -78,32 +78,32 @@ namespace DataTypes
 
         public bool Equals(Car other)
         {
-            return this.Id == other.Id;
+            return Id == other.Id;
         }
     }
 
-    public class Month : IComparable<Month>
+    public class YearMonth : IComparable<YearMonth>
     {
-        public int year { get; set; }
-        public int month { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
 
-        public int CompareTo(Month other)
+        public int CompareTo(YearMonth other)
         {
-            if (other.year > this.year)
+            if (other.Year > this.Year)
             {
                 return -1;
             }
-            else if (other.year < this.year)
+            else if (other.Year < this.Year)
             {
                 return 1;
             }
             else
             {
-                if (other.month > this.month)
+                if (other.Month > this.Month)
                 {
                     return -1;
                 }
-                else if (other.month < this.month)
+                else if (other.Month < this.Month)
                 {
                     return 1;
                 }
@@ -117,37 +117,37 @@ namespace DataTypes
 
     public class Engine
     {
-        public int hp { get; set; }
-        public int kw { get; set; }
-        public float volume { get; set; }
-        public Enginetype engineType { get; set; }
+        public int Hp { get; set; }
+        public int Kw { get; set; }
+        public float Volume { get; set; }
+        public Enginetype EngineType { get; set; }
 
     }
 
     public enum GearboxType
     {
-        mechanic,
-        automatic
+        Mechanic,
+        Automatic
     };
 
     public enum DriveWheels
     {
-        front,
-        rear,
-        all
+        Front,
+        Rear,
+        All
     };
 
     public enum SteeringWheelPosition
     {
-        left,
-        right
+        Left,
+        Right
     }
 
     public enum NumberOfDoors
     {
-        twoThree = 23,
-        fourFive = 45,
-        sixSeven = 67
+        TwoThree = 23,
+        FourFive = 45,
+        SixSeven = 67
     }
 
     public enum EuroStandard

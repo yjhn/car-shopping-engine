@@ -22,10 +22,10 @@ namespace CarEngine.Pages
             string[] carModels = { "Vienas", "Du", "Trys" };
             string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
             Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
-                brand: "alfa", model: "beta", true, dateOfPurchase: new Month { year = 2000, month = 10 }, engine: new Engine { hp = 100, kw = 60, volume = 1.2f },
-                fuelType: FuelType.petrol, chassisType: ChassisType.station_wagon, color: "juoda", gearboxType: GearboxType.automatic, totalKilometersDriven: 100000,
-                driveWheels: DriveWheels.rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.left,
-                numberOfDoors: NumberOfDoors.fourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new Month { year = 2022, month = 5 },
+                brand: "alfa", model: "beta", true, dateOfPurchase: new YearMonth { Year = 2000, Month = 10 }, engine: new Engine { Hp = 100, Kw = 60, Volume = 1.2f },
+                fuelType: FuelType.Petrol, chassisType: ChassisType.Station_wagon, color: "juoda", gearboxType: GearboxType.Automatic, totalKilometersDriven: 100000,
+                driveWheels: DriveWheels.Rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.Left,
+                numberOfDoors: NumberOfDoors.FourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new YearMonth { Year = 2022, Month = 5 },
                 wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
                 additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
 
