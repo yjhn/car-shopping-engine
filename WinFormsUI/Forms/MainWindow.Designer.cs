@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.sidebarPanel = new System.Windows.Forms.Panel();
             this.favoritesButton = new System.Windows.Forms.Button();
             this.uploadButton = new System.Windows.Forms.Button();
@@ -40,10 +39,8 @@
             this.uploadPage = new CarEngine.Pages.UploadPage();
             this.searchPage = new CarEngine.SearchPage();
             this.profilePage = new CarEngine.Pages.ProfilePage();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.sidebarPanel.SuspendLayout();
             this.pagePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // sidebarPanel
@@ -148,6 +145,7 @@
             this.pagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pagePanel.Location = new System.Drawing.Point(126, 26);
             this.pagePanel.Margin = new System.Windows.Forms.Padding(2);
+            this.pagePanel.MinimumSize = new System.Drawing.Size(660, 250);
             this.pagePanel.Name = "pagePanel";
             this.pagePanel.Size = new System.Drawing.Size(708, 555);
             this.pagePanel.TabIndex = 2;
@@ -159,7 +157,7 @@
             this.browsePage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browsePage.Location = new System.Drawing.Point(0, 0);
             this.browsePage.Margin = new System.Windows.Forms.Padding(1);
-            this.browsePage.MinimumSize = new System.Drawing.Size(650, 555);
+            this.browsePage.MinimumSize = new System.Drawing.Size(660, 250);
             this.browsePage.Name = "browsePage";
             this.browsePage.Size = new System.Drawing.Size(708, 555);
             this.browsePage.TabIndex = 0;
@@ -212,15 +210,13 @@
             this.Controls.Add(this.topPanel);
             this.Controls.Add(this.sidebarPanel);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(850, 600);
+            this.MinimumSize = new System.Drawing.Size(850, 450);
             this.Name = "MainWindow";
-            this.Text = "Form2";
+            this.Text = "Car shopping engine";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.sidebarPanel.ResumeLayout(false);
             this.pagePanel.ResumeLayout(false);
             this.pagePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -234,7 +230,6 @@
         private System.Windows.Forms.Button uploadButton;
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.Panel pagePanel;
-        private System.Windows.Forms.BindingSource bindingSource1;
         private CarEngine.SearchPage searchPage;
         private CarEngine.BrowsePage browsePage;
         private CarEngine.Pages.ProfilePage profilePage;

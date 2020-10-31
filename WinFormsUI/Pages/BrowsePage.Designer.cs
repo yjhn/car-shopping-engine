@@ -50,16 +50,17 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainPanel.AutoScroll = true;
+            this.mainPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.mainPanel.MinimumSize = new System.Drawing.Size(660, 150);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(700, 496);
+            this.mainPanel.Size = new System.Drawing.Size(700, 457);
             this.mainPanel.TabIndex = 1;
             // 
             // bottomPanel
             // 
             this.bottomPanel.AutoScroll = true;
-            this.bottomPanel.AutoSize = true;
             this.bottomPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.bottomPanel.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.bottomPanel.Controls.Add(this.sortButton);
@@ -71,11 +72,11 @@
             this.bottomPanel.Controls.Add(this.previousPageButton);
             this.bottomPanel.Controls.Add(this.nextPageButton);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 500);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 457);
             this.bottomPanel.Margin = new System.Windows.Forms.Padding(2);
-            this.bottomPanel.MinimumSize = new System.Drawing.Size(660, 0);
+            this.bottomPanel.MinimumSize = new System.Drawing.Size(660, 53);
             this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(700, 55);
+            this.bottomPanel.Size = new System.Drawing.Size(700, 53);
             this.bottomPanel.TabIndex = 2;
             // 
             // sortButton
@@ -83,7 +84,7 @@
             this.sortButton.AccessibleDescription = "sort button";
             this.sortButton.AccessibleName = "sort button";
             this.sortButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.sortButton.Location = new System.Drawing.Point(332, 16);
+            this.sortButton.Location = new System.Drawing.Point(332, 15);
             this.sortButton.Name = "sortButton";
             this.sortButton.Size = new System.Drawing.Size(37, 23);
             this.sortButton.TabIndex = 13;
@@ -104,7 +105,7 @@
             "total kilometers driven",
             "original purchase country",
             "next vehicle inspection"});
-            this.sortResultsByCombobox.Location = new System.Drawing.Point(441, 16);
+            this.sortResultsByCombobox.Location = new System.Drawing.Point(441, 15);
             this.sortResultsByCombobox.Margin = new System.Windows.Forms.Padding(2);
             this.sortResultsByCombobox.Name = "sortResultsByCombobox";
             this.sortResultsByCombobox.Size = new System.Drawing.Size(160, 23);
@@ -115,7 +116,7 @@
             this.refreshButton.AccessibleDescription = "refresh button";
             this.refreshButton.AccessibleName = "refresh button";
             this.refreshButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.refreshButton.Location = new System.Drawing.Point(14, 16);
+            this.refreshButton.Location = new System.Drawing.Point(14, 15);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(75, 23);
             this.refreshButton.TabIndex = 12;
@@ -132,7 +133,7 @@
             this.sortAscDescPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.sortAscDescPanel.Controls.Add(this.sortAscRadioButton);
             this.sortAscDescPanel.Controls.Add(this.sortDescRadioButton);
-            this.sortAscDescPanel.Location = new System.Drawing.Point(577, 0);
+            this.sortAscDescPanel.Location = new System.Drawing.Point(577, -1);
             this.sortAscDescPanel.Name = "sortAscDescPanel";
             this.sortAscDescPanel.Size = new System.Drawing.Size(123, 52);
             this.sortAscDescPanel.TabIndex = 11;
@@ -172,7 +173,7 @@
             this.sortByLabel.AutoSize = true;
             this.sortByLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.sortByLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.sortByLabel.Location = new System.Drawing.Point(374, 17);
+            this.sortByLabel.Location = new System.Drawing.Point(374, 16);
             this.sortByLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.sortByLabel.Name = "sortByLabel";
             this.sortByLabel.Size = new System.Drawing.Size(67, 21);
@@ -185,7 +186,7 @@
             this.pageNumberLabel.AccessibleName = "current page number";
             this.pageNumberLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pageNumberLabel.AutoSize = true;
-            this.pageNumberLabel.Location = new System.Drawing.Point(192, 20);
+            this.pageNumberLabel.Location = new System.Drawing.Point(192, 19);
             this.pageNumberLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.pageNumberLabel.Name = "pageNumberLabel";
             this.pageNumberLabel.Size = new System.Drawing.Size(13, 15);
@@ -199,7 +200,7 @@
             this.previousPageButton.AccessibleName = "previous page button";
             this.previousPageButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.previousPageButton.Enabled = false;
-            this.previousPageButton.Location = new System.Drawing.Point(129, 16);
+            this.previousPageButton.Location = new System.Drawing.Point(129, 15);
             this.previousPageButton.Margin = new System.Windows.Forms.Padding(2);
             this.previousPageButton.Name = "previousPageButton";
             this.previousPageButton.Size = new System.Drawing.Size(47, 23);
@@ -214,7 +215,7 @@
             this.nextPageButton.AccessibleName = "next page button";
             this.nextPageButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.nextPageButton.Enabled = false;
-            this.nextPageButton.Location = new System.Drawing.Point(219, 16);
+            this.nextPageButton.Location = new System.Drawing.Point(219, 15);
             this.nextPageButton.Margin = new System.Windows.Forms.Padding(2);
             this.nextPageButton.Name = "nextPageButton";
             this.nextPageButton.Size = new System.Drawing.Size(47, 23);
@@ -232,15 +233,14 @@
             this.Controls.Add(this.bottomPanel);
             this.Controls.Add(this.mainPanel);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(660, 555);
+            this.MinimumSize = new System.Drawing.Size(660, 203);
             this.Name = "BrowsePage";
-            this.Size = new System.Drawing.Size(700, 555);
+            this.Size = new System.Drawing.Size(700, 510);
             this.bottomPanel.ResumeLayout(false);
             this.bottomPanel.PerformLayout();
             this.sortAscDescPanel.ResumeLayout(false);
             this.sortAscDescPanel.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

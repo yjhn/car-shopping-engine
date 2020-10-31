@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Frontend;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,25 +13,16 @@ namespace Test1
         private readonly Color _inactiveSidebarButtonColor = Color.Transparent;
         private readonly Color _inactiveSidebarButtonTextColor = Color.Transparent;
 
+        // create the instance of Api that will be passed down to every page
+        private readonly IApi _api = new Api();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            // set window title
-            Text = "Car Shopping Engine";
-        }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-            // this causes the app to lock up while it fetches data from server
+            // start with Browse page activated
             SetActivePanel(browsePage);
-
-            // browse button is "clicked"
-            sidebarButton_Click(browseButton);
-
-            // manually set the color of the button since I don't know how to raise button click event from here
-            browseButton.ForeColor = _activeSidebarButtonTextColor;
-            browseButton.BackColor = _activeSidebarButtonColor;
+            SidebarButtonClicked(browseButton);
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -41,29 +33,29 @@ namespace Test1
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(browsePage);
-            sidebarButton_Click(browseButton);
+            SidebarButtonClicked(browseButton);
         }
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(searchPage);
-            sidebarButton_Click(searchButton);
+            SidebarButtonClicked(searchButton);
         }
 
         private void UploadButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(uploadPage);
-            sidebarButton_Click(uploadButton);
+            SidebarButtonClicked(uploadButton);
         }
 
         private void FavoritesButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(profilePage);
-            sidebarButton_Click(favoritesButton);
+            SidebarButtonClicked(favoritesButton);
         }
 
-        // this method must be called when any sidebar button is clicked as it set button colors
-        private void sidebarButton_Click(Button button/*, EventArgs e*/)
+        // this method must be called when any sidebar button is clicked as it sets button colors
+        private void SidebarButtonClicked(Button button)
         {
             browseButton.ForeColor = _inactiveSidebarButtonTextColor;
             browseButton.BackColor = _inactiveSidebarButtonColor;
@@ -77,11 +69,17 @@ namespace Test1
             button.ForeColor = _activeSidebarButtonTextColor;
             button.BackColor = _activeSidebarButtonColor;
 
-            // this is OK as this method is called after SetActivePanel (since this was added to button click eventhandler later than button_Click)
+            // enable all buttons
+            browseButton.Enabled = true;
+            searchButton.Enabled = true;
+            uploadButton.Enabled = true;
+            favoritesButton.Enabled = true;
+
+            // disable the button that was clicked
             button.Enabled = false;
         }
 
-        private void SetActivePanel(UserControl control)
+        private void SetActivePanel(UserControl panel)
         {
             // disable all panels
             searchPage.Visible = false;
@@ -89,14 +87,8 @@ namespace Test1
             uploadPage.Visible = false;
             profilePage.Visible = false;
 
-            // enable all buttons, the callee must disable its own button after calling this method
-            browseButton.Enabled = true;
-            searchButton.Enabled = true;
-            uploadButton.Enabled = true;
-            favoritesButton.Enabled = true;
-
             // enable panel that's provided
-            control.Visible = true;
+            panel.Visible = true;
         }
     }
 }
