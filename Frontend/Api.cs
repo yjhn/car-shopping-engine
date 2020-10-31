@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Frontend
 {
-    public class Api
+    public class Api : IApi
     {
         // event to tell the UI that there is no connection to server
         public event Action NoServerResponse = delegate { };
