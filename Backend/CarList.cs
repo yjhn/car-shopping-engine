@@ -1,7 +1,9 @@
 ﻿using DataTypes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace Backend
@@ -55,14 +57,25 @@ namespace Backend
         {
             List<Car> filteredCarList = _carList;
 
-            if (filters.PriceFrom.HasValue && filters.PriceTo.HasValue)
-                filteredCarList = (from car in filteredCarList where (car.Price >= filters.PriceFrom && car.Price <= filters.PriceTo) select car).ToList();
-            if (!string.IsNullOrEmpty(filters.Username))
-                filteredCarList = (from car in filteredCarList where car.UploaderUsername.Equals(filters.Username) select car).ToList();
-            if (filters.YearFrom.HasValue && filters.YearTo.HasValue)
-                filteredCarList = (from car in filteredCarList where (car.DateOfPurchase.Year >= filters.YearFrom && car.DateOfPurchase.Year <= filters.YearTo) select car).ToList();
-            if (filters.FuelType.HasValue)
-                filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
+            if (!string.IsNullOrEmpty(filters.Brand))
+                filteredCarList = (from car in filteredCarList where car.Brand.ToLower().Contains(filters.Brand) select car).ToList();
+            if (!string.IsNullOrEmpty(filters.Model))
+                filteredCarList = (from car in filteredCarList where car.Model.ToLower().Contains(filters.Model) select car).ToList();
+            if (filters.Used.HasValue)
+                filteredCarList = (from car in filteredCarList where car.Used == filters.Used select car).ToList();
+            if (filters.PriceFrom.HasValue)
+                filteredCarList = (from car in filteredCarList where car.Price >= filters.PriceFrom select car).ToList();
+            if (filters.PriceTo.HasValue)
+                filteredCarList = (from car in filteredCarList where car.Price <= filters.PriceTo select car).ToList();
+            //if (!string.IsNullOrEmpty(filters.Username))
+            //    filteredCarList = (from car in filteredCarList where car.UploaderUsername.ToLower() == filters.Username select car).ToList();
+            //if (filters.YearFrom.HasValue)
+            //    filteredCarList = (from car in filteredCarList where car.DateOfPurchase.Year >= filters.YearFrom select car).ToList();
+            //if (filters.YearTo.HasValue)
+            //    filteredCarList = (from car in filteredCarList where car.DateOfPurchase.Year <= filters.YearTo select car).ToList();
+            //if (filters.FuelType.HasValue)
+            //    filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
+
 
             return GetSortedCarsJson(sortBy, sortAscending, startIndex, amount, filteredCarList);
         }
