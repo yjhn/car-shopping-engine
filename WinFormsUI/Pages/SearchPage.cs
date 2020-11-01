@@ -8,6 +8,7 @@ namespace CarEngine
 {
     public partial class SearchPage : UserControl
     {
+        private int _resultspageNr = 1;
         private IApi _frontendApi;
 
         // This property MUST be set for this to work correctly
@@ -91,20 +92,6 @@ namespace CarEngine
                 FuelType = fuelType
             };
 
-            //_resultList = await new VehicleSearch(_frontendApi).searchVehicles(brandTextbox.Text,
-            //                                          modelTextbox.Text,
-            //                                          fuelType,
-            //                                          vehicleType,
-            //                                          sortBy,
-            //                                          sortAscending,
-            //                                          usedRadioBtn.Checked,
-            //                                          newRadioBtn.Checked,
-            //                                          Convert.ToInt32(lowerPriceTextbox.Value),
-            //                                          Convert.ToInt32(higherPriceTextbox.Value),
-            //                                          Convert.ToInt32(lowerYearTextbox.Value),
-            //                                          Convert.ToInt32(higherYearTextbox.Value));
-
-            //after we get the results back from server, we show them
             // create new tab for search results
 
             BrowsePage searchResultsTab = new BrowsePage(filters, (string)sortByCombobox.SelectedItem, sortAscRadioBtn.Checked)
@@ -114,7 +101,7 @@ namespace CarEngine
                 AutoScroll = true,
                 AutoSize = false
             };
-            TabPage resultsTab = new TabPage("results 1");
+            TabPage resultsTab = new TabPage("results " + _resultspageNr++);
             resultsTab.SuspendLayout();
             resultsTab.Controls.Add(searchResultsTab);
             searchAndResultsTabs.TabPages.Add(resultsTab);
