@@ -10,14 +10,13 @@ namespace CarEngine
 {
     public partial class BrowsePage : UserControl
     {
-        // need to prepare this for use as a search results page
-
+        private readonly bool _isSearchResultsPage;
         private readonly CarFilters _filters;
-        private SortingCriteria _sorting;
+        private string _selectedSortItem;
         private bool _sortAsc;
-        //static Random rnd;
         public int AdsInPage = 15;
         private int _currentPageNumber = 1;
+        private readonly EnumParser _parser = new EnumParser();
 
         // this is used to track whether "next page" button should be enabled 
         private bool _nextPageButtonEnabled = false;
@@ -25,37 +24,47 @@ namespace CarEngine
         // a list to store all car ads in all pages
         private readonly List<CarAdMinimal[]> _adList = new List<CarAdMinimal[]>();
         // instance of API
-        private Api _frontendApi = new Api();
+        private IApi _frontendApi;
+
+        // This property MUST be set for this to work correctly
+        public IApi Api
+        {
+            get
+            {
+                return _frontendApi;
+            }
+            set
+            {
+                // _frontendApi can be set only once
+                if (_frontendApi == null)
+                {
+                    _frontendApi = value;
+
+                    // we only start loading the content once we get the api
+                    SortingChanged();
+                }
+            }
+        }
 
         public BrowsePage()
         {
+            _isSearchResultsPage = false;
+
             InitializeComponent();
             sortResultsByCombobox.SelectedIndex = 0;
-            SortingChanged();
         }
 
+        //  this constructor is needed to use this as a search results page
+        public BrowsePage(CarFilters carFilters, string selectedSortItem, bool sortAsc)
+        {
+            _isSearchResultsPage = true;
+            _filters = carFilters;
 
-        //public BrowsePage(CarFilters carFilters = null, SortingCriteria? sortBy = default, bool? sortAsc = default)
-        //{
-        //    filters = carFilters;
+            InitializeComponent();
 
-        //    InitializeComponent();
-
-        //    if (sortBy != default)
-        //    {
-        //        sorting = (SortingCriteria)sortBy;
-        //        sortResultsByCombobox.SelectedItem = Sorting.GetSortObj(sorting);
-        //        if(sortAsc != default)
-        //        {
-        //            this.sortAsc = (bool)sortAsc;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        sortResultsByCombobox.SelectedIndex = 0;
-        //    }
-        //    sortingChanged();
-        //}
+            sortAscRadioButton.Checked = sortAsc;
+            sortResultsByCombobox.SelectedItem = selectedSortItem;
+        }
 
         // this method sets nextPageButton.Enabled property
         private async void ShowCarList()
@@ -67,31 +76,28 @@ namespace CarEngine
             // clear main panel to load other ads
             mainPanel.Controls.Clear();
 
-            // enable "next page" button. It might get disabled later in the method, so we cannot do this later
+            // enable . It might get disabled later in the method, so we cannot do this later
             _nextPageButtonEnabled = true;
 
             // if we are one the first page for the first time
             if (_adList.Count == 0)
             {
-                //Task<CarAdMinimal[]> ads = GetMinimalVehicleAds(0, AdsInPage);
                 CarAdMinimal[] carAds = await GetMinimalVehicleAds(0, AdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     _nextPageButtonEnabled = false;
                     nextPageButton.Enabled = false;
                     // does Api return null if it gets an empty list from server?
-                    // if not, then we should display network error
+                    // if not, then we should display network error -- no need for this as no connection stuff will be managed by delegate in Api class
                     return;
                 }
-                _nextPageButtonEnabled = true;
                 _adList.Add(carAds);
             }
 
-            // since prefetch is happening, we need to check if we are on the last populated page to disable "next" button if neccessary
+            // if we are on the last popuplated page, we need to prefetch more data
             if (_currentPageNumber == _adList.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                //Task<CarAdMinimal[]> ads = GetMinimalVehicleAds(AdsInPage * _currentPageNumber, AdsInPage);
                 CarAdMinimal[] carAds = await GetMinimalVehicleAds(AdsInPage * _currentPageNumber, AdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
@@ -100,7 +106,6 @@ namespace CarEngine
                 }
                 else
                 {
-                    _nextPageButtonEnabled = true;
                     _adList.Add(carAds);
                 }
             }
@@ -114,24 +119,28 @@ namespace CarEngine
             }
             nextPageButton.Enabled = _nextPageButtonEnabled;
 
-            // re-enable "refrexh" and "sort" buttons
+            // re-enable "refresh" and "sort" buttons
             refreshButton.Enabled = true;
             sortButton.Enabled = true;
         }
 
         private async Task<CarAdMinimal[]> GetMinimalVehicleAds(int startIndex, int amount)
         {
-            List<Car> vehicles;
-            if (_filters != null)
+            // if frontendApi is not set, we do nothing
+            if (_frontendApi != null)
             {
-                vehicles = await _frontendApi.SearchVehicles(_filters, _sorting, _sortAsc, startIndex, amount);
+                List<Car> vehicles;
+                if (_isSearchResultsPage)
+                {
+                    vehicles = await _frontendApi.SearchVehicles(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
+                }
+                else
+                {
+                    vehicles = await _frontendApi.SortBy(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
+                }
+                return Converter.VehicleListToAds(vehicles);
             }
-            else
-            {
-                //sorting = Sorting.getSortingCriteria((string)sortResultsByCombobox.SelectedItem);
-                vehicles = await _frontendApi.SortBy(_sorting, startIndex, amount, _sortAsc);
-            }
-            return Converter.vehicleListToAds(vehicles);
+            return null;
         }
 
         private void NextPageButton_Click(object sender, EventArgs e)
@@ -144,14 +153,10 @@ namespace CarEngine
             _currentPageNumber++;
             pageNumberLabel.Text = _currentPageNumber.ToString();
             ShowCarList();
-            //nextPageButton.Enabled = canShowMoreAds;
         }
 
         private void PreviousPageButton_Click(object sender, EventArgs e)
         {
-            // this is not needed as it is already enforced
-            //if (currentPageNumber > 1)
-            //{
             mainPanel.AutoScrollPosition = new Point(0, 0);
             _currentPageNumber--;
             if (_currentPageNumber == 1)
@@ -160,14 +165,13 @@ namespace CarEngine
             }
             pageNumberLabel.Text = _currentPageNumber.ToString();
             ShowCarList();
-            nextPageButton.Enabled = true;
-            //}
+            //nextPageButton.Enabled = true;
         }
 
         private void SortingChanged()
         {
             // set SortingCriteria and sortAsc
-            _sorting = Sorting.GetSortingCriteria((string)sortResultsByCombobox.SelectedItem);
+            _selectedSortItem = (string)sortResultsByCombobox.SelectedItem;
             _sortAsc = sortAscRadioButton.Checked;
 
             // clear current ads, since they are obsolete

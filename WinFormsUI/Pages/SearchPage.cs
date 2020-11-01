@@ -8,9 +8,8 @@ namespace CarEngine
 {
     public partial class SearchPage : UserControl
     {
-        private List<Car> _resultList;
         private Api _frontendApi = new Api(); // this is bad. There should only be one instance of this in the whole project
-
+        private readonly EnumParser _parser = new EnumParser();
         public SearchPage()
         {
             InitializeComponent();
@@ -18,14 +17,14 @@ namespace CarEngine
             // set min and max allowed manufacture years
             lowerYearTextbox.Minimum = VehiclePropertyConstants.MinVehicleManufactureYear;
             lowerYearTextbox.Maximum = VehiclePropertyConstants.MaxVehicleManufactureYear;
-            upperYearTextbox.Minimum = VehiclePropertyConstants.MinVehicleManufactureYear;
-            upperYearTextbox.Maximum = VehiclePropertyConstants.MaxVehicleManufactureYear;
+            higherYearTextbox.Minimum = VehiclePropertyConstants.MinVehicleManufactureYear;
+            higherYearTextbox.Maximum = VehiclePropertyConstants.MaxVehicleManufactureYear;
 
             // set min and max allowed price
             lowerPriceTextbox.Minimum = VehiclePropertyConstants.MinVehiclePrice;
             lowerPriceTextbox.Maximum = VehiclePropertyConstants.MaxVehiclePrice;
-            upperPriceTextbox.Minimum = VehiclePropertyConstants.MinVehiclePrice;
-            upperPriceTextbox.Maximum = VehiclePropertyConstants.MaxVehiclePrice;
+            higherPriceTextbox.Minimum = VehiclePropertyConstants.MinVehiclePrice;
+            higherPriceTextbox.Maximum = VehiclePropertyConstants.MaxVehiclePrice;
 
             // default vehicle type: any
             vehicleTypeCombobox.SelectedIndex = 0;
@@ -36,99 +35,38 @@ namespace CarEngine
 
             // make NumericUpDown appear empty
             lowerYearTextbox.Text = "";
-            upperYearTextbox.Text = "";
+            higherYearTextbox.Text = "";
             lowerPriceTextbox.Text = "";
-            upperPriceTextbox.Text = "";
+            higherPriceTextbox.Text = "";
         }
 
-        private /*async*/ void SearchButton_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
-            // for testing purposes
-            BrowsePage searchResultsTab = new BrowsePage();
-            TabPage resultsTab = new TabPage("results 1");
-            resultsTab.SuspendLayout();
-            resultsTab.Controls.Add(searchResultsTab);
-            searchResultsTab.Dock = DockStyle.Fill;
-            searchResultsTab.AutoScroll = true;
-            searchResultsTab.AutoSize = false;
-            //searchResultsTab.
-            resultsTab.ResumeLayout();
+            FuelType? fuelType = _parser.GetFuelType((string)fuelTypeCombobox.SelectedItem);
 
-            searchAndResultsTabs.TabPages.Add(resultsTab);
+            ChassisType? chassisType = _parser.GetChassisType((string)vehicleTypeCombobox.SelectedItem);
 
-            // formulate a query to the frontend to search for cars
-            // frontend should save the query for use if user goes back to this screen - or maybe not, as information will not be removed from the form
+            //SortingCriteria sortBy = EnumParser.GetSortingCriteria((string)sortByCombobox.SelectedItem);
 
-            //FuelType? fuelType;
-            //switch (fuelTypeCombobox.SelectedItem)
-            //{
-            //    case "any":
-            //        fuelType = default;
-            //        break;
-            //    case "petrol":
-            //        fuelType = FuelType.Petrol;
-            //        break;
-            //    case "diesel":
-            //        fuelType = FuelType.Diesel;
-            //        break;
-            //    case "electric":
-            //        fuelType = FuelType.Electricity;
-            //        break;
-            //    case "hybrid":
-            //        fuelType = FuelType.Hybrid;
-            //        break;
-            //    default:
-            //        fuelType = default;
-            //        break;
-            //}
+            string brand = brandTextbox.Text.ToLower();
+            string model = modelTextbox.Text.ToLower();
+            int lowerPrice = (int)lowerPriceTextbox.Value;
+            int higherPrice = (int)higherPriceTextbox.Value;
+            int lowerYear = (int)lowerYearTextbox.Value;
+            int higherYear = (int)higherYearTextbox.Value;
 
-            //ChassisType? vehicleType;
-            //switch (vehicleTypeCombobox.SelectedItem)
-            //{
-            //    case "any":
-            //        vehicleType = default;
-            //        break;
-            //    case "station wagon":
-            //        vehicleType = ChassisType.Station_wagon;
-            //        break;
-            //    case "hatchback":
-            //        vehicleType = ChassisType.Hatchback;
-            //        break;
-            //    case "sedan":
-            //        vehicleType = ChassisType.Sedan;
-            //        break;
-            //    case "suv":
-            //        vehicleType = ChassisType.Suv;
-            //        break;
-            //    case "minivan":
-            //        vehicleType = ChassisType.Minivan;
-            //        break;
-            //    case "coupe":
-            //        vehicleType = ChassisType.Coupe;
-            //        break;
-            //    case "convertible":
-            //        vehicleType = ChassisType.Convertible;
-            //        break;
-            //    case "passenger minibus":
-            //        vehicleType = ChassisType.Passenger_minibus;
-            //        break;
-            //    case "combi minibus":
-            //        vehicleType = ChassisType.Combi_minibus;
-            //        break;
-            //    case "freight minibus":
-            //        vehicleType = ChassisType.Freight_minibus;
-            //        break;
-            //    case "commercial":
-            //        vehicleType = ChassisType.Commercial;
-            //        break;
-            //    default:
-            //        vehicleType = default;
-            //        break;
-            //}
-
-            //SortingCriteria sortBy = Sorting.GetSortingCriteria((string)sortByCombobox.SelectedItem);
-
-            //bool sortAscending = sortAscRadioBtn.Checked;
+            CarFilters filters = new CarFilters()
+            {
+                ChassisType = chassisType,
+                Brand = (brand == "") ? null : brand,
+                Model = (model == "") ? null : model,
+                PriceFrom = (lowerPrice == VehiclePropertyConstants.MinVehiclePrice) ? default(int?) : lowerPrice,
+                PriceTo = (higherPrice == VehiclePropertyConstants.MinVehiclePrice) ? default(int?) : higherPrice,
+                Used = usedRadioBtn.Checked ? true : (newRadioBtn.Checked ? false : default(bool?)),
+                YearFrom = (lowerYear == VehiclePropertyConstants.MinVehicleManufactureYear) ? default(int?) : lowerYear,
+                YearTo = (higherYear == VehiclePropertyConstants.MaxVehicleManufactureYear) ? default(int?) : higherYear,
+                FuelType = fuelType
+            };
 
             //_resultList = await new VehicleSearch(_frontendApi).searchVehicles(brandTextbox.Text,
             //                                          modelTextbox.Text,
@@ -139,12 +77,29 @@ namespace CarEngine
             //                                          usedRadioBtn.Checked,
             //                                          newRadioBtn.Checked,
             //                                          Convert.ToInt32(lowerPriceTextbox.Value),
-            //                                          Convert.ToInt32(upperPriceTextbox.Value),
+            //                                          Convert.ToInt32(higherPriceTextbox.Value),
             //                                          Convert.ToInt32(lowerYearTextbox.Value),
-            //                                          Convert.ToInt32(upperYearTextbox.Value));
+            //                                          Convert.ToInt32(higherYearTextbox.Value));
 
-            // after we get the results back from server, we show them
-            //searchResultsPage.Visible = true;
+            //after we get the results back from server, we show them
+            // create new tab for search results
+
+            BrowsePage searchResultsTab = new BrowsePage(filters, (string)sortByCombobox.SelectedItem, sortAscRadioBtn.Checked)
+            {
+                Api = _frontendApi,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                AutoSize = false
+            };
+            TabPage resultsTab = new TabPage("results 1");
+            resultsTab.SuspendLayout();
+            resultsTab.Controls.Add(searchResultsTab);
+            searchAndResultsTabs.TabPages.Add(resultsTab);
+            resultsTab.ResumeLayout();
+
+            // set focus to search results page
+            // for some reason this does not work
+            resultsTab.Focus();
         }
 
         private void ResetSearchButton_Click(object sender, EventArgs e)
@@ -154,11 +109,11 @@ namespace CarEngine
             brandTextbox.ResetText();
             modelTextbox.ResetText();
             lowerPriceTextbox.ResetText();
-            upperPriceTextbox.ResetText();
+            higherPriceTextbox.ResetText();
             newRadioBtn.Checked = false;
             usedRadioBtn.Checked = false;
             lowerYearTextbox.ResetText();
-            upperYearTextbox.ResetText();
+            higherYearTextbox.ResetText();
             fuelTypeCombobox.SelectedIndex = 0;
             sortByCombobox.SelectedIndex = 0;
             sortDescRadioBtn.Checked = true;

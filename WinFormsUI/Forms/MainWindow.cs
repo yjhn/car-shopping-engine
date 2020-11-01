@@ -19,6 +19,7 @@ namespace Test1
         public MainWindow()
         {
             InitializeComponent();
+            browsePage.Api = _api;
 
             // start with Browse page activated
             SetActivePanel(browsePage);

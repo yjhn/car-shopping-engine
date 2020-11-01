@@ -32,7 +32,7 @@ namespace CarEngine
             return Convert.ToBase64String(imageBytes);
         }
 
-        public static CarAdMinimal[] vehicleListToAds(List<Car> vehicleList)
+        public static CarAdMinimal[] VehicleListToAds(List<Car> vehicleList)
         {
             if(vehicleList == null)
             {

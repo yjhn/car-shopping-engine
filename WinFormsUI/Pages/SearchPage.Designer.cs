@@ -48,7 +48,7 @@ namespace CarEngine
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.brandTextbox = new System.Windows.Forms.TextBox();
-            this.upperYearTextbox = new System.Windows.Forms.NumericUpDown();
+            this.higherYearTextbox = new System.Windows.Forms.NumericUpDown();
             this.searchBtn = new System.Windows.Forms.Button();
             this.modelTextbox = new System.Windows.Forms.TextBox();
             this.fuelTypeCombobox = new System.Windows.Forms.ComboBox();
@@ -56,7 +56,7 @@ namespace CarEngine
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.upperPriceTextbox = new System.Windows.Forms.NumericUpDown();
+            this.higherPriceTextbox = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lowerPriceTextbox = new System.Windows.Forms.NumericUpDown();
@@ -66,8 +66,8 @@ namespace CarEngine
             this.sortAscDescPanel.SuspendLayout();
             this.usedNewPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lowerYearTextbox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperYearTextbox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperPriceTextbox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.higherYearTextbox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.higherPriceTextbox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerPriceTextbox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -94,7 +94,7 @@ namespace CarEngine
             this.searchTab.Controls.Add(this.label9);
             this.searchTab.Controls.Add(this.label8);
             this.searchTab.Controls.Add(this.brandTextbox);
-            this.searchTab.Controls.Add(this.upperYearTextbox);
+            this.searchTab.Controls.Add(this.higherYearTextbox);
             this.searchTab.Controls.Add(this.searchBtn);
             this.searchTab.Controls.Add(this.modelTextbox);
             this.searchTab.Controls.Add(this.fuelTypeCombobox);
@@ -102,7 +102,7 @@ namespace CarEngine
             this.searchTab.Controls.Add(this.label6);
             this.searchTab.Controls.Add(this.label5);
             this.searchTab.Controls.Add(this.label4);
-            this.searchTab.Controls.Add(this.upperPriceTextbox);
+            this.searchTab.Controls.Add(this.higherPriceTextbox);
             this.searchTab.Controls.Add(this.label3);
             this.searchTab.Controls.Add(this.label2);
             this.searchTab.Controls.Add(this.lowerPriceTextbox);
@@ -322,26 +322,26 @@ namespace CarEngine
             this.brandTextbox.Size = new System.Drawing.Size(246, 23);
             this.brandTextbox.TabIndex = 1;
             // 
-            // upperYearTextbox
+            // higherYearTextbox
             // 
-            this.upperYearTextbox.AccessibleDescription = "upper year range combo box";
-            this.upperYearTextbox.AccessibleName = "upper year range combo box";
-            this.upperYearTextbox.Location = new System.Drawing.Point(322, 284);
-            this.upperYearTextbox.Margin = new System.Windows.Forms.Padding(2);
-            this.upperYearTextbox.Maximum = new decimal(new int[] {
+            this.higherYearTextbox.AccessibleDescription = "upper year range combo box";
+            this.higherYearTextbox.AccessibleName = "upper year range combo box";
+            this.higherYearTextbox.Location = new System.Drawing.Point(322, 284);
+            this.higherYearTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.higherYearTextbox.Maximum = new decimal(new int[] {
             2020,
             0,
             0,
             0});
-            this.upperYearTextbox.Minimum = new decimal(new int[] {
+            this.higherYearTextbox.Minimum = new decimal(new int[] {
             1900,
             0,
             0,
             0});
-            this.upperYearTextbox.Name = "upperYearTextbox";
-            this.upperYearTextbox.Size = new System.Drawing.Size(46, 23);
-            this.upperYearTextbox.TabIndex = 8;
-            this.upperYearTextbox.Value = new decimal(new int[] {
+            this.higherYearTextbox.Name = "higherYearTextbox";
+            this.higherYearTextbox.Size = new System.Drawing.Size(46, 23);
+            this.higherYearTextbox.TabIndex = 8;
+            this.higherYearTextbox.Value = new decimal(new int[] {
             2020,
             0,
             0,
@@ -443,25 +443,25 @@ namespace CarEngine
             this.label4.TabIndex = 3;
             this.label4.Text = "-";
             // 
-            // upperPriceTextbox
+            // higherPriceTextbox
             // 
-            this.upperPriceTextbox.AccessibleDescription = "Upper price range text box";
-            this.upperPriceTextbox.AccessibleName = "Upper price range text box";
-            this.upperPriceTextbox.Increment = new decimal(new int[] {
+            this.higherPriceTextbox.AccessibleDescription = "Upper price range text box";
+            this.higherPriceTextbox.AccessibleName = "Upper price range text box";
+            this.higherPriceTextbox.Increment = new decimal(new int[] {
             100,
             0,
             0,
             0});
-            this.upperPriceTextbox.Location = new System.Drawing.Point(365, 181);
-            this.upperPriceTextbox.Margin = new System.Windows.Forms.Padding(2);
-            this.upperPriceTextbox.Maximum = new decimal(new int[] {
+            this.higherPriceTextbox.Location = new System.Drawing.Point(365, 181);
+            this.higherPriceTextbox.Margin = new System.Windows.Forms.Padding(2);
+            this.higherPriceTextbox.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
-            this.upperPriceTextbox.Name = "upperPriceTextbox";
-            this.upperPriceTextbox.Size = new System.Drawing.Size(82, 23);
-            this.upperPriceTextbox.TabIndex = 4;
+            this.higherPriceTextbox.Name = "higherPriceTextbox";
+            this.higherPriceTextbox.Size = new System.Drawing.Size(82, 23);
+            this.higherPriceTextbox.TabIndex = 4;
             // 
             // label3
             // 
@@ -545,8 +545,8 @@ namespace CarEngine
             this.usedNewPanel.ResumeLayout(false);
             this.usedNewPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lowerYearTextbox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperYearTextbox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperPriceTextbox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.higherYearTextbox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.higherPriceTextbox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerPriceTextbox)).EndInit();
             this.ResumeLayout(false);
 
@@ -570,7 +570,7 @@ namespace CarEngine
         private Label label9;
         private Label label8;
         private TextBox brandTextbox;
-        private NumericUpDown upperYearTextbox;
+        private NumericUpDown higherYearTextbox;
         private Button searchBtn;
         private TextBox modelTextbox;
         private ComboBox fuelTypeCombobox;
@@ -578,7 +578,7 @@ namespace CarEngine
         private Label label6;
         private Label label5;
         private Label label4;
-        private NumericUpDown upperPriceTextbox;
+        private NumericUpDown higherPriceTextbox;
         private Label label3;
         private Label label2;
         private NumericUpDown lowerPriceTextbox;
