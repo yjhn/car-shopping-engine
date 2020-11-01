@@ -43,6 +43,10 @@ namespace CarEngine
                     // we only start loading the content once we get the api
                     SortingChanged();
                 }
+                else
+                {
+                    throw new Exception("Cannot set Api property more than once");
+                }
             }
         }
 
@@ -126,21 +130,16 @@ namespace CarEngine
 
         private async Task<CarAdMinimal[]> GetMinimalVehicleAds(int startIndex, int amount)
         {
-            // if frontendApi is not set, we do nothing
-            if (_frontendApi != null)
+            List<Car> vehicles;
+            if (_isSearchResultsPage)
             {
-                List<Car> vehicles;
-                if (_isSearchResultsPage)
-                {
-                    vehicles = await _frontendApi.SearchVehicles(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
-                }
-                else
-                {
-                    vehicles = await _frontendApi.SortBy(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
-                }
-                return Converter.VehicleListToAds(vehicles);
+                vehicles = await _frontendApi.SearchVehicles(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
             }
-            return null;
+            else
+            {
+                vehicles = await _frontendApi.SortBy(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
+            }
+            return Converter.VehicleListToAds(vehicles);
         }
 
         private void NextPageButton_Click(object sender, EventArgs e)

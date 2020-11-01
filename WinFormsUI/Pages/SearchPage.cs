@@ -8,7 +8,30 @@ namespace CarEngine
 {
     public partial class SearchPage : UserControl
     {
-        private Api _frontendApi = new Api(); // this is bad. There should only be one instance of this in the whole project
+        private IApi _frontendApi;
+
+        // This property MUST be set for this to work correctly
+        public IApi Api
+        {
+            get
+            {
+                return _frontendApi;
+            }
+            set
+            {
+                // _frontendApi can be set only once
+                if (_frontendApi == null)
+                {
+                    _frontendApi = value;
+                }
+                else
+                {
+                    throw new Exception("Cannot set Api property more than once");
+                }
+            }
+        }
+
+        //private Api _frontendApi = new Api(); // this is bad. There should only be one instance of this in the whole project
         private readonly EnumParser _parser = new EnumParser();
         public SearchPage()
         {

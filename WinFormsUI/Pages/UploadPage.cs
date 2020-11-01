@@ -1,21 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using System.Linq;
-using DataTypes;
+﻿using DataTypes;
 using Frontend;
-using System.Windows.Forms.VisualStyles;
-using System.Security.Cryptography;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace CarEngine.Pages
 {
     public partial class UploadPage : UserControl
     {
-        private Api _frontendApi = new Api();
+        private IApi _frontendApi;
+        private EnumParser _parser = new EnumParser();
+
+
+        // This property MUST be set for this to work correctly
+        public IApi Api
+        {
+            get
+            {
+                return _frontendApi;
+            }
+            set
+            {
+                // _frontendApi can be set only once
+                if (_frontendApi == null)
+                {
+                    _frontendApi = value;
+                }
+                else
+                {
+                    throw new Exception("Cannot set Api property more than once");
+                }
+            }
+        }
 
         public UploadPage()
         {
@@ -90,12 +108,12 @@ namespace CarEngine.Pages
         private Car GetAllCarInfo()
         {
             Car uploadCar = new Car();
-            uploadCar.ChassisType = SetChassisType();
+            uploadCar.ChassisType = (ChassisType)_parser.GetChassisType((string)typeComboBox.SelectedItem);
             uploadCar.Brand = brandTextBox.Text;
             uploadCar.Model = modelTextBox.Text;
             uploadCar.Price = Convert.ToInt32(priceBox.Value);
             uploadCar.Used = radioButtonUsed.Checked;
-            uploadCar.FuelType = GetFuelType();
+            uploadCar.FuelType = (FuelType)_parser.GetFuelType((string)fuelTypeComboBox.SelectedItem);
             uploadCar.Images = GetImages();
             return uploadCar;
         }
@@ -112,81 +130,6 @@ namespace CarEngine.Pages
             //main didele nuotrauka
             imagesList.Add(Converter.ConvertImageToBase64(pictureBox1.Image));
             return imagesList.ToArray();
-        }
-
-        private ChassisType SetChassisType()
-        {
-            ChassisType vehicleType;
-            switch (typeComboBox.SelectedItem)
-            {
-                case "any":
-                    vehicleType = default;
-                    break;
-                case "station wagon":
-                    vehicleType = ChassisType.Station_wagon;
-                    break;
-                case "hatchback":
-                    vehicleType = ChassisType.Hatchback;
-                    break;
-                case "sedan":
-                    vehicleType = ChassisType.Sedan;
-                    break;
-                case "suv":
-                    vehicleType = ChassisType.Suv;
-                    break;
-                case "minivan":
-                    vehicleType = ChassisType.Minivan;
-                    break;
-                case "coupe":
-                    vehicleType = ChassisType.Coupe;
-                    break;
-                case "convertible":
-                    vehicleType = ChassisType.Convertible;
-                    break;
-                case "passenger minibus":
-                    vehicleType = ChassisType.Passenger_minibus;
-                    break;
-                case "combi minibus":
-                    vehicleType = ChassisType.Combi_minibus;
-                    break;
-                case "freight minibus":
-                    vehicleType = ChassisType.Freight_minibus;
-                    break;
-                case "commercial":
-                    vehicleType = ChassisType.Commercial;
-                    break;
-                default:
-                    vehicleType = default;
-                    break;
-            }
-            return vehicleType;
-        }
-
-        private FuelType GetFuelType()
-        {
-            FuelType fuelType;
-            switch (fuelTypeComboBox.SelectedItem)
-            {
-                case "any":
-                    fuelType = default;
-                    break;
-                case "petrol":
-                    fuelType = FuelType.Petrol;
-                    break;
-                case "diesel":
-                    fuelType = FuelType.Diesel;
-                    break;
-                case "electric":
-                    fuelType = FuelType.Electricity;
-                    break;
-                case "hybrid":
-                    fuelType = FuelType.Hybrid;
-                    break;
-                default:
-                    fuelType = default;
-                    break;
-            }
-            return fuelType;
         }
 
         private void ClearSelections()

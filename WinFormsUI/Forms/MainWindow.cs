@@ -19,7 +19,12 @@ namespace Test1
         public MainWindow()
         {
             InitializeComponent();
+
+            // pass Api down
             browsePage.Api = _api;
+            searchPage.Api = _api;
+            uploadPage.Api = _api;
+            profilePage.Api = _api;
 
             // start with Browse page activated
             SetActivePanel(browsePage);

@@ -2,11 +2,35 @@
 using DataTypes;
 using System;
 using System.Windows.Forms;
+using Frontend;
 
 namespace CarEngine.Pages
 {
     public partial class ProfilePage : UserControl
     {
+        private IApi _frontendApi;
+
+        // This property MUST be set for this to work correctly
+        public IApi Api
+        {
+            get
+            {
+                return _frontendApi;
+            }
+            set
+            {
+                // _frontendApi can be set only once
+                if (_frontendApi == null)
+                {
+                    _frontendApi = value;
+                }
+                else
+                {
+                    throw new Exception("Cannot set Api property more than once");
+                }
+            }
+        }
+
         public ProfilePage()
         {
             InitializeComponent();

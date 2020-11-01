@@ -42,23 +42,23 @@ namespace CarEngine
             this.newRadioBtn = new System.Windows.Forms.RadioButton();
             this.vehicleTypeCombobox = new System.Windows.Forms.ComboBox();
             this.lowerYearTextbox = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
+            this.vehicleTypeLabel = new System.Windows.Forms.Label();
             this.resetSearchBtn = new System.Windows.Forms.Button();
             this.sortByCombobox = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.sortByLabel = new System.Windows.Forms.Label();
+            this.modelLabel = new System.Windows.Forms.Label();
             this.brandTextbox = new System.Windows.Forms.TextBox();
             this.higherYearTextbox = new System.Windows.Forms.NumericUpDown();
             this.searchBtn = new System.Windows.Forms.Button();
             this.modelTextbox = new System.Windows.Forms.TextBox();
             this.fuelTypeCombobox = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.fuelTypeLabel = new System.Windows.Forms.Label();
+            this.yearRangeDashLabel = new System.Windows.Forms.Label();
+            this.yearRangeLabel = new System.Windows.Forms.Label();
+            this.priceRangeDashLabel = new System.Windows.Forms.Label();
             this.higherPriceTextbox = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.priceRangeLabel = new System.Windows.Forms.Label();
+            this.brandLabel = new System.Windows.Forms.Label();
             this.lowerPriceTextbox = new System.Windows.Forms.NumericUpDown();
             this.titleLabel = new System.Windows.Forms.Label();
             this.searchAndResultsTabs.SuspendLayout();
@@ -88,23 +88,23 @@ namespace CarEngine
             this.searchTab.Controls.Add(this.usedNewPanel);
             this.searchTab.Controls.Add(this.vehicleTypeCombobox);
             this.searchTab.Controls.Add(this.lowerYearTextbox);
-            this.searchTab.Controls.Add(this.label10);
+            this.searchTab.Controls.Add(this.vehicleTypeLabel);
             this.searchTab.Controls.Add(this.resetSearchBtn);
             this.searchTab.Controls.Add(this.sortByCombobox);
-            this.searchTab.Controls.Add(this.label9);
-            this.searchTab.Controls.Add(this.label8);
+            this.searchTab.Controls.Add(this.sortByLabel);
+            this.searchTab.Controls.Add(this.modelLabel);
             this.searchTab.Controls.Add(this.brandTextbox);
             this.searchTab.Controls.Add(this.higherYearTextbox);
             this.searchTab.Controls.Add(this.searchBtn);
             this.searchTab.Controls.Add(this.modelTextbox);
             this.searchTab.Controls.Add(this.fuelTypeCombobox);
-            this.searchTab.Controls.Add(this.label7);
-            this.searchTab.Controls.Add(this.label6);
-            this.searchTab.Controls.Add(this.label5);
-            this.searchTab.Controls.Add(this.label4);
+            this.searchTab.Controls.Add(this.fuelTypeLabel);
+            this.searchTab.Controls.Add(this.yearRangeDashLabel);
+            this.searchTab.Controls.Add(this.yearRangeLabel);
+            this.searchTab.Controls.Add(this.priceRangeDashLabel);
             this.searchTab.Controls.Add(this.higherPriceTextbox);
-            this.searchTab.Controls.Add(this.label3);
-            this.searchTab.Controls.Add(this.label2);
+            this.searchTab.Controls.Add(this.priceRangeLabel);
+            this.searchTab.Controls.Add(this.brandLabel);
             this.searchTab.Controls.Add(this.lowerPriceTextbox);
             this.searchTab.Controls.Add(this.titleLabel);
             this.searchTab.Location = new System.Drawing.Point(4, 24);
@@ -239,19 +239,19 @@ namespace CarEngine
             0,
             0});
             // 
-            // label10
+            // vehicleTypeLabel
             // 
-            this.label10.AccessibleDescription = "type of the vehicle label";
-            this.label10.AccessibleName = "type of the vehicle label";
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label10.Location = new System.Drawing.Point(187, 61);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(59, 25);
-            this.label10.TabIndex = 3;
-            this.label10.Text = "Type:";
+            this.vehicleTypeLabel.AccessibleDescription = "type of the vehicle label";
+            this.vehicleTypeLabel.AccessibleName = "type of the vehicle label";
+            this.vehicleTypeLabel.AutoSize = true;
+            this.vehicleTypeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.vehicleTypeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.vehicleTypeLabel.Location = new System.Drawing.Point(187, 61);
+            this.vehicleTypeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.vehicleTypeLabel.Name = "vehicleTypeLabel";
+            this.vehicleTypeLabel.Size = new System.Drawing.Size(59, 25);
+            this.vehicleTypeLabel.TabIndex = 3;
+            this.vehicleTypeLabel.Text = "Type:";
             // 
             // resetSearchBtn
             // 
@@ -284,33 +284,33 @@ namespace CarEngine
             this.sortByCombobox.Size = new System.Drawing.Size(160, 23);
             this.sortByCombobox.TabIndex = 10;
             // 
-            // label9
+            // sortByLabel
             // 
-            this.label9.AccessibleDescription = "sort by label";
-            this.label9.AccessibleName = "sort by label";
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label9.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label9.Location = new System.Drawing.Point(163, 360);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(83, 25);
-            this.label9.TabIndex = 3;
-            this.label9.Text = "Sort by:";
+            this.sortByLabel.AccessibleDescription = "sort by label";
+            this.sortByLabel.AccessibleName = "sort by label";
+            this.sortByLabel.AutoSize = true;
+            this.sortByLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.sortByLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.sortByLabel.Location = new System.Drawing.Point(163, 360);
+            this.sortByLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.sortByLabel.Name = "sortByLabel";
+            this.sortByLabel.Size = new System.Drawing.Size(83, 25);
+            this.sortByLabel.TabIndex = 3;
+            this.sortByLabel.Text = "Sort by:";
             // 
-            // label8
+            // modelLabel
             // 
-            this.label8.AccessibleDescription = "model of the vehicle";
-            this.label8.AccessibleName = "model of the vehicle";
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label8.Location = new System.Drawing.Point(172, 145);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(74, 25);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "Model:";
+            this.modelLabel.AccessibleDescription = "model of the vehicle";
+            this.modelLabel.AccessibleName = "model of the vehicle";
+            this.modelLabel.AutoSize = true;
+            this.modelLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.modelLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.modelLabel.Location = new System.Drawing.Point(172, 145);
+            this.modelLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.modelLabel.Name = "modelLabel";
+            this.modelLabel.Size = new System.Drawing.Size(74, 25);
+            this.modelLabel.TabIndex = 3;
+            this.modelLabel.Text = "Model:";
             // 
             // brandTextbox
             // 
@@ -388,60 +388,60 @@ namespace CarEngine
             this.fuelTypeCombobox.Size = new System.Drawing.Size(129, 23);
             this.fuelTypeCombobox.TabIndex = 9;
             // 
-            // label7
+            // fuelTypeLabel
             // 
-            this.label7.AccessibleDescription = "fuel type:";
-            this.label7.AccessibleName = "fuel type:";
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label7.Location = new System.Drawing.Point(148, 320);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(98, 25);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "Fuel type:";
+            this.fuelTypeLabel.AccessibleDescription = "fuel type:";
+            this.fuelTypeLabel.AccessibleName = "fuel type:";
+            this.fuelTypeLabel.AutoSize = true;
+            this.fuelTypeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.fuelTypeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fuelTypeLabel.Location = new System.Drawing.Point(148, 320);
+            this.fuelTypeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.fuelTypeLabel.Name = "fuelTypeLabel";
+            this.fuelTypeLabel.Size = new System.Drawing.Size(98, 25);
+            this.fuelTypeLabel.TabIndex = 3;
+            this.fuelTypeLabel.Text = "Fuel type:";
             // 
-            // label6
+            // yearRangeDashLabel
             // 
-            this.label6.AccessibleDescription = "dash";
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label6.Location = new System.Drawing.Point(302, 284);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(16, 21);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "-";
+            this.yearRangeDashLabel.AccessibleDescription = "dash";
+            this.yearRangeDashLabel.AutoSize = true;
+            this.yearRangeDashLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.yearRangeDashLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.yearRangeDashLabel.Location = new System.Drawing.Point(302, 284);
+            this.yearRangeDashLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.yearRangeDashLabel.Name = "yearRangeDashLabel";
+            this.yearRangeDashLabel.Size = new System.Drawing.Size(16, 21);
+            this.yearRangeDashLabel.TabIndex = 3;
+            this.yearRangeDashLabel.Text = "-";
             // 
-            // label5
+            // yearRangeLabel
             // 
-            this.label5.AccessibleDescription = "year range:";
-            this.label5.AccessibleName = "year range:";
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label5.Location = new System.Drawing.Point(134, 282);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(112, 25);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Year range:";
+            this.yearRangeLabel.AccessibleDescription = "year range:";
+            this.yearRangeLabel.AccessibleName = "year range:";
+            this.yearRangeLabel.AutoSize = true;
+            this.yearRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.yearRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.yearRangeLabel.Location = new System.Drawing.Point(134, 282);
+            this.yearRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.yearRangeLabel.Name = "yearRangeLabel";
+            this.yearRangeLabel.Size = new System.Drawing.Size(112, 25);
+            this.yearRangeLabel.TabIndex = 3;
+            this.yearRangeLabel.Text = "Year range:";
             // 
-            // label4
+            // priceRangeDashLabel
             // 
-            this.label4.AccessibleDescription = "dash";
-            this.label4.AccessibleName = "dash";
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label4.Location = new System.Drawing.Point(345, 178);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(16, 21);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "-";
+            this.priceRangeDashLabel.AccessibleDescription = "dash";
+            this.priceRangeDashLabel.AccessibleName = "dash";
+            this.priceRangeDashLabel.AutoSize = true;
+            this.priceRangeDashLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.priceRangeDashLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.priceRangeDashLabel.Location = new System.Drawing.Point(345, 178);
+            this.priceRangeDashLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.priceRangeDashLabel.Name = "priceRangeDashLabel";
+            this.priceRangeDashLabel.Size = new System.Drawing.Size(16, 21);
+            this.priceRangeDashLabel.TabIndex = 3;
+            this.priceRangeDashLabel.Text = "-";
             // 
             // higherPriceTextbox
             // 
@@ -463,33 +463,33 @@ namespace CarEngine
             this.higherPriceTextbox.Size = new System.Drawing.Size(82, 23);
             this.higherPriceTextbox.TabIndex = 4;
             // 
-            // label3
+            // priceRangeLabel
             // 
-            this.label3.AccessibleDescription = "price range:";
-            this.label3.AccessibleName = "price range:";
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label3.Location = new System.Drawing.Point(128, 179);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(118, 25);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Price range:";
+            this.priceRangeLabel.AccessibleDescription = "price range:";
+            this.priceRangeLabel.AccessibleName = "price range:";
+            this.priceRangeLabel.AutoSize = true;
+            this.priceRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.priceRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.priceRangeLabel.Location = new System.Drawing.Point(128, 179);
+            this.priceRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.priceRangeLabel.Name = "priceRangeLabel";
+            this.priceRangeLabel.Size = new System.Drawing.Size(118, 25);
+            this.priceRangeLabel.TabIndex = 3;
+            this.priceRangeLabel.Text = "Price range:";
             // 
-            // label2
+            // brandLabel
             // 
-            this.label2.AccessibleDescription = "brand of the vehicle label";
-            this.label2.AccessibleName = "brand of the vehicle label";
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(175, 103);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(71, 25);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Brand:";
+            this.brandLabel.AccessibleDescription = "brand of the vehicle label";
+            this.brandLabel.AccessibleName = "brand of the vehicle label";
+            this.brandLabel.AutoSize = true;
+            this.brandLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.brandLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.brandLabel.Location = new System.Drawing.Point(175, 103);
+            this.brandLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.brandLabel.Name = "brandLabel";
+            this.brandLabel.Size = new System.Drawing.Size(71, 25);
+            this.brandLabel.TabIndex = 3;
+            this.brandLabel.Text = "Brand:";
             // 
             // lowerPriceTextbox
             // 
@@ -564,23 +564,23 @@ namespace CarEngine
         private RadioButton newRadioBtn;
         private ComboBox vehicleTypeCombobox;
         private NumericUpDown lowerYearTextbox;
-        private Label label10;
+        private Label vehicleTypeLabel;
         private Button resetSearchBtn;
         private ComboBox sortByCombobox;
-        private Label label9;
-        private Label label8;
+        private Label sortByLabel;
+        private Label modelLabel;
         private TextBox brandTextbox;
         private NumericUpDown higherYearTextbox;
         private Button searchBtn;
         private TextBox modelTextbox;
         private ComboBox fuelTypeCombobox;
-        private Label label7;
-        private Label label6;
-        private Label label5;
-        private Label label4;
+        private Label fuelTypeLabel;
+        private Label yearRangeDashLabel;
+        private Label yearRangeLabel;
+        private Label priceRangeDashLabel;
         private NumericUpDown higherPriceTextbox;
-        private Label label3;
-        private Label label2;
+        private Label priceRangeLabel;
+        private Label brandLabel;
         private NumericUpDown lowerPriceTextbox;
         private Label titleLabel;
     }
