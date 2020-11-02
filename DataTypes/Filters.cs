@@ -96,7 +96,7 @@ namespace DataTypes
         OriginalPurchaseCountry
     }
 
-    public enum Enginetype
+    public enum EngineType
     {
         I4,
         V6,
@@ -105,6 +105,7 @@ namespace DataTypes
         W8,
         W12,
         W16,
+        Electric,
         Other
     };
 

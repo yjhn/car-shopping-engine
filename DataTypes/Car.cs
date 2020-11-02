@@ -43,9 +43,7 @@ namespace DataTypes
             Comment = comment;
         }
 
-        public Car(){ }
-
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         public int Price { get; set; }
         public string UploaderUsername { get; set; }
         public DateTime UploadDate { get; set; }
@@ -78,14 +76,29 @@ namespace DataTypes
 
         public bool Equals(Car other)
         {
-            return Id == other.Id;
+            if (Id == -1 || other.Id == -1)
+            {
+                throw new Exception("Cannot compare cars that have unassigned Ids");
+            }
+            else
+            {
+                return Id == other.Id;
+            }
         }
+
+        // temporary, for testing purposes only
+        public Car() { }
     }
 
     public class YearMonth : IComparable<YearMonth>
     {
-        public int Year { get; set; }
-        public int Month { get; set; }
+        public YearMonth(int year, int month)
+        {
+            Year = year;
+            Month = month;
+        }
+        public int Year { get; private set; }
+        public int Month { get; private set; }
 
         public int CompareTo(YearMonth other)
         {
@@ -117,10 +130,22 @@ namespace DataTypes
 
     public class Engine
     {
-        public int Hp { get; set; }
-        public int Kw { get; set; }
-        public float Volume { get; set; }
-        public Enginetype EngineType { get; set; }
+        public Engine(int hp, int kw, float volume, EngineType type):this(hp, kw, type)
+        {
+            Volume = volume;
+        }
+
+        public Engine(int hp, int kw, EngineType type)
+        {
+            Hp = hp;
+            Kw = kw;
+            Type = type;
+        }
+
+        public int Hp { get; private set; }
+        public int Kw { get; private set; }
+        public float Volume { get; private set; }
+        public EngineType Type { get; private set; }
 
     }
 

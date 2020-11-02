@@ -27,6 +27,8 @@ namespace CarEngine
         private IApi _frontendApi;
 
         // This property MUST be set for this to work correctly
+        // this may not be needed (it should make designer not set Api value to null)
+        // [DefaultValue(null)]
         public IApi Api
         {
             get
