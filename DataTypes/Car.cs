@@ -86,7 +86,7 @@ namespace DataTypes
             }
         }
 
-        // temporary, for testing purposes only
+        // required for serialization to work
         public Car() { }
     }
 
@@ -97,6 +97,9 @@ namespace DataTypes
             Year = year;
             Month = month;
         }
+
+        // required for serialization to work
+        public YearMonth() { }
         public int Year { get; private set; }
         public int Month { get; private set; }
 
@@ -142,10 +145,12 @@ namespace DataTypes
             Type = type;
         }
 
-        public int Hp { get; private set; }
-        public int Kw { get; private set; }
-        public float Volume { get; private set; }
-        public EngineType Type { get; private set; }
+        // required for serialization to work
+        public Engine() { }
+        public int Hp { get; set; }
+        public int Kw { get; set; }
+        public float Volume { get; set; }
+        public EngineType Type { get; set; }
 
     }
 
