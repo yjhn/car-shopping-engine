@@ -33,12 +33,12 @@
             this.uploadButton = new System.Windows.Forms.Button();
             this.searchButton = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
-            this.topPanel = new System.Windows.Forms.Panel();
             this.pagePanel = new System.Windows.Forms.Panel();
             this.browsePage = new CarEngine.BrowsePage();
             this.uploadPage = new CarEngine.Pages.UploadPage();
             this.searchPage = new CarEngine.SearchPage();
             this.profilePage = new CarEngine.Pages.ProfilePage();
+            this.networkErrorMessage = new System.Windows.Forms.Label();
             this.sidebarPanel.SuspendLayout();
             this.pagePanel.SuspendLayout();
             this.SuspendLayout();
@@ -126,15 +126,6 @@
             this.browseButton.UseVisualStyleBackColor = false;
             this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
-            // topPanel
-            // 
-            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topPanel.Location = new System.Drawing.Point(126, 0);
-            this.topPanel.Margin = new System.Windows.Forms.Padding(2);
-            this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(708, 26);
-            this.topPanel.TabIndex = 1;
-            // 
             // pagePanel
             // 
             this.pagePanel.AutoScroll = true;
@@ -143,11 +134,11 @@
             this.pagePanel.Controls.Add(this.searchPage);
             this.pagePanel.Controls.Add(this.profilePage);
             this.pagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pagePanel.Location = new System.Drawing.Point(126, 26);
+            this.pagePanel.Location = new System.Drawing.Point(126, 0);
             this.pagePanel.Margin = new System.Windows.Forms.Padding(2);
             this.pagePanel.MinimumSize = new System.Drawing.Size(660, 250);
             this.pagePanel.Name = "pagePanel";
-            this.pagePanel.Size = new System.Drawing.Size(708, 555);
+            this.pagePanel.Size = new System.Drawing.Size(708, 581);
             this.pagePanel.TabIndex = 2;
             // 
             // browsePage
@@ -159,7 +150,7 @@
             this.browsePage.Margin = new System.Windows.Forms.Padding(1);
             this.browsePage.MinimumSize = new System.Drawing.Size(660, 250);
             this.browsePage.Name = "browsePage";
-            this.browsePage.Size = new System.Drawing.Size(708, 555);
+            this.browsePage.Size = new System.Drawing.Size(708, 581);
             this.browsePage.TabIndex = 0;
             this.browsePage.TabStop = false;
             // 
@@ -172,7 +163,7 @@
             this.uploadPage.Location = new System.Drawing.Point(0, 0);
             this.uploadPage.Margin = new System.Windows.Forms.Padding(1);
             this.uploadPage.Name = "uploadPage";
-            this.uploadPage.Size = new System.Drawing.Size(708, 555);
+            this.uploadPage.Size = new System.Drawing.Size(708, 581);
             this.uploadPage.TabIndex = 2;
             // 
             // searchPage
@@ -185,7 +176,7 @@
             this.searchPage.Location = new System.Drawing.Point(0, 0);
             this.searchPage.Margin = new System.Windows.Forms.Padding(1);
             this.searchPage.Name = "searchPage";
-            this.searchPage.Size = new System.Drawing.Size(708, 555);
+            this.searchPage.Size = new System.Drawing.Size(708, 581);
             this.searchPage.TabIndex = 1;
             // 
             // profilePage
@@ -196,8 +187,23 @@
             this.profilePage.Location = new System.Drawing.Point(0, 0);
             this.profilePage.Margin = new System.Windows.Forms.Padding(1);
             this.profilePage.Name = "profilePage";
-            this.profilePage.Size = new System.Drawing.Size(708, 555);
+            this.profilePage.Size = new System.Drawing.Size(708, 581);
             this.profilePage.TabIndex = 3;
+            // 
+            // networkErrorMessage
+            // 
+            this.networkErrorMessage.AccessibleDescription = "network error message";
+            this.networkErrorMessage.AccessibleName = "network error message";
+            this.networkErrorMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.networkErrorMessage.Font = new System.Drawing.Font("Segoe UI", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.networkErrorMessage.ForeColor = System.Drawing.Color.Red;
+            this.networkErrorMessage.Location = new System.Drawing.Point(0, 0);
+            this.networkErrorMessage.Name = "networkErrorMessage";
+            this.networkErrorMessage.Size = new System.Drawing.Size(834, 581);
+            this.networkErrorMessage.TabIndex = 3;
+            this.networkErrorMessage.Text = "No connection to server";
+            this.networkErrorMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.networkErrorMessage.Visible = false;
             // 
             // MainWindow
             // 
@@ -207,8 +213,8 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(834, 581);
             this.Controls.Add(this.pagePanel);
-            this.Controls.Add(this.topPanel);
             this.Controls.Add(this.sidebarPanel);
+            this.Controls.Add(this.networkErrorMessage);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MinimumSize = new System.Drawing.Size(850, 450);
             this.Name = "MainWindow";
@@ -225,7 +231,6 @@
 
         private System.Windows.Forms.Panel sidebarPanel;
         private System.Windows.Forms.Button browseButton;
-        private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.Button favoritesButton;
         private System.Windows.Forms.Button uploadButton;
         private System.Windows.Forms.Button searchButton;
@@ -234,5 +239,6 @@
         private CarEngine.BrowsePage browsePage;
         private CarEngine.Pages.ProfilePage profilePage;
         private CarEngine.Pages.UploadPage uploadPage;
+        private System.Windows.Forms.Label networkErrorMessage;
     }
 }

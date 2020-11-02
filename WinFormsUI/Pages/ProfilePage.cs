@@ -3,6 +3,7 @@ using DataTypes;
 using System;
 using System.Windows.Forms;
 using Frontend;
+using System.ComponentModel;
 
 namespace CarEngine.Pages
 {
@@ -11,6 +12,7 @@ namespace CarEngine.Pages
         private IApi _frontendApi;
 
         // This property MUST be set for this to work correctly
+        [DefaultValue(null)]
         public IApi Api
         {
             get

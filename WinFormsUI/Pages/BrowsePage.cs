@@ -2,6 +2,7 @@
 using Frontend;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,7 +29,7 @@ namespace CarEngine
 
         // This property MUST be set for this to work correctly
         // this may not be needed (it should make designer not set Api value to null)
-        // [DefaultValue(null)]
+        [DefaultValue(null)]
         public IApi Api
         {
             get
@@ -38,7 +39,7 @@ namespace CarEngine
             set
             {
                 // _frontendApi can be set only once
-                if (_frontendApi == null)
+                if (_frontendApi == null || value == null)
                 {
                     _frontendApi = value;
 
@@ -47,7 +48,7 @@ namespace CarEngine
                 }
                 else
                 {
-                    throw new Exception("Cannot set Api property more than once");
+                    throw new Exception("Error while setting Api");
                 }
             }
         }

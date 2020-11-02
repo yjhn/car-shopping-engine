@@ -2,6 +2,7 @@
 using Frontend;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace CarEngine
@@ -12,6 +13,7 @@ namespace CarEngine
         private IApi _frontendApi;
 
         // This property MUST be set for this to work correctly
+        [DefaultValue(null)]
         public IApi Api
         {
             get
@@ -102,10 +104,8 @@ namespace CarEngine
                 AutoSize = false
             };
             TabPage resultsTab = new TabPage("results " + _resultspageNr++);
-            resultsTab.SuspendLayout();
             resultsTab.Controls.Add(searchResultsTab);
             searchAndResultsTabs.TabPages.Add(resultsTab);
-            resultsTab.ResumeLayout();
 
             // set focus to search results page
             // for some reason this does not work

@@ -2,6 +2,7 @@
 using Frontend;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,6 +16,7 @@ namespace CarEngine.Pages
 
 
         // This property MUST be set for this to work correctly
+        [DefaultValue(null)]
         public IApi Api
         {
             get

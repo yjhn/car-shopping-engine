@@ -18,6 +18,9 @@ namespace Test1
 
         public MainWindow()
         {
+            // add method to handle no connection event to Api's delegate
+            _api.NoServerResponse += NoConnection;
+
             InitializeComponent();
 
             // pass Api down
@@ -29,6 +32,21 @@ namespace Test1
             // start with Browse page activated
             SetActivePanel(browsePage);
             SidebarButtonClicked(browseButton);
+        }
+
+        // this works, but if connection reappears, currently nothing changes
+        private void NoConnection()
+        {
+            Action a = new Action(() =>
+            {
+                SetActivePanel(networkErrorMessage);
+                networkErrorMessage.BringToFront();
+                browseButton.Enabled = false;
+                searchButton.Enabled = false;
+                uploadButton.Enabled = false;
+                favoritesButton.Enabled = false;
+            });
+            Invoke(a);
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -85,7 +103,7 @@ namespace Test1
             button.Enabled = false;
         }
 
-        private void SetActivePanel(UserControl panel)
+        private void SetActivePanel(Control panel)
         {
             // disable all panels
             searchPage.Visible = false;
