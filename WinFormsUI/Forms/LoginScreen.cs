@@ -14,17 +14,14 @@ namespace Test1
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if(usernameTextBox.Text == "vienas" && passwordTextBox.Text == "du")
-            {
-                new MainWindow().Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("The username or password you entered is incorrect.\nTry again.");
-                passwordTextBox.Clear();
-                passwordTextBox.Focus();
-            }
+
+
+            //Here we should retrieve userToken from backend, if userToken is null it means, user is not logged in, for this button will just make the user token not null and set UserName. This Button will close the Form
+
+            Program.user.Username = usernameTextBox.Text;
+            Program.userToken = "";
+
+            this.Close();
         }
 
         private void UsernameTextBox_KeyDown(object sender, KeyEventArgs e)

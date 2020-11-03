@@ -39,17 +39,20 @@
             // usernameText
             // 
             this.usernameText.AutoSize = true;
-            this.usernameText.Location = new System.Drawing.Point(31, 21);
+            this.usernameText.BackColor = System.Drawing.Color.Transparent;
+            this.usernameText.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.usernameText.ForeColor = System.Drawing.Color.Yellow;
+            this.usernameText.Location = new System.Drawing.Point(70, 19);
             this.usernameText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.usernameText.Name = "usernameText";
-            this.usernameText.Size = new System.Drawing.Size(63, 15);
+            this.usernameText.Size = new System.Drawing.Size(106, 25);
             this.usernameText.TabIndex = 0;
             this.usernameText.Text = "Username:";
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(111, 48);
-            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.passwordTextBox.Location = new System.Drawing.Point(70, 99);
+            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.Size = new System.Drawing.Size(138, 23);
             this.passwordTextBox.TabIndex = 1;
@@ -57,8 +60,8 @@
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.Location = new System.Drawing.Point(111, 21);
-            this.usernameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.usernameTextBox.Location = new System.Drawing.Point(70, 46);
+            this.usernameTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(138, 23);
             this.usernameTextBox.TabIndex = 1;
@@ -67,18 +70,21 @@
             // passwordText
             // 
             this.passwordText.AutoSize = true;
-            this.passwordText.Location = new System.Drawing.Point(31, 48);
+            this.passwordText.BackColor = System.Drawing.Color.Transparent;
+            this.passwordText.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.passwordText.ForeColor = System.Drawing.Color.Yellow;
+            this.passwordText.Location = new System.Drawing.Point(70, 71);
             this.passwordText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.passwordText.Name = "passwordText";
-            this.passwordText.Size = new System.Drawing.Size(60, 15);
+            this.passwordText.Size = new System.Drawing.Size(102, 25);
             this.passwordText.TabIndex = 0;
             this.passwordText.Text = "Password:";
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Window;
-            this.button1.Location = new System.Drawing.Point(11, 93);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Location = new System.Drawing.Point(11, 137);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(266, 42);
             this.button1.TabIndex = 2;
@@ -99,7 +105,7 @@
             this.Controls.Add(this.usernameTextBox);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.usernameText);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "LoginScreen";
             this.Text = "3";
             this.ResumeLayout(false);

@@ -4,12 +4,15 @@ using System;
 using System.Windows.Forms;
 using Frontend;
 using System.ComponentModel;
+using Test1;
 
 namespace CarEngine.Pages
 {
     public partial class ProfilePage : UserControl
     {
         private IApi _frontendApi;
+        private bool loginPageShow = false;
+
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
@@ -61,6 +64,45 @@ namespace CarEngine.Pages
             newCar.Comment = "Komentaras";
             newCar.Images = images;
             return newCar;
+        }
+
+        private void profilePicture_Click(object sender, EventArgs e)
+        {
+            if (!loginPageShow)
+            {
+                LoginScreen loginScreen = new LoginScreen();
+                loginScreen.Show();
+                loginPageShow = true;
+
+                loginScreen.FormClosing += LoginScreen_FormClosing;
+
+            }
+        }
+
+        private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            loginPageShow = false;
+            UpdatePage();
+            ((LoginScreen)sender).FormClosing -= LoginScreen_FormClosing;
+        }
+
+        private void UpdatePage()
+        {
+            logoutBtn.Visible= (Program.userToken==null)? false : true;
+
+
+            usernameLabel.Text = Program.user.Username;
+            uploadedLabel.Text = "Ads uploaded by " + Program.user.Username;
+            favoriteAdsLabel.Text = Program.user.Username + " favorite Ads";
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Program.userToken = null;
+            Program.user.Username = "Guest";
+            UpdatePage();
+
         }
     }
 }

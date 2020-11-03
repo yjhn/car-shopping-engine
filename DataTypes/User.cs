@@ -21,6 +21,7 @@ namespace DataTypes
         public long Phone2 { get; set; }
         public string HashedPassword { get; set; }
         public string Email { get; set; }
+        public int UserID { get; set; }
 
         public bool Equals(User other)
         {
