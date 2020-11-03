@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginScreen));
             this.usernameText = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.usernameTextBox = new System.Windows.Forms.TextBox();
@@ -38,43 +39,48 @@
             // usernameText
             // 
             this.usernameText.AutoSize = true;
-            this.usernameText.Location = new System.Drawing.Point(44, 80);
+            this.usernameText.Location = new System.Drawing.Point(31, 21);
+            this.usernameText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.usernameText.Name = "usernameText";
-            this.usernameText.Size = new System.Drawing.Size(95, 25);
+            this.usernameText.Size = new System.Drawing.Size(63, 15);
             this.usernameText.TabIndex = 0;
             this.usernameText.Text = "Username:";
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(158, 147);
+            this.passwordTextBox.Location = new System.Drawing.Point(111, 48);
+            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.Size = new System.Drawing.Size(195, 31);
+            this.passwordTextBox.Size = new System.Drawing.Size(138, 23);
             this.passwordTextBox.TabIndex = 1;
             this.passwordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.Location = new System.Drawing.Point(158, 80);
+            this.usernameTextBox.Location = new System.Drawing.Point(111, 21);
+            this.usernameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.usernameTextBox.Name = "usernameTextBox";
-            this.usernameTextBox.Size = new System.Drawing.Size(195, 31);
+            this.usernameTextBox.Size = new System.Drawing.Size(138, 23);
             this.usernameTextBox.TabIndex = 1;
             this.usernameTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UsernameTextBox_KeyDown);
             // 
             // passwordText
             // 
             this.passwordText.AutoSize = true;
-            this.passwordText.Location = new System.Drawing.Point(44, 147);
+            this.passwordText.Location = new System.Drawing.Point(31, 48);
+            this.passwordText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.passwordText.Name = "passwordText";
-            this.passwordText.Size = new System.Drawing.Size(91, 25);
+            this.passwordText.Size = new System.Drawing.Size(60, 15);
             this.passwordText.TabIndex = 0;
             this.passwordText.Text = "Password:";
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Window;
-            this.button1.Location = new System.Drawing.Point(144, 249);
+            this.button1.Location = new System.Drawing.Point(11, 93);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 34);
+            this.button1.Size = new System.Drawing.Size(266, 42);
             this.button1.TabIndex = 2;
             this.button1.Text = "login";
             this.button1.UseVisualStyleBackColor = false;
@@ -82,17 +88,20 @@
             // 
             // LoginScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(401, 342);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(289, 209);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.passwordText);
             this.Controls.Add(this.usernameTextBox);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.usernameText);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "LoginScreen";
-            this.Text = "Form1";
+            this.Text = "3";
             this.ResumeLayout(false);
             this.PerformLayout();
 
