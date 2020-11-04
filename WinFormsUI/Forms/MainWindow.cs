@@ -87,7 +87,7 @@ namespace Test1
             // login logic
             if (!_loginPageShow)
             {
-                LoginScreen loginScreen = new LoginScreen();
+                LoginScreen loginScreen = new LoginScreen(_api);
                 loginScreen.Show();
                 _loginPageShow = true;
 

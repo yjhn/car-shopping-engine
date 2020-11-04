@@ -66,17 +66,20 @@ namespace CarEngine.Pages
             return newCar;
         }
 
+        // this is not needed
         private void profilePicture_Click(object sender, EventArgs e)
         {
-            if (!loginPageShow)
-            {
-                LoginScreen loginScreen = new LoginScreen();
-                loginScreen.Show();
-                loginPageShow = true;
+            // this is not needed
 
-                loginScreen.FormClosing += LoginScreen_FormClosing;
+            //if (!loginPageShow)
+            //{
+            //    LoginScreen loginScreen = new LoginScreen();
+            //    loginScreen.Show();
+            //    loginPageShow = true;
 
-            }
+            //    loginScreen.FormClosing += LoginScreen_FormClosing;
+
+            //}
         }
 
         private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)

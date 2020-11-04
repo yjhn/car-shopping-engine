@@ -12,31 +12,9 @@ namespace Test1
     {
         private IApi _frontendApi;
 
-        // This property MUST be set for this to work correctly
-        // this may not be needed (it should make designer not set Api value to null)
-        [DefaultValue(null)]
-        public IApi Api
+        public LoginScreen(IApi api)
         {
-            get
-            {
-                return _frontendApi;
-            }
-            set
-            {
-                // _frontendApi can be set only once
-                if (_frontendApi == null || value == null)
-                {
-                    _frontendApi = value;
-                }
-                else
-                {
-                    throw new Exception("Error while setting Api");
-                }
-            }
-        }
-
-        public LoginScreen()
-        {
+            _frontendApi = api;
             InitializeComponent();
             passwordTextBox.PasswordChar = '*';
             phoneTextbox.Controls.RemoveAt(0);
