@@ -34,7 +34,7 @@ namespace Backend
         public bool CheckIfExists(string username);
 
         // returns: true, if such a user exists, false otherwise
-        public bool Authenticate(string username, string hashedPassword);
+        public byte[] Authenticate(string username, string hashedPassword);
 
         // returns: true, if removal is successful, false if not
         public bool DeleteUser(string username);

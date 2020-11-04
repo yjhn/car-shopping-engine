@@ -336,12 +336,10 @@ namespace Server
 
         private void Login(string username, string hashedPassword)
         {
-            bool success = _db.Authenticate(username, hashedPassword);
-            if (!success)
+            _r = MakeResponse(200, _db.Authenticate(username, hashedPassword));
+            if (_r.Content != null)
                 _r = MakeResponse(400);
-            else
-                _r = MakeResponse(201);
-        }
+                    }
 
         private void GetFilteredCars(Dictionary<string, string> queries)
         {

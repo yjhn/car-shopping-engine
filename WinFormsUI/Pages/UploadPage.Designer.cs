@@ -138,7 +138,7 @@
             this.typeComboBox.AccessibleName = "vehicle type combobox";
             this.typeComboBox.FormattingEnabled = true;
             this.typeComboBox.Items.AddRange(new object[] {
-            "any",
+            //"any",
             "station wagon",
             "hatchback",
             "sedan",
@@ -427,7 +427,7 @@
             this.fuelTypeComboBox.AccessibleName = "fuel type combo box";
             this.fuelTypeComboBox.FormattingEnabled = true;
             this.fuelTypeComboBox.Items.AddRange(new object[] {
-            "any",
+            //"any",
             "petrol",
             "diesel",
             "electric",

@@ -10,6 +10,7 @@ namespace Backend
     {
         private List<Car> _carList;
         private List<User> _userList;
+        private List<MinimalUser> _minimalUserList;
         private readonly FileReader _fileReader;
         private readonly FileWriter _fileWriter;
         private int _lastCarId;
@@ -86,12 +87,27 @@ namespace Backend
             }
         }
 
-        // not needed as this will have to be more convenient (should return user without some fields)
-        public bool Authenticate(string username, string hashedPassword)
+        public byte[] Authenticate(string username, string hashedPassword)
         {
-            return _userList.Exists((user) => user.Username == username && user.HashedPassword == hashedPassword);
-        }
-
+            bool exists = _userList.Exists((user) => user.Username == username && user.HashedPassword == hashedPassword);
+            if (!exists)
+                return null;
+            User loged = null;
+            foreach (User temp in _userList)
+                if (temp.Username == username && temp.HashedPassword == hashedPassword)
+                    loged = temp;
+            MinimalUser minimal = new MinimalUser
+            {
+                Username = loged.Username,
+                Token = Guid.NewGuid().ToString(),
+               Phone1 = loged.Phone1,
+                Email = loged.Email
+            };
+            minimal.LikedAds = loged.LikedAds;
+            byte[] jsonUser = JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(minimal);
+            return jsonUser;
+            }
+ 
         public bool CheckIfExists(string username)
         {
             return _userList.Exists(user => user.Username == username);

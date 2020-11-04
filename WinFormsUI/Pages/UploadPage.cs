@@ -109,7 +109,7 @@ namespace CarEngine.Pages
         //surenka info apie automobili is visu info lauku
         private Car GetAllCarInfo()
         {
-            Car uploadCar = new Car();
+            Car uploadCar = new Car();  
             uploadCar.ChassisType = (ChassisType)_parser.GetChassisType((string)typeComboBox.SelectedItem);
             uploadCar.Brand = brandTextBox.Text;
             uploadCar.Model = modelTextBox.Text;
