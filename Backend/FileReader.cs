@@ -9,7 +9,7 @@ namespace Backend
 {
     internal class FileReader
     {
-        private readonly string _databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
+        private readonly string _defaultDatabasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\car shopping engine\db\";
         private readonly string _userDatabasePath;
         private readonly string _carDatabasePath;
         private readonly Logger _logger;
@@ -25,7 +25,7 @@ namespace Backend
             }
             else
             {
-                _carDatabasePath = _databasePath + @"cars\";
+                _carDatabasePath = _defaultDatabasePath + @"cars\";
             }
             if (userDbPath != null)
             {
@@ -33,7 +33,7 @@ namespace Backend
             }
             else
             {
-                _userDatabasePath = _databasePath + @"users\";
+                _userDatabasePath = _defaultDatabasePath + @"users\";
             }
         }
 
@@ -41,7 +41,7 @@ namespace Backend
         {
             if (Directory.Exists(_carDatabasePath))
             {
-                string fileName = _databasePath + Id + ".json";
+                string fileName = _defaultDatabasePath + Id + ".json";
                 try
                 {
                     byte[] jsonBytes = File.ReadAllBytes(fileName);

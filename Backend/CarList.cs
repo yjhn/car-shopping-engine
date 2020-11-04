@@ -1,9 +1,7 @@
 ﻿using DataTypes;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace Backend
@@ -67,14 +65,14 @@ namespace Backend
                 filteredCarList = (from car in filteredCarList where car.Price >= filters.PriceFrom select car).ToList();
             if (filters.PriceTo.HasValue)
                 filteredCarList = (from car in filteredCarList where car.Price <= filters.PriceTo select car).ToList();
-            //if (!string.IsNullOrEmpty(filters.Username))
-            //    filteredCarList = (from car in filteredCarList where car.UploaderUsername.ToLower() == filters.Username select car).ToList();
-            //if (filters.YearFrom.HasValue)
-            //    filteredCarList = (from car in filteredCarList where car.DateOfPurchase.Year >= filters.YearFrom select car).ToList();
-            //if (filters.YearTo.HasValue)
-            //    filteredCarList = (from car in filteredCarList where car.DateOfPurchase.Year <= filters.YearTo select car).ToList();
-            //if (filters.FuelType.HasValue)
-            //    filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
+            if (!string.IsNullOrEmpty(filters.Username))
+                filteredCarList = (from car in filteredCarList where car.UploaderUsername.ToLower() == filters.Username select car).ToList();
+            if (filters.YearFrom.HasValue)
+                filteredCarList = (from car in filteredCarList where car.DateOfPurchase.Year >= filters.YearFrom select car).ToList();
+            if (filters.YearTo.HasValue)
+                filteredCarList = (from car in filteredCarList where car.DateOfPurchase.Year <= filters.YearTo select car).ToList();
+            if (filters.FuelType.HasValue)
+                filteredCarList = (from car in filteredCarList where car.FuelType == filters.FuelType select car).ToList();
 
 
             return GetSortedCarsJson(sortBy, sortAscending, startIndex, amount, filteredCarList);

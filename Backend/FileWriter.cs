@@ -7,7 +7,7 @@ namespace Backend
 {
     internal class FileWriter
     {
-        private readonly string _databasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\test\db\";
+        private readonly string _defaultDatabasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\car shopping engine\db\";
         private readonly Logger _logger;
         private readonly string _userDatabasePath;
         private readonly string _carDatabasePath;
@@ -27,7 +27,7 @@ namespace Backend
             }
             else
             {
-                _carDatabasePath = _databasePath + @"cars\";
+                _carDatabasePath = _defaultDatabasePath + @"cars\";
             }
             if (userDbPath != null)
             {
@@ -35,7 +35,7 @@ namespace Backend
             }
             else
             {
-                _userDatabasePath = _databasePath + @"users\";
+                _userDatabasePath = _defaultDatabasePath + @"users\";
             }
         }
 
