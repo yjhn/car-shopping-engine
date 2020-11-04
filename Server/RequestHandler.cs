@@ -170,8 +170,8 @@ namespace Server
                     if (contentType.StartsWith("application/json"))
                         AddUser(req.Content);
                     break;
-                case "login":
-                    if (contentType.StartsWith("application/x-www-form-urlencoded"))
+                case "users/login":
+                    if (string.IsNullOrEmpty(contentType) || contentType.StartsWith("application/x-www-form-urlencoded"))
                     {
                         Regex loginValidation = new Regex(@"^username=(?<username>[a-zA-Z]+)&hashed_password=(?<hashedPassword>[\d\D]+)$");
                         if (!loginValidation.IsMatch(Encoding.ASCII.GetString(req.Content)))

@@ -15,7 +15,7 @@ namespace Frontend
         Task<bool?> DeleteUser(string username);
         Task<Car> GetCar(int id);
         Task<List<Car>> GetCars(int startIndex, int amount);
-        Task<User> GetUser(string username);
+        Task<MinimalUser?> GetUser(string username, string hashedPassword);
         Task<List<Car>> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
         Task<List<Car>> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending);
     }

@@ -3,14 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using System.Text;
 namespace Frontend
 {
     public class Api : IApi
     {
         // event to tell the UI that there is no connection to server
         public event Action NoServerResponse = delegate { };
-
 
         // this class should not be static
         public Task<List<Car>> GetCars(int startIndex, int amount)
@@ -201,23 +200,26 @@ namespace Frontend
             });
         }
 
-        public Task<User> GetUser(string username)
+        public Task<MinimalUser?> GetUser(string username, string hashedPassword)
         {
-            return Task.Run<User>(() =>
+            return Task.Run<MinimalUser?>(() =>
             {
-                Request req = ReqInit("GET", "users");
-                req.Queries.Add("username", username);
+                Request req = ReqInit("POST", "users/login");
+                string content = "username=" + username + "&hashed_password=" + hashedPassword;
+                req.Headers.Add(new Header("Content-length", content.Length.ToString()));
+                req.Content = Encoding.ASCII.GetBytes(content);
                 Response r = GetResponse(req);
                 if (r == null)
                 {
                     NoServerResponse.Invoke();
                     return null;
                 }
-                return r.Content.Length > 0 ? JsonSerializer.Deserialize<User>(r.Content) : null;
-            });
+                return JsonSerializer.Deserialize<MinimalUser>(r.Content);
+            }
+            );
         }
 
-        private string MakeType(string key)
+                private string MakeType(string key)
         {
             string contentType;
             switch (key)
