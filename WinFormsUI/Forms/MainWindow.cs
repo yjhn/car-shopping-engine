@@ -16,6 +16,8 @@ namespace Test1
         // create the instance of Api that will be passed down to every page
         private readonly IApi _api = new Api();
 
+        private bool _loginPageShow = false;
+
         public MainWindow()
         {
             // add method to handle no connection event to Api's delegate
@@ -78,6 +80,44 @@ namespace Test1
             SidebarButtonClicked(favoritesButton);
         }
 
+        private void LoginButton_Click(object sender, EventArgs e)
+        {
+            // login logic
+            if (!_loginPageShow)
+            {
+                LoginScreen loginScreen = new LoginScreen();
+                loginScreen.Show();
+                _loginPageShow = true;
+
+                loginScreen.FormClosing += LoginScreen_FormClosing;
+
+            }
+        }
+
+        private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _loginPageShow = false;
+
+            // actually we should get it from server, this is for testing
+            // this should be done elsewhere
+            Program.userToken = "user";
+            Program.user.Username = "Guest";
+
+            // show log out button if user is now logged in
+            // temporarily we will show it always
+            logoutBtn.Visible = Program.userToken == "user";
+
+            //UpdatePage();
+            //((LoginScreen)sender).FormClosing -= LoginScreen_FormClosing;
+        }
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+            // logout logic
+
+            logoutBtn.Visible = false;
+        }
+
         // this method must be called when any sidebar button is clicked as it sets button colors
         private void SidebarButtonClicked(Button button)
         {
@@ -113,6 +153,21 @@ namespace Test1
 
             // enable panel that's provided
             panel.Visible = true;
+        }
+
+        private void UserNameLabel_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void LoginBtn_VisibleChanged(object sender, EventArgs e)
+        {
+            logoutBtn.Visible = !loginBtn.Visible;
+        }
+
+        private void LogoutBtn_VisibleChanged(object sender, EventArgs e)
+        {
+            loginBtn.Visible = !logoutBtn.Visible;
         }
     }
 }

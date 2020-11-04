@@ -29,10 +29,13 @@
         private void InitializeComponent()
         {
             this.sidebarPanel = new System.Windows.Forms.Panel();
+            this.loginBtn = new System.Windows.Forms.Button();
+            this.userNameLabel = new System.Windows.Forms.Label();
             this.favoritesButton = new System.Windows.Forms.Button();
             this.uploadButton = new System.Windows.Forms.Button();
             this.searchButton = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
+            this.logoutBtn = new System.Windows.Forms.Button();
             this.pagePanel = new System.Windows.Forms.Panel();
             this.browsePage = new CarEngine.BrowsePage();
             this.uploadPage = new CarEngine.Pages.UploadPage();
@@ -47,16 +50,53 @@
             // 
             this.sidebarPanel.AutoScroll = true;
             this.sidebarPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(64)))), ((int)(((byte)(89)))));
+            this.sidebarPanel.Controls.Add(this.loginBtn);
+            this.sidebarPanel.Controls.Add(this.userNameLabel);
             this.sidebarPanel.Controls.Add(this.favoritesButton);
             this.sidebarPanel.Controls.Add(this.uploadButton);
             this.sidebarPanel.Controls.Add(this.searchButton);
             this.sidebarPanel.Controls.Add(this.browseButton);
+            this.sidebarPanel.Controls.Add(this.logoutBtn);
             this.sidebarPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.sidebarPanel.Location = new System.Drawing.Point(0, 0);
             this.sidebarPanel.Margin = new System.Windows.Forms.Padding(2);
             this.sidebarPanel.Name = "sidebarPanel";
             this.sidebarPanel.Size = new System.Drawing.Size(126, 581);
             this.sidebarPanel.TabIndex = 0;
+            // 
+            // loginBtn
+            // 
+            this.loginBtn.AccessibleDescription = "log in button";
+            this.loginBtn.AccessibleName = "log in button";
+            this.loginBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.loginBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.loginBtn.FlatAppearance.BorderSize = 0;
+            this.loginBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.loginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.loginBtn.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.loginBtn.ForeColor = System.Drawing.Color.Transparent;
+            this.loginBtn.Location = new System.Drawing.Point(0, 497);
+            this.loginBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.loginBtn.Name = "loginBtn";
+            this.loginBtn.Size = new System.Drawing.Size(126, 42);
+            this.loginBtn.TabIndex = 6;
+            this.loginBtn.Text = "log in";
+            this.loginBtn.UseVisualStyleBackColor = false;
+            this.loginBtn.VisibleChanged += new System.EventHandler(this.LoginBtn_VisibleChanged);
+            this.loginBtn.Click += new System.EventHandler(this.LoginButton_Click);
+            // 
+            // userNameLabel
+            // 
+            this.userNameLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userNameLabel.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.userNameLabel.ForeColor = System.Drawing.Color.Yellow;
+            this.userNameLabel.Location = new System.Drawing.Point(0, 0);
+            this.userNameLabel.Name = "userNameLabel";
+            this.userNameLabel.Size = new System.Drawing.Size(126, 56);
+            this.userNameLabel.TabIndex = 5;
+            this.userNameLabel.Text = "Guest";
+            this.userNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.userNameLabel.Click += new System.EventHandler(this.UserNameLabel_Click);
             // 
             // favoritesButton
             // 
@@ -71,7 +111,7 @@
             this.favoritesButton.Name = "favoritesButton";
             this.favoritesButton.Size = new System.Drawing.Size(126, 80);
             this.favoritesButton.TabIndex = 4;
-            this.favoritesButton.Text = "favorites";
+            this.favoritesButton.Text = "profile";
             this.favoritesButton.UseVisualStyleBackColor = false;
             this.favoritesButton.Click += new System.EventHandler(this.FavoritesButton_Click);
             // 
@@ -125,6 +165,28 @@
             this.browseButton.Text = "browse";
             this.browseButton.UseVisualStyleBackColor = false;
             this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
+            // 
+            // logoutBtn
+            // 
+            this.logoutBtn.AccessibleDescription = "log out button";
+            this.logoutBtn.AccessibleName = "log out button";
+            this.logoutBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.logoutBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.logoutBtn.FlatAppearance.BorderSize = 0;
+            this.logoutBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.logoutBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.logoutBtn.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.logoutBtn.ForeColor = System.Drawing.Color.Transparent;
+            this.logoutBtn.Location = new System.Drawing.Point(0, 539);
+            this.logoutBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.logoutBtn.Name = "logoutBtn";
+            this.logoutBtn.Size = new System.Drawing.Size(126, 42);
+            this.logoutBtn.TabIndex = 7;
+            this.logoutBtn.Text = "log out";
+            this.logoutBtn.UseVisualStyleBackColor = false;
+            this.logoutBtn.Visible = false;
+            this.logoutBtn.VisibleChanged += new System.EventHandler(this.LogoutBtn_VisibleChanged);
+            this.logoutBtn.Click += new System.EventHandler(this.LogoutButton_Click);
             // 
             // pagePanel
             // 
@@ -240,5 +302,8 @@
         private CarEngine.Pages.ProfilePage profilePage;
         private CarEngine.Pages.UploadPage uploadPage;
         private System.Windows.Forms.Label networkErrorMessage;
+        private System.Windows.Forms.Button logoutBtn;
+        private System.Windows.Forms.Button loginBtn;
+        private System.Windows.Forms.Label userNameLabel;
     }
 }

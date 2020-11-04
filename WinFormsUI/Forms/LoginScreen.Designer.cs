@@ -107,7 +107,7 @@
             this.Controls.Add(this.usernameText);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "LoginScreen";
-            this.Text = "3";
+            this.Text = "Log In";
             this.ResumeLayout(false);
             this.PerformLayout();
 

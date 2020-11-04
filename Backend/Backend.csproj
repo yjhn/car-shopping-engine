@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="BackendException.cs" />
+    <Compile Remove="CarList.cs" />
     <Compile Remove="ErrorHandler.cs" />
+    <Compile Remove="ICarDb.cs" />
     <Compile Remove="IErrorHandler.cs" />
+    <Compile Remove="IUserDb.cs" />
     <Compile Remove="Program.cs" />
+    <Compile Remove="UserList.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -65,6 +65,7 @@
             this.usernameLabel.TabIndex = 0;
             this.usernameLabel.Text = "Guest";
             this.usernameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.usernameLabel.Click += new System.EventHandler(this.profilePicture_Click);
             // 
             // uploadedLabel
             // 
