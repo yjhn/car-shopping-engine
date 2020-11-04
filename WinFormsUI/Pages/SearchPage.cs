@@ -1,8 +1,9 @@
-﻿using DataTypes;
+﻿using CarEngine.Properties;
+using DataTypes;
 using Frontend;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CarEngine
@@ -11,6 +12,9 @@ namespace CarEngine
     {
         private int _resultspageNr = 1;
         private IApi _frontendApi;
+
+        // tab close button image
+        Image closeImage = Converter.ResizeImage(Resources.tabclose, 15, 15);
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
@@ -96,6 +100,8 @@ namespace CarEngine
 
             // create new tab for search results
 
+
+            // add ability to select this with tab
             BrowsePage searchResultsTab = new BrowsePage(filters, (string)sortByCombobox.SelectedItem, sortAscRadioBtn.Checked)
             {
                 Api = _frontendApi,
@@ -107,9 +113,12 @@ namespace CarEngine
             resultsTab.Controls.Add(searchResultsTab);
             searchAndResultsTabs.TabPages.Add(resultsTab);
 
+
+            //searchAndResultsTabs.TabPages[searchAndResultsTabs.TabPages.Count - 1].Focus();
+
             // set focus to search results page
             // for some reason this does not work
-            resultsTab.Focus();
+            //resultsTab.Focus();
         }
 
         private void ResetSearchButton_Click(object sender, EventArgs e)
@@ -134,6 +143,49 @@ namespace CarEngine
             if (Visible)
             {
                 vehicleTypeCombobox.Focus();
+            }
+        }
+
+        private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            try
+            {
+                var tabPage = this.searchAndResultsTabs.TabPages[e.Index];
+                var tabRect = this.searchAndResultsTabs.GetTabRect(e.Index);
+                tabRect.Inflate(-2, -2);
+                // draw Close button to all TabPages
+                if (e.Index > 0)
+                {
+                    e.Graphics.DrawImage(closeImage,
+                        (tabRect.Right - closeImage.Width),
+                        tabRect.Top + (tabRect.Height - closeImage.Height) / 2);
+                }
+                TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font,
+                    tabRect, tabPage.ForeColor, TextFormatFlags.Left);
+
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
+
+
+        private void TabControl_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Process MouseDown event for every tab except for the first
+            for (var i = 1; i < searchAndResultsTabs.TabPages.Count; i++)
+            {
+                var tabRect = searchAndResultsTabs.GetTabRect(i);
+                tabRect.Inflate(-2, -2);
+                var imageRect = new Rectangle(
+                    (tabRect.Right - closeImage.Width),
+                    (tabRect.Top + (tabRect.Height - closeImage.Height) / 2),
+                    closeImage.Width,
+                    closeImage.Height);
+                if (imageRect.Contains(e.Location))
+                {
+                    searchAndResultsTabs.TabPages.RemoveAt(i);
+                    return;
+                }
             }
         }
     }

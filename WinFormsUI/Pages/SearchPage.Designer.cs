@@ -75,11 +75,16 @@ namespace CarEngine
             // 
             this.searchAndResultsTabs.Controls.Add(this.searchTab);
             this.searchAndResultsTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.searchAndResultsTabs.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.searchAndResultsTabs.ItemSize = new System.Drawing.Size(70, 20);
             this.searchAndResultsTabs.Location = new System.Drawing.Point(0, 0);
             this.searchAndResultsTabs.Name = "searchAndResultsTabs";
             this.searchAndResultsTabs.SelectedIndex = 0;
             this.searchAndResultsTabs.Size = new System.Drawing.Size(696, 563);
+            this.searchAndResultsTabs.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.searchAndResultsTabs.TabIndex = 14;
+            this.searchAndResultsTabs.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabControl_DrawItem);
+            this.searchAndResultsTabs.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TabControl_MouseDown);
             // 
             // searchTab
             // 
