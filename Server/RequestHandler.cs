@@ -217,44 +217,32 @@ namespace Server
         private void GetCars(Request req)
         {
             Dictionary<string, string> queries = req.Queries;
-            int? id = null;
             int amount = 50, startIndex = 0;
-            ArgumentException incompatible = new ArgumentException("Incompatible queries");
             SortingCriteria? criteria = null;
-            if (queries.ContainsKey("id"))
-                id = int.Parse(queries["id"]);
             if (queries.ContainsKey("sort_by"))
             {
-                if (id != null)
-                    throw incompatible;
                 criteria = GetSortingCriteria(queries["sort_by"]);
             }
             if (queries.ContainsKey("amount"))
             {
-                if (id != null)
-                    throw incompatible;
                 amount = int.Parse(queries["amount"]);
             }
             if (queries.ContainsKey("start_index"))
             {
-                if (id != null)
-                    throw incompatible;
                 startIndex = int.Parse(queries["start_index"]);
             }
             byte[] responseBody;
-            //if (id != null)
-            //    responseBody = _db.GetCarJson((int)id);
-            ///*else */if (criteria != null)
-            //{
+            if (criteria != null)
+            {
                 bool sortAscending = true;
                 if (queries.ContainsKey("sort_ascending"))
                     sortAscending = bool.Parse(queries["sort_ascending"]);
                 responseBody = _db.GetSortedCarsJson((SortingCriteria)criteria, sortAscending, startIndex, amount);
-            //}
-            //else
-            //{
-            //    responseBody = _db.GetCarListJson(startIndex, amount);
-            //}
+            }
+            else
+            {
+                responseBody = new byte[0];
+            }
 
             _r = MakeResponse(200, responseBody);
         }
