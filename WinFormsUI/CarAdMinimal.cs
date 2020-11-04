@@ -18,10 +18,12 @@ namespace CarEngine
             _carInfo = carInfo;
             BackColor = _normalAdColor;
 
-            carModel.Text = $"{carInfo.Brand} {carInfo.Model}";
-            price.Text = carInfo.Price.ToString() + "€";
+            carBrandModelBtn.Text = $"{carInfo.Brand} {carInfo.Model}";
+            priceLabel.Text = carInfo.Price.ToString() + "€";
+
+            // this is causing an exception if engine  is null
             //additionInfo.Text = carInfo.Engine.Kw.ToString() + "kW";
-            additionInfo.Text += $" \"{carInfo.Comment}\"";
+            additionalInfo.Text += $" \"{carInfo.Comment}\"";
             if (carInfo.Images != null && carInfo.Images.Length > 0)
             {
                 carImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
