@@ -200,9 +200,9 @@ namespace Frontend
             });
         }
 
-        public Task<MinimalUser?> GetUser(string username, string hashedPassword)
+        public Task<MinimalUser> GetUser(string username, string hashedPassword)
         {
-            return Task.Run<MinimalUser?>(() =>
+            return Task.Run<MinimalUser>(() =>
             {
                 Request req = ReqInit("POST", "users/login");
                 string content = "username=" + username + "&hashed_password=" + hashedPassword;

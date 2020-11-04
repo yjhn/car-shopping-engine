@@ -10,7 +10,7 @@ namespace Backend
     {
         private List<Car> _carList;
         private List<User> _userList;
-        private List<MinimalUser> _minimalUserList;
+        private readonly List<MinimalUser> _minimalUserList;
         private readonly FileReader _fileReader;
         private readonly FileWriter _fileWriter;
         private int _lastCarId;
@@ -100,7 +100,7 @@ namespace Backend
             {
                 Username = loged.Username,
                 Token = Guid.NewGuid().ToString(),
-               Phone1 = loged.Phone1,
+               Phone1 = loged.Phone,
                 Email = loged.Email
             };
             minimal.LikedAds = loged.LikedAds;

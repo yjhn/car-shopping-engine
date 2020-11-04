@@ -14,7 +14,7 @@ namespace CarEngine
         private IApi _frontendApi;
 
         // tab close button image
-        Image closeImage = Converter.ResizeImage(Resources.tabclose, 15, 15);
+        private readonly Image _closeImage = Converter.ResizeImage(Resources.tabclose, 15, 15);
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
@@ -157,9 +157,9 @@ namespace CarEngine
                 // draw Close button to all TabPages
                 if (e.Index > 0)
                 {
-                    e.Graphics.DrawImage(closeImage,
-                        (tabRect.Right - closeImage.Width),
-                        tabRect.Top + (tabRect.Height - closeImage.Height) / 2);
+                    e.Graphics.DrawImage(_closeImage,
+                        (tabRect.Right - _closeImage.Width),
+                        tabRect.Top + (tabRect.Height - _closeImage.Height) / 2);
                 }
                 TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font,
                     tabRect, tabPage.ForeColor, TextFormatFlags.Left);
@@ -177,10 +177,10 @@ namespace CarEngine
                 var tabRect = searchAndResultsTabs.GetTabRect(i);
                 tabRect.Inflate(-2, -2);
                 var imageRect = new Rectangle(
-                    (tabRect.Right - closeImage.Width),
-                    (tabRect.Top + (tabRect.Height - closeImage.Height) / 2),
-                    closeImage.Width,
-                    closeImage.Height);
+                    (tabRect.Right - _closeImage.Width),
+                    (tabRect.Top + (tabRect.Height - _closeImage.Height) / 2),
+                    _closeImage.Width,
+                    _closeImage.Height);
                 if (imageRect.Contains(e.Location))
                 {
                     searchAndResultsTabs.TabPages.RemoveAt(i);

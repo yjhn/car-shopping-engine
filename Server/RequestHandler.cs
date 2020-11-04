@@ -371,13 +371,13 @@ namespace Server
             return System.Text.Encoding.ASCII.GetBytes(output);
         }
 
-        private bool Verify(Request req)
-        {
-            bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
-            if (!verified)
-                _r = MakeResponse(401);
-            return verified;
-        }
+        //private bool Verify(Request req)
+        //{
+        //    bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
+        //    if (!verified)
+        //        _r = MakeResponse(401);
+        //    return verified;
+        //}
 
         private SortingCriteria? GetSortingCriteria(string criteriaString)
         {
