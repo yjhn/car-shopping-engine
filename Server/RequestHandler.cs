@@ -325,7 +325,7 @@ namespace Server
         private void Login(string username, string hashedPassword)
         {
             _r = MakeResponse(200, _db.Authenticate(username, hashedPassword));
-            if (_r.Content != null)
+            if (_r.Content == null)
                 _r = MakeResponse(400);
         }
 

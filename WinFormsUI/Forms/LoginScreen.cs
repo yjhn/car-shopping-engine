@@ -24,10 +24,10 @@ namespace Test1
 
         private async void LoginButton_Click(object sender, EventArgs e)
         {
-            //Here we should retrieve userToken from backend, if userToken is null it means, user is not logged in, for this button will just make the user token not null and set UserName. This Button will close the Form
+            //Here we should retrieve UserToken from backend, if UserToken is null it means, user is not logged in, for this button will just make the user token not null and set UserName. This Button will close the Form
 
             //Program.user.Username = usernameTextBox.Text;
-            //Program.userToken = "";
+            //Program.UserToken = "";
 
 
             _userInfo = await _frontendApi.GetUser(usernameTextBox.Text, EncryptPassword(passwordTextBox.Text, usernameTextBox.Text));

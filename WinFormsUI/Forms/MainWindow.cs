@@ -101,12 +101,14 @@ namespace Test1
 
             // actually we should get it from server, this is for testing
             // this should be done elsewhere
-            Program.userToken = "user";
-            Program.user.Username = "Guest";
+            //Program.UserToken = "user";
+            //Program.user.Username = "Guest";
+
+            userNameLabel.Text = Program.Username;
 
             // show log out button if user is now logged in
             // temporarily we will show it always
-            logoutBtn.Visible = Program.userToken == "user";
+            logoutBtn.Visible = Program.UserToken != null;
 
             //UpdatePage();
             //((LoginScreen)sender).FormClosing -= LoginScreen_FormClosing;

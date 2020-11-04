@@ -45,8 +45,8 @@
             // 
             // usernameLabel
             // 
-            this.usernameLabel.AccessibleDescription = "username label";
-            this.usernameLabel.AccessibleName = "username label";
+            this.usernameLabel.AccessibleDescription = "Username label";
+            this.usernameLabel.AccessibleName = "Username label";
             this.usernameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.usernameLabel.AutoSize = true;
@@ -73,8 +73,8 @@
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.AccessibleDescription = "username text box";
-            this.usernameTextBox.AccessibleName = "username text box";
+            this.usernameTextBox.AccessibleDescription = "Username text box";
+            this.usernameTextBox.AccessibleName = "Username text box";
             this.usernameTextBox.Location = new System.Drawing.Point(52, 57);
             this.usernameTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.usernameTextBox.Name = "usernameTextBox";

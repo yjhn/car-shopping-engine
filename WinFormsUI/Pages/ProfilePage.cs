@@ -91,7 +91,7 @@ namespace CarEngine.Pages
 
         private void UpdatePage()
         {
-            logoutBtn.Visible= (Program.userToken==null)? false : true;
+            logoutBtn.Visible= (Program.UserToken == null)? false : true;
 
 
             usernameLabel.Text = Program.user.Username;
@@ -100,9 +100,9 @@ namespace CarEngine.Pages
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            Program.userToken = null;
+            Program.UserToken = null;
             Program.user.Username = "Guest";
             UpdatePage();
 

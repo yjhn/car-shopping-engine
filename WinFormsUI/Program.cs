@@ -10,9 +10,9 @@ namespace Test1
         ///  The main entry point for the application.
         /// </summary>
         /// 
-        public static User user = new User("Guest", 0, "", "");
-        public static string userToken = null;
-        public static string username = null;
+        //public static User user = new User("Guest", 0, "", "");
+        public static string UserToken = null;
+        public static string Username = null;
         public static MinimalUser User
         {
             get
@@ -21,9 +21,12 @@ namespace Test1
             }
             set
             {
-                username = value.Username;
-                userToken = value.Token;
-                User = value;
+                if (value != null)
+                {
+                    Username = value.Username;
+                    UserToken = value.Token;
+                    //User = value;
+                }
             }
         }
 
