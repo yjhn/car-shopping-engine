@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace DataTypes
 {
-    public class User : IEquatable<User>
+    public class User
     {
         // unique db key = username
-        public User(string username, long phone1, string hashedPassword, string email, long phone2 = 0)
+        public User(string username, Int64 phone, string hashedPassword, string email)
         {
             Username = username;
-            Phone1 = phone1;
-            Phone2 = phone2;
+            Phone = phone;
             HashedPassword = hashedPassword;
             Email = email;
         }
@@ -19,15 +18,9 @@ namespace DataTypes
         public User() { }
 
         public string Username { get; set; }
-        public long Phone1 { get; set; }
-        public long Phone2 { get; set; }
+        public Int64 Phone { get; set; }
         public string HashedPassword { get; set; }
         public string Email { get; set; }
         public List<int> LikedAds { get; set; }
-
-        public bool Equals(User other)
-        {
-            return this.Username == other.Username;
-        }
     }
 }

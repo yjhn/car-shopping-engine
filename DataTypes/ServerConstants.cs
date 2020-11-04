@@ -8,7 +8,7 @@ namespace DataTypes
         public const string HttpVersion = "HTTP/1.1";
         public const string Scheme = "https";
         public const string HeaderSeparator = "\r\n";
-        public const int MaxBufferSize = 5000;
+        public const int MaxBufferSize = 5000000;
         public const int MaxAttempts = 5000;
         public const int ServerTimeout = 200;
         public const int ClientTimeout = 5000;
