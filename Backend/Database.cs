@@ -105,6 +105,7 @@ namespace Backend
             };
             minimal.LikedAds = loged.LikedAds;
             byte[] jsonUser = JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(minimal);
+            _minimalUserList.Add(minimal);
             return jsonUser;
             }
  
