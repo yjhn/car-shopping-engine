@@ -9,7 +9,7 @@
         public bool DeleteUser(string username);
 
         // returns: user serialized to UTF-8 JSON
-        public byte[] GetUserJson(string username);
+        public byte[] GetUserInfoJson(string username);
 
         // returns: true, if user already exists, false otherwise
         public bool CheckIfExists(string username);

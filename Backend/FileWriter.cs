@@ -12,7 +12,7 @@ namespace Backend
         private readonly string _userDatabasePath;
         private readonly string _carDatabasePath;
 
-        JsonSerializerOptions options = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
             WriteIndented = true
         };
@@ -44,7 +44,7 @@ namespace Backend
             string fileName = _carDatabasePath + car.Id + ".json";
 
             byte[] jsonUtf8Bytes;
-            jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(car, options);
+            jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(car, _options);
 
             try
             {
@@ -83,7 +83,7 @@ namespace Backend
             string fileName = _userDatabasePath + user.Username + ".json";
 
             byte[] jsonUtf8Bytes;
-            jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(user, options);
+            jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(user, _options);
 
             try
             {

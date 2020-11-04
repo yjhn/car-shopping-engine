@@ -26,7 +26,7 @@ namespace Backend
         }
 
         // returns null if not found
-        public byte[] GetUserJson(string username)
+        public byte[] GetUserInfoJson(string username)
         {
             User user = _userList.Find(user => user.Username == username);
             return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;

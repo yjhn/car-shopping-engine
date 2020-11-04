@@ -5,8 +5,8 @@ namespace Server
 {
     public static class Clients
     {
-        private static Dictionary<string, int> registeredClients = new Dictionary<string, int>();
-        private static Dictionary<string, DateTime> clientTimes = new Dictionary<string, DateTime>();
+        readonly private static Dictionary<string, int> _registeredClients = new Dictionary<string, int>();
+        readonly private static Dictionary<string, DateTime> _clientTimes = new Dictionary<string, DateTime>();
         public static int Register(string username)
         {
             var r = new Random();
@@ -14,18 +14,18 @@ namespace Server
             do
             {
                 int session = r.Next();
-                if (!registeredClients.ContainsKey(username))
+                if (!_registeredClients.ContainsKey(username))
                 {
-                    registeredClients.Add(username, session);
-                    clientTimes.Add(username, DateTime.UtcNow);
+                    _registeredClients.Add(username, session);
+                    _clientTimes.Add(username, DateTime.UtcNow);
                 }
                 else
                 {
-                    registeredClients[username] = session;
-                    clientTimes[username] = DateTime.UtcNow;
+                    _registeredClients[username] = session;
+                    _clientTimes[username] = DateTime.UtcNow;
                 }
                 int sessionRepeated = 0;
-                foreach (KeyValuePair<string, int> kvp in registeredClients)
+                foreach (KeyValuePair<string, int> kvp in _registeredClients)
                     if (session == kvp.Value)
                         sessionRepeated++;
                 if (sessionRepeated > 1)
@@ -33,15 +33,15 @@ namespace Server
             }
             while (!success);
 
-            return registeredClients[username];
+            return _registeredClients[username];
         }
 
         public static bool Verify(int session)
         {
-            foreach (KeyValuePair<string, int> kvp in registeredClients)
+            foreach (KeyValuePair<string, int> kvp in _registeredClients)
                 if (kvp.Value == session)
                 {
-                    TimeSpan interval = DateTime.UtcNow - clientTimes[kvp.Key];
+                    TimeSpan interval = DateTime.UtcNow - _clientTimes[kvp.Key];
                     if (interval.Hours > 0)
                         return false;
                     else

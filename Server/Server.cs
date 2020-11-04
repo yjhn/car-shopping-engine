@@ -14,24 +14,22 @@ namespace Server
 {
     public class Server
     {
-        private TcpListener tcpServer = null;
-        private Logger logger;
-        private ICarDb carDb;
-        private IUserDb userDb;
-        private X509Certificate serverCertificate;
-        public Server(Logger logger, ICarDb carDb, IUserDb userDb)
+        private readonly TcpListener _tcpServer = null;
+        private readonly Logger _logger;
+        private readonly IDatabase _db;
+        private X509Certificate _serverCertificate;
+        public Server(Logger logger, IDatabase db)
         {
-            this.logger = logger;
-            this.carDb = carDb;
-            this.userDb = userDb;
+            _logger = logger;
+            _db = db;
 
             IPAddress addr = IPAddress.Parse(ServerConstants.Host);
-            tcpServer = new TcpListener(addr, ServerConstants.Port);
-            tcpServer.Start();
-            startListener();
+            _tcpServer = new TcpListener(addr, ServerConstants.Port);
+            _tcpServer.Start();
+            StartListener();
         }
 
-        private void startListener()
+        private void StartListener()
         {
             try
             {
@@ -42,7 +40,7 @@ namespace Server
                     Console.Write("Waiting for a connection... ");
 
                     // Perform a blocking call to accept requests.
-                    TcpClient tcpClient = tcpServer.AcceptTcpClient();
+                    TcpClient tcpClient = _tcpServer.AcceptTcpClient();
                     Console.WriteLine("Connected!");
 
                     Thread t = new Thread(new ParameterizedThreadStart(ReceiveRequests));
@@ -51,8 +49,8 @@ namespace Server
             }
             catch (Exception e)
             {
-                logger.LogException(e);
-                tcpServer.Stop();
+                _logger.LogException(e);
+                _tcpServer.Stop();
             }
         }
 
@@ -63,8 +61,8 @@ namespace Server
             SslStream sslStream = new SslStream(client.GetStream(), false);
             try
             {
-                serverCertificate = new X509Certificate(ServerConstants.CertFileName, ServerConstants.Password);
-                sslStream.AuthenticateAsServer(serverCertificate, clientCertificateRequired: false, checkCertificateRevocation: true);
+                _serverCertificate = new X509Certificate(ServerConstants.CertFileName, ServerConstants.Password);
+                sslStream.AuthenticateAsServer(_serverCertificate, clientCertificateRequired: false, checkCertificateRevocation: true);
                 sslStream.ReadTimeout = ServerConstants.ServerTimeout;
                 sslStream.WriteTimeout = ServerConstants.ServerTimeout;
                 StringBuilder data = new StringBuilder(); ;
@@ -86,19 +84,19 @@ namespace Server
                 }
                 catch (IOException e)
                 {
-                    logger.LogException(e);
+                    _logger.LogException(e);
                 }
                 // Process the data sent by the client and make a response.
-                byte[] msg = new RequestHandler(data.ToString(), carDb, userDb, logger).HandleRequest();
+                byte[] msg = new RequestHandler(data.ToString(), _db, _logger).HandleRequest();
 
                 // Send back a response.
                 sslStream.Write(msg, 0, msg.Length);
             }
             catch (Exception e)
             {
-                logger.LogException(e);
+                _logger.LogException(e);
                 if (e.InnerException != null)
-                    logger.LogException(e.InnerException);
+                    _logger.LogException(e.InnerException);
             }
 
             // Shutdown and end connection
@@ -111,12 +109,11 @@ namespace Server
 
         public static void Main(String[] args)
         {
-            // create car database, user database and logger, since only one instance of each will be needed
+            // create database and logger since only one instance of each will be needed
             Logger logger = new Logger();
-            ICarDb carDb = new CarList(logger);
-            IUserDb userDb = new UserList(logger);
+            IDatabase db = new Database(logger);
 
-            new Server(logger, carDb, userDb);
+            new Server(logger, db);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DataTypes
 {
@@ -14,6 +15,7 @@ namespace DataTypes
             Email = email;
         }
 
+        // required for deserialization
         public User() { }
 
         public string Username { get; set; }
@@ -21,7 +23,7 @@ namespace DataTypes
         public long Phone2 { get; set; }
         public string HashedPassword { get; set; }
         public string Email { get; set; }
-        public int UserID { get; set; }
+        public List<int> LikedAds { get; set; }
 
         public bool Equals(User other)
         {

@@ -10,17 +10,15 @@ namespace Server
 {
     public class RequestHandler
     {
-        private String rawRequest;
-        private Response r;
-        private ICarDb carDb;
-        private IUserDb userDb;
-        private Logger logger;
-        public RequestHandler(String rawRequest, ICarDb carDb, IUserDb userDb, Logger logger)
+        readonly private string _rawRequest;
+        private Response _r;
+        readonly private IDatabase _db;
+        readonly private Logger _logger;
+        public RequestHandler(String rawRequest, IDatabase db, Logger logger)
         {
-            this.rawRequest = rawRequest;
-            this.carDb = carDb;
-            this.userDb = userDb;
-            this.logger = logger;
+            _rawRequest = rawRequest;
+            _logger = logger;
+            _db = db;
         }
 
         public byte[] HandleRequest()
@@ -30,7 +28,7 @@ namespace Server
                 Request newRequest = ParseRequest();
                 Validation isValid = ValidateRequest(newRequest);
                 if (isValid != Validation.OK)
-                    r = MakeResponse(isValid);
+                    _r = MakeResponse(isValid);
                 else
                     switch (newRequest.Method)
                     {
@@ -44,29 +42,29 @@ namespace Server
                             ProcessDelete(newRequest);
                             break;
                         default:
-                            r = MakeResponse(501);
+                            _r = MakeResponse(501);
                             break;
                     }
             }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is ArgumentException || e is ArgumentNullException)
             {
-                logger.LogException(e);
-                r = MakeResponse(400);
+                _logger.LogException(e);
+                _r = MakeResponse(400);
             }
             catch (Exception e)
             {
-                logger.LogException(e);
-                r = MakeResponse(500);
+                _logger.LogException(e);
+                _r = MakeResponse(500);
             }
-            return r.Format();
+            return _r.Format();
         }
 
         private Request ParseRequest()
         {
             Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+){ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z,\.:\/\?\d&_\-; =]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
-            if (!regex.IsMatch(rawRequest))
+            if (!regex.IsMatch(_rawRequest))
                 throw new ArgumentException("Invalid request");
-            GroupCollection groups = regex.Matches(rawRequest)[0].Groups;
+            GroupCollection groups = regex.Matches(_rawRequest)[0].Groups;
             string method = groups["method"].Value.ToUpper();
             string url = groups["url"].Value;
             string resource = groups["resource"].Value;
@@ -149,7 +147,7 @@ namespace Server
                     GetUser(req.Queries["username"]);
                     break;
                 default:
-                    r = MakeResponse(404);
+                    _r = MakeResponse(404);
                     break;
             }
         }
@@ -159,7 +157,7 @@ namespace Server
             string contentType = "x-www-form-urlencoded";
             if (Header.Contains(req.Headers, "CONTENT-TYPE"))
                 contentType = Header.GetValueByName(req.Headers, "CONTENT-TYPE");
-            r = MakeResponse(415);
+            _r = MakeResponse(415);
             switch (req.Resource)
             {
                 case "cars":
@@ -177,7 +175,7 @@ namespace Server
                     {
                         Regex loginValidation = new Regex(@"^username=(?<username>[a-zA-Z]+)&hashed_password=(?<hashedPassword>[\d\D]+)$");
                         if (!loginValidation.IsMatch(Encoding.ASCII.GetString(req.Content)))
-                            r = MakeResponse(400);
+                            _r = MakeResponse(400);
                         else
                         {
                             GroupCollection groups = loginValidation.Matches(Encoding.ASCII.GetString(req.Content))[0].Groups;
@@ -188,7 +186,7 @@ namespace Server
                     }
                     break;
                 default:
-                    r = MakeResponse(404);
+                    _r = MakeResponse(404);
                     break;
             }
         }
@@ -207,13 +205,13 @@ namespace Server
                     result = DeleteUser(req.Queries["username"]);
                     break;
                 default:
-                    r = MakeResponse(404);
+                    _r = MakeResponse(404);
                     break;
             }
             if (!result)
-                r = MakeResponse(200, SetContent("Deletion failed"), "text/plain");
+                _r = MakeResponse(200, SetContent("Deletion failed"), "text/plain");
             else
-                r = MakeResponse(200);
+                _r = MakeResponse(200);
         }
 
         private void GetCars(Request req)
@@ -244,60 +242,60 @@ namespace Server
                 startIndex = int.Parse(queries["start_index"]);
             }
             byte[] responseBody;
-            if (id != null)
-                responseBody = carDb.GetCarJson((int)id);
-            else if (criteria != null)
-            {
+            //if (id != null)
+            //    responseBody = _db.GetCarJson((int)id);
+            ///*else */if (criteria != null)
+            //{
                 bool sortAscending = true;
                 if (queries.ContainsKey("sort_ascending"))
                     sortAscending = bool.Parse(queries["sort_ascending"]);
-                responseBody = carDb.GetSortedCarsJson((SortingCriteria)criteria, sortAscending, startIndex, amount);
-            }
-            else
-            {
-                responseBody = carDb.GetCarListJson(startIndex, amount);
-            }
+                responseBody = _db.GetSortedCarsJson((SortingCriteria)criteria, sortAscending, startIndex, amount);
+            //}
+            //else
+            //{
+            //    responseBody = _db.GetCarListJson(startIndex, amount);
+            //}
 
-            r = MakeResponse(200, responseBody);
+            _r = MakeResponse(200, responseBody);
         }
 
         private void GetUser(string username)
         {
-            byte[] responseBody = userDb.GetUserJson(username);
-            r = MakeResponse(200, responseBody);
+            byte[] responseBody = _db.GetUserInfoJson(username);
+            _r = MakeResponse(200, responseBody);
         }
 
         private void AddCar(byte[] carData)
         {
-            bool result = carDb.AddCarJson(carData);
+            bool result = _db.AddCarJson(carData);
             if (result)
             {
-                r = MakeResponse(201);
-                CarList cs = (CarList)carDb;
-                int id = cs.LastCarId;
-                r.Headers.Add(new Header("Location", $"{ServerConstants.Scheme}://{ServerConstants.HostForClients}:{ServerConstants.Port}/cars/{id}"));
+                _r = MakeResponse(201);
+                IDatabase cs = _db;
+                int id = cs.GetLastCarId();
+                _r.Headers.Add(new Header("Location", $"{ServerConstants.Scheme}://{ServerConstants.HostForClients}:{ServerConstants.Port}/cars/{id}"));
             }
             else
-                r = MakeResponse(204);
+                _r = MakeResponse(204);
         }
 
         private void AddUser(byte[] userData)
         {
-            bool result = userDb.AddUserJson(userData);
+            bool result = _db.AddUserJson(userData);
             if (result)
-                r = MakeResponse(201);
+                _r = MakeResponse(201);
             else
-                r = MakeResponse(204);
+                _r = MakeResponse(204);
         }
 
         private bool DeleteCar(int id)
         {
-            return carDb.DeleteCar(id);
+            return _db.DeleteCar(id);
         }
 
         private bool DeleteUser(string username)
         {
-            return userDb.DeleteUser(username);
+            return _db.DeleteUser(username);
         }
 
         private Response MakeResponse(Validation v)
@@ -323,10 +321,12 @@ namespace Server
         {
             Response r = new Response(statusCode);
             r.Content = content;
-            List<Header> headers = new List<Header>();
-            headers.Add(new Header("Connection", "close"));
-            headers.Add(new Header("Date", DateTime.Now.ToUniversalTime().ToString("r")));
-            headers.Add(new Header("Server", "UnquestionableSolutions"));
+            List<Header> headers = new List<Header>
+            {
+                new Header("Connection", "close"),
+                new Header("Date", DateTime.Now.ToUniversalTime().ToString("r")),
+                new Header("Server", "UnquestionableSolutions")
+            };
             if (content.Length > 0)
                 headers.Add(new Header("Content-type", $"{contentType}; charset=utf-8"));
             headers.Add(new Header("Content-length", content.Length.ToString()));
@@ -336,11 +336,11 @@ namespace Server
 
         private void Login(string username, string hashedPassword)
         {
-            bool success = userDb.Authenticate(username, hashedPassword);
+            bool success = _db.Authenticate(username, hashedPassword);
             if (!success)
-                r = MakeResponse(400);
+                _r = MakeResponse(400);
             else
-                r = MakeResponse(201);
+                _r = MakeResponse(201);
         }
 
         private void GetFilteredCars(Dictionary<string, string> queries)
@@ -377,7 +377,7 @@ namespace Server
                 sortAscending = bool.Parse(queries["sort_ascending"]);
             if (queries.ContainsKey("start_index"))
                 startIndex = int.Parse(queries["start_index"]);
-            r = MakeResponse(200, carDb.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
+            _r = MakeResponse(200, _db.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
         }
 
         private byte[] SetContent(string output)
@@ -389,7 +389,7 @@ namespace Server
         {
             bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
             if (!verified)
-                r = MakeResponse(401);
+                _r = MakeResponse(401);
             return verified;
         }
 
