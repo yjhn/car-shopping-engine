@@ -234,6 +234,7 @@
             this.MinimumSize = new System.Drawing.Size(660, 203);
             this.Name = "BrowsePage";
             this.Size = new System.Drawing.Size(700, 510);
+            this.VisibleChanged += new System.EventHandler(this.BrowsePage_VisibleChanged);
             this.bottomPanel.ResumeLayout(false);
             this.bottomPanel.PerformLayout();
             this.sortAscDescPanel.ResumeLayout(false);

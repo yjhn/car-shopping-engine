@@ -120,9 +120,12 @@ namespace CarEngine
             CarAdMinimal[] pageToShow = _adList[_currentPageNumber - 1];
 
             // try to display only as many ads as there are in the page
-            foreach (CarAdMinimal ad in pageToShow)
+            for (int i = 0; i < pageToShow.Length; i++)
             {
-                mainPanel.Controls.Add(ad);
+                mainPanel.Controls.Add(pageToShow[i]);
+
+                // make ads selectable by tab (added 6 to make space for sorting buttons at the bottom)
+                pageToShow[i].TabIndex = i + 6;
             }
             nextPageButton.Enabled = _nextPageButtonEnabled;
 
@@ -192,6 +195,14 @@ namespace CarEngine
         private void SortButton_Click(object sender, EventArgs e)
         {
             SortingChanged();
+        }
+
+        private void BrowsePage_VisibleChanged(object sender, EventArgs e)
+        {
+            if (Visible)
+            {
+                refreshButton.Focus();
+            }
         }
     }
 }

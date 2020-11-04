@@ -327,7 +327,7 @@ namespace Server
             _r = MakeResponse(200, _db.Authenticate(username, hashedPassword));
             if (_r.Content != null)
                 _r = MakeResponse(400);
-                    }
+        }
 
         private void GetFilteredCars(Dictionary<string, string> queries)
         {
