@@ -47,6 +47,8 @@ namespace Test1
                 searchButton.Enabled = false;
                 uploadButton.Enabled = false;
                 favoritesButton.Enabled = false;
+                loginBtn.Enabled = false;
+                logoutBtn.Enabled = false;
             });
             Invoke(a);
         }
