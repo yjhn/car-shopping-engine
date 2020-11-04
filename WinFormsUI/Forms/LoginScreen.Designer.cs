@@ -62,6 +62,8 @@
             // 
             // passwordTextBox
             // 
+            this.passwordTextBox.AccessibleDescription = "password text box";
+            this.passwordTextBox.AccessibleName = "password text box";
             this.passwordTextBox.Location = new System.Drawing.Point(52, 109);
             this.passwordTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.passwordTextBox.Name = "passwordTextBox";
@@ -71,11 +73,13 @@
             // 
             // usernameTextBox
             // 
+            this.usernameTextBox.AccessibleDescription = "username text box";
+            this.usernameTextBox.AccessibleName = "username text box";
             this.usernameTextBox.Location = new System.Drawing.Point(52, 57);
             this.usernameTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(150, 23);
-            this.usernameTextBox.TabIndex = 1;
+            this.usernameTextBox.TabIndex = 0;
             this.usernameTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UsernameTextBox_KeyDown);
             // 
             // passwordLabel
@@ -101,7 +105,7 @@
             this.loginButton.Margin = new System.Windows.Forms.Padding(2);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(150, 42);
-            this.loginButton.TabIndex = 2;
+            this.loginButton.TabIndex = 4;
             this.loginButton.Text = "log in";
             this.loginButton.UseVisualStyleBackColor = false;
             this.loginButton.Click += new System.EventHandler(this.LoginButton_Click);
@@ -114,7 +118,7 @@
             this.signUpButton.Margin = new System.Windows.Forms.Padding(2);
             this.signUpButton.Name = "signUpButton";
             this.signUpButton.Size = new System.Drawing.Size(150, 42);
-            this.signUpButton.TabIndex = 2;
+            this.signUpButton.TabIndex = 5;
             this.signUpButton.Text = "sign up";
             this.signUpButton.UseVisualStyleBackColor = false;
             this.signUpButton.Click += new System.EventHandler(this.SigUpButton_Click);
@@ -149,11 +153,13 @@
             // 
             // emailTextbox
             // 
+            this.emailTextbox.AccessibleDescription = "email text box";
+            this.emailTextbox.AccessibleName = "email text box";
             this.emailTextbox.Location = new System.Drawing.Point(52, 161);
             this.emailTextbox.Margin = new System.Windows.Forms.Padding(2);
             this.emailTextbox.Name = "emailTextbox";
             this.emailTextbox.Size = new System.Drawing.Size(150, 23);
-            this.emailTextbox.TabIndex = 1;
+            this.emailTextbox.TabIndex = 2;
             this.emailTextbox.Visible = false;
             this.emailTextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UsernameTextBox_KeyDown);
             // 
@@ -188,6 +194,7 @@
             0,
             0,
             0});
+            this.phoneTextbox.InterceptArrowKeys = false;
             this.phoneTextbox.Location = new System.Drawing.Point(53, 214);
             this.phoneTextbox.Maximum = new decimal(new int[] {
             -727379969,

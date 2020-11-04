@@ -109,7 +109,7 @@ namespace Backend
             return jsonUser;
             }
  
-        public bool CheckIfExists(string username)
+        private bool CheckIfExists(string username)
         {
             return _userList.Exists(user => user.Username == username);
         }

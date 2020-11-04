@@ -12,7 +12,20 @@ namespace Test1
         /// 
         public static User user = new User("Guest", 0, "", "");
         public static string userToken = null;
-
+        public static string username = null;
+        public static MinimalUser User
+        {
+            get
+            {
+                return User;
+            }
+            set
+            {
+                username = value.Username;
+                userToken = value.Token;
+                User = value;
+            }
+        }
 
         [STAThread]
         static void Main()

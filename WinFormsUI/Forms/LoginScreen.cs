@@ -11,6 +11,7 @@ namespace Test1
     public partial class LoginScreen : Form
     {
         private IApi _frontendApi;
+        private MinimalUser _userInfo;
 
         public LoginScreen(IApi api)
         {
@@ -21,24 +22,31 @@ namespace Test1
             phoneTextbox.ResetText();
         }
 
-        private void LoginButton_Click(object sender, EventArgs e)
+        private async void LoginButton_Click(object sender, EventArgs e)
         {
             //Here we should retrieve userToken from backend, if userToken is null it means, user is not logged in, for this button will just make the user token not null and set UserName. This Button will close the Form
 
-            Program.user.Username = usernameTextBox.Text;
-            Program.userToken = "";
+            //Program.user.Username = usernameTextBox.Text;
+            //Program.userToken = "";
 
-            this.Close();
+
+            _userInfo = await _frontendApi.GetUser(usernameTextBox.Text, EncryptPassword(passwordTextBox.Text, usernameTextBox.Text));
+            Close();
         }
 
-        private void SigUpButton_Click(object sender, EventArgs e)
+        private async void SigUpButton_Click(object sender, EventArgs e)
         {
-
+            bool? successfullyCreated = false;
             if (!loginButton.Visible)
             {
                 // need to check for bad input
                 User user = new User(usernameTextBox.Text, Convert.ToInt64(phoneTextbox.Text), EncryptPassword(passwordTextBox.Text, usernameTextBox.Text), emailTextbox.Text);
-                _frontendApi.AddUser(user);
+                successfullyCreated =  await _frontendApi.AddUser(user);
+                if (successfullyCreated != null && (bool)successfullyCreated)
+                {
+                    // show that user creation is successful
+                    Close();
+                }
             }
             else
             {
@@ -47,6 +55,7 @@ namespace Test1
                 phoneLabel.Visible = true;
                 phoneTextbox.Visible = true;
                 loginButton.Visible = false;
+                usernameTextBox.Focus();
             }
         }
 

@@ -30,9 +30,6 @@ namespace Backend
 
         public byte[] GetUserLikedAds(string username, int startIndex, int amount);
 
-        // returns: true, if user already exists, false otherwise
-        public bool CheckIfExists(string username);
-
         // returns: true, if such a user exists, false otherwise
         public byte[] Authenticate(string username, string hashedPassword);
 

@@ -92,7 +92,6 @@ namespace Test1
                 _loginPageShow = true;
 
                 loginScreen.FormClosing += LoginScreen_FormClosing;
-
             }
         }
 
