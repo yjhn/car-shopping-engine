@@ -94,16 +94,16 @@ namespace CarEngine.Pages
             logoutBtn.Visible= (Program.UserToken == null)? false : true;
 
 
-            usernameLabel.Text = Program.user.Username;
-            uploadedLabel.Text = "Ads uploaded by " + Program.user.Username;
-            favoriteAdsLabel.Text = Program.user.Username + " favorite Ads";
+//            usernameLabel.Text = Program.user.Username;
+  //          uploadedLabel.Text = "Ads uploaded by " + Program.user.Username;
+   //         favoriteAdsLabel.Text = Program.user.Username + " favorite Ads";
 
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
             Program.UserToken = null;
-            Program.user.Username = "Guest";
+            //Program.user.Username = "Guest";
             UpdatePage();
 
         }

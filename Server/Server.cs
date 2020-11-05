@@ -22,7 +22,6 @@ namespace Server
         {
             _logger = logger;
             _db = db;
-
             IPAddress addr = IPAddress.Parse(ServerConstants.Host);
             _tcpServer = new TcpListener(addr, ServerConstants.Port);
             _tcpServer.Start();
@@ -67,10 +66,12 @@ namespace Server
                 sslStream.WriteTimeout = ServerConstants.ServerTimeout;
                 StringBuilder data = new StringBuilder(); ;
                 byte[] bytes = new Byte[ServerConstants.MaxBufferSize];
+                byte[] msg = null;
                 try
                 {
                     bool readMore = true;
                     int attempts = 0;
+                    string newData = null;
                     do
                     {
                         int numOfBytes = sslStream.Read(bytes, 0, bytes.Length);
@@ -78,7 +79,16 @@ namespace Server
                         if (numOfBytes == 0)
                             readMore = false;
                         // Translate data bytes to a ASCII string.
-                        data.Append(Encoding.ASCII.GetString(bytes, 0, numOfBytes));
+                        newData = Encoding.ASCII.GetString(bytes, 0, numOfBytes);
+                        // if all data was fetched at first attempt, check it
+                        if (attempts == 1)
+                        {
+                            bool isRequestValid = false;
+                            msg = new RequestHandler(newData, _db, _logger).HandleRequest(out isRequestValid);
+                            if (isRequestValid)
+                                readMore = false;
+                        }
+                        data.Append(newData);
                     }
                     while (readMore && attempts < ServerConstants.MaxAttempts);
                 }
@@ -87,7 +97,8 @@ namespace Server
                     _logger.LogException(e);
                 }
                 // Process the data sent by the client and make a response.
-                byte[] msg = new RequestHandler(data.ToString(), _db, _logger).HandleRequest();
+                bool unnecessary;
+                msg = new RequestHandler(data.ToString(), _db, _logger).HandleRequest(out unnecessary);
 
                 // Send back a response.
                 sslStream.Write(msg, 0, msg.Length);
@@ -112,7 +123,6 @@ namespace Server
             // create database and logger since only one instance of each will be needed
             Logger logger = new Logger();
             IDatabase db = new Database(logger);
-
             new Server(logger, db);
         }
     }

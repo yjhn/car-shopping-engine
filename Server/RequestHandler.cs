@@ -21,15 +21,20 @@ namespace Server
             _db = db;
         }
 
-        public byte[] HandleRequest()
+        public byte[] HandleRequest(out bool isAllRequest)
         {
             try
             {
                 Request newRequest = ParseRequest();
                 Validation isValid = ValidateRequest(newRequest);
                 if (isValid != Validation.OK)
+                {
+                    isAllRequest = false;
                     _r = MakeResponse(isValid);
+                }
                 else
+                {
+                    isAllRequest = true;
                     switch (newRequest.Method)
                     {
                         case "GET":
@@ -45,16 +50,19 @@ namespace Server
                             _r = MakeResponse(501);
                             break;
                     }
-            }
+                }
+                }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is ArgumentException || e is ArgumentNullException)
             {
                 _logger.LogException(e);
                 _r = MakeResponse(400);
+                isAllRequest = false;
             }
             catch (Exception e)
             {
                 _logger.LogException(e);
                 _r = MakeResponse(500);
+                isAllRequest = false;
             }
             return _r.Format();
         }
@@ -154,7 +162,7 @@ namespace Server
 
         private void ProcessPost(Request req)
         {
-            string contentType = "x-www-form-urlencoded";
+            string contentType = "application/x-www-form-urlencoded";
             if (Header.Contains(req.Headers, "CONTENT-TYPE"))
                 contentType = Header.GetValueByName(req.Headers, "CONTENT-TYPE");
             _r = MakeResponse(415);
@@ -171,19 +179,8 @@ namespace Server
                         AddUser(req.Content);
                     break;
                 case "users/login":
-                    if (string.IsNullOrEmpty(contentType) || contentType.StartsWith("application/x-www-form-urlencoded"))
-                    {
-                        Regex loginValidation = new Regex(@"^username=(?<username>[a-zA-Z]+)&hashed_password=(?<hashedPassword>[\d\D]+)$");
-                        if (!loginValidation.IsMatch(Encoding.ASCII.GetString(req.Content)))
-                            _r = MakeResponse(400);
-                        else
-                        {
-                            GroupCollection groups = loginValidation.Matches(Encoding.ASCII.GetString(req.Content))[0].Groups;
-                            string username = groups["username"].Value;
-                            string hashedPassword = groups["hashedPassword"].Value;
-                            Login(username, hashedPassword);
-                        }
-                    }
+                    if (contentType == "application/x-www-form-urlencoded")
+                        Login(Encoding.ASCII.GetString(req.Content));
                     break;
                 default:
                     _r = MakeResponse(404);
@@ -322,13 +319,6 @@ namespace Server
             return r;
         }
 
-        private void Login(string username, string hashedPassword)
-        {
-            _r = MakeResponse(200, _db.Authenticate(username, hashedPassword));
-            if (_r.Content == null)
-                _r = MakeResponse(400);
-        }
-
         private void GetFilteredCars(Dictionary<string, string> queries)
         {
             SortingCriteria? criteria = null;
@@ -371,15 +361,33 @@ namespace Server
             return System.Text.Encoding.ASCII.GetBytes(output);
         }
 
-        //private bool Verify(Request req)
-        //{
-        //    bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
-        //    if (!verified)
-        //        _r = MakeResponse(401);
-        //    return verified;
-        //}
+        private void Login(string loginData)
+        {
+            Regex loginValidation = new Regex(@"^username=(?<username>[\d\D]+)&hashed_password=(?<hashedPassword>[\d\D]+)$");
+            if (!loginValidation.IsMatch(loginData))
+                _r = MakeResponse(400);
+            else
+            {
+                GroupCollection groups = loginValidation.Matches(loginData)[0].Groups;
+                string username = groups["username"].Value;
+                string hashedPassword = groups["hashedPassword"].Value;
+                byte[] loginOperation = _db.Authenticate(username, hashedPassword);
+                if (loginOperation != null)
+                    _r = MakeResponse(200, loginOperation);
+                else
+                    _r = MakeResponse(400);
+            }
+        }
 
-        private SortingCriteria? GetSortingCriteria(string criteriaString)
+            //private bool Verify(Request req)
+            //{
+            //    bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
+            //    if (!verified)
+            //        _r = MakeResponse(401);
+            //    return verified;
+            //}
+
+            private SortingCriteria? GetSortingCriteria(string criteriaString)
         {
             SortingCriteria? criteria = null;
             Type sortingType = typeof(SortingCriteria);

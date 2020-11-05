@@ -10,7 +10,7 @@ namespace Backend
     {
         private List<Car> _carList;
         private List<User> _userList;
-        private readonly List<MinimalUser> _minimalUserList;
+        private List<MinimalUser> _minimalUserList = new List<MinimalUser>();
         private readonly FileReader _fileReader;
         private readonly FileWriter _fileWriter;
         private int _lastCarId;
@@ -89,26 +89,32 @@ namespace Backend
 
         public byte[] Authenticate(string username, string hashedPassword)
         {
-            bool exists = _userList.Exists((user) => user.Username == username && user.HashedPassword == hashedPassword);
-            if (!exists)
-                return null;
-            User loged = null;
-            foreach (User temp in _userList)
-                if (temp.Username == username && temp.HashedPassword == hashedPassword)
-                    loged = temp;
-            MinimalUser minimal = new MinimalUser
+            try
             {
-                Username = loged.Username,
-                Token = Guid.NewGuid().ToString(),
-               Phone1 = loged.Phone,
-                Email = loged.Email
-            };
-            minimal.LikedAds = loged.LikedAds;
-            byte[] jsonUser = JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(minimal);
-            _minimalUserList.Add(minimal);
-            return jsonUser;
+                bool exists = _userList.Exists((user) => user.Username == username && user.HashedPassword == hashedPassword);
+                MinimalUser minimal = new MinimalUser();
+                if (exists)
+                {
+                    User user = _userList.Find(user => user.Username == username);
+                    MinimalUser authenticatedUser = new MinimalUser
+                    {
+                        Username = user.Username,
+                        Token = Guid.NewGuid().ToString(),
+                        Phone = user.Phone,
+                        Email = user.Email
+                    };
+                    _minimalUserList.Add(authenticatedUser);
+                }
+                byte[] jsonUser = JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(minimal);
+                return jsonUser;
             }
- 
+            catch (Exception e)
+            {
+                _logger.LogException(e);
+                return null;
+            }
+        }
+
         private bool CheckIfExists(string username)
         {
             return _userList.Exists(user => user.Username == username);
