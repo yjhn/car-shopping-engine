@@ -31,8 +31,8 @@ namespace CarEngine
             carBrandModelBtn.Text = $"{carInfo.Brand} {carInfo.Model}";
             priceLabel.Text = carInfo.Price.ToString() + "€";
 
-            // this is causing an exception if engine  is null
-            //additionInfo.Text = carInfo.Engine.Kw.ToString() + "kW";
+            // for now we don't have this
+            //additionalInfo.Text = carInfo.Engine.Kw.ToString() + "kW";
             additionalInfo.Text += $" \"{carInfo.Comment}\"";
             if (carInfo.Images != null && carInfo.Images.Length > 0)
             {

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfilePage));
             this.profilePicture = new System.Windows.Forms.PictureBox();
             this.usernameLabel = new System.Windows.Forms.Label();
             this.uploadedLabel = new System.Windows.Forms.Label();
@@ -43,6 +44,7 @@
             // 
             this.profilePicture.AccessibleDescription = "user profile picture";
             this.profilePicture.AccessibleName = "user profile picture";
+            this.profilePicture.Image = ((System.Drawing.Image)(resources.GetObject("profilePicture.Image")));
             this.profilePicture.Location = new System.Drawing.Point(195, 0);
             this.profilePicture.Margin = new System.Windows.Forms.Padding(2);
             this.profilePicture.Name = "profilePicture";
@@ -50,7 +52,6 @@
             this.profilePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.profilePicture.TabIndex = 0;
             this.profilePicture.TabStop = false;
-            this.profilePicture.Click += new System.EventHandler(this.ProfilePicture_Click);
             // 
             // usernameLabel
             // 
@@ -66,7 +67,6 @@
             this.usernameLabel.TabIndex = 0;
             this.usernameLabel.Text = "Guest";
             this.usernameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.usernameLabel.Click += new System.EventHandler(this.ProfilePicture_Click);
             // 
             // uploadedLabel
             // 

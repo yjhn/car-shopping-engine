@@ -1,7 +1,6 @@
 ﻿using DataTypes;
 using Frontend;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -36,10 +35,40 @@ namespace CarEngine.Pages
             }
         }
 
+        private UserInfo _userInfo;
+
+        [DefaultValue(null)]
+        public UserInfo UserInfo
+        {
+            get
+            {
+                return _userInfo;
+            }
+            set
+            {
+                // _userInfo can be set only once
+                if (_userInfo == null && value != null)
+                {
+                    _userInfo = value;
+
+                    // enable upload button once we get the api and userInfo
+                    if (_frontendApi != null)
+                    {
+                        uploadButton.Enabled = true;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error while setting UserInfo");
+                }
+            }
+        }
+
         public UploadPage()
         {
             InitializeComponent();
-            // default types for combo boxes: 
+
+            // default values for combo boxes: 
             typeComboBox.SelectedIndex = 0;
             fuelTypeComboBox.SelectedIndex = 0;
             driveWheelsComboBox.SelectedIndex = 0;
@@ -51,7 +80,7 @@ namespace CarEngine.Pages
             additionalImagesPanel.Controls.Clear();
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.Filter = "Images (*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|" +
+            dialog.Filter = "Images (*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|" +
                             "All files (*.*)|*.*";
 
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -64,7 +93,7 @@ namespace CarEngine.Pages
                 PictureBox picture = new PictureBox();
                 picture.Size = new Size(additionalImagesPanel.Height, additionalImagesPanel.Height);
                 picture.Location = new Point(additionalImagesPanel.Width - (i) * (picture.Width + 5), 0);
-                picture.ImageLocation = dialog.FileNames[i];
+                picture.Image = Image.FromFile(dialog.FileNames[i]);
                 picture.SizeMode = PictureBoxSizeMode.Zoom;
                 picture.BackColor = SystemColors.ControlLightLight;
                 additionalImagesPanel.Controls.Add(picture);
@@ -73,7 +102,6 @@ namespace CarEngine.Pages
 
         private void UploadButton_Click(object sender, EventArgs e)
         {
-            //temporary kokas :_)
             if (CheckIfFilled())
             {
                 PushCar();
@@ -112,14 +140,11 @@ namespace CarEngine.Pages
         }
 
         //surenka info apie automobili is visu info lauku ir ikelia per api 
-        private void PushCar()
+        private async void PushCar()
         {
             Car uploadCar = new Car
             {
-                //----------------
-                // ui shouldn't need to do this, this is a task for frontend
-                UploaderUsername = "userTest",//change to current users name
-                //----------------
+                UploaderUsername = _userInfo.Username,
                 UploadDate = DateTime.Now,
                 Price = Convert.ToInt32(priceBox.Value),
                 Brand = modelTextBox.Text,
@@ -130,28 +155,34 @@ namespace CarEngine.Pages
                 GearboxType = (GearboxType)_parser.GetGearboxType((string)gearboxTypeComboBox.SelectedItem),
                 TotalKilometersDriven = Convert.ToInt32(priceBox.Value),
                 DriveWheels = (DriveWheels)_parser.GetDriveWheels((string)driveWheelsComboBox.SelectedItem),
-                Defects = new string[] {defectsTextBox.Text},
+                Defects = new string[] { defectsTextBox.Text },
                 SteeringWheelPosition = radioButtonLeftWheel.Checked ? SteeringWheelPosition.Left : SteeringWheelPosition.Right,
-                //Images = new string[] { Converter.ConvertImageToBase64(pictureBox1.Image)}
-                    //^image uploadas neveikia, nutruksta connection su serveriu. not handled properly yet
+                Images = GetImages()
             };
-            _frontendApi.AddCar(uploadCar);
+            int? result = await _frontendApi.AddCar(uploadCar);
+            if (result != null)
+            {
+                MessageBox.Show("Successfully uploaded", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Failed to upload ad", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         //surenka visas nuotraukas, kurios yra parinktos at a given time
         private string[] GetImages()
         {
-            List<string> imagesList = new List<string>();
-            //visas iš papildomu nuotrauku panel
-            foreach (PictureBox picBox in additionalImagesPanel.Controls)
+            string[] images = new string[additionalImagesPanel.Controls.Count + 1];
+            // main image
+            images[0] = Converter.ConvertImageToBase64(pictureBox1.Image);
+            // additional images
+            for (int i = 1; i <= additionalImagesPanel.Controls.Count; i++)
             {
-                imagesList.Add(Converter.ConvertImageToBase64(picBox.Image));
+                images[i] = Converter.ConvertImageToBase64(((PictureBox)additionalImagesPanel.Controls[i - 1]).Image);
             }
-            //main didele nuotrauka
-            imagesList.Add(Converter.ConvertImageToBase64(pictureBox1.Image));
-            string[] returnas = imagesList.ToArray();
-            return returnas;
-                
+            return images;
+
         }
 
         private void ClearSelections()

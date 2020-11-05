@@ -104,10 +104,9 @@ namespace CarEngine
             sortResultsByCombobox.SelectedItem = selectedSortItem;
         }
 
-        // this method sets nextPageButton.Enabled property
         private async void ShowCarList()
         {
-            // disable "refresh" and "sort" buttons for the duration of the load so that they cannot be abused
+            // disable "refresh" and "sort" buttons for the duration of the load so that they cannot be abused by user
             refreshButton.Enabled = false;
             sortButton.Enabled = false;
 
@@ -125,8 +124,6 @@ namespace CarEngine
                 {
                     _nextPageButtonEnabled = false;
                     nextPageButton.Enabled = false;
-                    // does Api return null if it gets an empty list from server?
-                    // if not, then we should display network error -- no need for this as no connection stuff will be managed by delegate in Api class
                     return;
                 }
                 _adList.Add(carAds);
@@ -215,7 +212,6 @@ namespace CarEngine
             }
             pageNumberLabel.Text = _currentPageNumber.ToString();
             ShowCarList();
-            //nextPageButton.Enabled = true;
         }
 
         private void SortingChanged()

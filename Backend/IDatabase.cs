@@ -37,4 +37,4 @@ namespace Backend
         public bool DeleteUser(string username);
         public bool UpdateLikedAds(string token, List<int> newAds);
     }
-    }
+}

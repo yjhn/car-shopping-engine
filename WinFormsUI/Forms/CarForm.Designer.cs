@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CarForm));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.brand = new System.Windows.Forms.Label();
             this.model = new System.Windows.Forms.Label();
@@ -65,9 +64,10 @@
             this.flowLayoutPanel1.Controls.Add(this.eurostandard);
             this.flowLayoutPanel1.Controls.Add(this.vin);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 9);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(444, 410);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(388, 308);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
             // brand
@@ -76,7 +76,7 @@
             this.brand.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.brand.Location = new System.Drawing.Point(3, 0);
             this.brand.Name = "brand";
-            this.brand.Size = new System.Drawing.Size(105, 37);
+            this.brand.Size = new System.Drawing.Size(83, 30);
             this.brand.TabIndex = 0;
             this.brand.Text = "label16";
             // 
@@ -84,9 +84,9 @@
             // 
             this.model.AutoSize = true;
             this.model.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.model.Location = new System.Drawing.Point(3, 37);
+            this.model.Location = new System.Drawing.Point(3, 30);
             this.model.Name = "model";
-            this.model.Size = new System.Drawing.Size(91, 32);
+            this.model.Size = new System.Drawing.Size(73, 25);
             this.model.TabIndex = 0;
             this.model.Text = "label15";
             // 
@@ -94,10 +94,10 @@
             // 
             this.engine.AutoSize = true;
             this.engine.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.engine.Location = new System.Drawing.Point(3, 69);
-            this.engine.Margin = new System.Windows.Forms.Padding(3, 0, 3, 15);
+            this.engine.Location = new System.Drawing.Point(3, 55);
+            this.engine.Margin = new System.Windows.Forms.Padding(3, 0, 3, 11);
             this.engine.Name = "engine";
-            this.engine.Size = new System.Drawing.Size(76, 28);
+            this.engine.Size = new System.Drawing.Size(61, 21);
             this.engine.TabIndex = 0;
             this.engine.Text = "label14";
             // 
@@ -105,9 +105,9 @@
             // 
             this.age.AutoSize = true;
             this.age.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.age.Location = new System.Drawing.Point(3, 112);
+            this.age.Location = new System.Drawing.Point(3, 87);
             this.age.Name = "age";
-            this.age.Size = new System.Drawing.Size(76, 28);
+            this.age.Size = new System.Drawing.Size(61, 21);
             this.age.TabIndex = 0;
             this.age.Text = "label13";
             // 
@@ -115,10 +115,10 @@
             // 
             this.price.AutoSize = true;
             this.price.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.price.Location = new System.Drawing.Point(3, 140);
-            this.price.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
+            this.price.Location = new System.Drawing.Point(3, 108);
+            this.price.Margin = new System.Windows.Forms.Padding(3, 0, 3, 8);
             this.price.Name = "price";
-            this.price.Size = new System.Drawing.Size(91, 32);
+            this.price.Size = new System.Drawing.Size(73, 25);
             this.price.TabIndex = 0;
             this.price.Text = "label12";
             // 
@@ -126,9 +126,9 @@
             // 
             this.chassisType.AutoSize = true;
             this.chassisType.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.chassisType.Location = new System.Drawing.Point(3, 182);
+            this.chassisType.Location = new System.Drawing.Point(3, 141);
             this.chassisType.Name = "chassisType";
-            this.chassisType.Size = new System.Drawing.Size(91, 32);
+            this.chassisType.Size = new System.Drawing.Size(73, 25);
             this.chassisType.TabIndex = 0;
             this.chassisType.Text = "label11";
             // 
@@ -136,9 +136,9 @@
             // 
             this.color.AutoSize = true;
             this.color.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.color.Location = new System.Drawing.Point(3, 214);
+            this.color.Location = new System.Drawing.Point(3, 166);
             this.color.Name = "color";
-            this.color.Size = new System.Drawing.Size(91, 32);
+            this.color.Size = new System.Drawing.Size(73, 25);
             this.color.TabIndex = 0;
             this.color.Text = "label10";
             // 
@@ -146,9 +146,9 @@
             // 
             this.fuelType.AutoSize = true;
             this.fuelType.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.fuelType.Location = new System.Drawing.Point(3, 246);
+            this.fuelType.Location = new System.Drawing.Point(3, 191);
             this.fuelType.Name = "fuelType";
-            this.fuelType.Size = new System.Drawing.Size(78, 32);
+            this.fuelType.Size = new System.Drawing.Size(63, 25);
             this.fuelType.TabIndex = 0;
             this.fuelType.Text = "label9";
             // 
@@ -156,9 +156,9 @@
             // 
             this.gearBoxType.AutoSize = true;
             this.gearBoxType.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.gearBoxType.Location = new System.Drawing.Point(3, 278);
+            this.gearBoxType.Location = new System.Drawing.Point(3, 216);
             this.gearBoxType.Name = "gearBoxType";
-            this.gearBoxType.Size = new System.Drawing.Size(78, 32);
+            this.gearBoxType.Size = new System.Drawing.Size(63, 25);
             this.gearBoxType.TabIndex = 0;
             this.gearBoxType.Text = "label8";
             // 
@@ -166,9 +166,9 @@
             // 
             this.weight.AutoSize = true;
             this.weight.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.weight.Location = new System.Drawing.Point(3, 310);
+            this.weight.Location = new System.Drawing.Point(3, 241);
             this.weight.Name = "weight";
-            this.weight.Size = new System.Drawing.Size(78, 32);
+            this.weight.Size = new System.Drawing.Size(63, 25);
             this.weight.TabIndex = 0;
             this.weight.Text = "label7";
             // 
@@ -176,9 +176,9 @@
             // 
             this.eurostandard.AutoSize = true;
             this.eurostandard.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.eurostandard.Location = new System.Drawing.Point(3, 342);
+            this.eurostandard.Location = new System.Drawing.Point(3, 266);
             this.eurostandard.Name = "eurostandard";
-            this.eurostandard.Size = new System.Drawing.Size(78, 32);
+            this.eurostandard.Size = new System.Drawing.Size(63, 25);
             this.eurostandard.TabIndex = 0;
             this.eurostandard.Text = "label6";
             // 
@@ -186,27 +186,28 @@
             // 
             this.vin.AutoSize = true;
             this.vin.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.vin.Location = new System.Drawing.Point(3, 374);
+            this.vin.Location = new System.Drawing.Point(92, 0);
             this.vin.Name = "vin";
-            this.vin.Size = new System.Drawing.Size(78, 32);
+            this.vin.Size = new System.Drawing.Size(63, 25);
             this.vin.TabIndex = 0;
             this.vin.Text = "label5";
             // 
             // comment
             // 
             this.comment.AutoSize = true;
-            this.comment.Location = new System.Drawing.Point(12, 436);
+            this.comment.Location = new System.Drawing.Point(10, 327);
             this.comment.Name = "comment";
-            this.comment.Size = new System.Drawing.Size(50, 20);
+            this.comment.Size = new System.Drawing.Size(38, 15);
             this.comment.TabIndex = 1;
             this.comment.Text = "label1";
             // 
             // carMainImage
             // 
-            this.carMainImage.Image = ((System.Drawing.Image)(resources.GetObject("carMainImage.Image")));
-            this.carMainImage.Location = new System.Drawing.Point(3, 3);
+            this.carMainImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.carMainImage.Location = new System.Drawing.Point(3, 2);
+            this.carMainImage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.carMainImage.Name = "carMainImage";
-            this.carMainImage.Size = new System.Drawing.Size(447, 407);
+            this.carMainImage.Size = new System.Drawing.Size(391, 0);
             this.carMainImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.carMainImage.TabIndex = 2;
             this.carMainImage.TabStop = false;
@@ -215,19 +216,21 @@
             // 
             this.flowLayoutPanel2.AutoScroll = true;
             this.flowLayoutPanel2.Controls.Add(this.carMainImage);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(462, 12);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(404, 9);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(480, 422);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(420, 316);
             this.flowLayoutPanel2.TabIndex = 3;
             // 
             // CarForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(954, 560);
+            this.ClientSize = new System.Drawing.Size(835, 420);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.comment);
             this.Controls.Add(this.flowLayoutPanel1);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "CarForm";
             this.Text = "CarForm";
             this.flowLayoutPanel1.ResumeLayout(false);

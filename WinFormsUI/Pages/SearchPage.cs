@@ -127,9 +127,6 @@ namespace CarEngine
             };
 
             // create new tab for search results
-
-
-            // add ability to select this with tab
             BrowsePage searchResultsTab = new BrowsePage(filters, (string)sortByCombobox.SelectedItem, sortAscRadioBtn.Checked)
             {
                 Api = _frontendApi,
@@ -141,9 +138,6 @@ namespace CarEngine
             TabPage resultsTab = new TabPage("results " + _resultspageNr++);
             resultsTab.Controls.Add(searchResultsTab);
             searchAndResultsTabs.TabPages.Add(resultsTab);
-
-
-            //searchAndResultsTabs.TabPages[searchAndResultsTabs.TabPages.Count - 1].Focus();
 
             // set focus to search results page
             // for some reason this does not work
@@ -200,7 +194,7 @@ namespace CarEngine
 
         private void TabControl_MouseDown(object sender, MouseEventArgs e)
         {
-            // Process MouseDown event for every tab except for the first
+            // Process MouseDown event for every tab except for the first (close tab if user clicks on close button)
             for (var i = 1; i < searchAndResultsTabs.TabPages.Count; i++)
             {
                 var tabRect = searchAndResultsTabs.GetTabRect(i);

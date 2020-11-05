@@ -13,7 +13,6 @@ namespace Test1
         private readonly Color _inactiveSidebarButtonColor = Color.Transparent;
         private readonly Color _inactiveSidebarButtonTextColor = Color.Transparent;
 
-        // create the instance of Api that will be passed down to every page
         private readonly IApi _api;
         private readonly UserInfo _userInfo;
 
@@ -33,6 +32,7 @@ namespace Test1
             searchPage.Api = _api;
             searchPage.UserInfo = _userInfo;
             uploadPage.Api = _api;
+            uploadPage.UserInfo = _userInfo;
             profilePage.Api = _api;
             profilePage.UserInfo = _userInfo;
         }
@@ -56,7 +56,7 @@ namespace Test1
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // this makes the application update user liked ads
+            // this makes the application send updated user liked ads list to server
             if (logoutBtn.Visible)
             {
                 logoutBtn.PerformClick();
@@ -90,34 +90,21 @@ namespace Test1
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            // login logic
-            //if (!_loginPageShow)
-            //{
-                LoginScreen loginScreen = new LoginScreen(_api, _userInfo);
-                loginScreen.Show();
-                loginBtn.Enabled = false;
-                //_loginPageShow = true;
-
-                loginScreen.FormClosing += LoginScreen_FormClosing;
-            //}
+            LoginScreen loginScreen = new LoginScreen(_api, _userInfo);
+            loginScreen.Show();
+            loginBtn.Enabled = false;
+            loginScreen.FormClosing += LoginScreen_FormClosing;
         }
 
         private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //_loginPageShow = false;
-
-            // actually we should get it from server, this is for testing
-            // this should be done elsewhere
-            //Program.UserToken = "user";
-            //Program.user.Username = "Guest";
-
             // show log out button if user is now logged in
-            // temporarily we will show it always
             if (_userInfo.Username != null)
             {
                 userNameLabel.Text = _userInfo.Username;
                 logoutBtn.Visible = true;
                 profileButton.Enabled = true;
+                uploadButton.Enabled = true;
             }
             else
             {
@@ -128,19 +115,19 @@ namespace Test1
 
         private void LogoutButton_Click(object sender, EventArgs e)
         {
-            // logout logic
             _userInfo.User = null;
             userNameLabel.Text = "Guest";
 
-            // disable profile page and go to browse page
+            // disable profile and upload page and go to browse page
             browseButton.PerformClick();
             profileButton.Enabled = false;
+            uploadButton.Enabled = false;
 
             loginBtn.Enabled = true;
             logoutBtn.Visible = false;
         }
 
-        // this method must be called when any sidebar button is clicked as it sets button colors
+        // this method must be called when any sidebar button is clicked because it sets button colors
         private void SidebarButtonClicked(Button button)
         {
             browseButton.ForeColor = _inactiveSidebarButtonTextColor;
@@ -158,10 +145,10 @@ namespace Test1
             // enable buttons
             browseButton.Enabled = true;
             searchButton.Enabled = true;
-            uploadButton.Enabled = true;
             if (_userInfo.Username != null)
             {
                 profileButton.Enabled = true;
+                uploadButton.Enabled = true;
             }
 
             // disable the button that was clicked

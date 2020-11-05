@@ -125,7 +125,7 @@ namespace Backend
 
         public bool UpdateLikedAds(string token, List<int> newAds)
         {
-            MinimalUser minimal = _minimalUserList.Find((minimalUser)=> minimalUser.Token == token);
+            MinimalUser minimal = _minimalUserList.Find((minimalUser) => minimalUser.Token == token);
             if (minimal == null)
                 return false;
             minimal.LikedAds = newAds;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace DataTypes
 {
@@ -133,7 +132,7 @@ namespace DataTypes
 
     public class Engine
     {
-        public Engine(int hp, int kw, float volume, EngineType type):this(hp, kw, type)
+        public Engine(int hp, int kw, float volume, EngineType type) : this(hp, kw, type)
         {
             Volume = volume;
         }

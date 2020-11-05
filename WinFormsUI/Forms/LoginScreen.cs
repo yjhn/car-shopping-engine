@@ -30,7 +30,7 @@ namespace Test1
             if (Validate(username, password))
             {
                 MinimalUser user = await _frontendApi.GetUser(username, EncryptPassword(passwordTextBox.Text, username));
-                if(user == null)
+                if (user == null)
                 {
                     MessageBox.Show("Bad username or password", "Bad credentials", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     passwordTextBox.Clear();
@@ -80,13 +80,12 @@ namespace Test1
                         }
                         else
                         {
-                            // this would ideally only happen if username is duplicate, but it happens all the time for some reason
                             MessageBox.Show("This username is already taken", "Bad username", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
                     {
-                        // this should happen when there is no connection to server
+                        // if Api returns null, then there is no connection to server
                         MessageBox.Show("No connection to server", "No connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -122,8 +121,11 @@ namespace Test1
             }
         }
 
+        private bool Validate(string username, string password)
+        {
+            return !(username == "" || username.Contains(' ') || password == "" || password.Contains(' '));
+        }
 
-        // method to encrypt password
         public string EncryptPassword(string password, string salt)
         {
             using (var sha256 = SHA256.Create())
@@ -132,11 +134,6 @@ namespace Test1
                 byte[] saltedPasswordAsBytes = Encoding.UTF8.GetBytes(saltedPassword);
                 return Convert.ToBase64String(sha256.ComputeHash(saltedPasswordAsBytes));
             }
-        }
-
-        private bool Validate(string username, string password)
-        {
-            return !(username == "" || username.Contains(' ') || password == "" || password.Contains(' '));
         }
     }
 }

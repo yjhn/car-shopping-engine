@@ -28,7 +28,7 @@ namespace CarEngine.Forms
 
             if (carInfo.Engine != null)
             {
-                engine.Text = $"{carInfo.Engine.Type.ToString()} {carInfo.Engine.Volume.ToString()} {carInfo.Engine.Kw.ToString()}";
+                engine.Text = $"{carInfo.Engine.Type} {carInfo.Engine.Volume} {carInfo.Engine.Kw}";
             }
             else
             {

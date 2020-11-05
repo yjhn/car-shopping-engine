@@ -1,5 +1,4 @@
-﻿using CarEngine.Properties;
-using DataTypes;
+﻿using DataTypes;
 using Frontend;
 using System;
 using System.Collections.Generic;
@@ -73,18 +72,19 @@ namespace CarEngine.Pages
         public ProfilePage()
         {
             InitializeComponent();
-            profilePicture.Image = Resources.PikPng_com_profile_icon_png_805068;
         }
 
         private /*async*/ void LoadInfo()
         {
             if (_userInfo != null && _userInfo.Username != null && _frontendApi != null)
             {
+                usernameLabel.Text = _userInfo.Username;
+
                 List<Car> likedCars = _userInfo.LikedCarList;
                 List<bool> isLiked = Enumerable.Repeat(true, likedCars.Count).ToList();
 
                 CarAdMinimal[] likedAdsList = Converter.VehicleListToAds(likedCars, _userInfo, isLiked);
-                
+
                 likedAdsPanel.Controls.Clear();
                 likedAdsPanel.Controls.AddRange(likedAdsList);
 
@@ -93,37 +93,6 @@ namespace CarEngine.Pages
                 // currently Api does not have this functionality
                 //uploadedAdsPanel.Controls.AddRange(Converter.VehicleListToAds(_frontendApi. ,_userInfo))
             }
-
-            // --temporary
-            //uploadedPanel.Controls.Add(new CarAdMinimal(GenerateRandomCar(), _userInfo));
-            //favoriteAds.Controls.Add(new CarAdMinimal(GenerateRandomCar(), _userInfo));
-        }
-
-        private Car GenerateRandomCar()
-        {
-            //string[] carBrands = { "BMW", "Audi", "Fiat" };
-            //string[] carModels = { "Vienas", "Du", "Trys" };
-            string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
-            Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
-                brand: "alfa", model: "beta", true, dateOfPurchase: new YearMonth(2020, 2), engine: new Engine(100, 60, 1.2f, EngineType.W3),
-                fuelType: FuelType.Petrol, chassisType: ChassisType.Station_wagon, color: "juoda", gearboxType: GearboxType.Automatic, totalKilometersDriven: 100000,
-                driveWheels: DriveWheels.Rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.Left,
-                numberOfDoors: NumberOfDoors.FourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new YearMonth(2022, 5),
-                wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
-                additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
-
-            newCar.Model = "Vienas";
-            newCar.Brand = "BMW";
-            newCar.Price = 15000;
-            newCar.Comment = "Komentaras";
-            newCar.Images = images;
-            return newCar;
-        }
-
-        private void ProfilePicture_Click(object sender, EventArgs e)
-        {
-            // this should show profile info when called
-            // currently profile info screen is not implemented
         }
 
         private void ProfilePage_VisibleChanged(object sender, EventArgs e)
@@ -135,3 +104,25 @@ namespace CarEngine.Pages
         }
     }
 }
+
+
+//private Car GenerateRandomCar()
+//{
+//    //string[] carBrands = { "BMW", "Audi", "Fiat" };
+//    //string[] carModels = { "Vienas", "Du", "Trys" };
+//    string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
+//    Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
+//        brand: "alfa", model: "beta", true, dateOfPurchase: new YearMonth(2020, 2), engine: new Engine(100, 60, 1.2f, EngineType.W3),
+//        fuelType: FuelType.Petrol, chassisType: ChassisType.Station_wagon, color: "juoda", gearboxType: GearboxType.Automatic, totalKilometersDriven: 100000,
+//        driveWheels: DriveWheels.Rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.Left,
+//        numberOfDoors: NumberOfDoors.FourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new YearMonth(2022, 5),
+//        wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
+//        additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
+
+//    newCar.Model = "Vienas";
+//    newCar.Brand = "BMW";
+//    newCar.Price = 15000;
+//    newCar.Comment = "Komentaras";
+//    newCar.Images = images;
+//    return newCar;
+//}

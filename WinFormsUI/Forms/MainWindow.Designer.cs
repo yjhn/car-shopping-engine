@@ -119,6 +119,7 @@
             // uploadButton
             // 
             this.uploadButton.BackColor = System.Drawing.Color.Transparent;
+            this.uploadButton.Enabled = false;
             this.uploadButton.FlatAppearance.BorderSize = 0;
             this.uploadButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.uploadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

@@ -141,6 +141,7 @@
             // 
             // uploadButton
             // 
+            this.uploadButton.Enabled = false;
             this.uploadButton.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.uploadButton.Location = new System.Drawing.Point(230, 502);
             this.uploadButton.Margin = new System.Windows.Forms.Padding(2);
@@ -410,12 +411,12 @@
             this.yearRangeLabel.AutoSize = true;
             this.yearRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.yearRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.yearRangeLabel.Location = new System.Drawing.Point(35, 195);
+            this.yearRangeLabel.Location = new System.Drawing.Point(90, 192);
             this.yearRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.yearRangeLabel.Name = "yearRangeLabel";
-            this.yearRangeLabel.Size = new System.Drawing.Size(112, 25);
+            this.yearRangeLabel.Size = new System.Drawing.Size(56, 25);
             this.yearRangeLabel.TabIndex = 3;
-            this.yearRangeLabel.Text = "Year range:";
+            this.yearRangeLabel.Text = "Year:";
             // 
             // yearBox
             // 

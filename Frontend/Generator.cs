@@ -1,5 +1,5 @@
-using System;
 using DataTypes;
+using System;
 namespace Frontend
 {
     public class Generator

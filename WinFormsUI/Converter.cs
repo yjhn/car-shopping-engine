@@ -38,8 +38,6 @@ namespace CarEngine
 
         public static Image Base64ToImg(string base64Image)
         {
-            //data:image/gif;base64,
-            //this image is a single pixel (black)
             byte[] bytes = Convert.FromBase64String(base64Image);
 
             Image image;
@@ -60,7 +58,7 @@ namespace CarEngine
 
         public static CarAdMinimal[] VehicleListToAds(List<Car> vehicleList, UserInfo userInfo, List<bool> isLiked)
         {
-            if(vehicleList == null)
+            if (vehicleList == null)
             {
                 return null;
             }

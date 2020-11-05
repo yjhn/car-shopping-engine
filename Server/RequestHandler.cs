@@ -404,7 +404,7 @@ namespace Server
             }
         }
 
-            private SortingCriteria? GetSortingCriteria(string criteriaString)
+        private SortingCriteria? GetSortingCriteria(string criteriaString)
         {
             SortingCriteria? criteria = null;
             Type sortingType = typeof(SortingCriteria);

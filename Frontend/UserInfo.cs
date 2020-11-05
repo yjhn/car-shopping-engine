@@ -1,6 +1,5 @@
 ﻿using DataTypes;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace Frontend
 {
@@ -17,8 +16,8 @@ namespace Frontend
 
         public MinimalUser User
         {
-            // use setter when logging in and logging out
-            // when logging ou, set this to null
+            // use setter when logging in and out
+            // when logging out, set this to null
             set
             {
                 if (value != null)
@@ -45,7 +44,7 @@ namespace Frontend
         public UserInfo(IApi api)
         {
             _api = api;
-            
+
         }
 
         private /*async*/ void GetLikedCars()
