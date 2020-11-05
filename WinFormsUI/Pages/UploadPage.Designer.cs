@@ -228,12 +228,12 @@
             this.priceRangeLabel.AutoSize = true;
             this.priceRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.priceRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.priceRangeLabel.Location = new System.Drawing.Point(30, 158);
+            this.priceRangeLabel.Location = new System.Drawing.Point(86, 158);
             this.priceRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.priceRangeLabel.Name = "priceRangeLabel";
-            this.priceRangeLabel.Size = new System.Drawing.Size(118, 25);
+            this.priceRangeLabel.Size = new System.Drawing.Size(61, 25);
             this.priceRangeLabel.TabIndex = 3;
-            this.priceRangeLabel.Text = "Price range:";
+            this.priceRangeLabel.Text = "Price:";
             // 
             // radioButton1
             // 
@@ -450,7 +450,7 @@
             this.fuelTypeComboBox.Items.AddRange(new object[] {
             "petrol",
             "diesel",
-            "electric",
+            "electricity",
             "hybrid"});
             this.fuelTypeComboBox.Location = new System.Drawing.Point(153, 274);
             this.fuelTypeComboBox.Margin = new System.Windows.Forms.Padding(2);
@@ -498,9 +498,19 @@
             0,
             0,
             0});
+            this.priceBox.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             this.priceBox.Name = "priceBox";
             this.priceBox.Size = new System.Drawing.Size(82, 23);
             this.priceBox.TabIndex = 3;
+            this.priceBox.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             // 
             // gearboxTypeLabel
             // 
@@ -594,8 +604,8 @@
             this.driveWheelsComboBox.AccessibleName = "drive wheels combo box";
             this.driveWheelsComboBox.FormattingEnabled = true;
             this.driveWheelsComboBox.Items.AddRange(new object[] {
-            "left",
-            "right"});
+            "front",
+            "rear"});
             this.driveWheelsComboBox.Location = new System.Drawing.Point(429, 234);
             this.driveWheelsComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.driveWheelsComboBox.Name = "driveWheelsComboBox";

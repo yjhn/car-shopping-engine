@@ -40,9 +40,8 @@ namespace CarEngine.Pages
         public UploadPage()
         {
             InitializeComponent();
-            // default vehicle type: any
+            // default types for combo boxes: 
             typeComboBox.SelectedIndex = 0;
-            // default fuel type: 
             fuelTypeComboBox.SelectedIndex = 0;
             driveWheelsComboBox.SelectedIndex = 0;
             gearboxTypeComboBox.SelectedIndex = 0;
@@ -98,6 +97,11 @@ namespace CarEngine.Pages
             else if (!radioButtonNew.Checked && !radioButtonUsed.Checked)
             {
                 DisplayErrorMessage("select whether its new or used");
+                return false;
+            }
+            else if (!radioButtonLeftWheel.Checked && !radioButtonRightWheel.Checked)
+            {
+                DisplayErrorMessage("select whether wheel is on the left or the right side");
                 return false;
             }
             /*else if (pictureBox1.Image == null)
@@ -158,10 +162,13 @@ namespace CarEngine.Pages
             priceBox.ResetText();
             radioButtonNew.Checked = false;
             radioButtonUsed.Checked = false;
+            radioButtonLeftWheel.Checked = false;
+            radioButtonRightWheel.Checked = false;
             yearBox.ResetText();
             fuelTypeComboBox.SelectedIndex = 0;
             additionalImagesPanel.Controls.Clear();
             pictureBox1.Image = null;
+            defectsTextBox.ResetText();
         }
 
         private void DisplayErrorMessage(string text)
