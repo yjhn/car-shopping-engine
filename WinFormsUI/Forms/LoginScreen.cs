@@ -10,9 +10,11 @@ namespace Test1
     public partial class LoginScreen : Form
     {
         private readonly IApi _frontendApi;
+        private readonly UserInfo _userInfo;
 
-        public LoginScreen(IApi api)
+        public LoginScreen(IApi api, UserInfo userInfo)
         {
+            _userInfo = userInfo;
             _frontendApi = api;
             InitializeComponent();
             passwordTextBox.PasswordChar = '*';
@@ -35,7 +37,7 @@ namespace Test1
                 }
                 else
                 {
-                    UserInfo.User = user;
+                    _userInfo.User = user;
                     Close();
                 }
             }

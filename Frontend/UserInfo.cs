@@ -3,23 +3,24 @@ using System.Collections.Generic;
 
 namespace Frontend
 {
-    // class to keep track of login and user state
-    public static class UserInfo
+    public class UserInfo
     {
-        public static MinimalUser User
+        private readonly IApi _api;
+        //private MinimalUser _user;
+
+        public UserInfo(IApi api)
         {
-            // use getter when logging out
-            get
-            {
-                // liked ads list might have changed while user was logged in
-                User.LikedAds = LikedAds;
-                return User;
-            }
-            // use setter when logging in
+            _api = api;
+        }
+
+        public MinimalUser User
+        {
+            // use setter when logging in and logging out
             set
             {
                 if (value != null)
                 {
+                    //_user = value;
                     Username = value.Username;
                     LikedAds = value.LikedAds;
                     Token = value.Token;
@@ -27,15 +28,24 @@ namespace Frontend
                 else
                 {
                     // this happens if user logs out
+
+                    // we need to send updated user info to the server in this case
+                    //_user.LikedAds = LikedAds;
+                    // call Api
+                    _api.UpdateLikedAds(Token, LikedAds);
+
+                    // reset user info
                     Username = null;
                     LikedAds = null;
                     Token = null;
+                    //_user = null;
                 }
             }
         }
-        public static string Username { get; private set; }
-        public static List<int> LikedAds { get; private set; }
 
-        internal static string Token { get; private set; }
+        public string Username { get; private set; }
+        public List<int> LikedAds { get; private set; }
+
+        internal string Token { get; private set; }
     }
 }

@@ -1,9 +1,9 @@
 using DataTypes;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Text;
 namespace Frontend
 {
     public class Api : IApi
@@ -211,9 +211,12 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
+                if (r.Content == null || r.Content.Length == 0)
+                {
+                    return null;
+                }
                 return JsonSerializer.Deserialize<MinimalUser>(r.Content);
-            }
-            );
+            });
         }
 
         public Task<bool?> UpdateLikedAds(string token, List<int> likedAds)
@@ -239,7 +242,7 @@ namespace Frontend
             });
         }
 
-                    private string MakeType(string key)
+        private string MakeType(string key)
         {
             string contentType;
             switch (key)

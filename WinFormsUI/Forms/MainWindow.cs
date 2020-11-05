@@ -14,13 +14,17 @@ namespace Test1
         private readonly Color _inactiveSidebarButtonTextColor = Color.Transparent;
 
         // create the instance of Api that will be passed down to every page
-        private readonly IApi _api = new Api();
+        private readonly IApi _api;
+        private readonly UserInfo _userInfo;
 
         //private bool _loginPageShow = false;
         private bool _loggedIn = false;
 
-        public MainWindow()
+        public MainWindow(IApi api, UserInfo userInfo)
         {
+            _api = api;
+            _userInfo = userInfo;
+
             // add method to handle no connection event to Api's delegate
             _api.NoServerResponse += NoConnection;
 
@@ -87,7 +91,7 @@ namespace Test1
             // login logic
             //if (!_loginPageShow)
             //{
-                LoginScreen loginScreen = new LoginScreen(_api);
+                LoginScreen loginScreen = new LoginScreen(_api, _userInfo);
                 loginScreen.Show();
                 loginBtn.Enabled = false;
                 //_loginPageShow = true;
@@ -107,9 +111,9 @@ namespace Test1
 
             // show log out button if user is now logged in
             // temporarily we will show it always
-            if (UserInfo.Username != null)
+            if (_userInfo.Username != null)
             {
-                userNameLabel.Text = UserInfo.Username;
+                userNameLabel.Text = _userInfo.Username;
                 logoutBtn.Visible = true;
                 profileButton.Enabled = true;
             }
@@ -123,7 +127,13 @@ namespace Test1
         private void LogoutButton_Click(object sender, EventArgs e)
         {
             // logout logic
-            UserInfo.User = null;
+            _userInfo.User = null;
+            userNameLabel.Text = "Guest";
+
+            // disable profile page and go to browse page
+            browseButton.PerformClick();
+            profileButton.Enabled = false;
+
             loginBtn.Enabled = true;
             logoutBtn.Visible = false;
         }

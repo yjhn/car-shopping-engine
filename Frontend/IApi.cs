@@ -16,6 +16,7 @@ namespace Frontend
         Task<Car> GetCar(int id);
         Task<List<Car>> GetCars(int startIndex, int amount);
         Task<MinimalUser> GetUser(string username, string hashedPassword);
+        Task<bool?> UpdateLikedAds(string token, List<int> likedAds);
         Task<List<Car>> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
         Task<List<Car>> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending);
     }
