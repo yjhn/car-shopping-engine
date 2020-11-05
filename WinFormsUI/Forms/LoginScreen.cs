@@ -1,7 +1,6 @@
 ﻿using DataTypes;
 using Frontend;
 using System;
-using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -10,42 +9,89 @@ namespace Test1
 {
     public partial class LoginScreen : Form
     {
-        private IApi _frontendApi;
-        private MinimalUser _userInfo;
+        private readonly IApi _frontendApi;
+        //private MinimalUser _userInfo;
 
         public LoginScreen(IApi api)
         {
             _frontendApi = api;
             InitializeComponent();
             passwordTextBox.PasswordChar = '*';
-            phoneTextbox.Controls.RemoveAt(0);
+            phoneTextbox.Controls[0].Visible = false;
             phoneTextbox.ResetText();
         }
 
         private async void LoginButton_Click(object sender, EventArgs e)
         {
-            //Here we should retrieve UserToken from backend, if UserToken is null it means, user is not logged in, for this button will just make the user token not null and set UserName. This Button will close the Form
+            string username = usernameTextBox.Text;
+            string password = passwordTextBox.Text;
 
-            //Program.user.Username = usernameTextBox.Text;
-            //Program.UserToken = "";
-
-
-            _userInfo = await _frontendApi.GetUser(usernameTextBox.Text, EncryptPassword(passwordTextBox.Text, usernameTextBox.Text));
-            Close();
+            if (Validate(username, password))
+            {
+                MinimalUser user = await _frontendApi.GetUser(username, EncryptPassword(passwordTextBox.Text, username));
+                if(user == null)
+                {
+                    MessageBox.Show("Bad username or password", "Bad credentials", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    passwordTextBox.Clear();
+                }
+                else
+                {
+                    UserInfo.User = user;
+                    Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Username and password cannot be empty and cannot contain spaces ", "Bad input", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                passwordTextBox.Clear();
+            }
         }
 
         private async void SigUpButton_Click(object sender, EventArgs e)
         {
-            bool? successfullyCreated = false;
+            bool? successfullyCreated;
             if (!loginButton.Visible)
             {
                 // need to check for bad input
-                User user = new User(usernameTextBox.Text, Convert.ToInt64(phoneTextbox.Text), EncryptPassword(passwordTextBox.Text, usernameTextBox.Text), emailTextbox.Text);
-                successfullyCreated =  await _frontendApi.AddUser(user);
-                if (successfullyCreated != null && (bool)successfullyCreated)
+                string username = usernameTextBox.Text;
+                string password = passwordTextBox.Text;
+                string email = emailTextbox.Text;
+                long phone = Convert.ToInt64(phoneTextbox.Text);
+                if (Validate(username, password) && email != "" && !email.Contains(' ') && phone != 1000000)
                 {
-                    // show that user creation is successful
-                    Close();
+                    User user = new User(username, phone, EncryptPassword(password, username), email);
+                    successfullyCreated = await _frontendApi.AddUser(user);
+
+                    if (successfullyCreated != null)
+                    {
+                        if ((bool)successfullyCreated)
+                        {
+                            // show that user creation is successful
+                            MessageBox.Show("Successfully created user " + username, "User created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // show login controls
+                            emailLabel.Visible = false;
+                            emailTextbox.Visible = false;
+                            phoneLabel.Visible = false;
+                            phoneTextbox.Visible = false;
+                            loginButton.Visible = true;
+                            usernameTextBox.Focus();
+                        }
+                        else
+                        {
+                            // this would ideally only happen if username is duplicate, but it happens all the time for some reason
+                            MessageBox.Show("This username is already taken", "Bad username", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        // this should happen when there is no connection to server
+                        MessageBox.Show("No connection to server", "No connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Fields cannot be empty and cannot contain spaces", "Bad form data", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -85,6 +131,11 @@ namespace Test1
                 byte[] saltedPasswordAsBytes = Encoding.UTF8.GetBytes(saltedPassword);
                 return Convert.ToBase64String(sha256.ComputeHash(saltedPasswordAsBytes));
             }
+        }
+
+        private bool Validate(string username, string password)
+        {
+            return !(username == "" || username.Contains(' ') || password == "" || password.Contains(' '));
         }
     }
 }

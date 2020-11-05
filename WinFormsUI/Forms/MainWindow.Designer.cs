@@ -31,7 +31,7 @@
             this.sidebarPanel = new System.Windows.Forms.Panel();
             this.loginBtn = new System.Windows.Forms.Button();
             this.userNameLabel = new System.Windows.Forms.Label();
-            this.favoritesButton = new System.Windows.Forms.Button();
+            this.profileButton = new System.Windows.Forms.Button();
             this.uploadButton = new System.Windows.Forms.Button();
             this.searchButton = new System.Windows.Forms.Button();
             this.browseButton = new System.Windows.Forms.Button();
@@ -52,7 +52,7 @@
             this.sidebarPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(64)))), ((int)(((byte)(89)))));
             this.sidebarPanel.Controls.Add(this.loginBtn);
             this.sidebarPanel.Controls.Add(this.userNameLabel);
-            this.sidebarPanel.Controls.Add(this.favoritesButton);
+            this.sidebarPanel.Controls.Add(this.profileButton);
             this.sidebarPanel.Controls.Add(this.uploadButton);
             this.sidebarPanel.Controls.Add(this.searchButton);
             this.sidebarPanel.Controls.Add(this.browseButton);
@@ -98,22 +98,23 @@
             this.userNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.userNameLabel.Click += new System.EventHandler(this.UserNameLabel_Click);
             // 
-            // favoritesButton
+            // profileButton
             // 
-            this.favoritesButton.BackColor = System.Drawing.Color.Transparent;
-            this.favoritesButton.FlatAppearance.BorderSize = 0;
-            this.favoritesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.favoritesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.favoritesButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.favoritesButton.ForeColor = System.Drawing.Color.Transparent;
-            this.favoritesButton.Location = new System.Drawing.Point(0, 310);
-            this.favoritesButton.Margin = new System.Windows.Forms.Padding(2);
-            this.favoritesButton.Name = "favoritesButton";
-            this.favoritesButton.Size = new System.Drawing.Size(126, 80);
-            this.favoritesButton.TabIndex = 4;
-            this.favoritesButton.Text = "profile";
-            this.favoritesButton.UseVisualStyleBackColor = false;
-            this.favoritesButton.Click += new System.EventHandler(this.FavoritesButton_Click);
+            this.profileButton.BackColor = System.Drawing.Color.Transparent;
+            this.profileButton.Enabled = false;
+            this.profileButton.FlatAppearance.BorderSize = 0;
+            this.profileButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.profileButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.profileButton.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.profileButton.ForeColor = System.Drawing.Color.Transparent;
+            this.profileButton.Location = new System.Drawing.Point(0, 310);
+            this.profileButton.Margin = new System.Windows.Forms.Padding(2);
+            this.profileButton.Name = "profileButton";
+            this.profileButton.Size = new System.Drawing.Size(126, 80);
+            this.profileButton.TabIndex = 4;
+            this.profileButton.Text = "profile";
+            this.profileButton.UseVisualStyleBackColor = false;
+            this.profileButton.Click += new System.EventHandler(this.ProfileButton_Click);
             // 
             // uploadButton
             // 
@@ -293,7 +294,7 @@
 
         private System.Windows.Forms.Panel sidebarPanel;
         private System.Windows.Forms.Button browseButton;
-        private System.Windows.Forms.Button favoritesButton;
+        private System.Windows.Forms.Button profileButton;
         private System.Windows.Forms.Button uploadButton;
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.Panel pagePanel;

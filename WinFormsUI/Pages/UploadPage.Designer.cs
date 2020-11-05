@@ -732,9 +732,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button uploadButton;
         private System.Windows.Forms.ComboBox typeComboBox;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label brandLabel;
-        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label modelLabel;
         private System.Windows.Forms.Label priceRangeLabel;
         private System.Windows.Forms.RadioButton radioButton1;
@@ -756,7 +754,6 @@
         private System.Windows.Forms.NumericUpDown yearBox;
         private System.Windows.Forms.ComboBox fuelTypeComboBox;
         private System.Windows.Forms.Label fuelTypeLabel;
-        private System.Windows.Forms.FlowLayoutPanel additionalImagePanel;
         private System.Windows.Forms.FlowLayoutPanel additionalImagesPanel;
         private System.Windows.Forms.TextBox brandTextBox;
         private System.Windows.Forms.TextBox modelTextBox;

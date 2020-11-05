@@ -11,7 +11,6 @@ namespace CarEngine.Pages
     public partial class ProfilePage : UserControl
     {
         private IApi _frontendApi;
-        private bool loginPageShow = false;
 
 
         // This property MUST be set for this to work correctly
@@ -66,46 +65,32 @@ namespace CarEngine.Pages
             return newCar;
         }
 
-        // this is not needed
-        private void profilePicture_Click(object sender, EventArgs e)
+        private void ProfilePicture_Click(object sender, EventArgs e)
         {
-            // this is not needed
-
-            //if (!loginPageShow)
-            //{
-            //    LoginScreen loginScreen = new LoginScreen();
-            //    loginScreen.Show();
-            //    loginPageShow = true;
-
-            //    loginScreen.FormClosing += LoginScreen_FormClosing;
-
-            //}
+            // this should show profile info when called
+            // currently profile info screen is not implemented
         }
 
         private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-            loginPageShow = false;
-            UpdatePage();
-            ((LoginScreen)sender).FormClosing -= LoginScreen_FormClosing;
+            //UpdatePage();
         }
 
         private void UpdatePage()
         {
-            logoutBtn.Visible= (Program.UserToken == null)? false : true;
+            //logoutBtn.Visible= (Program.UserToken == null)? false : true;
 
 
-//            usernameLabel.Text = Program.user.Username;
-  //          uploadedLabel.Text = "Ads uploaded by " + Program.user.Username;
-   //         favoriteAdsLabel.Text = Program.user.Username + " favorite Ads";
+            //usernameLabel.Text = Program.user.Username;
+            //uploadedLabel.Text = "Ads uploaded by " + Program.user.Username;
+            //favoriteAdsLabel.Text = Program.user.Username + " favorite Ads";
 
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
             Program.UserToken = null;
-            //Program.user.Username = "Guest";
             UpdatePage();
-
         }
     }
 }

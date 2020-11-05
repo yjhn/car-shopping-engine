@@ -201,9 +201,19 @@
             232,
             0,
             0});
+            this.phoneTextbox.Minimum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.phoneTextbox.Name = "phoneTextbox";
             this.phoneTextbox.Size = new System.Drawing.Size(149, 23);
             this.phoneTextbox.TabIndex = 3;
+            this.phoneTextbox.Value = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.phoneTextbox.Visible = false;
             // 
             // LoginScreen

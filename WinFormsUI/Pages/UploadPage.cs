@@ -14,7 +14,6 @@ namespace CarEngine.Pages
         private IApi _frontendApi;
         private EnumParser _parser = new EnumParser();
 
-
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
         public IApi Api
@@ -118,6 +117,7 @@ namespace CarEngine.Pages
             Car uploadCar = new Car
             {
                 //----------------
+                // ui shouldn't need to do this, this is a task for frontend
                 UploaderUsername = "userTest",//change to current users name
                 //----------------
                 UploadDate = DateTime.Now,

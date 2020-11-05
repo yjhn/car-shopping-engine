@@ -16,7 +16,8 @@ namespace Test1
         // create the instance of Api that will be passed down to every page
         private readonly IApi _api = new Api();
 
-        private bool _loginPageShow = false;
+        //private bool _loginPageShow = false;
+        private bool _loggedIn = false;
 
         public MainWindow()
         {
@@ -32,8 +33,7 @@ namespace Test1
             profilePage.Api = _api;
 
             // start with Browse page activated
-            SetActivePanel(browsePage);
-            SidebarButtonClicked(browseButton);
+            browseButton.PerformClick();
         }
 
         // this works, but if connection reappears, currently nothing changes
@@ -46,7 +46,7 @@ namespace Test1
                 browseButton.Enabled = false;
                 searchButton.Enabled = false;
                 uploadButton.Enabled = false;
-                favoritesButton.Enabled = false;
+                profileButton.Enabled = false;
                 loginBtn.Enabled = false;
                 logoutBtn.Enabled = false;
             });
@@ -76,48 +76,55 @@ namespace Test1
             SidebarButtonClicked(uploadButton);
         }
 
-        private void FavoritesButton_Click(object sender, EventArgs e)
+        private void ProfileButton_Click(object sender, EventArgs e)
         {
             SetActivePanel(profilePage);
-            SidebarButtonClicked(favoritesButton);
+            SidebarButtonClicked(profileButton);
         }
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
             // login logic
-            if (!_loginPageShow)
-            {
+            //if (!_loginPageShow)
+            //{
                 LoginScreen loginScreen = new LoginScreen(_api);
                 loginScreen.Show();
-                _loginPageShow = true;
+                loginBtn.Enabled = false;
+                //_loginPageShow = true;
 
                 loginScreen.FormClosing += LoginScreen_FormClosing;
-            }
+            //}
         }
 
         private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _loginPageShow = false;
+            //_loginPageShow = false;
 
             // actually we should get it from server, this is for testing
             // this should be done elsewhere
             //Program.UserToken = "user";
             //Program.user.Username = "Guest";
 
-            userNameLabel.Text = Program.Username;
-
             // show log out button if user is now logged in
             // temporarily we will show it always
-            logoutBtn.Visible = Program.UserToken != null;
-
-            //UpdatePage();
-            //((LoginScreen)sender).FormClosing -= LoginScreen_FormClosing;
+            if (UserInfo.Username != null)
+            {
+                userNameLabel.Text = UserInfo.Username;
+                logoutBtn.Visible = true;
+                profileButton.Enabled = true;
+            }
+            else
+            {
+                // enable login button if user has not logged in
+                loginBtn.Enabled = true;
+            }
         }
 
         private void LogoutButton_Click(object sender, EventArgs e)
         {
             // logout logic
-
+            UserInfo.User = null;
+            loginBtn.Enabled = true;
             logoutBtn.Visible = false;
         }
 
@@ -130,17 +137,20 @@ namespace Test1
             searchButton.BackColor = _inactiveSidebarButtonColor;
             uploadButton.ForeColor = _inactiveSidebarButtonTextColor;
             uploadButton.BackColor = _inactiveSidebarButtonColor;
-            favoritesButton.ForeColor = _inactiveSidebarButtonTextColor;
-            favoritesButton.BackColor = _inactiveSidebarButtonColor;
+            profileButton.ForeColor = _inactiveSidebarButtonTextColor;
+            profileButton.BackColor = _inactiveSidebarButtonColor;
 
             button.ForeColor = _activeSidebarButtonTextColor;
             button.BackColor = _activeSidebarButtonColor;
 
-            // enable all buttons
+            // enable all buttons except for profile
             browseButton.Enabled = true;
             searchButton.Enabled = true;
             uploadButton.Enabled = true;
-            favoritesButton.Enabled = true;
+            if (_loggedIn)
+            {
+                profileButton.Enabled = true;
+            }
 
             // disable the button that was clicked
             button.Enabled = false;
@@ -160,7 +170,8 @@ namespace Test1
 
         private void UserNameLabel_Click(object sender, EventArgs e)
         {
-            
+            // goes to profile page
+            profileButton.PerformClick();
         }
 
         private void LoginBtn_VisibleChanged(object sender, EventArgs e)
