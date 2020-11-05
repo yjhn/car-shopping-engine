@@ -92,6 +92,7 @@ namespace Backend
                 {
                     writer.Write(jsonUtf8Bytes);
                 }
+                // should add logging, makes debugging easier
                 return true;
             }
             catch (Exception e)

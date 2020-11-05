@@ -174,10 +174,7 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                bool added = false;
-                if (r.StatusCode == 201)
-                    added = true;
-                return added;
+                return r.StatusCode == 201;
             });
         }
 

@@ -14,7 +14,7 @@ namespace Server
         private Response _r;
         readonly private IDatabase _db;
         readonly private Logger _logger;
-        public RequestHandler(String rawRequest, IDatabase db, Logger logger)
+        public RequestHandler(string rawRequest, IDatabase db, Logger logger)
         {
             _rawRequest = rawRequest;
             _logger = logger;
@@ -51,7 +51,7 @@ namespace Server
                             break;
                     }
                 }
-                }
+            }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is ArgumentException || e is ArgumentNullException)
             {
                 _logger.LogException(e);
@@ -266,11 +266,14 @@ namespace Server
 
         private void AddUser(byte[] userData)
         {
-            bool result = _db.AddUserJson(userData);
-            if (result)
+            if (_db.AddUserJson(userData))
+            {
                 _r = MakeResponse(201);
+            }
             else
+            {
                 _r = MakeResponse(204);
+            }
         }
 
         private bool DeleteCar(int id)
@@ -379,15 +382,15 @@ namespace Server
             }
         }
 
-            //private bool Verify(Request req)
-            //{
-            //    bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
-            //    if (!verified)
-            //        _r = MakeResponse(401);
-            //    return verified;
-            //}
+        //private bool Verify(Request req)
+        //{
+        //    bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
+        //    if (!verified)
+        //        _r = MakeResponse(401);
+        //    return verified;
+        //}
 
-            private SortingCriteria? GetSortingCriteria(string criteriaString)
+        private SortingCriteria? GetSortingCriteria(string criteriaString)
         {
             SortingCriteria? criteria = null;
             Type sortingType = typeof(SortingCriteria);

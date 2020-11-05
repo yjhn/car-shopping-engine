@@ -68,7 +68,8 @@ namespace Backend
                 if (!CheckIfExists(u.Username))
                 {
                     _userList.Add(u);
-                    return _fileWriter.WriteUserData(u); // make filewriter be able to write serialized data
+                    // should return a status code, not bool
+                    return _fileWriter.WriteUserData(u);
                 }
                 else
                 {
@@ -87,6 +88,7 @@ namespace Backend
             }
         }
 
+        // returns: MinimalUser serialized to UTF-8 JSON
         public byte[] Authenticate(string username, string hashedPassword)
         {
             try
