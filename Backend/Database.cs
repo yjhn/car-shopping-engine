@@ -46,6 +46,7 @@ namespace Backend
                 _lastCarId++;
                 _carList.Add(c);
                 _fileWriter.WriteCarData(c);
+                _logger.Log("Added new car. ID = " + c.Id);
                 return true;
             }
             catch (JsonException e)
@@ -69,6 +70,7 @@ namespace Backend
                 {
                     _userList.Add(u);
                     // should return a status code, not bool
+                    _logger.Log("Added new user. Username = " + u.Username);
                     return _fileWriter.WriteUserData(u);
                 }
                 else
@@ -93,11 +95,14 @@ namespace Backend
         {
             try
             {
-                bool exists = _userList.Exists((user) => user.Username == username && user.HashedPassword == hashedPassword);
-                MinimalUser minimal = new MinimalUser();
-                if (exists)
+                User user = _userList.Find(user => user.Username == username && user.HashedPassword == hashedPassword);
+                if (user == null)
                 {
-                    User user = _userList.Find(user => user.Username == username);
+                    _logger.Log($"Failed login attempt. User [ {username} ] not found.");
+                    return null;
+                }
+                else
+                {
                     MinimalUser authenticatedUser = new MinimalUser
                     {
                         Username = user.Username,
@@ -106,9 +111,9 @@ namespace Backend
                         Email = user.Email
                     };
                     _minimalUserList.Add(authenticatedUser);
+                    _logger.Log($"User [ {username} ] logged in.");
+                    return JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(authenticatedUser);
                 }
-                byte[] jsonUser = JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(minimal);
-                return jsonUser;
             }
             catch (Exception e)
             {

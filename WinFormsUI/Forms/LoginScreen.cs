@@ -10,7 +10,6 @@ namespace Test1
     public partial class LoginScreen : Form
     {
         private readonly IApi _frontendApi;
-        //private MinimalUser _userInfo;
 
         public LoginScreen(IApi api)
         {

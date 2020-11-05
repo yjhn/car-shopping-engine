@@ -70,27 +70,5 @@ namespace CarEngine.Pages
             // this should show profile info when called
             // currently profile info screen is not implemented
         }
-
-        private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //UpdatePage();
-        }
-
-        private void UpdatePage()
-        {
-            //logoutBtn.Visible= (Program.UserToken == null)? false : true;
-
-
-            //usernameLabel.Text = Program.user.Username;
-            //uploadedLabel.Text = "Ads uploaded by " + Program.user.Username;
-            //favoriteAdsLabel.Text = Program.user.Username + " favorite Ads";
-
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            //Program.UserToken = null;
-            UpdatePage();
-        }
     }
 }

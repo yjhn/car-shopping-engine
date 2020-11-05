@@ -124,7 +124,6 @@
             this.logoutBtn.Text = "Log Out";
             this.logoutBtn.UseVisualStyleBackColor = true;
             this.logoutBtn.Visible = false;
-            this.logoutBtn.Click += new System.EventHandler(this.Button1_Click);
             // 
             // ProfilePage
             // 
