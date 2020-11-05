@@ -117,6 +117,17 @@ namespace Backend
             }
         }
 
+        public bool UpdateLikedAds(string token, List<int> newAds)
+        {
+            MinimalUser minimal = _minimalUserList.Find((minimalUser)=> minimalUser.Token == token);
+            if (minimal == null)
+                return false;
+            minimal.LikedAds = newAds;
+            User original = _userList.Find((User user) => minimal.Username == user.Username);
+            original.LikedAds = newAds;
+            return true;
+        }
+
         private bool CheckIfExists(string username)
         {
             return _userList.Exists(user => user.Username == username);

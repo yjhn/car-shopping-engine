@@ -216,7 +216,30 @@ namespace Frontend
             );
         }
 
-                private string MakeType(string key)
+        public Task<bool?> UpdateLikedAds(string token, List<int> likedAds)
+        {
+            return new Task<bool?>(() =>
+            {
+                Request req = ReqInit("POST", "users/update-liked-ads");
+                byte[] likedAdsContent = JsonSerializer.SerializeToUtf8Bytes<List<int>>(likedAds);
+                req.Headers.Add(new Header("token", token));
+                req.Queries.Add("Content-length", likedAdsContent.Length.ToString());
+                req.Queries.Add("Content-type", MakeType("json"));
+                req.Content = likedAdsContent;
+                Response r = GetResponse(req);
+                if (r == null)
+                {
+                    NoServerResponse.Invoke();
+                    return null;
+                }
+                bool updated = false;
+                if (r.StatusCode == 200)
+                    updated = true;
+                return updated;
+            });
+        }
+
+                    private string MakeType(string key)
         {
             string contentType;
             switch (key)

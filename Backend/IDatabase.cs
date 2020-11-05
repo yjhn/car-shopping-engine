@@ -1,5 +1,5 @@
 ﻿using DataTypes;
-
+using System.Collections.Generic;
 namespace Backend
 {
     public interface IDatabase
@@ -35,5 +35,6 @@ namespace Backend
 
         // returns: true, if removal is successful, false if not
         public bool DeleteUser(string username);
+        public bool UpdateLikedAds(string token, List<int> newAds);
     }
-}
+    }

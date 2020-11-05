@@ -165,7 +165,7 @@ namespace Server
             string contentType = "application/x-www-form-urlencoded";
             if (Header.Contains(req.Headers, "CONTENT-TYPE"))
                 contentType = Header.GetValueByName(req.Headers, "CONTENT-TYPE");
-            _r = MakeResponse(415);
+            Response unsupportedType = MakeResponse(415);
             switch (req.Resource)
             {
                 case "cars":
@@ -173,14 +173,26 @@ namespace Server
                     //return;
                     if (contentType.StartsWith("application/json"))
                         AddCar(req.Content);
+                    else
+                        _r = unsupportedType;
                     break;
                 case "users":
                     if (contentType.StartsWith("application/json"))
                         AddUser(req.Content);
+                    else
+                        _r = unsupportedType;
                     break;
                 case "users/login":
                     if (contentType == "application/x-www-form-urlencoded")
                         Login(Encoding.ASCII.GetString(req.Content));
+                    else
+                        _r = unsupportedType;
+                    break;
+                case "users/update-liked-ads":
+                    if (contentType.StartsWith("application/json"))
+                        updateAds(Header.GetValueByName(req.Headers, "TOKEN"), System.Text.Json.JsonSerializer.Deserialize<List<int>>(req.Content));
+                    else
+                        _r = unsupportedType;
                     break;
                 default:
                     _r = MakeResponse(404);
@@ -210,6 +222,16 @@ namespace Server
             else
                 _r = MakeResponse(200);
         }
+
+        private void updateAds(string token, List<int> ads)
+        {
+            bool result = _db.UpdateLikedAds(token, ads);
+            if (result)
+                _r = MakeResponse(200);
+            else
+                _r = MakeResponse(404);
+        }
+
 
         private void GetCars(Request req)
         {
@@ -382,15 +404,7 @@ namespace Server
             }
         }
 
-        //private bool Verify(Request req)
-        //{
-        //    bool verified = Clients.Verify(int.Parse(req.Queries["session"]));
-        //    if (!verified)
-        //        _r = MakeResponse(401);
-        //    return verified;
-        //}
-
-        private SortingCriteria? GetSortingCriteria(string criteriaString)
+            private SortingCriteria? GetSortingCriteria(string criteriaString)
         {
             SortingCriteria? criteria = null;
             Type sortingType = typeof(SortingCriteria);

@@ -89,7 +89,7 @@ namespace CarEngine.Pages
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Program.UserToken = null;
+            //Program.UserToken = null;
             UpdatePage();
         }
     }
