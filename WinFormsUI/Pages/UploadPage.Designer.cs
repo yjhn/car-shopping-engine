@@ -69,11 +69,15 @@
             this.driveWheelsComboBox = new System.Windows.Forms.ComboBox();
             this.defectsLabel = new System.Windows.Forms.Label();
             this.defectsTextBox = new System.Windows.Forms.TextBox();
+            this.radioButtonLeftWheel = new System.Windows.Forms.RadioButton();
+            this.radioButtonRightWheel = new System.Windows.Forms.RadioButton();
+            this.panel5 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yearBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.priceBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.driveKmBox)).BeginInit();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTitleLabel
@@ -138,7 +142,7 @@
             // uploadButton
             // 
             this.uploadButton.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.uploadButton.Location = new System.Drawing.Point(230, 468);
+            this.uploadButton.Location = new System.Drawing.Point(230, 502);
             this.uploadButton.Margin = new System.Windows.Forms.Padding(2);
             this.uploadButton.Name = "uploadButton";
             this.uploadButton.Size = new System.Drawing.Size(174, 34);
@@ -394,7 +398,7 @@
             this.panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel4.Controls.Add(this.radioButtonUsed);
             this.panel4.Controls.Add(this.radioButtonNew);
-            this.panel4.Location = new System.Drawing.Point(353, 115);
+            this.panel4.Location = new System.Drawing.Point(339, 113);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(87, 58);
             this.panel4.TabIndex = 5;
@@ -530,23 +534,28 @@
             // 
             this.driveKmBox.AccessibleDescription = "driven kilometers combo box";
             this.driveKmBox.AccessibleName = "driven kilometers combo box";
+            this.driveKmBox.Increment = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.driveKmBox.Location = new System.Drawing.Point(153, 235);
             this.driveKmBox.Margin = new System.Windows.Forms.Padding(2);
             this.driveKmBox.Maximum = new decimal(new int[] {
-            2020,
+            800000,
             0,
             0,
             0});
             this.driveKmBox.Minimum = new decimal(new int[] {
-            1900,
+            2000,
             0,
             0,
             0});
             this.driveKmBox.Name = "driveKmBox";
-            this.driveKmBox.Size = new System.Drawing.Size(46, 23);
+            this.driveKmBox.Size = new System.Drawing.Size(82, 23);
             this.driveKmBox.TabIndex = 7;
             this.driveKmBox.Value = new decimal(new int[] {
-            1900,
+            2000,
             0,
             0,
             0});
@@ -614,8 +623,44 @@
             this.defectsTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.defectsTextBox.Multiline = true;
             this.defectsTextBox.Name = "defectsTextBox";
-            this.defectsTextBox.Size = new System.Drawing.Size(160, 140);
+            this.defectsTextBox.Size = new System.Drawing.Size(160, 173);
             this.defectsTextBox.TabIndex = 2;
+            // 
+            // radioButtonLeftWheel
+            // 
+            this.radioButtonLeftWheel.AccessibleDescription = "radio button for left side whee;";
+            this.radioButtonLeftWheel.AccessibleName = "radio button for left side whee;";
+            this.radioButtonLeftWheel.AutoSize = true;
+            this.radioButtonLeftWheel.Location = new System.Drawing.Point(33, 14);
+            this.radioButtonLeftWheel.Name = "radioButtonLeftWheel";
+            this.radioButtonLeftWheel.Size = new System.Drawing.Size(103, 19);
+            this.radioButtonLeftWheel.TabIndex = 1;
+            this.radioButtonLeftWheel.TabStop = true;
+            this.radioButtonLeftWheel.Text = "Left side wheel";
+            this.radioButtonLeftWheel.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonRightWheel
+            // 
+            this.radioButtonRightWheel.AccessibleDescription = "radio button for right side whee;";
+            this.radioButtonRightWheel.AccessibleName = "radio button for right side whee;";
+            this.radioButtonRightWheel.AutoSize = true;
+            this.radioButtonRightWheel.Location = new System.Drawing.Point(33, 36);
+            this.radioButtonRightWheel.Name = "radioButtonRightWheel";
+            this.radioButtonRightWheel.Size = new System.Drawing.Size(111, 19);
+            this.radioButtonRightWheel.TabIndex = 2;
+            this.radioButtonRightWheel.Text = "Right side wheel";
+            this.radioButtonRightWheel.UseVisualStyleBackColor = true;
+            // 
+            // panel5
+            // 
+            this.panel5.AutoSize = true;
+            this.panel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel5.Controls.Add(this.radioButtonLeftWheel);
+            this.panel5.Controls.Add(this.radioButtonRightWheel);
+            this.panel5.Location = new System.Drawing.Point(449, 113);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(147, 58);
+            this.panel5.TabIndex = 5;
             // 
             // UploadPage
             // 
@@ -624,6 +669,7 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Controls.Add(this.panel5);
             this.Controls.Add(this.defectsTextBox);
             this.Controls.Add(this.defectsLabel);
             this.Controls.Add(this.driveWheelsComboBox);
@@ -653,13 +699,15 @@
             this.Controls.Add(this.mainTitleLabel);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UploadPage";
-            this.Size = new System.Drawing.Size(688, 535);
+            this.Size = new System.Drawing.Size(688, 570);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yearBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.priceBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.driveKmBox)).EndInit();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -711,5 +759,8 @@
         private System.Windows.Forms.Label driveWheels;
         private System.Windows.Forms.ComboBox driveWheelsComboBox;
         private System.Windows.Forms.Label defectsLabel;
+        private System.Windows.Forms.RadioButton radioButtonLeftWheel;
+        private System.Windows.Forms.RadioButton radioButtonRightWheel;
+        private System.Windows.Forms.Panel panel5;
     }
 }

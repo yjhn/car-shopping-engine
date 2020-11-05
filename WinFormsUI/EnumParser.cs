@@ -109,6 +109,32 @@ namespace CarEngine
             //return fuelType;
         }
 
+        internal GearboxType? GetGearboxType(string gearboxName)
+        {
+            if (gearboxName != "any")
+            {
+                string parsableGearboxName = gearboxName.Replace(' ', '_');
+                return (GearboxType?)Enum.Parse(typeof(GearboxType), parsableGearboxName, true);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        internal DriveWheels? GetDriveWheels(string driveWheelsName)
+        {
+            if (driveWheelsName != "any")
+            {
+                string parsabledriveWheelsName = driveWheelsName.Replace(' ', '_');
+                return (DriveWheels?)Enum.Parse(typeof(DriveWheels), parsabledriveWheelsName, true);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         internal ChassisType? GetChassisType(string chassisName)
         {
             if (chassisName != "any")

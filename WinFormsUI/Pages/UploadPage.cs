@@ -42,8 +42,10 @@ namespace CarEngine.Pages
             InitializeComponent();
             // default vehicle type: any
             typeComboBox.SelectedIndex = 0;
-            // default fuel type: any
+            // default fuel type: 
             fuelTypeComboBox.SelectedIndex = 0;
+            driveWheelsComboBox.SelectedIndex = 0;
+            gearboxTypeComboBox.SelectedIndex = 0;
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
@@ -109,12 +111,10 @@ namespace CarEngine.Pages
         //surenka info apie automobili is visu info lauku ir ikelia per api 
         private void PushCar()
         {
-            Random rand = new Random();
-            string[] colors = { "raudona", "zalia", "melyna", "geltona", "balta", "belekokia spalva", "purpurine", "alyvine", "tamsiai violetine" };
             Car uploadCar = new Car
             {
                 //----------------
-                UploaderUsername = "user" + rand.Next(0, 100), //change to current users name
+                UploaderUsername = "userTest",//change to current users name
                 //----------------
                 UploadDate = DateTime.Now,
                 Price = Convert.ToInt32(priceBox.Value),
@@ -123,12 +123,13 @@ namespace CarEngine.Pages
                 Used = radioButtonUsed.Checked,
                 FuelType = (FuelType)_parser.GetFuelType((string)fuelTypeComboBox.SelectedItem),
                 ChassisType = (ChassisType)_parser.GetChassisType((string)typeComboBox.SelectedItem),
-                GearboxType = GearboxType.Automatic,
-                TotalKilometersDriven = rand.Next(2000, 800000),
-                DriveWheels = DriveWheels.Front,
-                Defects = new string[] { "luzusi dureliu rankena", "isdauzti trys langai" },
-                SteeringWheelPosition = SteeringWheelPosition.Left,
+                GearboxType = (GearboxType)_parser.GetGearboxType((string)gearboxTypeComboBox.SelectedItem),
+                TotalKilometersDriven = Convert.ToInt32(priceBox.Value),
+                DriveWheels = (DriveWheels)_parser.GetDriveWheels((string)driveWheelsComboBox.SelectedItem),
+                Defects = new string[] {defectsTextBox.Text},
+                SteeringWheelPosition = radioButtonLeftWheel.Checked ? SteeringWheelPosition.Left : SteeringWheelPosition.Right,
                 //Images = new string[] { Converter.ConvertImageToBase64(pictureBox1.Image)}
+                    //^image uploadas neveikia, nutruksta connection su serveriu. not handled properly yet
             };
             _frontendApi.AddCar(uploadCar);
         }
