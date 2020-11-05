@@ -74,24 +74,31 @@ namespace CarEngine.Pages
             InitializeComponent();
         }
 
-        private /*async*/ void LoadInfo()
+        private async    void LoadInfo()
         {
             if (_userInfo != null && _userInfo.Username != null && _frontendApi != null)
             {
                 usernameLabel.Text = _userInfo.Username;
 
                 List<Car> likedCars = _userInfo.LikedCarList;
-                List<bool> isLiked = Enumerable.Repeat(true, likedCars.Count).ToList();
+                // this list can be null
+                if (likedCars != null)
+                {
+                    List<bool> isLiked = Enumerable.Repeat(true, likedCars.Count).ToList();
 
-                CarAdMinimal[] likedAdsList = Converter.VehicleListToAds(likedCars, _userInfo, isLiked);
+                    CarAdMinimal[] likedAdsList = Converter.VehicleListToAds(likedCars, _userInfo, isLiked);
 
-                likedAdsPanel.Controls.Clear();
-                likedAdsPanel.Controls.AddRange(likedAdsList);
+                    likedAdsPanel.Controls.Clear();
+                    likedAdsPanel.Controls.AddRange(likedAdsList);
+                }
 
                 uploadedAdsPanel.Controls.Clear();
-
-                // currently Api does not have this functionality
-                //uploadedAdsPanel.Controls.AddRange(Converter.VehicleListToAds(_frontendApi. ,_userInfo))
+                List<Car> uploadedCars = await _frontendApi.GetUploadedCars(_userInfo.Username, 0, 15);
+                if (uploadedCars != null)
+                {
+                    List<bool> isUploaded = Enumerable.Repeat(true, uploadedCars.Count).ToList();
+                    uploadedAdsPanel.Controls.AddRange(Converter.VehicleListToAds(uploadedCars, _userInfo, isUploaded));
+                }
             }
         }
 

@@ -242,6 +242,54 @@ namespace Frontend
             });
         }
 
+        public Task<List<Car>> GetLikedCars(string username, int startIndex, int amount)
+        {
+            return new Task<List<Car>>(() =>
+            {
+                Request req = ReqInit("GET", "cars/liked");
+                req.Queries.Add("amount", amount.ToString());
+                req.Queries.Add("start_index", startIndex.ToString());
+                req.Queries.Add("username", username);
+                Response r = GetResponse(req);
+                if (r == null)
+                {
+                    NoServerResponse.Invoke();
+                    return null;
+                }
+                                List<Car> likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
+                                // if list is null, it may be better to return empty one instead of null
+
+                //if (likedCarList == null)
+                    //likedCarList = new List<Car>();
+                return likedCarList;
+            }
+            );
+        }
+
+        public Task<List<Car>>GetUploadedCars(string username, int startIndex, int amount)
+        {
+            return new Task<List<Car>>(() =>
+            {
+                Request req = ReqInit("GET", "cars/uploaded");
+                req.Queries.Add("amount", amount.ToString());
+                req.Queries.Add("start_index", startIndex.ToString());
+                req.Queries.Add("username", username);
+                Response r = GetResponse(req);
+                if (r == null)
+                {
+                    NoServerResponse.Invoke();
+                    return null;
+                }
+                List<Car> uploadedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
+                // maybe it's better to return empty list instead of null?
+
+                //if (uploadedCarList == null)
+                    //uploadedCarList = new List<Car>();
+                return uploadedCarList;
+            }
+ );
+        }
+
         private string MakeType(string key)
         {
             string contentType;

@@ -123,16 +123,25 @@ namespace Backend
             }
         }
 
-        public bool UpdateLikedAds(string token, List<int> newAds)
+        public bool UpdateLikedAds(string token, byte[] newAdsJson)
         {
-            MinimalUser minimal = _minimalUserList.Find((minimalUser) => minimalUser.Token == token);
-            if (minimal == null)
+            try
+            {
+                List<int> newAds = JsonSerializer.Deserialize<List<int>>(newAdsJson);
+                MinimalUser minimal = _minimalUserList.Find((minimalUser) => minimalUser.Token == token);
+                if (minimal == null)
+                    return false;
+                minimal.LikedAds = newAds;
+                User original = _userList.Find((User user) => minimal.Username == user.Username);
+                original.LikedAds = newAds;
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogException(e);
                 return false;
-            minimal.LikedAds = newAds;
-            User original = _userList.Find((User user) => minimal.Username == user.Username);
-            original.LikedAds = newAds;
-            return true;
-        }
+            }
+        }           
 
         private bool CheckIfExists(string username)
         {
@@ -225,7 +234,6 @@ namespace Backend
             List<Car> carsToReturn = uploadedCars.Skip(startIndex).Take(amount).ToList();
             return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
         }
-
 
         private byte[] GetSortedCarsJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {

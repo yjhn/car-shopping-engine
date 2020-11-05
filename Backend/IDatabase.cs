@@ -35,6 +35,6 @@ namespace Backend
 
         // returns: true, if removal is successful, false if not
         public bool DeleteUser(string username);
-        public bool UpdateLikedAds(string token, List<int> newAds);
+        public bool UpdateLikedAds(string token, byte[] newAdsJson);
     }
 }

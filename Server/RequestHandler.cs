@@ -69,7 +69,7 @@ namespace Server
 
         private Request ParseRequest()
         {
-            Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+){ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z,\.:\/\?\d&_\-; =]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
+            Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+){ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[^\r\n]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
             if (!regex.IsMatch(_rawRequest))
                 throw new ArgumentException("Invalid request");
             GroupCollection groups = regex.Matches(_rawRequest)[0].Groups;
@@ -151,6 +151,12 @@ namespace Server
                 case "cars/filters":
                     GetFilteredCars(req.Queries);
                     break;
+                case "cars/liked":
+                    GetLikedCars(req.Queries);
+                    break;
+                case "cars/uploaded":
+                    GetUploadedCars(req.Queries);
+                    break;
                 case "users":
                     GetUser(req.Queries["username"]);
                     break;
@@ -190,7 +196,7 @@ namespace Server
                     break;
                 case "users/update-liked-ads":
                     if (contentType.StartsWith("application/json"))
-                        updateAds(Header.GetValueByName(req.Headers, "TOKEN"), System.Text.Json.JsonSerializer.Deserialize<List<int>>(req.Content));
+                        updateAds(Header.GetValueByName(req.Headers, "TOKEN"), req.Content);
                     else
                         _r = unsupportedType;
                     break;
@@ -223,7 +229,7 @@ namespace Server
                 _r = MakeResponse(200);
         }
 
-        private void updateAds(string token, List<int> ads)
+        private void updateAds(string token, byte[] ads)
         {
             bool result = _db.UpdateLikedAds(token, ads);
             if (result)
@@ -231,7 +237,6 @@ namespace Server
             else
                 _r = MakeResponse(404);
         }
-
 
         private void GetCars(Request req)
         {
@@ -381,7 +386,25 @@ namespace Server
             _r = MakeResponse(200, _db.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
         }
 
-        private byte[] SetContent(string output)
+        private void GetLikedCars(Dictionary<string, string> queries)
+        {
+            int startIndex = int.Parse(queries["start_index"]);
+            int amount = int.Parse(queries["amount"]);
+            string username = queries["username"];
+                        byte[] favouriteCars = _db.GetUserLikedAds(username, startIndex, amount);
+            _r = MakeResponse(200, favouriteCars);
+        }
+
+        private void GetUploadedCars(Dictionary<string, string> queries)
+        {
+            int startIndex = int.Parse(queries["start_index"]);
+            int amount = int.Parse(queries["amount"]);
+            string username = queries["username"];
+            byte[] uploadedCars = _db.GetUserUploadedAds(username, startIndex, amount);
+            _r = MakeResponse(200, uploadedCars);
+        }
+
+            private byte[] SetContent(string output)
         {
             return System.Text.Encoding.ASCII.GetBytes(output);
         }

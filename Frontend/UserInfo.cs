@@ -47,13 +47,11 @@ namespace Frontend
 
         }
 
-        private /*async*/ void GetLikedCars()
+        private async void GetLikedCars()
         {
             // load user liked ads from server
-            //LikedCarList = await _api.
+            LikedCarList = await _api.GetLikedCars(Username, 0, 15);
 
-            //temporary
-            LikedCarList = new List<Car>();
         }
     }
 }
