@@ -1,51 +1,60 @@
 ﻿using DataTypes;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Frontend
 {
     public class UserInfo
     {
         private readonly IApi _api;
-        //private MinimalUser _user;
 
-        public UserInfo(IApi api)
-        {
-            _api = api;
-        }
+        public string Username { get; private set; }
+        public List<int> LikedAds { get; private set; }
+
+        private string Token { get; set; }
+
+        public List<Car> LikedCarList { get; private set; }
 
         public MinimalUser User
         {
             // use setter when logging in and logging out
+            // when logging ou, set this to null
             set
             {
                 if (value != null)
                 {
-                    //_user = value;
                     Username = value.Username;
                     LikedAds = value.LikedAds;
                     Token = value.Token;
+                    GetLikedCars();
                 }
-                else
+                else if (Username != null)
                 {
                     // this happens if user logs out
-
-                    // we need to send updated user info to the server in this case
-                    //_user.LikedAds = LikedAds;
-                    // call Api
+                    // update liked ads of the user who logged out
                     _api.UpdateLikedAds(Token, LikedAds);
 
                     // reset user info
                     Username = null;
                     LikedAds = null;
                     Token = null;
-                    //_user = null;
                 }
             }
         }
 
-        public string Username { get; private set; }
-        public List<int> LikedAds { get; private set; }
+        public UserInfo(IApi api)
+        {
+            _api = api;
+            
+        }
 
-        internal string Token { get; private set; }
+        private /*async*/ void GetLikedCars()
+        {
+            // load user liked ads from server
+            //LikedCarList = await _api.
+
+            //temporary
+            LikedCarList = new List<Car>();
+        }
     }
 }

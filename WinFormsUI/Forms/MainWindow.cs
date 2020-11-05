@@ -17,9 +17,6 @@ namespace Test1
         private readonly IApi _api;
         private readonly UserInfo _userInfo;
 
-        //private bool _loginPageShow = false;
-        private bool _loggedIn = false;
-
         public MainWindow(IApi api, UserInfo userInfo)
         {
             _api = api;
@@ -32,12 +29,12 @@ namespace Test1
 
             // pass Api down
             browsePage.Api = _api;
+            browsePage.UserInfo = _userInfo;
             searchPage.Api = _api;
+            searchPage.UserInfo = _userInfo;
             uploadPage.Api = _api;
             profilePage.Api = _api;
-
-            // start with Browse page activated
-            browseButton.PerformClick();
+            profilePage.UserInfo = _userInfo;
         }
 
         // this works, but if connection reappears, currently nothing changes
@@ -59,6 +56,11 @@ namespace Test1
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // this makes the application update user liked ads
+            if (logoutBtn.Visible)
+            {
+                logoutBtn.PerformClick();
+            }
             Application.Exit();
         }
 
@@ -153,11 +155,11 @@ namespace Test1
             button.ForeColor = _activeSidebarButtonTextColor;
             button.BackColor = _activeSidebarButtonColor;
 
-            // enable all buttons except for profile
+            // enable buttons
             browseButton.Enabled = true;
             searchButton.Enabled = true;
             uploadButton.Enabled = true;
-            if (_loggedIn)
+            if (_userInfo.Username != null)
             {
                 profileButton.Enabled = true;
             }
@@ -192,6 +194,12 @@ namespace Test1
         private void LogoutBtn_VisibleChanged(object sender, EventArgs e)
         {
             loginBtn.Visible = !logoutBtn.Visible;
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            // start with Browse page activated
+            browseButton.PerformClick();
         }
     }
 }

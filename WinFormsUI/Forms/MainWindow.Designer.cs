@@ -283,6 +283,7 @@
             this.Name = "MainWindow";
             this.Text = "Car shopping engine";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.sidebarPanel.ResumeLayout(false);
             this.pagePanel.ResumeLayout(false);
             this.pagePanel.PerformLayout();

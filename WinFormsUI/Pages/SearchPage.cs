@@ -12,6 +12,7 @@ namespace CarEngine
     {
         private int _resultspageNr = 1;
         private IApi _frontendApi;
+        private readonly EnumParser _parser = new EnumParser();
 
         // tab close button image
         private readonly Image _closeImage = Converter.ResizeImage(Resources.tabclose, 15, 15);
@@ -27,7 +28,7 @@ namespace CarEngine
             set
             {
                 // _frontendApi can be set only once
-                if (_frontendApi == null)
+                if (_frontendApi == null && value != null)
                 {
                     _frontendApi = value;
                 }
@@ -38,8 +39,35 @@ namespace CarEngine
             }
         }
 
-        //private Api _frontendApi = new Api(); // this is bad. There should only be one instance of this in the whole project
-        private readonly EnumParser _parser = new EnumParser();
+        private UserInfo _userInfo;
+
+        [DefaultValue(null)]
+        public UserInfo UserInfo
+        {
+            get
+            {
+                return _userInfo;
+            }
+            set
+            {
+                // _userInfo can be set only once
+                if (_userInfo == null && value != null)
+                {
+                    _userInfo = value;
+
+                    // we only enable the search button once we get the api and userInfo
+                    if (_frontendApi != null)
+                    {
+                        searchBtn.Enabled = true;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error while setting UserInfo");
+                }
+            }
+        }
+
         public SearchPage()
         {
             InitializeComponent();
@@ -105,6 +133,7 @@ namespace CarEngine
             BrowsePage searchResultsTab = new BrowsePage(filters, (string)sortByCombobox.SelectedItem, sortAscRadioBtn.Checked)
             {
                 Api = _frontendApi,
+                UserInfo = _userInfo,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 AutoSize = false

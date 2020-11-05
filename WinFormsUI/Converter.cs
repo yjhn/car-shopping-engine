@@ -1,12 +1,11 @@
 ﻿using DataTypes;
+using Frontend;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-
-// this should be moved to Frontend project
 
 namespace CarEngine
 {
@@ -59,7 +58,7 @@ namespace CarEngine
             return Convert.ToBase64String(imageBytes);
         }
 
-        public static CarAdMinimal[] VehicleListToAds(List<Car> vehicleList)
+        public static CarAdMinimal[] VehicleListToAds(List<Car> vehicleList, UserInfo userInfo, List<bool> isLiked)
         {
             if(vehicleList == null)
             {
@@ -70,7 +69,7 @@ namespace CarEngine
             // might not get the amount of ads we asked for
             for (int i = 0; i < vehicleList.Count; i++)
             {
-                minimalAds[i] = new CarAdMinimal(vehicleList[i]);
+                minimalAds[i] = new CarAdMinimal(vehicleList[i], userInfo, isLiked[i]);
             }
             return minimalAds;
         }

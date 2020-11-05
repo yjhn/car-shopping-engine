@@ -1,5 +1,6 @@
 ﻿using CarEngine.Forms;
 using DataTypes;
+using Frontend;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,14 +9,23 @@ namespace CarEngine
 {
     public partial class CarAdMinimal : UserControl
     {
-        private readonly Car _carInfo;
         private readonly Color _selectedAdColor = Color.Aquamarine;
         private readonly Color _normalAdColor = Color.FloralWhite;
 
-        public CarAdMinimal(Car carInfo)
+        private readonly Car _carInfo;
+        private readonly UserInfo _userInfo;
+
+        public CarAdMinimal(Car carInfo, UserInfo userInfo, bool liked)
         {
-            InitializeComponent();
+            _userInfo = userInfo;
             _carInfo = carInfo;
+
+            InitializeComponent();
+            if (liked)
+            {
+                likeButton.Text = "♥";
+            }
+
             BackColor = _normalAdColor;
 
             carBrandModelBtn.Text = $"{carInfo.Brand} {carInfo.Model}";
@@ -58,9 +68,26 @@ namespace CarEngine
             OpenCarWindow();
         }
 
-        private void AdditionInfo_Click(object sender, EventArgs e)
+        private void AdditionalInfo_Click(object sender, EventArgs e)
         {
             OpenCarWindow();
+        }
+
+        private void LikeButton_Click(object sender, EventArgs e)
+        {
+            // if user has not already liked this ad
+            if (((Button)sender).Text == "❤")
+            {
+                ((Button)sender).Text = "♥";
+                _userInfo.LikedAds.Add(_carInfo.Id);
+                _userInfo.LikedCarList.Add(_carInfo);
+            }
+            else
+            {
+                ((Button)sender).Text = "❤";
+                _userInfo.LikedAds.Remove(_carInfo.Id);
+                _userInfo.LikedCarList.Remove(_carInfo);
+            }
         }
     }
 }

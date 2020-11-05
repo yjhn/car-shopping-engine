@@ -28,7 +28,6 @@ namespace CarEngine
         private IApi _frontendApi;
 
         // This property MUST be set for this to work correctly
-        // this may not be needed (it should make designer not set Api value to null)
         [DefaultValue(null)]
         public IApi Api
         {
@@ -39,16 +38,48 @@ namespace CarEngine
             set
             {
                 // _frontendApi can be set only once
-                if (_frontendApi == null || value == null)
+                if (_frontendApi == null && value != null)
                 {
                     _frontendApi = value;
 
-                    // we only start loading the content once we get the api
-                    SortingChanged();
+                    // we only start loading the content once we get the api and userInfo
+                    if (_userInfo != null)
+                    {
+                        SortingChanged();
+                    }
                 }
                 else
                 {
                     throw new Exception("Error while setting Api");
+                }
+            }
+        }
+
+        private UserInfo _userInfo;
+
+        [DefaultValue(null)]
+        public UserInfo UserInfo
+        {
+            get
+            {
+                return _userInfo;
+            }
+            set
+            {
+                // _userInfo can be set only once
+                if (_userInfo == null && value != null)
+                {
+                    _userInfo = value;
+
+                    // we only start loading the content once we get the api and userInfo
+                    if (_frontendApi != null)
+                    {
+                        SortingChanged();
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error while setting UserInfo");
                 }
             }
         }
@@ -145,7 +176,21 @@ namespace CarEngine
             {
                 vehicles = await _frontendApi.SortBy(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
             }
-            return Converter.VehicleListToAds(vehicles);
+
+            List<bool> isLiked;
+            if (_userInfo.Username != null)
+            {
+                isLiked = new List<bool>(vehicles.Count);
+                foreach (Car car in vehicles)
+                {
+                    isLiked.Add(_userInfo.LikedAds.Contains(car.Id));
+                }
+            }
+            else
+            {
+                isLiked = new List<bool>(new bool[vehicles.Count]);
+            }
+            return Converter.VehicleListToAds(vehicles, _userInfo, isLiked);
         }
 
         private void NextPageButton_Click(object sender, EventArgs e)

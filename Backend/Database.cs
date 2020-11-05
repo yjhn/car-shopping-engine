@@ -10,7 +10,7 @@ namespace Backend
     {
         private List<Car> _carList;
         private List<User> _userList;
-        private List<MinimalUser> _minimalUserList = new List<MinimalUser>();
+        private readonly List<MinimalUser> _minimalUserList = new List<MinimalUser>();
         private readonly FileReader _fileReader;
         private readonly FileWriter _fileWriter;
         private int _lastCarId;
@@ -108,7 +108,8 @@ namespace Backend
                         Username = user.Username,
                         Token = Guid.NewGuid().ToString(),
                         Phone = user.Phone,
-                        Email = user.Email
+                        Email = user.Email,
+                        LikedAds = user.LikedAds
                     };
                     _minimalUserList.Add(authenticatedUser);
                     _logger.Log($"User [ {username} ] logged in.");

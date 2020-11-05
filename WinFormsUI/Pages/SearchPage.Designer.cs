@@ -356,6 +356,7 @@ namespace CarEngine
             // 
             this.searchBtn.AccessibleDescription = "search button";
             this.searchBtn.AccessibleName = "search button";
+            this.searchBtn.Enabled = false;
             this.searchBtn.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.searchBtn.Location = new System.Drawing.Point(236, 464);
             this.searchBtn.Margin = new System.Windows.Forms.Padding(2);

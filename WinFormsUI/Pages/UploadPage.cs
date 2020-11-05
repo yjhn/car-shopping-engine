@@ -25,7 +25,7 @@ namespace CarEngine.Pages
             set
             {
                 // _frontendApi can be set only once
-                if (_frontendApi == null)
+                if (_frontendApi == null && value != null)
                 {
                     _frontendApi = value;
                 }

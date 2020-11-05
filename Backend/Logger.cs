@@ -22,7 +22,7 @@ namespace Backend
                 Directory.CreateDirectory(Path.GetDirectoryName(_exceptionsLogPath));
                 _exceptionsLogFile = File.OpenWrite(_exceptionsLogPath);
                 Directory.CreateDirectory(Path.GetDirectoryName(_messagesLogPath));
-                _exceptionsLogFile = File.OpenWrite(_messagesLogPath);
+                _messagesLogFile = File.OpenWrite(_messagesLogPath);
             }
             catch (Exception e)
             {
@@ -49,8 +49,8 @@ namespace Backend
             byte[] info = new UTF8Encoding(true).GetBytes($"{s}\n");
             try
             {
-                await _exceptionsLogFile.WriteAsync(info, 0, info.Length);
-                await _exceptionsLogFile.FlushAsync();
+                await _messagesLogFile.WriteAsync(info, 0, info.Length);
+                await _messagesLogFile.FlushAsync();
             }
             catch (Exception exc)
             {

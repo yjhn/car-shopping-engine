@@ -5,7 +5,6 @@ namespace CarEngine
 {
     internal class EnumParser
     {
-        // this method is ONLY for sorting based on sorting criteria that are available in SearhPage sortByCombobox -- they should be moved to a central location to be reusable
         internal SortingCriteria GetSortingCriteria(string name)
         {
             // need to move those strings to a centrally stored list
