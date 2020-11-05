@@ -61,10 +61,19 @@
             this.fuelTypeLabel = new System.Windows.Forms.Label();
             this.additionalImagesPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.priceBox = new System.Windows.Forms.NumericUpDown();
+            this.gearboxTypeLabel = new System.Windows.Forms.Label();
+            this.gearboxTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.driveKmBox = new System.Windows.Forms.NumericUpDown();
+            this.drivenKmLabel = new System.Windows.Forms.Label();
+            this.driveWheels = new System.Windows.Forms.Label();
+            this.driveWheelsComboBox = new System.Windows.Forms.ComboBox();
+            this.defectsLabel = new System.Windows.Forms.Label();
+            this.defectsTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yearBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.priceBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.driveKmBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mainTitleLabel
@@ -83,7 +92,7 @@
             // 
             this.nameLabel.AutoSize = true;
             this.nameLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.nameLabel.Location = new System.Drawing.Point(197, 83);
+            this.nameLabel.Location = new System.Drawing.Point(90, 85);
             this.nameLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(59, 25);
@@ -92,7 +101,7 @@
             // 
             // browseButton
             // 
-            this.browseButton.Location = new System.Drawing.Point(161, 379);
+            this.browseButton.Location = new System.Drawing.Point(118, 347);
             this.browseButton.Margin = new System.Windows.Forms.Padding(2);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(78, 20);
@@ -107,7 +116,7 @@
             this.uploadLabel.AccessibleName = "upload a picture:";
             this.uploadLabel.AutoSize = true;
             this.uploadLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.uploadLabel.Location = new System.Drawing.Point(74, 340);
+            this.uploadLabel.Location = new System.Drawing.Point(35, 316);
             this.uploadLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uploadLabel.Name = "uploadLabel";
             this.uploadLabel.Size = new System.Drawing.Size(165, 25);
@@ -118,10 +127,10 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(261, 340);
+            this.pictureBox1.Location = new System.Drawing.Point(208, 318);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(211, 97);
+            this.pictureBox1.Size = new System.Drawing.Size(196, 129);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
@@ -129,7 +138,7 @@
             // uploadButton
             // 
             this.uploadButton.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.uploadButton.Location = new System.Drawing.Point(261, 469);
+            this.uploadButton.Location = new System.Drawing.Point(230, 468);
             this.uploadButton.Margin = new System.Windows.Forms.Padding(2);
             this.uploadButton.Name = "uploadButton";
             this.uploadButton.Size = new System.Drawing.Size(174, 34);
@@ -155,7 +164,7 @@
             "combi minibus",
             "freight minibus",
             "commercial"});
-            this.typeComboBox.Location = new System.Drawing.Point(261, 85);
+            this.typeComboBox.Location = new System.Drawing.Point(153, 87);
             this.typeComboBox.Name = "typeComboBox";
             this.typeComboBox.Size = new System.Drawing.Size(181, 23);
             this.typeComboBox.TabIndex = 0;
@@ -164,10 +173,10 @@
             // 
             this.brandTextBox.AccessibleDescription = "text box for brand of the vehicle";
             this.brandTextBox.AccessibleName = "brand of the vehicle";
-            this.brandTextBox.Location = new System.Drawing.Point(261, 131);
+            this.brandTextBox.Location = new System.Drawing.Point(429, 87);
             this.brandTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.brandTextBox.Name = "brandTextBox";
-            this.brandTextBox.Size = new System.Drawing.Size(246, 23);
+            this.brandTextBox.Size = new System.Drawing.Size(181, 23);
             this.brandTextBox.TabIndex = 1;
             // 
             // brandLabel
@@ -177,7 +186,7 @@
             this.brandLabel.AutoSize = true;
             this.brandLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.brandLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.brandLabel.Location = new System.Drawing.Point(185, 126);
+            this.brandLabel.Location = new System.Drawing.Point(353, 85);
             this.brandLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.brandLabel.Name = "brandLabel";
             this.brandLabel.Size = new System.Drawing.Size(71, 25);
@@ -188,10 +197,10 @@
             // 
             this.modelTextBox.AccessibleDescription = "text box for model of the vehicle";
             this.modelTextBox.AccessibleName = "model of the vehicle";
-            this.modelTextBox.Location = new System.Drawing.Point(261, 174);
+            this.modelTextBox.Location = new System.Drawing.Point(153, 123);
             this.modelTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.modelTextBox.Name = "modelTextBox";
-            this.modelTextBox.Size = new System.Drawing.Size(246, 23);
+            this.modelTextBox.Size = new System.Drawing.Size(181, 23);
             this.modelTextBox.TabIndex = 2;
             // 
             // modelLabel
@@ -201,7 +210,7 @@
             this.modelLabel.AutoSize = true;
             this.modelLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.modelLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.modelLabel.Location = new System.Drawing.Point(177, 169);
+            this.modelLabel.Location = new System.Drawing.Point(74, 123);
             this.modelLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.modelLabel.Name = "modelLabel";
             this.modelLabel.Size = new System.Drawing.Size(74, 25);
@@ -215,7 +224,7 @@
             this.priceRangeLabel.AutoSize = true;
             this.priceRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.priceRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.priceRangeLabel.Location = new System.Drawing.Point(138, 214);
+            this.priceRangeLabel.Location = new System.Drawing.Point(30, 158);
             this.priceRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.priceRangeLabel.Name = "priceRangeLabel";
             this.priceRangeLabel.Size = new System.Drawing.Size(118, 25);
@@ -372,7 +381,7 @@
             this.radioButtonNew.AccessibleDescription = "radio button for new car";
             this.radioButtonNew.AccessibleName = "new car";
             this.radioButtonNew.AutoSize = true;
-            this.radioButtonNew.Location = new System.Drawing.Point(33, 39);
+            this.radioButtonNew.Location = new System.Drawing.Point(33, 36);
             this.radioButtonNew.Name = "radioButtonNew";
             this.radioButtonNew.Size = new System.Drawing.Size(49, 19);
             this.radioButtonNew.TabIndex = 2;
@@ -385,9 +394,9 @@
             this.panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel4.Controls.Add(this.radioButtonUsed);
             this.panel4.Controls.Add(this.radioButtonNew);
-            this.panel4.Location = new System.Drawing.Point(425, 216);
+            this.panel4.Location = new System.Drawing.Point(353, 115);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(87, 61);
+            this.panel4.Size = new System.Drawing.Size(87, 58);
             this.panel4.TabIndex = 5;
             // 
             // yearRangeLabel
@@ -397,7 +406,7 @@
             this.yearRangeLabel.AutoSize = true;
             this.yearRangeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.yearRangeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.yearRangeLabel.Location = new System.Drawing.Point(139, 255);
+            this.yearRangeLabel.Location = new System.Drawing.Point(35, 195);
             this.yearRangeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.yearRangeLabel.Name = "yearRangeLabel";
             this.yearRangeLabel.Size = new System.Drawing.Size(112, 25);
@@ -408,7 +417,7 @@
             // 
             this.yearBox.AccessibleDescription = "lower year range combo box";
             this.yearBox.AccessibleName = "lower year range combo box";
-            this.yearBox.Location = new System.Drawing.Point(261, 257);
+            this.yearBox.Location = new System.Drawing.Point(153, 197);
             this.yearBox.Margin = new System.Windows.Forms.Padding(2);
             this.yearBox.Maximum = new decimal(new int[] {
             2020,
@@ -439,10 +448,10 @@
             "diesel",
             "electric",
             "hybrid"});
-            this.fuelTypeComboBox.Location = new System.Drawing.Point(261, 299);
+            this.fuelTypeComboBox.Location = new System.Drawing.Point(153, 274);
             this.fuelTypeComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.fuelTypeComboBox.Name = "fuelTypeComboBox";
-            this.fuelTypeComboBox.Size = new System.Drawing.Size(129, 23);
+            this.fuelTypeComboBox.Size = new System.Drawing.Size(142, 23);
             this.fuelTypeComboBox.TabIndex = 9;
             // 
             // fuelTypeLabel
@@ -452,7 +461,7 @@
             this.fuelTypeLabel.AutoSize = true;
             this.fuelTypeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.fuelTypeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fuelTypeLabel.Location = new System.Drawing.Point(153, 297);
+            this.fuelTypeLabel.Location = new System.Drawing.Point(49, 271);
             this.fuelTypeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.fuelTypeLabel.Name = "fuelTypeLabel";
             this.fuelTypeLabel.Size = new System.Drawing.Size(98, 25);
@@ -463,10 +472,10 @@
             // 
             this.additionalImagesPanel.AutoScroll = true;
             this.additionalImagesPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.additionalImagesPanel.Location = new System.Drawing.Point(476, 340);
+            this.additionalImagesPanel.Location = new System.Drawing.Point(38, 376);
             this.additionalImagesPanel.Margin = new System.Windows.Forms.Padding(2);
             this.additionalImagesPanel.Name = "additionalImagesPanel";
-            this.additionalImagesPanel.Size = new System.Drawing.Size(185, 71);
+            this.additionalImagesPanel.Size = new System.Drawing.Size(161, 126);
             this.additionalImagesPanel.TabIndex = 10;
             // 
             // priceBox
@@ -478,7 +487,7 @@
             0,
             0,
             0});
-            this.priceBox.Location = new System.Drawing.Point(261, 216);
+            this.priceBox.Location = new System.Drawing.Point(153, 160);
             this.priceBox.Margin = new System.Windows.Forms.Padding(2);
             this.priceBox.Maximum = new decimal(new int[] {
             1000000,
@@ -489,6 +498,125 @@
             this.priceBox.Size = new System.Drawing.Size(82, 23);
             this.priceBox.TabIndex = 3;
             // 
+            // gearboxTypeLabel
+            // 
+            this.gearboxTypeLabel.AccessibleDescription = "gearbox type:";
+            this.gearboxTypeLabel.AccessibleName = "gearbox type:";
+            this.gearboxTypeLabel.AutoSize = true;
+            this.gearboxTypeLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.gearboxTypeLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.gearboxTypeLabel.Location = new System.Drawing.Point(286, 195);
+            this.gearboxTypeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.gearboxTypeLabel.Name = "gearboxTypeLabel";
+            this.gearboxTypeLabel.Size = new System.Drawing.Size(138, 25);
+            this.gearboxTypeLabel.TabIndex = 3;
+            this.gearboxTypeLabel.Text = "Gearbox type:";
+            // 
+            // gearboxTypeComboBox
+            // 
+            this.gearboxTypeComboBox.AccessibleDescription = "gear type combo box";
+            this.gearboxTypeComboBox.AccessibleName = "gear type combo box";
+            this.gearboxTypeComboBox.FormattingEnabled = true;
+            this.gearboxTypeComboBox.Items.AddRange(new object[] {
+            "automatic",
+            "mechanic"});
+            this.gearboxTypeComboBox.Location = new System.Drawing.Point(429, 197);
+            this.gearboxTypeComboBox.Margin = new System.Windows.Forms.Padding(2);
+            this.gearboxTypeComboBox.Name = "gearboxTypeComboBox";
+            this.gearboxTypeComboBox.Size = new System.Drawing.Size(129, 23);
+            this.gearboxTypeComboBox.TabIndex = 9;
+            // 
+            // driveKmBox
+            // 
+            this.driveKmBox.AccessibleDescription = "driven kilometers combo box";
+            this.driveKmBox.AccessibleName = "driven kilometers combo box";
+            this.driveKmBox.Location = new System.Drawing.Point(153, 235);
+            this.driveKmBox.Margin = new System.Windows.Forms.Padding(2);
+            this.driveKmBox.Maximum = new decimal(new int[] {
+            2020,
+            0,
+            0,
+            0});
+            this.driveKmBox.Minimum = new decimal(new int[] {
+            1900,
+            0,
+            0,
+            0});
+            this.driveKmBox.Name = "driveKmBox";
+            this.driveKmBox.Size = new System.Drawing.Size(46, 23);
+            this.driveKmBox.TabIndex = 7;
+            this.driveKmBox.Value = new decimal(new int[] {
+            1900,
+            0,
+            0,
+            0});
+            // 
+            // drivenKmLabel
+            // 
+            this.drivenKmLabel.AccessibleDescription = "driven km:";
+            this.drivenKmLabel.AccessibleName = "driven km:";
+            this.drivenKmLabel.AutoSize = true;
+            this.drivenKmLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.drivenKmLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.drivenKmLabel.Location = new System.Drawing.Point(38, 232);
+            this.drivenKmLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.drivenKmLabel.Name = "drivenKmLabel";
+            this.drivenKmLabel.Size = new System.Drawing.Size(109, 25);
+            this.drivenKmLabel.TabIndex = 3;
+            this.drivenKmLabel.Text = "Driven km:";
+            // 
+            // driveWheels
+            // 
+            this.driveWheels.AccessibleDescription = "Drive Wheels:";
+            this.driveWheels.AccessibleName = "Drive Wheels:";
+            this.driveWheels.AutoSize = true;
+            this.driveWheels.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.driveWheels.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.driveWheels.Location = new System.Drawing.Point(291, 232);
+            this.driveWheels.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.driveWheels.Name = "driveWheels";
+            this.driveWheels.Size = new System.Drawing.Size(128, 25);
+            this.driveWheels.TabIndex = 3;
+            this.driveWheels.Text = "Drive wheels:";
+            // 
+            // driveWheelsComboBox
+            // 
+            this.driveWheelsComboBox.AccessibleDescription = "drive wheels combo box";
+            this.driveWheelsComboBox.AccessibleName = "drive wheels combo box";
+            this.driveWheelsComboBox.FormattingEnabled = true;
+            this.driveWheelsComboBox.Items.AddRange(new object[] {
+            "left",
+            "right"});
+            this.driveWheelsComboBox.Location = new System.Drawing.Point(429, 234);
+            this.driveWheelsComboBox.Margin = new System.Windows.Forms.Padding(2);
+            this.driveWheelsComboBox.Name = "driveWheelsComboBox";
+            this.driveWheelsComboBox.Size = new System.Drawing.Size(84, 23);
+            this.driveWheelsComboBox.TabIndex = 9;
+            // 
+            // defectsLabel
+            // 
+            this.defectsLabel.AccessibleDescription = "Defects:";
+            this.defectsLabel.AccessibleName = "Defects:";
+            this.defectsLabel.AutoSize = true;
+            this.defectsLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.defectsLabel.Location = new System.Drawing.Point(337, 270);
+            this.defectsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.defectsLabel.Name = "defectsLabel";
+            this.defectsLabel.Size = new System.Drawing.Size(82, 25);
+            this.defectsLabel.TabIndex = 1;
+            this.defectsLabel.Text = "Defects:";
+            // 
+            // defectsTextBox
+            // 
+            this.defectsTextBox.AccessibleDescription = "defects text box";
+            this.defectsTextBox.AccessibleName = "defects text box";
+            this.defectsTextBox.Location = new System.Drawing.Point(429, 274);
+            this.defectsTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.defectsTextBox.Multiline = true;
+            this.defectsTextBox.Name = "defectsTextBox";
+            this.defectsTextBox.Size = new System.Drawing.Size(160, 140);
+            this.defectsTextBox.TabIndex = 2;
+            // 
             // UploadPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -496,6 +624,14 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Controls.Add(this.defectsTextBox);
+            this.Controls.Add(this.defectsLabel);
+            this.Controls.Add(this.driveWheelsComboBox);
+            this.Controls.Add(this.driveWheels);
+            this.Controls.Add(this.drivenKmLabel);
+            this.Controls.Add(this.driveKmBox);
+            this.Controls.Add(this.gearboxTypeComboBox);
+            this.Controls.Add(this.gearboxTypeLabel);
             this.Controls.Add(this.priceBox);
             this.Controls.Add(this.additionalImagesPanel);
             this.Controls.Add(this.fuelTypeLabel);
@@ -523,6 +659,7 @@
             this.panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yearBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.priceBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.driveKmBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -565,7 +702,14 @@
         private System.Windows.Forms.FlowLayoutPanel additionalImagesPanel;
         private System.Windows.Forms.TextBox brandTextBox;
         private System.Windows.Forms.TextBox modelTextBox;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox defectsTextBox;
         private System.Windows.Forms.NumericUpDown priceBox;
+        private System.Windows.Forms.Label gearboxTypeLabel;
+        private System.Windows.Forms.ComboBox gearboxTypeComboBox;
+        private System.Windows.Forms.NumericUpDown driveKmBox;
+        private System.Windows.Forms.Label drivenKmLabel;
+        private System.Windows.Forms.Label driveWheels;
+        private System.Windows.Forms.ComboBox driveWheelsComboBox;
+        private System.Windows.Forms.Label defectsLabel;
     }
 }

@@ -76,7 +76,7 @@ namespace CarEngine.Pages
             //temporary kokas :_)
             if (CheckIfFilled())
             {
-                _frontendApi.AddCar(GetAllCarInfo());
+                PushCar();
                 ClearSelections();
             }
         }
@@ -98,26 +98,39 @@ namespace CarEngine.Pages
                 DisplayErrorMessage("select whether its new or used");
                 return false;
             }
-            else if (pictureBox1.Image == null)
+            /*else if (pictureBox1.Image == null)
             {
                 DisplayErrorMessage("put some images");
                 return false;
-            }
+            }*/
             return true;
         }
 
-        //surenka info apie automobili is visu info lauku
-        private Car GetAllCarInfo()
+        //surenka info apie automobili is visu info lauku ir ikelia per api 
+        private void PushCar()
         {
-            Car uploadCar = new Car();  
-            uploadCar.ChassisType = (ChassisType)_parser.GetChassisType((string)typeComboBox.SelectedItem);
-            uploadCar.Brand = brandTextBox.Text;
-            uploadCar.Model = modelTextBox.Text;
-            uploadCar.Price = Convert.ToInt32(priceBox.Value);
-            uploadCar.Used = radioButtonUsed.Checked;
-            uploadCar.FuelType = (FuelType)_parser.GetFuelType((string)fuelTypeComboBox.SelectedItem);
-            uploadCar.Images = GetImages();
-            return uploadCar;
+            Random rand = new Random();
+            string[] colors = { "raudona", "zalia", "melyna", "geltona", "balta", "belekokia spalva", "purpurine", "alyvine", "tamsiai violetine" };
+            Car uploadCar = new Car
+            {
+                //----------------
+                UploaderUsername = "user" + rand.Next(0, 100), //change to current users name
+                //----------------
+                UploadDate = DateTime.Now,
+                Price = Convert.ToInt32(priceBox.Value),
+                Brand = modelTextBox.Text,
+                Model = modelTextBox.Text,
+                Used = radioButtonUsed.Checked,
+                FuelType = (FuelType)_parser.GetFuelType((string)fuelTypeComboBox.SelectedItem),
+                ChassisType = (ChassisType)_parser.GetChassisType((string)typeComboBox.SelectedItem),
+                GearboxType = GearboxType.Automatic,
+                TotalKilometersDriven = rand.Next(2000, 800000),
+                DriveWheels = DriveWheels.Front,
+                Defects = new string[] { "luzusi dureliu rankena", "isdauzti trys langai" },
+                SteeringWheelPosition = SteeringWheelPosition.Left,
+                //Images = new string[] { Converter.ConvertImageToBase64(pictureBox1.Image)}
+            };
+            _frontendApi.AddCar(uploadCar);
         }
 
         //surenka visas nuotraukas, kurios yra parinktos at a given time
@@ -131,7 +144,9 @@ namespace CarEngine.Pages
             }
             //main didele nuotrauka
             imagesList.Add(Converter.ConvertImageToBase64(pictureBox1.Image));
-            return imagesList.ToArray();
+            string[] returnas = imagesList.ToArray();
+            return returnas;
+                
         }
 
         private void ClearSelections()
