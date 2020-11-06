@@ -26,8 +26,7 @@ namespace Test1
         {
             string username = usernameTextBox.Text;
             string password = passwordTextBox.Text;
-
-            if (Validate(username, password))
+                        if (Validate(username,  password))
             {
                 MinimalUser user = await _frontendApi.GetUser(username, EncryptPassword(passwordTextBox.Text, username));
                 if (user == null)

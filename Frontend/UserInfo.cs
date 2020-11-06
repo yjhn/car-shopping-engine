@@ -59,7 +59,7 @@ namespace Frontend
         private async void GetLikedCars()
         {
             // load user liked ads from server, this should not return null
-            LikedCarList = await _api.GetLikedCars(Username, 0, 100);
+            LikedCarList = await _api.GetLikedCars(Token, 0, 100);
 
             // temporary
             //if(LikedCarList == null)
