@@ -185,7 +185,10 @@ namespace CarEngine
             }
             else
             {
+                if (vehicles != null)
                 isLiked = new List<bool>(new bool[vehicles.Count]);
+                else
+                    isLiked = new List<bool>();
             }
             return Converter.VehicleListToAds(vehicles, _userInfo, isLiked);
         }

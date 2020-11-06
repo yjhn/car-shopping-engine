@@ -64,6 +64,7 @@ namespace Server
                 _r = MakeResponse(500);
                 isAllRequest = false;
             }
+
             return _r.Format();
         }
 
@@ -152,7 +153,7 @@ namespace Server
                     GetFilteredCars(req.Queries);
                     break;
                 case "cars/liked":
-                    GetLikedCars(req.Queries);
+                    GetLikedCars(req.Queries, Header.GetValueByName(req.Headers, "TOKEN"));
                     break;
                 case "cars/uploaded":
                     GetUploadedCars(req.Queries);
@@ -386,12 +387,11 @@ namespace Server
             _r = MakeResponse(200, _db.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
         }
 
-        private void GetLikedCars(Dictionary<string, string> queries)
+        private void GetLikedCars(Dictionary<string, string> queries, string token)
         {
             int startIndex = int.Parse(queries["start_index"]);
             int amount = int.Parse(queries["amount"]);
-            string username = queries["username"];
-                        byte[] favouriteCars = _db.GetUserLikedAds(username, startIndex, amount);
+            byte[] favouriteCars = _db.GetUserLikedAds(token, startIndex, amount);
             _r = MakeResponse(200, favouriteCars);
         }
 
@@ -404,7 +404,7 @@ namespace Server
             _r = MakeResponse(200, uploadedCars);
         }
 
-            private byte[] SetContent(string output)
+        private byte[] SetContent(string output)
         {
             return System.Text.Encoding.ASCII.GetBytes(output);
         }

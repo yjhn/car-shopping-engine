@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+
 namespace Frontend
 {
     public class Api : IApi
@@ -220,7 +221,7 @@ namespace Frontend
 
         public Task<bool?> UpdateLikedAds(string token, List<int> likedAds)
         {
-            return new Task<bool?>(() =>
+            return Task.Run<bool?>(() =>
             {
                 Request req = ReqInit("POST", "users/update-liked-ads");
                 byte[] likedAdsContent = JsonSerializer.SerializeToUtf8Bytes<List<int>>(likedAds);
@@ -241,14 +242,14 @@ namespace Frontend
             });
         }
 
-        public Task<List<Car>> GetLikedCars(string username, int startIndex, int amount)
+        public Task<List<Car>> GetLikedCars(string token, int startIndex, int amount)
         {
-            return new Task<List<Car>>(() =>
+            return Task.Run<List<Car>>(() =>
             {
                 Request req = ReqInit("GET", "cars/liked");
                 req.Queries.Add("amount", amount.ToString());
                 req.Queries.Add("start_index", startIndex.ToString());
-                req.Queries.Add("username", username);
+                req.Headers.Add(new Header("token", token));
                 Response r = GetResponse(req);
                 if (r == null)
                 {
@@ -275,7 +276,7 @@ namespace Frontend
 
         public Task<List<Car>> GetUploadedCars(string username, int startIndex, int amount)
         {
-            return new Task<List<Car>>(() =>
+            return Task.Run<List<Car>>(() =>
             {
                 Request req = ReqInit("GET", "cars/uploaded");
                 req.Queries.Add("amount", amount.ToString());

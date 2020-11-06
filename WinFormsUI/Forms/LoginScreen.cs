@@ -57,7 +57,9 @@ namespace Test1
                 string username = usernameTextBox.Text;
                 string password = passwordTextBox.Text;
                 string email = emailTextbox.Text;
-                long phone = Convert.ToInt64(phoneTextbox.Text);
+                long phone = 1000000;
+                if (!string.IsNullOrEmpty(phoneTextbox.Text))
+                    phone = Convert.ToInt64(phoneTextbox.Text);
                 if (Validate(username, password) && email != "" && !email.Contains(' ') && phone != 1000000)
                 {
                     User user = new User(username, phone, EncryptPassword(password, username), email);

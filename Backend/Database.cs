@@ -206,12 +206,12 @@ namespace Backend
             return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
         }
 
-        public byte[] GetUserLikedAds(string username, int startIndex, int amount)
+        public byte[] GetUserLikedAds(string token, int startIndex, int amount)
         {
             List<Car> likedCars = new List<Car>();
 
             // should check if this user exists
-            User user = _userList.Find(user => user.Username == username);
+            MinimalUser user = _minimalUserList.Find(user => user.Token == token);
             foreach (int id in user.LikedAds)
             {
                 likedCars.Add(_carList.Find(car => car.Id == id));
