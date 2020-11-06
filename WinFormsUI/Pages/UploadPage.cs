@@ -109,6 +109,11 @@ namespace CarEngine.Pages
             }
         }
 
+        private void ResetDataButton_Click(object sender, EventArgs e)
+        {
+            ClearSelections();
+        }
+
         private bool CheckIfFilled()
         {
             if (brandTextBox.Text.Length < 1)
@@ -131,11 +136,11 @@ namespace CarEngine.Pages
                 DisplayErrorMessage("select whether wheel is on the left or the right side");
                 return false;
             }
-            /*else if (pictureBox1.Image == null)
+            else if (pictureBox1.Image == null)
             {
                 DisplayErrorMessage("put some images");
                 return false;
-            }*/
+            }
             return true;
         }
 

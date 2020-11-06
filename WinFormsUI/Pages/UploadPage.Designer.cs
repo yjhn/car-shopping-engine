@@ -72,6 +72,7 @@
             this.radioButtonLeftWheel = new System.Windows.Forms.RadioButton();
             this.radioButtonRightWheel = new System.Windows.Forms.RadioButton();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.resetDataButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yearBox)).BeginInit();
@@ -673,6 +674,20 @@
             this.panel5.Size = new System.Drawing.Size(147, 58);
             this.panel5.TabIndex = 5;
             // 
+            // resetDataButton
+            // 
+            this.resetDataButton.AccessibleDescription = "reset data";
+            this.resetDataButton.AccessibleName = "reset data";
+            this.resetDataButton.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.resetDataButton.Location = new System.Drawing.Point(535, 468);
+            this.resetDataButton.Margin = new System.Windows.Forms.Padding(2);
+            this.resetDataButton.Name = "resetDataButton";
+            this.resetDataButton.Size = new System.Drawing.Size(125, 34);
+            this.resetDataButton.TabIndex = 5;
+            this.resetDataButton.Text = "reset data";
+            this.resetDataButton.UseVisualStyleBackColor = true;
+            this.resetDataButton.Click += new System.EventHandler(this.ResetDataButton_Click);
+            // 
             // UploadPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -680,6 +695,7 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Controls.Add(this.resetDataButton);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.defectsTextBox);
             this.Controls.Add(this.defectsLabel);
@@ -770,5 +786,6 @@
         private System.Windows.Forms.RadioButton radioButtonLeftWheel;
         private System.Windows.Forms.RadioButton radioButtonRightWheel;
         private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Button resetDataButton;
     }
 }
