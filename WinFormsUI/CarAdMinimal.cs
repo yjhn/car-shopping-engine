@@ -11,12 +11,14 @@ namespace CarEngine
     {
         private readonly Color _selectedAdColor = Color.Aquamarine;
         private readonly Color _normalAdColor = Color.FloralWhite;
+        //public bool LoggedIn { get; set; } = false;
 
         private readonly Car _carInfo;
         private readonly UserInfo _userInfo;
 
         public CarAdMinimal(Car carInfo, UserInfo userInfo, bool liked)
         {
+            userInfo.LoginStateChanged += LoginStateChanged;
             _userInfo = userInfo;
             _carInfo = carInfo;
 
@@ -24,6 +26,11 @@ namespace CarEngine
             if (liked)
             {
                 likeButton.Text = "♥";
+            }
+
+            if (_userInfo.Username == null)
+            {
+                likeButton.Enabled = false;
             }
 
             BackColor = _normalAdColor;
@@ -37,6 +44,21 @@ namespace CarEngine
             if (carInfo.Images != null && carInfo.Images.Length > 0)
             {
                 carImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
+            }
+        }
+
+        private void LoginStateChanged()
+        {
+            // if user just logged out
+            if(_userInfo.Username == null)
+            {
+                likeButton.Enabled = false;
+                likeButton.Text = "❤";
+            }
+            else // if user just logged in
+            {
+                likeButton.Enabled = true;
+                likeButton.Text = _userInfo.LikedAds.Contains(_carInfo.Id) ? "♥" : "❤";
             }
         }
 

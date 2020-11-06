@@ -11,7 +11,6 @@ namespace Frontend
         // event to tell the UI that there is no connection to server
         public event Action NoServerResponse = delegate { };
 
-        // this class should not be static
         public Task<List<Car>> GetCars(int startIndex, int amount)
         {
             return Task.Run<List<Car>>(() =>
@@ -256,17 +255,25 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                                List<Car> likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
-                                // if list is null, it may be better to return empty one instead of null
+                List<Car> likedCarList;
+                if (r.Content != null && r.Content.Length != 0)
+                {
+                    likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
+                }
+                else
+                {
+                    likedCarList = new List<Car>();
+                }
+                //throw new Exception();
+                // if list is null, it may be better to return empty one instead of null
 
                 //if (likedCarList == null)
-                    //likedCarList = new List<Car>();
+                //    likedCarList = new List<Car>();
                 return likedCarList;
-            }
-            );
+            });
         }
 
-        public Task<List<Car>>GetUploadedCars(string username, int startIndex, int amount)
+        public Task<List<Car>> GetUploadedCars(string username, int startIndex, int amount)
         {
             return new Task<List<Car>>(() =>
             {
@@ -284,7 +291,7 @@ namespace Frontend
                 // maybe it's better to return empty list instead of null?
 
                 //if (uploadedCarList == null)
-                    //uploadedCarList = new List<Car>();
+                //uploadedCarList = new List<Car>();
                 return uploadedCarList;
             }
  );

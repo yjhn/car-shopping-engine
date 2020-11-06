@@ -209,6 +209,8 @@ namespace Backend
         public byte[] GetUserLikedAds(string username, int startIndex, int amount)
         {
             List<Car> likedCars = new List<Car>();
+
+            // should check if this user exists
             User user = _userList.Find(user => user.Username == username);
             foreach (int id in user.LikedAds)
             {

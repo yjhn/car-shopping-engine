@@ -55,7 +55,7 @@ namespace CarEngine.Pages
                 if (_userInfo == null && value != null)
                 {
                     _userInfo = value;
-
+                    _userInfo.LoginStateChanged += LoginStateChanged;
                     // we only start loading the content once we get the api and userInfo and we are logged in
                     if (_frontendApi != null && value.Username != null)
                     {
@@ -74,7 +74,17 @@ namespace CarEngine.Pages
             InitializeComponent();
         }
 
-        private async    void LoadInfo()
+        private void LoginStateChanged()
+        {
+            // if user logs out we clear everything
+            if(_userInfo.Username == null)
+            {
+                likedAdsPanel.Controls.Clear();
+                uploadedAdsPanel.Controls.Clear();
+            }
+        }
+
+        private async void LoadInfo()
         {
             if (_userInfo != null && _userInfo.Username != null && _frontendApi != null)
             {

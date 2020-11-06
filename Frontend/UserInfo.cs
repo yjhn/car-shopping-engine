@@ -1,4 +1,5 @@
 ﻿using DataTypes;
+using System;
 using System.Collections.Generic;
 
 namespace Frontend
@@ -20,12 +21,18 @@ namespace Frontend
             // when logging out, set this to null
             set
             {
-                if (value != null)
+                // only let a new user log in once the last has loggd out
+                if (value != null && Username == null)
                 {
                     Username = value.Username;
                     LikedAds = value.LikedAds;
                     Token = value.Token;
                     GetLikedCars();
+                    if (LikedCarList == null)
+                    {
+                        LikedCarList = new List<Car>();
+                    }
+                    LoginStateChanged.Invoke();
                 }
                 else if (Username != null)
                 {
@@ -37,6 +44,7 @@ namespace Frontend
                     Username = null;
                     LikedAds = null;
                     Token = null;
+                    LoginStateChanged.Invoke();
                 }
             }
         }
@@ -44,14 +52,20 @@ namespace Frontend
         public UserInfo(IApi api)
         {
             _api = api;
-
         }
+
+        public Action LoginStateChanged = delegate { };
 
         private async void GetLikedCars()
         {
-            // load user liked ads from server
-            LikedCarList = await _api.GetLikedCars(Username, 0, 15);
+            // load user liked ads from server, this should not return null
+            LikedCarList = await _api.GetLikedCars(Username, 0, 100);
 
+            // temporary
+            //if(LikedCarList == null)
+            //{
+            //    LikedCarList = new List<Car>();
+            //}
         }
     }
 }
