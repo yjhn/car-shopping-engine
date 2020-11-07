@@ -226,8 +226,8 @@ namespace Frontend
                 Request req = ReqInit("POST", "users/update-liked-ads");
                 byte[] likedAdsContent = JsonSerializer.SerializeToUtf8Bytes<List<int>>(likedAds);
                 req.Headers.Add(new Header("token", token));
-                req.Queries.Add("Content-length", likedAdsContent.Length.ToString());
-                req.Queries.Add("Content-type", MakeType("json"));
+                req.Headers.Add(new Header("Content-length", likedAdsContent.Length.ToString()));
+                req.Headers.Add(new Header("Content-type", MakeType("json")));
                 req.Content = likedAdsContent;
                 Response r = GetResponse(req);
                 if (r == null)
