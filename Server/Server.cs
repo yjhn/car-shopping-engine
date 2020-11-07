@@ -36,11 +36,9 @@ namespace Server
                 while (true)
                 {
                     Console.Write("Waiting for a connection... ");
-
                     // Perform a blocking call to accept requests.
                     TcpClient tcpClient = _tcpServer.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
-
+                                        Console.WriteLine("Connected!");
                     Thread t = new Thread(new ParameterizedThreadStart(ReceiveRequests));
                     t.Start(tcpClient);
                 }

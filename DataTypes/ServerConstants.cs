@@ -4,6 +4,7 @@ namespace DataTypes
     {
         public const string Host = "0.0.0.0";
         public const string HostForClients = "localhost";
+        public const string Ip = "127.0.0.1";
         public const int Port = 8888;
         public const string HttpVersion = "HTTP/1.1";
         public const string Scheme = "https";

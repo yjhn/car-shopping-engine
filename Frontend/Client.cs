@@ -53,7 +53,7 @@ namespace Frontend
             StringBuilder rawResponse = new StringBuilder();
             try
             {
-                TcpClient client = new TcpClient(ServerConstants.HostForClients, ServerConstants.Port);
+                TcpClient client = new TcpClient(ServerConstants.Ip, ServerConstants.Port);
                 SslStream sslStream = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
                 sslStream.AuthenticateAsClient(ServerConstants.HostForClients);
                 sslStream.ReadTimeout = ServerConstants.ClientTimeout;

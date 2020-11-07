@@ -129,7 +129,6 @@ namespace Test1
         {
             _userInfo.User = null;
             userNameLabel.Text = "Guest";
-
             // disable profile and upload page and go to browse page
             browseButton.PerformClick();
             profileButton.Enabled = false;
