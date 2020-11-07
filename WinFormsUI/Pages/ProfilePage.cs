@@ -3,7 +3,6 @@ using Frontend;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace CarEngine.Pages
@@ -56,6 +55,7 @@ namespace CarEngine.Pages
                 {
                     _userInfo = value;
                     _userInfo.LoginStateChanged += LoginStateChanged;
+                    _userInfo.LikedCarListUpdated += LoadLikedCars;
                     // we only start loading the content once we get the api and userInfo and we are logged in
                     if (_frontendApi != null && value.Username != null)
                     {
@@ -76,11 +76,12 @@ namespace CarEngine.Pages
 
         private void LoginStateChanged()
         {
-            // if user logs out we clear everything
-            if(_userInfo.Username == null)
+            likedAdsPanel.Controls.Clear();
+            uploadedAdsPanel.Controls.Clear();
+            // if user logs in we load their info
+            if (_userInfo.Username != null)
             {
-                likedAdsPanel.Controls.Clear();
-                uploadedAdsPanel.Controls.Clear();
+                LoadInfo();
             }
         }
 
@@ -89,27 +90,21 @@ namespace CarEngine.Pages
             if (_userInfo != null && _userInfo.Username != null && _frontendApi != null)
             {
                 usernameLabel.Text = _userInfo.Username;
+                LoadLikedCars();
 
-                List<Car> likedCars = _userInfo.LikedCarList;
-                // this list can be null
-                if (likedCars != null)
-                {
-                    List<bool> isLiked = Enumerable.Repeat(true, likedCars.Count).ToList();
-
-                    CarAdMinimal[] likedAdsList = Converter.VehicleListToAds(likedCars, _userInfo, isLiked);
-
-                    likedAdsPanel.Controls.Clear();
-                    likedAdsPanel.Controls.AddRange(likedAdsList);
-                }
-
-                uploadedAdsPanel.Controls.Clear();
                 List<Car> uploadedCars = await _frontendApi.GetUploadedCars(_userInfo.Username, 0, 15);
                 if (uploadedCars != null)
                 {
-                    List<bool> isUploaded = Enumerable.Repeat(true, uploadedCars.Count).ToList();
-                    uploadedAdsPanel.Controls.AddRange(Converter.VehicleListToAds(uploadedCars, _userInfo, isUploaded));
+                    uploadedAdsPanel.Controls.AddRange(Converter.VehicleListToAds(uploadedCars, _userInfo));
                 }
             }
+        }
+
+        private void LoadLikedCars()
+        {
+            CarAdMinimal[] likedAdsList = Converter.VehicleListToAds(_userInfo.LikedCarList, _userInfo);
+            likedAdsPanel.Controls.Clear();
+            likedAdsPanel.Controls.AddRange(likedAdsList);
         }
 
         private void ProfilePage_VisibleChanged(object sender, EventArgs e)

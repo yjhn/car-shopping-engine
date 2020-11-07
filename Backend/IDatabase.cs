@@ -26,9 +26,9 @@ namespace Backend
         // returns: user info serialized to UTF-8 JSON
         public byte[] GetUserInfoJson(string username);
 
-        public byte[] GetUserUploadedAds(string username, int startIndex, int amount);
+        public byte[] GetUserUploadedAdsJson(string username, int startIndex, int amount);
 
-        public byte[] GetUserLikedAds(string username, int startIndex, int amount);
+        public byte[] GetUserLikedAdsJson(string token, int startIndex, int amount);
 
         // returns: true, if such a user exists, false otherwise
         public byte[] Authenticate(string username, string hashedPassword);

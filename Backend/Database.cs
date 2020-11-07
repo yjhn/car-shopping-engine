@@ -10,7 +10,7 @@ namespace Backend
     {
         private List<Car> _carList;
         private List<User> _userList;
-        private readonly List<MinimalUser> _minimalUserList = new List<MinimalUser>();
+        private readonly List<MinimalUser> _currentlyLoggedInUsers = new List<MinimalUser>();
         private readonly FileReader _fileReader;
         private readonly FileWriter _fileWriter;
         private int _lastCarId;
@@ -42,12 +42,15 @@ namespace Backend
             try
             {
                 Car c = JsonSerializer.Deserialize<Car>(car);
-                c.Id = _lastCarId + 1;
                 _lastCarId++;
+                c.Id = _lastCarId;
                 _carList.Add(c);
-                _fileWriter.WriteCarData(c);
-                _logger.Log("Added new car. ID = " + c.Id);
-                return true;
+                if (_fileWriter.WriteCarData(c))
+                {
+                    _logger.Log("Added new car. ID = " + c.Id);
+                    return true;
+                }
+                else return false;
             }
             catch (JsonException e)
             {
@@ -69,7 +72,7 @@ namespace Backend
                 if (!CheckIfExists(u.Username))
                 {
                     _userList.Add(u);
-                    // should return a status code, not bool
+                    // should probably return a status code, not bool
                     _logger.Log("Added new user. Username = " + u.Username);
                     return _fileWriter.WriteUserData(u);
                 }
@@ -98,23 +101,26 @@ namespace Backend
                 User user = _userList.Find(user => user.Username == username && user.HashedPassword == hashedPassword);
                 if (user == null)
                 {
-                    _logger.Log($"Failed login attempt. User [ {username} ] not found.");
+                    _logger.Log($"Failed login attempt. User [ {username} ] not found or bad user password");
                     return null;
                 }
-                else
+                // remove all current minimalUser instances from _currentlyLoggedInUsers
+                // if user signs in at a few locations, this will "sign him out" from all but the last one
+                _currentlyLoggedInUsers.RemoveAll(user => user.Username == username);
+
+                // create new minimalUser with new session Id
+                MinimalUser authenticatedUser = new MinimalUser
                 {
-                    MinimalUser authenticatedUser = new MinimalUser
-                    {
-                        Username = user.Username,
-                        Token = Guid.NewGuid().ToString(),
-                        Phone = user.Phone,
-                        Email = user.Email,
-                        LikedAds = user.LikedAds
-                    };
-                    _minimalUserList.Add(authenticatedUser);
-                    _logger.Log($"User [ {username} ] logged in.");
-                    return JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(authenticatedUser);
-                }
+                    Username = user.Username,
+                    Token = Guid.NewGuid().ToString(),
+                    Phone = user.Phone,
+                    Email = user.Email,
+                    LikedAds = user.LikedAds
+                };
+                // this is the only place that can add users to currently logged in user list
+                _currentlyLoggedInUsers.Add(authenticatedUser);
+                _logger.Log($"User [ {username} ] logged in.");
+                return JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(authenticatedUser);
             }
             catch (Exception e)
             {
@@ -128,12 +134,15 @@ namespace Backend
             try
             {
                 List<int> newAds = JsonSerializer.Deserialize<List<int>>(newAdsJson);
-                MinimalUser minimal = _minimalUserList.Find((minimalUser) => minimalUser.Token == token);
+                MinimalUser minimal = _currentlyLoggedInUsers.Find((minimalUser) => minimalUser.Token == token);
                 if (minimal == null)
                     return false;
                 minimal.LikedAds = newAds;
                 User original = _userList.Find((User user) => minimal.Username == user.Username);
                 original.LikedAds = newAds;
+
+                // write updated user data to file
+                _fileWriter.WriteUserData(original);
                 return true;
             }
             catch (Exception e)
@@ -141,7 +150,7 @@ namespace Backend
                 _logger.LogException(e);
                 return false;
             }
-        }           
+        }
 
         private bool CheckIfExists(string username)
         {
@@ -150,11 +159,21 @@ namespace Backend
 
         public bool DeleteCar(int id)
         {
-            // remove this car from all user liked cars
-            foreach (User user in _userList)
+            // remove this car from all users liked cars lists
+            _userList.ForEach(user =>
             {
-                user.LikedAds.Remove(id);
-            }
+                if (user.LikedAds.Remove(id))
+                {
+                    // if user info is changed, it needs to be saved
+                    _fileWriter.WriteUserData(user);
+                }
+            });
+            // remove this car from currently logged in users liked lists
+            _currentlyLoggedInUsers.ForEach(user => user.LikedAds.Remove(id));
+            //foreach (User user in _userList)
+            //{
+            //    user.LikedAds.Remove(id);
+            //}
             return _carList.RemoveAll(car => car.Id == id) == 1 && _fileWriter.DeleteCar(id);
         }
 
@@ -162,6 +181,8 @@ namespace Backend
         {
             // remove ads posted by this user
             _carList.RemoveAll(car => car.UploaderUsername == username);
+            // delete user from currently logged in users
+            _currentlyLoggedInUsers.RemoveAll(user => user.Username == username);
             return _userList.RemoveAll(user => user.Username == username) == 1 && _fileWriter.DeleteUser(username);
         }
 
@@ -191,40 +212,50 @@ namespace Backend
             //    filteredCarList = (from car in filteredCarList where car.UploaderUsername.ToLower() == filters.Username select car).ToList();
 
 
-            return GetSortedCarsJson(sortBy, sortAscending, startIndex, amount, filteredCarList);
+            return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, filteredCarList);
         }
 
         public byte[] GetSortedCarsJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            return GetSortedCarsJson(sortBy, sortAscending, startIndex, amount, null);
+            return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount);
         }
 
         // returns null if not found
+        // this is not used
         public byte[] GetUserInfoJson(string username)
         {
             User user = _userList.Find(user => user.Username == username);
             return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
         }
 
-        public byte[] GetUserLikedAds(string token, int startIndex, int amount)
+        public byte[] GetUserLikedAdsJson(string token, int startIndex, int amount)
         {
+            // check if this user is currently logged in, otherwise his liked ads cannot be given
+            MinimalUser user = _currentlyLoggedInUsers.Find(user => user.Token == token);
+            if (user == null)
+            {
+                // if user is not logged in
+                return null;
+            }
             List<Car> likedCars = new List<Car>();
-
-            // should check if this user exists
-            MinimalUser user = _minimalUserList.Find(user => user.Token == token);
             foreach (int id in user.LikedAds)
             {
+                // if Find returns null (although it should never happen), this will cause problems
                 likedCars.Add(_carList.Find(car => car.Id == id));
             }
-
             List<Car> carsToReturn = likedCars.Skip(startIndex).Take(amount).ToList();
             return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
         }
 
-        public byte[] GetUserUploadedAds(string username, int startIndex, int amount)
+        public byte[] GetUserUploadedAdsJson(string username, int startIndex, int amount)
         {
             List<Car> uploadedCars = new List<Car>();
             User user = _userList.Find(user => user.Username == username);
+            // if this user does not exist
+            if (user == null)
+            {
+                return null;
+            }
             foreach (Car car in _carList)
             {
                 if (car.UploaderUsername == username)
@@ -237,14 +268,14 @@ namespace Backend
             return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
         }
 
-        private byte[] GetSortedCarsJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
+        private byte[] GetSortedCarsListJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {
             if (carListToSort == null)
             {
                 carListToSort = _carList;
             }
             carListToSort.SortBy(sortBy, sortAscending);
-            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Skip(startIndex).Take(amount).ToList<Car>());
+            return JsonSerializer.SerializeToUtf8Bytes<List<Car>>(carListToSort.Skip(startIndex).Take(amount).ToList());
         }
     }
 }

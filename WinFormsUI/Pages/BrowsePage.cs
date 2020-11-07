@@ -173,24 +173,7 @@ namespace CarEngine
             {
                 vehicles = await _frontendApi.SortBy(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
             }
-
-            List<bool> isLiked;
-            if (_userInfo.Username != null)
-            {
-                isLiked = new List<bool>(vehicles.Count);
-                foreach (Car car in vehicles)
-                {
-                    isLiked.Add(_userInfo.LikedAds.Contains(car.Id));
-                }
-            }
-            else
-            {
-                if (vehicles != null)
-                isLiked = new List<bool>(new bool[vehicles.Count]);
-                else
-                    isLiked = new List<bool>();
-            }
-            return Converter.VehicleListToAds(vehicles, _userInfo, isLiked);
+            return Converter.VehicleListToAds(vehicles, _userInfo);
         }
 
         private void NextPageButton_Click(object sender, EventArgs e)

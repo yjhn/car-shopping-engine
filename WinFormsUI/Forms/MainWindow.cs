@@ -15,6 +15,7 @@ namespace Test1
 
         private readonly IApi _api;
         private readonly UserInfo _userInfo;
+        LoginScreen loginScreen;
 
         public MainWindow(IApi api, UserInfo userInfo)
         {
@@ -50,6 +51,11 @@ namespace Test1
                 profileButton.Enabled = false;
                 loginBtn.Enabled = false;
                 logoutBtn.Enabled = false;
+                // close login screen if it is open
+                if(loginScreen != null)
+                {
+                    loginScreen.Close();
+                }
             });
             Invoke(a);
         }
@@ -59,7 +65,12 @@ namespace Test1
             // this makes the application send updated user liked ads list to server
             if (logoutBtn.Visible)
             {
-                logoutBtn.PerformClick();
+                _userInfo.User = null;
+            }
+            // close login screen if it is opened
+            if(loginScreen != null)
+            {
+                loginScreen.Close();
             }
             Application.Exit();
         }
@@ -90,7 +101,7 @@ namespace Test1
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            LoginScreen loginScreen = new LoginScreen(_api, _userInfo);
+            loginScreen = new LoginScreen(_api, _userInfo);
             loginScreen.Show();
             loginBtn.Enabled = false;
             loginScreen.FormClosing += LoginScreen_FormClosing;
@@ -111,6 +122,7 @@ namespace Test1
                 // enable login button if user has not logged in
                 loginBtn.Enabled = true;
             }
+            loginScreen = null;
         }
 
         private void LogoutButton_Click(object sender, EventArgs e)

@@ -13,8 +13,8 @@ namespace Frontend
         Task<bool?> AddUser(User user);
         Task<bool?> DeleteCar(int id);
         Task<bool?> DeleteUser(string username);
-        Task<Car> GetCar(int id);
-        Task<List<Car>> GetCars(int startIndex, int amount);
+        //Task<Car> GetCar(int id);
+        //Task<List<Car>> GetCars(int startIndex, int amount);
         Task<MinimalUser> GetUser(string username, string hashedPassword);
         Task<bool?> UpdateLikedAds(string token, List<int> likedAds);
         Task<List<Car>> GetLikedCars(string token, int startIndex, int amount);

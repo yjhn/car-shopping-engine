@@ -31,6 +31,8 @@ namespace Test1
                 MinimalUser user = await _frontendApi.GetUser(username, EncryptPassword(passwordTextBox.Text, username));
                 if (user == null)
                 {
+                    // this is not always correct, as we will get null also when there is no connection
+                    // close this window from main window in no connection event
                     MessageBox.Show("Bad username or password", "Bad credentials", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     passwordTextBox.Clear();
                 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Frontend
@@ -12,22 +13,24 @@ namespace Frontend
         // event to tell the UI that there is no connection to server
         public event Action NoServerResponse = delegate { };
 
-        public Task<List<Car>> GetCars(int startIndex, int amount)
-        {
-            return Task.Run<List<Car>>(() =>
-            {
-                Request req = ReqInit("GET", "cars");
-                req.Queries.Add("amount", amount.ToString());
-                req.Queries.Add("start_index", startIndex.ToString());
-                Response r = GetResponse(req);
-                if (r == null)
-                {
-                    NoServerResponse.Invoke();
-                    return null;
-                }
-                return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
-            });
-        }
+
+        // this is not needed
+        //public Task<List<Car>> GetCars(int startIndex, int amount)
+        //{
+        //    return Task.Run<List<Car>>(() =>
+        //    {
+        //        Request req = ReqInit("GET", "cars");
+        //        req.Queries.Add("amount", amount.ToString());
+        //        req.Queries.Add("start_index", startIndex.ToString());
+        //        Response r = GetResponse(req);
+        //        if (r == null)
+        //        {
+        //            NoServerResponse.Invoke();
+        //            return null;
+        //        }
+        //        return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
+        //    });
+        //}
 
         public Task<List<Car>> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
         {
@@ -90,22 +93,24 @@ namespace Frontend
             });
         }
 
-        public Task<Car> GetCar(int id)
-        {
-            return Task.Run<Car>(() =>
-            {
-                Request req = ReqInit("GET", "cars");
-                req.Queries.Add("id", id.ToString());
-                Response r = GetResponse(req);
-                if (r == null)
-                {
-                    NoServerResponse.Invoke();
-                    return null;
-                }
-                return r.Content.Length > 0 ? JsonSerializer.Deserialize<Car>(r.Content) : null;
-            });
-        }
+        // this is not currently used and will probably not be used
+        //public Task<Car> GetCar(int id)
+        //{
+        //    return Task.Run<Car>(() =>
+        //    {
+        //        Request req = ReqInit("GET", "cars");
+        //        req.Queries.Add("id", id.ToString());
+        //        Response r = GetResponse(req);
+        //        if (r == null)
+        //        {
+        //            NoServerResponse.Invoke();
+        //            return null;
+        //        }
+        //        return r.Content.Length > 0 ? JsonSerializer.Deserialize<Car>(r.Content) : null;
+        //    });
+        //}
 
+        // this probably should not return int
         public Task<int?> AddCar(Car car)
         {
             return Task.Run<int?>(() =>
@@ -150,12 +155,7 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                bool result;
-                if (r.Content.Length > 0)
-                    result = true;
-                else
-                    result = false;
-                return result;
+                return r.Content.Length > 0;
             });
         }
 
@@ -190,10 +190,7 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                bool deleted = false;
-                if (r.Content.Length == 0)
-                    deleted = true;
-                return deleted;
+                return r.Content.Length == 0;
             });
         }
 
@@ -235,10 +232,7 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                bool updated = false;
-                if (r.StatusCode == 200)
-                    updated = true;
-                return updated;
+                return r.StatusCode == 200;
             });
         }
 
@@ -256,21 +250,10 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                List<Car> likedCarList;
-                if (r.Content != null && r.Content.Length != 0)
-                {
-                    likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
-                }
-                else
-                {
-                    likedCarList = new List<Car>();
-                }
-                //throw new Exception();
-                // if list is null, it may be better to return empty one instead of null
-
-                //if (likedCarList == null)
-                //    likedCarList = new List<Car>();
+                // if server returns anything, it cannot be null (it may be an empty list)
+                List<Car> likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
                 return likedCarList;
+
             });
         }
 
@@ -288,11 +271,9 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                List<Car> uploadedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
-                // maybe it's better to return empty list instead of null?
 
-                //if (uploadedCarList == null)
-                //uploadedCarList = new List<Car>();
+                // if server returns anything, it cannot be null (it may be an empty list)
+                List<Car> uploadedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
                 return uploadedCarList;
             }
  );

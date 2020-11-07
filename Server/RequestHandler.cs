@@ -197,7 +197,7 @@ namespace Server
                     break;
                 case "users/update-liked-ads":
                     if (contentType.StartsWith("application/json"))
-                        updateAds(Header.GetValueByName(req.Headers, "TOKEN"), req.Content);
+                        UpdateAds(Header.GetValueByName(req.Headers, "TOKEN"), req.Content);
                     else
                         _r = unsupportedType;
                     break;
@@ -230,7 +230,7 @@ namespace Server
                 _r = MakeResponse(200);
         }
 
-        private void updateAds(string token, byte[] ads)
+        private void UpdateAds(string token, byte[] ads)
         {
             bool result = _db.UpdateLikedAds(token, ads);
             if (result)
@@ -316,7 +316,7 @@ namespace Server
 
         private Response MakeResponse(Validation v)
         {
-            int statusCode = 0;
+            int statusCode;
             if (v == Validation.HttpVersionNotSupported)
                 statusCode = 505;
             else if (v == Validation.NoContentLength)
@@ -391,7 +391,7 @@ namespace Server
         {
             int startIndex = int.Parse(queries["start_index"]);
             int amount = int.Parse(queries["amount"]);
-            byte[] favouriteCars = _db.GetUserLikedAds(token, startIndex, amount);
+            byte[] favouriteCars = _db.GetUserLikedAdsJson(token, startIndex, amount);
             _r = MakeResponse(200, favouriteCars);
         }
 
@@ -400,7 +400,7 @@ namespace Server
             int startIndex = int.Parse(queries["start_index"]);
             int amount = int.Parse(queries["amount"]);
             string username = queries["username"];
-            byte[] uploadedCars = _db.GetUserUploadedAds(username, startIndex, amount);
+            byte[] uploadedCars = _db.GetUserUploadedAdsJson(username, startIndex, amount);
             _r = MakeResponse(200, uploadedCars);
         }
 

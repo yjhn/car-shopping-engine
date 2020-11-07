@@ -2,6 +2,7 @@
 using DataTypes;
 using Frontend;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,22 +17,24 @@ namespace CarEngine
         private readonly Car _carInfo;
         private readonly UserInfo _userInfo;
 
-        public CarAdMinimal(Car carInfo, UserInfo userInfo, bool liked)
+        public CarAdMinimal(Car carInfo, UserInfo userInfo)
         {
             userInfo.LoginStateChanged += LoginStateChanged;
             _userInfo = userInfo;
             _carInfo = carInfo;
 
             InitializeComponent();
-            if (liked)
-            {
-                likeButton.Text = "♥";
-            }
 
-            if (_userInfo.Username == null)
-            {
-                likeButton.Enabled = false;
-            }
+            // liked should be removed from constructor
+            //if (_userInfo.LikedAds.Contains(_carInfo.Id))
+            //{
+            //    likeButton.Text = "♥";
+            //}
+
+            LoginStateChanged();
+
+            // if user is not logged in he cannot like ads
+            //likeButton.Enabled = _userInfo.Username != null;
 
             BackColor = _normalAdColor;
 
@@ -50,7 +53,7 @@ namespace CarEngine
         private void LoginStateChanged()
         {
             // if user just logged out
-            if(_userInfo.Username == null)
+            if (_userInfo.Username == null)
             {
                 likeButton.Enabled = false;
                 likeButton.Text = "❤";
@@ -108,7 +111,11 @@ namespace CarEngine
             {
                 ((Button)sender).Text = "❤";
                 _userInfo.LikedAds.Remove(_carInfo.Id);
-                _userInfo.LikedCarList.Remove(_carInfo);
+                if (!_userInfo.LikedCarList.Remove(_carInfo))
+                {
+                    // this should never happen if the program works correctly
+                    throw new Exception("Trying to remove not liked car from liked cars");
+                }
             }
         }
     }

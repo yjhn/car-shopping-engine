@@ -53,7 +53,7 @@ namespace Server
         }
 
         // Method for handling clients' requests
-        private void ReceiveRequests(Object clientObj)
+        private void ReceiveRequests(object clientObj)
         {
             TcpClient client = (TcpClient)clientObj;
             SslStream sslStream = new SslStream(client.GetStream(), false);
@@ -63,7 +63,7 @@ namespace Server
                 sslStream.AuthenticateAsServer(_serverCertificate, clientCertificateRequired: false, checkCertificateRevocation: true);
                 sslStream.ReadTimeout = ServerConstants.ServerTimeout;
                 sslStream.WriteTimeout = ServerConstants.ServerTimeout;
-                StringBuilder data = new StringBuilder(); ;
+                StringBuilder data = new StringBuilder();
                 byte[] bytes = new Byte[ServerConstants.MaxBufferSize];
                 byte[] msg = null;
                 bool isRequestValid = false;
@@ -77,10 +77,12 @@ namespace Server
                         int numOfBytes = sslStream.Read(bytes, 0, bytes.Length);
                         attempts++;
                         if (numOfBytes == 0)
-                            readMore = false;
+                            break; // this should be equivalent to commented out line
+                            //readMore = false;
+
                         // Translate data bytes to a ASCII string.
                         newData = Encoding.ASCII.GetString(bytes, 0, numOfBytes);
-                        // if all data was fetched at first attempt, check it
+                        // if all data was fetched at first attempt, check it -- this is not optimal. What if the data was fetched at second attempt and so on?
                         if (attempts == 1)
                         {
                             isRequestValid = false;

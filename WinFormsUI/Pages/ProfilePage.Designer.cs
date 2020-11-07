@@ -88,7 +88,7 @@
             this.likedAdsLabel.AccessibleName = "favorite user ads";
             this.likedAdsLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.likedAdsLabel.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.likedAdsLabel.Location = new System.Drawing.Point(0, 350);
+            this.likedAdsLabel.Location = new System.Drawing.Point(0, 381);
             this.likedAdsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.likedAdsLabel.Name = "likedAdsLabel";
             this.likedAdsLabel.Size = new System.Drawing.Size(724, 25);
@@ -100,9 +100,9 @@
             // 
             this.likedAdsPanel.AutoScroll = true;
             this.likedAdsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.likedAdsPanel.Location = new System.Drawing.Point(0, 375);
+            this.likedAdsPanel.Location = new System.Drawing.Point(0, 406);
             this.likedAdsPanel.Name = "likedAdsPanel";
-            this.likedAdsPanel.Size = new System.Drawing.Size(724, 352);
+            this.likedAdsPanel.Size = new System.Drawing.Size(724, 321);
             this.likedAdsPanel.TabIndex = 6;
             // 
             // topPanel
@@ -121,7 +121,7 @@
             this.uploadedAdsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uploadedAdsPanel.Location = new System.Drawing.Point(0, 114);
             this.uploadedAdsPanel.Name = "uploadedAdsPanel";
-            this.uploadedAdsPanel.Size = new System.Drawing.Size(724, 236);
+            this.uploadedAdsPanel.Size = new System.Drawing.Size(724, 267);
             this.uploadedAdsPanel.TabIndex = 8;
             // 
             // ProfilePage

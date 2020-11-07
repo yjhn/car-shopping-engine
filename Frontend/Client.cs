@@ -36,7 +36,7 @@ namespace Frontend
                 message.Append("?");
                 foreach (KeyValuePair<string, string> kvp in req.Queries)
                     message.Append($"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}&");
-                message.Length = message.Length - 1;
+                message.Length -= 1;
             }
             message.Append($" {ServerConstants.HttpVersion}");
             req.Headers.Insert(0, new Header("Host", ServerConstants.HostForClients));

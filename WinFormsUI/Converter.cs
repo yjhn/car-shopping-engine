@@ -56,7 +56,7 @@ namespace CarEngine
             return Convert.ToBase64String(imageBytes);
         }
 
-        public static CarAdMinimal[] VehicleListToAds(List<Car> vehicleList, UserInfo userInfo, List<bool> isLiked)
+        public static CarAdMinimal[] VehicleListToAds(List<Car> vehicleList, UserInfo userInfo)
         {
             if (vehicleList == null)
             {
@@ -67,7 +67,7 @@ namespace CarEngine
             // might not get the amount of ads we asked for
             for (int i = 0; i < vehicleList.Count; i++)
             {
-                minimalAds[i] = new CarAdMinimal(vehicleList[i], userInfo, isLiked[i]);
+                minimalAds[i] = new CarAdMinimal(vehicleList[i], userInfo);
             }
             return minimalAds;
         }
