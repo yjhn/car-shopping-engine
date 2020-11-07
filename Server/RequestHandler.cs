@@ -70,7 +70,7 @@ namespace Server
 
         private Request ParseRequest()
         {
-            Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+){ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[^\r\n]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
+            Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_\-]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+){ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[^\r\n]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
             if (!regex.IsMatch(_rawRequest))
                 throw new ArgumentException("Invalid request");
             GroupCollection groups = regex.Matches(_rawRequest)[0].Groups;
