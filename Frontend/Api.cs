@@ -65,8 +65,6 @@ namespace Frontend
                     req.Queries.Add("brand", filters.Brand);
                 if (!string.IsNullOrEmpty(filters.Model))
                     req.Queries.Add("model", filters.Model);
-                if (filters.Used.HasValue)
-                    req.Queries.Add("used", filters.Used.ToString());
                 if (filters.PriceFrom.HasValue)
                     req.Queries.Add("price_from", filters.PriceFrom.ToString());
                 if (filters.PriceTo.HasValue)

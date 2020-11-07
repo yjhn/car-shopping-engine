@@ -82,14 +82,10 @@ namespace Server
 
                         // Translate data bytes to a ASCII string.
                         newData = Encoding.ASCII.GetString(bytes, 0, numOfBytes);
-                        // if all data was fetched at first attempt, check it -- this is not optimal. What if the data was fetched at second attempt and so on?
-                        if (attempts == 1)
-                        {
-                            isRequestValid = false;
+                        // if all data was fetched already, check it
                             msg = new RequestHandler(newData, _db, _logger).HandleRequest(out isRequestValid);
                             if (isRequestValid)
                                 readMore = false;
-                        }
                         data.Append(newData);
                     }
                     while (readMore && attempts < ServerConstants.MaxAttempts);
