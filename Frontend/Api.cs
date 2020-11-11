@@ -234,7 +234,7 @@ namespace Frontend
             });
         }
 
-        public Task<List<Car>> GetLikedCars(string token, int startIndex, int amount)
+        public Task<List<Car>> GetSortedLikedCars(string token, int startIndex, int amount)
         {
             return Task.Run<List<Car>>(() =>
             {
@@ -255,7 +255,7 @@ namespace Frontend
             });
         }
 
-        public Task<List<Car>> GetUploadedCars(string username, int startIndex, int amount)
+        public Task<List<Car>> GetSortedUploadedCars(string username, int startIndex, int amount)
         {
             return Task.Run<List<Car>>(() =>
             {

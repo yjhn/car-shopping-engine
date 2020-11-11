@@ -69,7 +69,7 @@ namespace Backend
             try
             {
                 User u = JsonSerializer.Deserialize<User>(user);
-                if (!CheckIfExists(u.Username))
+                if (!_userList.Exists(user => user.Username == u.Username))
                 {
                     _userList.Add(u);
                     // should probably return a status code, not bool
@@ -152,11 +152,6 @@ namespace Backend
             }
         }
 
-        private bool CheckIfExists(string username)
-        {
-            return _userList.Exists(user => user.Username == username);
-        }
-
         public bool DeleteCar(int id)
         {
             // remove this car from all users liked cars lists
@@ -228,7 +223,7 @@ namespace Backend
             return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
         }
 
-        public byte[] GetUserLikedAdsJson(string token, int startIndex, int amount)
+        public byte[] GetUserLikedAdsJson(string token, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             // check if this user is currently logged in, otherwise his liked ads cannot be given
             MinimalUser user = _currentlyLoggedInUsers.Find(user => user.Token == token);
@@ -237,37 +232,37 @@ namespace Backend
                 // if user is not logged in
                 return null;
             }
-            List<Car> likedCars = new List<Car>();
-            foreach (int id in user.LikedAds)
-            {
-                // if Find returns null (although it should never happen), this will cause problems
-                likedCars.Add(_carList.Find(car => car.Id == id));
-            }
-            List<Car> carsToReturn = likedCars.Skip(startIndex).Take(amount).ToList();
-            return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
+            List<Car> likedCars = _carList.Where(car => user.LikedAds.Contains(car.Id)).ToList();
+            //foreach (int id in user.LikedAds)
+            //{
+            //    // if Find returns null (although it should never happen), this will cause problems
+            //    likedCars.Add(_carList.Find(car => car.Id == id));
+            //}
+            //List<Car> carsToReturn = likedCars.Skip(startIndex).Take(amount).ToList();
+            return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, likedCars);
         }
 
-
-        // need to change this to support sorting
-        public byte[] GetUserUploadedAdsJson(string username, int startIndex, int amount)
+        public byte[] GetUserUploadedAdsJson(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            List<Car> uploadedCars = new List<Car>();
+            //List<Car> uploadedCars = new List<Car>();
             User user = _userList.Find(user => user.Username == username);
             // if this user does not exist
             if (user == null)
             {
                 return null;
             }
-            foreach (Car car in _carList)
-            {
-                if (car.UploaderUsername == username)
-                {
-                    uploadedCars.Add(car);
-                }
-            }
+            List<Car> uploadedCars = _carList.Where(car => car.UploaderUsername == username).ToList();
+            //foreach (Car car in _carList)
+            //{
+            //    if (car.UploaderUsername == username)
+            //    {
+            //        uploadedCars.Add(car);
+            //    }
+            //}
+            return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, uploadedCars);
 
-            List<Car> carsToReturn = uploadedCars.Skip(startIndex).Take(amount).ToList();
-            return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
+            //List<Car> carsToReturn = uploadedCars.Skip(startIndex).Take(amount).ToList();
+            //return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
         }
 
         private byte[] GetSortedCarsListJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)

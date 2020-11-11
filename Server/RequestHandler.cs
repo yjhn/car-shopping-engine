@@ -391,7 +391,7 @@ namespace Server
         {
             int startIndex = int.Parse(queries["start_index"]);
             int amount = int.Parse(queries["amount"]);
-            byte[] favouriteCars = _db.GetUserLikedAdsJson(token, startIndex, amount);
+            byte[] favouriteCars = _db.GetUserLikedAdsJson(token, TODO, TODO, startIndex, amount);
             _r = MakeResponse(200, favouriteCars);
         }
 
@@ -400,7 +400,7 @@ namespace Server
             int startIndex = int.Parse(queries["start_index"]);
             int amount = int.Parse(queries["amount"]);
             string username = queries["username"];
-            byte[] uploadedCars = _db.GetUserUploadedAdsJson(username, startIndex, amount);
+            byte[] uploadedCars = _db.GetUserUploadedAdsJson(username, TODO, TODO, startIndex, amount);
             _r = MakeResponse(200, uploadedCars);
         }
 

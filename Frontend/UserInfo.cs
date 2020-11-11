@@ -31,7 +31,7 @@ namespace Frontend
                 {
                     Token = value.Token;
                     // prefetch more ads in advance to know if there is more
-                    //GetLikedCars(value.Username, 0, 2 * _likedAdsInPage);
+                    //GetSortedLikedCars(value.Username, 0, 2 * _likedAdsInPage);
                     Username = value.Username;
                     LikedAds = value.LikedAds;
                     Email = value.Email;
@@ -81,18 +81,18 @@ namespace Frontend
         //    }
         //    else
         //    {
-        //        CarsLikedInCurrentSession = await _api.GetLikedCars(Token, 0, 100);
+        //        CarsLikedInCurrentSession = await _api.GetSortedLikedCars(Token, 0, 100);
         //        return CarsLikedInCurrentSession;
         //    }
         //}
 
-        //private async void GetLikedCars(string username, int startIndex, int amount)
+        //private async void GetSortedLikedCars(string username, int startIndex, int amount)
         //{
         //    // we only fetch anything if there is something to be fetched
         //    if (CanFetchMoreLikedAds)
         //    {
         //        // this will probably cause bugs when one user logs in then instantly out, then another instantly logs in
-        //        List<Car> temp = await _api.GetLikedCars(Token, startIndex, amount);
+        //        List<Car> temp = await _api.GetSortedLikedCars(Token, startIndex, amount);
         //        // user might have logged out while we were fetching data
         //        // check if the same user is still logged in
         //        if (temp != null)
@@ -123,7 +123,7 @@ namespace Frontend
         //    {
         //        if (CanFetchMoreLikedAds)
         //        {
-        //            GetLikedCars(Username, startIndex, _likedAdsInPage);
+        //            GetSortedLikedCars(Username, startIndex, _likedAdsInPage);
 
         //            return CarsLikedInCurrentSession.Skip(startIndex).Take(_likedAdsInPage).ToList();
         //        }
@@ -142,7 +142,7 @@ namespace Frontend
         //    // we could make server return total amount of results to avoid pointless queries
         //    if (_canFetchMoreLikedAds)
         //    {
-        //        GetLikedCars(Username, startIndex, amount);
+        //        GetSortedLikedCars(Username, startIndex, amount);
         //        return CarsLikedInCurrentSession.Count > startIndex ? CarsLikedInCurrentSession.Skip(startIndex).Take(amount).ToList() : null;
         //        //if (CarsLikedInCurrentSession.Count > startIndex)
         //        //{

@@ -185,7 +185,7 @@ namespace CarEngine.Pages
                     // send updated liked ads list to server
                     await _userInfo.UpdateLikedAds();
                     // not sure if this is going to work, it might not fetch the data before going forward
-                    _adsLikedInCurrentSession.AddRange(await _frontendApi.GetLikedCars(_userInfo.Token, 0, _likedAdsInPage - _leftoverNrOfAdsLikedInSession));
+                    _adsLikedInCurrentSession.AddRange(await _frontendApi.GetSortedLikedCars(_userInfo.Token,/*SortingCrieteria, sortAscending*/ 0, _likedAdsInPage - _leftoverNrOfAdsLikedInSession));
 
                     //// remove currently unliked ads from list
                     //_adsLikedInCurrentSession.RemoveAll(car => !_userInfo.LikedAds.Contains(car.Id));
@@ -239,7 +239,7 @@ namespace CarEngine.Pages
                     // send updated liked ads list to server
                     await _userInfo.UpdateLikedAds();
                     // fetch more ads to make full page if there is not enough
-                    _adsLikedInCurrentSession.AddRange(await _frontendApi.GetLikedCars(_userInfo.Token, startIndex, _likedAdsInPage - _leftoverNrOfAdsLikedInSession)); //_userInfo.GetLikedCarsPage(_likedAdsPageNr);
+                    _adsLikedInCurrentSession.AddRange(await _frontendApi.GetSortedLikedCars(_userInfo.Token, startIndex, _likedAdsInPage - _leftoverNrOfAdsLikedInSession)); //_userInfo.GetLikedCarsPage(_likedAdsPageNr);
                     if (_adsLikedInCurrentSession.Count == 0)
                     {
                         // since the next page is empty, next page button should be disabled
@@ -300,7 +300,7 @@ namespace CarEngine.Pages
             // if we are one the first page for the first time
             if (_uploadedAdsPages.Count == 0)
             {
-                List<Car> uploadedCars = await _frontendApi.GetUploadedCars(_userInfo.Username, 0, _uploadedAdsInPage);
+                List<Car> uploadedCars = await _frontendApi.GetSortedUploadedCars(_userInfo.Username,/* SortingCriteria, sortAscending*/ 0, _uploadedAdsInPage);
                 if (uploadedCars == null || uploadedCars.Count == 0)
                 {
                     refreshUploadedAdsBtn.Enabled = true;
@@ -316,7 +316,7 @@ namespace CarEngine.Pages
             if (_uploadedAdsPageNr == _uploadedAdsPages.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                List<Car> uploadedCars = await _frontendApi.GetUploadedCars(_userInfo.Username, (_uploadedAdsPageNr - 1) * _uploadedAdsInPage, _uploadedAdsInPage);
+                List<Car> uploadedCars = await _frontendApi.GetSortedUploadedCars(_userInfo.Username, (_uploadedAdsPageNr - 1) * _uploadedAdsInPage, _uploadedAdsInPage);
                 if (uploadedCars == null || uploadedCars.Count == 0)
                 {
                     // since the next page is empty, next page button should be disabled
