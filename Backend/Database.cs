@@ -247,6 +247,8 @@ namespace Backend
             return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
         }
 
+
+        // need to change this to support sorting
         public byte[] GetUserUploadedAdsJson(string username, int startIndex, int amount)
         {
             List<Car> uploadedCars = new List<Car>();

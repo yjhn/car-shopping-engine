@@ -10,8 +10,8 @@ namespace CarEngine
 {
     public partial class CarAdMinimal : UserControl
     {
-        private readonly Color _selectedAdColor = Color.Aquamarine;
-        private readonly Color _normalAdColor = Color.FloralWhite;
+        private readonly Color _selectedAdColor = Constants.SelectedAdColor;
+        private readonly Color _normalAdColor = Constants.NormalAdColor;
         //public bool LoggedIn { get; set; } = false;
 
         private readonly Car _carInfo;
@@ -105,17 +105,20 @@ namespace CarEngine
             {
                 ((Button)sender).Text = "♥";
                 _userInfo.LikedAds.Add(_carInfo.Id);
-                _userInfo.LikedCarList.Add(_carInfo);
+                //_userInfo.CarsLikedInCurrentSession.Add(_carInfo);
             }
             else
             {
                 ((Button)sender).Text = "❤";
                 _userInfo.LikedAds.Remove(_carInfo.Id);
-                if (!_userInfo.LikedCarList.Remove(_carInfo))
-                {
-                    // this should never happen if the program works correctly
-                    throw new Exception("Trying to remove not liked car from liked cars");
-                }
+                //_userInfo.CarsLikedInCurrentSession.Remove(_carInfo);
+
+                // this does not work correctly
+                //if (!_userInfo.CarsLikedInCurrentSession.Remove(_carInfo))
+                //{
+                //    // this should never happen if the program works correctly
+                //    throw new Exception("Trying to remove not liked car from liked cars");
+                //}
             }
         }
     }

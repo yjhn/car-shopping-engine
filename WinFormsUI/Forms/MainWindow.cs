@@ -1,4 +1,5 @@
-﻿using Frontend;
+﻿using CarEngine;
+using Frontend;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,10 +9,10 @@ namespace Test1
     public partial class MainWindow : Form
     {
         // create default colors for (in)active sidebar buttons
-        private readonly Color _activeSidebarButtonColor = Color.AntiqueWhite;
-        private readonly Color _activeSidebarButtonTextColor = Color.Black;
-        private readonly Color _inactiveSidebarButtonColor = Color.Transparent;
-        private readonly Color _inactiveSidebarButtonTextColor = Color.Transparent;
+        private readonly Color _activeSidebarButtonColor = Constants.ActiveSidebarButtonColor;
+        private readonly Color _activeSidebarButtonTextColor = Constants.ActiveSidebarButtonTextColor;
+        private readonly Color _inactiveSidebarButtonColor = Constants.InactiveSidebarButtonColor;
+        private readonly Color _inactiveSidebarButtonTextColor = Constants.InactiveSidebarButtonTextColor;
 
         private readonly IApi _api;
         private readonly UserInfo _userInfo;
@@ -180,8 +181,15 @@ namespace Test1
 
         private void UserNameLabel_Click(object sender, EventArgs e)
         {
-            // goes to profile page
-            profileButton.PerformClick();
+            // goes to profile page if user is logged in, otherwise prompts user to log in
+            if (userNameLabel.Text == "Guest")
+            {
+                loginBtn.PerformClick();
+            }
+            else
+            {
+                profileButton.PerformClick();
+            }
         }
 
         private void LoginBtn_VisibleChanged(object sender, EventArgs e)

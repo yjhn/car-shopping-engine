@@ -5,6 +5,8 @@ namespace CarEngine.Forms
 {
     public partial class CarForm : Form
     {
+        // add ability to delete cars from this form
+
         public CarForm(Car carInfo)
         {
             InitializeComponent();

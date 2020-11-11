@@ -61,7 +61,7 @@
             this.sidebarPanel.Location = new System.Drawing.Point(0, 0);
             this.sidebarPanel.Margin = new System.Windows.Forms.Padding(2);
             this.sidebarPanel.Name = "sidebarPanel";
-            this.sidebarPanel.Size = new System.Drawing.Size(126, 581);
+            this.sidebarPanel.Size = new System.Drawing.Size(126, 625);
             this.sidebarPanel.TabIndex = 0;
             // 
             // loginBtn
@@ -75,7 +75,7 @@
             this.loginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.loginBtn.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.loginBtn.ForeColor = System.Drawing.Color.Transparent;
-            this.loginBtn.Location = new System.Drawing.Point(0, 497);
+            this.loginBtn.Location = new System.Drawing.Point(0, 541);
             this.loginBtn.Margin = new System.Windows.Forms.Padding(2);
             this.loginBtn.Name = "loginBtn";
             this.loginBtn.Size = new System.Drawing.Size(126, 42);
@@ -179,7 +179,7 @@
             this.logoutBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.logoutBtn.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.logoutBtn.ForeColor = System.Drawing.Color.Transparent;
-            this.logoutBtn.Location = new System.Drawing.Point(0, 539);
+            this.logoutBtn.Location = new System.Drawing.Point(0, 583);
             this.logoutBtn.Margin = new System.Windows.Forms.Padding(2);
             this.logoutBtn.Name = "logoutBtn";
             this.logoutBtn.Size = new System.Drawing.Size(126, 42);
@@ -202,7 +202,7 @@
             this.pagePanel.Margin = new System.Windows.Forms.Padding(2);
             this.pagePanel.MinimumSize = new System.Drawing.Size(660, 250);
             this.pagePanel.Name = "pagePanel";
-            this.pagePanel.Size = new System.Drawing.Size(708, 581);
+            this.pagePanel.Size = new System.Drawing.Size(878, 625);
             this.pagePanel.TabIndex = 2;
             // 
             // browsePage
@@ -214,7 +214,7 @@
             this.browsePage.Margin = new System.Windows.Forms.Padding(1);
             this.browsePage.MinimumSize = new System.Drawing.Size(660, 250);
             this.browsePage.Name = "browsePage";
-            this.browsePage.Size = new System.Drawing.Size(708, 581);
+            this.browsePage.Size = new System.Drawing.Size(878, 625);
             this.browsePage.TabIndex = 0;
             this.browsePage.TabStop = false;
             // 
@@ -227,7 +227,7 @@
             this.uploadPage.Location = new System.Drawing.Point(0, 0);
             this.uploadPage.Margin = new System.Windows.Forms.Padding(1);
             this.uploadPage.Name = "uploadPage";
-            this.uploadPage.Size = new System.Drawing.Size(708, 581);
+            this.uploadPage.Size = new System.Drawing.Size(878, 625);
             this.uploadPage.TabIndex = 2;
             // 
             // searchPage
@@ -240,7 +240,7 @@
             this.searchPage.Location = new System.Drawing.Point(0, 0);
             this.searchPage.Margin = new System.Windows.Forms.Padding(1);
             this.searchPage.Name = "searchPage";
-            this.searchPage.Size = new System.Drawing.Size(708, 581);
+            this.searchPage.Size = new System.Drawing.Size(878, 625);
             this.searchPage.TabIndex = 1;
             // 
             // profilePage
@@ -251,7 +251,7 @@
             this.profilePage.Location = new System.Drawing.Point(0, 0);
             this.profilePage.Margin = new System.Windows.Forms.Padding(1);
             this.profilePage.Name = "profilePage";
-            this.profilePage.Size = new System.Drawing.Size(708, 581);
+            this.profilePage.Size = new System.Drawing.Size(878, 625);
             this.profilePage.TabIndex = 3;
             // 
             // networkErrorMessage
@@ -263,7 +263,7 @@
             this.networkErrorMessage.ForeColor = System.Drawing.Color.Red;
             this.networkErrorMessage.Location = new System.Drawing.Point(0, 0);
             this.networkErrorMessage.Name = "networkErrorMessage";
-            this.networkErrorMessage.Size = new System.Drawing.Size(834, 581);
+            this.networkErrorMessage.Size = new System.Drawing.Size(1004, 625);
             this.networkErrorMessage.TabIndex = 3;
             this.networkErrorMessage.Text = "No connection to server";
             this.networkErrorMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -275,7 +275,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(834, 581);
+            this.ClientSize = new System.Drawing.Size(1004, 625);
             this.Controls.Add(this.pagePanel);
             this.Controls.Add(this.sidebarPanel);
             this.Controls.Add(this.networkErrorMessage);

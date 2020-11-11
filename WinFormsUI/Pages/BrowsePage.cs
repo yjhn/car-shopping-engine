@@ -15,7 +15,7 @@ namespace CarEngine
         private readonly CarFilters _filters;
         private string _selectedSortItem;
         private bool _sortAsc;
-        public int AdsInPage = 15;
+        private readonly int _adsInPage = Constants.AdsInBrowsePage;
         private int _currentPageNumber = 1;
         private readonly EnumParser _parser = new EnumParser();
 
@@ -93,8 +93,10 @@ namespace CarEngine
         }
 
         //  this constructor is needed to use this as a search results page
-        public BrowsePage(CarFilters carFilters, string selectedSortItem, bool sortAsc)
+        public BrowsePage(CarFilters carFilters, string selectedSortItem, bool sortAsc, IApi api, UserInfo userInfo)
         {
+            _frontendApi = api;
+            _userInfo = userInfo;
             _isSearchResultsPage = true;
             _filters = carFilters;
 
@@ -102,6 +104,7 @@ namespace CarEngine
 
             sortAscRadioButton.Checked = sortAsc;
             sortResultsByCombobox.SelectedItem = selectedSortItem;
+            SortingChanged();
         }
 
         private async void ShowCarList()
@@ -119,9 +122,11 @@ namespace CarEngine
             // if we are one the first page for the first time
             if (_adList.Count == 0)
             {
-                CarAdMinimal[] carAds = await GetMinimalVehicleAds(0, AdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalVehicleAds(0, _adsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
+                    refreshButton.Enabled = true;
+                    sortButton.Enabled = true;
                     _nextPageButtonEnabled = false;
                     nextPageButton.Enabled = false;
                     return;
@@ -133,7 +138,7 @@ namespace CarEngine
             if (_currentPageNumber == _adList.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                CarAdMinimal[] carAds = await GetMinimalVehicleAds(AdsInPage * _currentPageNumber, AdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalVehicleAds(_adsInPage * _currentPageNumber, _adsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
@@ -148,6 +153,7 @@ namespace CarEngine
             CarAdMinimal[] pageToShow = _adList[_currentPageNumber - 1];
 
             // try to display only as many ads as there are in the page
+            //mainPanel.Controls.AddRange(pageToShow);
             for (int i = 0; i < pageToShow.Length; i++)
             {
                 mainPanel.Controls.Add(pageToShow[i]);
@@ -228,7 +234,7 @@ namespace CarEngine
         {
             if (Visible)
             {
-                refreshButton.Focus();
+                //refreshButton.Focus();
             }
         }
     }

@@ -11,7 +11,7 @@ namespace CarEngine.Pages
     public partial class UploadPage : UserControl
     {
         private IApi _frontendApi;
-        private EnumParser _parser = new EnumParser();
+        private readonly EnumParser _parser = new EnumParser();
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
@@ -78,10 +78,12 @@ namespace CarEngine.Pages
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             additionalImagesPanel.Controls.Clear();
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = true;
-            dialog.Filter = "Images (*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|" +
-                            "All files (*.*)|*.*";
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "Images (*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|" +
+                            "All files (*.*)|*.*"
+            };
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {

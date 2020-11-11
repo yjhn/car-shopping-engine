@@ -127,10 +127,8 @@ namespace CarEngine
             };
 
             // create new tab for search results
-            BrowsePage searchResultsTab = new BrowsePage(filters, (string)sortByCombobox.SelectedItem, sortAscRadioBtn.Checked)
+            BrowsePage searchResultsTab = new BrowsePage(filters, (string)sortByCombobox.SelectedItem, sortAscRadioBtn.Checked, _frontendApi, _userInfo)
             {
-                Api = _frontendApi,
-                UserInfo = _userInfo,
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 AutoSize = false
@@ -138,10 +136,7 @@ namespace CarEngine
             TabPage resultsTab = new TabPage("results " + _resultspageNr++);
             resultsTab.Controls.Add(searchResultsTab);
             searchAndResultsTabs.TabPages.Add(resultsTab);
-
-            // set focus to search results page
-            // for some reason this does not work
-            //resultsTab.Focus();
+            searchAndResultsTabs.SelectTab(searchAndResultsTabs.TabPages.Count - 1);
         }
 
         private void ResetSearchButton_Click(object sender, EventArgs e)
@@ -172,23 +167,22 @@ namespace CarEngine
         private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
 
-            try
+            //try
+            //{
+            var tabPage = this.searchAndResultsTabs.TabPages[e.Index];
+            var tabRect = this.searchAndResultsTabs.GetTabRect(e.Index);
+            tabRect.Inflate(-2, -2);
+            // draw Close button to all TabPages
+            if (e.Index > 0)
             {
-                var tabPage = this.searchAndResultsTabs.TabPages[e.Index];
-                var tabRect = this.searchAndResultsTabs.GetTabRect(e.Index);
-                tabRect.Inflate(-2, -2);
-                // draw Close button to all TabPages
-                if (e.Index > 0)
-                {
-                    e.Graphics.DrawImage(_closeImage,
-                        (tabRect.Right - _closeImage.Width),
-                        tabRect.Top + (tabRect.Height - _closeImage.Height) / 2);
-                }
-                TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font,
-                    tabRect, tabPage.ForeColor, TextFormatFlags.Left);
-
+                e.Graphics.DrawImage(_closeImage,
+                    (tabRect.Right - _closeImage.Width),
+                    tabRect.Top + (tabRect.Height - _closeImage.Height) / 2);
             }
-            catch (Exception ex) { throw new Exception(ex.Message); }
+            TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font,
+                tabRect, tabPage.ForeColor, TextFormatFlags.Left);
+            //}
+            //catch (Exception ex) { throw new Exception(ex.Message); }
         }
 
 
