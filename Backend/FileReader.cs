@@ -9,7 +9,9 @@ namespace Backend
 {
     internal class FileReader
     {
-        private readonly string _defaultDatabasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\car shopping engine\db\";
+        private readonly static string _desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private readonly static char _pathSeparator = Path.DirectorySeparatorChar;
+        private readonly static string _defaultDatabasePath = $"{_desktopPath}{_pathSeparator}car shopping engine{_pathSeparator}db{_pathSeparator}";
         private readonly string _userDatabasePath;
         private readonly string _carDatabasePath;
         private readonly Logger _logger;
@@ -25,7 +27,7 @@ namespace Backend
             }
             else
             {
-                _carDatabasePath = _defaultDatabasePath + @"cars\";
+                _carDatabasePath = $"{_defaultDatabasePath}cars{_pathSeparator}";
             }
             if (userDbPath != null)
             {
@@ -33,7 +35,7 @@ namespace Backend
             }
             else
             {
-                _userDatabasePath = _defaultDatabasePath + @"users\";
+                _userDatabasePath = $"{_defaultDatabasePath}users{_pathSeparator}";
             }
         }
 

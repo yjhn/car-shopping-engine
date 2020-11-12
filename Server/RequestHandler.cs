@@ -314,7 +314,7 @@ namespace Server
             return _db.DeleteUser(username);
         }
 
-        private Response MakeResponse(Validation v)
+        private static Response MakeResponse(Validation v)
         {
             int statusCode;
             if (v == Validation.HttpVersionNotSupported)

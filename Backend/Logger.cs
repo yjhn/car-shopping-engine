@@ -6,6 +6,10 @@ namespace Backend
 {
     public class Logger
     {
+        private readonly static string _desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private readonly static char _pathSeparator = Path.DirectorySeparatorChar;
+        private readonly static string _defaultLogPath = $"{_desktopPath}{_pathSeparator}car shopping engine{_pathSeparator}logs{_pathSeparator}";
+        private readonly static string _newline = Environment.NewLine;
         private readonly string _exceptionsLogPath;
         private readonly string _messagesLogPath;
         private readonly FileStream _exceptionsLogFile;
@@ -13,8 +17,8 @@ namespace Backend
 
         public Logger(string exceptionsLogPath = null, string messagesLogPath = null)
         {
-            _exceptionsLogPath = exceptionsLogPath ?? $@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\Desktop\car shopping engine\logs\Exceptions\{DateTime.Now.ToShortDateString()}-{DateTime.Now.ToLongTimeString().Replace(":", "-")}.txt";
-            _messagesLogPath = messagesLogPath ?? $@"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\Desktop\car shopping engine\logs\Messages\{DateTime.Now.ToShortDateString()}-{DateTime.Now.ToLongTimeString().Replace(":", "-")}.txt";
+            _exceptionsLogPath = exceptionsLogPath ?? $"{_defaultLogPath}Exceptions{_pathSeparator}{DateTime.Now.ToShortDateString()}-{DateTime.Now.ToLongTimeString().Replace(":", "-")}.txt";
+            _messagesLogPath = messagesLogPath ?? $"{_defaultLogPath}Messages{_pathSeparator}{DateTime.Now.ToShortDateString()}-{DateTime.Now.ToLongTimeString().Replace(":", "-")}.txt";
 
 
             try
@@ -26,13 +30,13 @@ namespace Backend
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Failed to create log file(s) {_exceptionsLogPath}\n{e}");
+                Console.WriteLine($"Failed to create log file(s) {_exceptionsLogPath}{_newline}{e}");
             }
         }
 
         public async void LogException(Exception e)
         {
-            byte[] info = new UTF8Encoding(true).GetBytes($"[{DateTime.Now:T}] {e}\n\n");
+            byte[] info = new UTF8Encoding(true).GetBytes($"[{DateTime.Now:T}] {e}{_newline}{_newline}");
             try
             {
                 await _exceptionsLogFile.WriteAsync(info.AsMemory(0, info.Length));
@@ -40,13 +44,13 @@ namespace Backend
             }
             catch (Exception exc)
             {
-                Console.WriteLine($"Cannot write to exceptions log file\n{exc}");
+                Console.WriteLine($"Cannot write to exceptions log file{_newline}{exc}");
             }
         }
 
         public async void Log(string s)
         {
-            byte[] info = new UTF8Encoding(true).GetBytes($"{s}\n");
+            byte[] info = new UTF8Encoding(true).GetBytes($"{s}{_newline}");
             try
             {
                 await _messagesLogFile.WriteAsync(info.AsMemory(0, info.Length));
@@ -54,7 +58,7 @@ namespace Backend
             }
             catch (Exception exc)
             {
-                Console.WriteLine($"Cannot write to messages log file\n{exc}");
+                Console.WriteLine($"Cannot write to messages log file{_newline}{exc}");
             }
         }
     }
