@@ -33,7 +33,7 @@ namespace Frontend
             StringBuilder message = new StringBuilder($"{req.Method} {req.Url}/{req.Resource}");
             if (req.Queries.Count > 0)
             {
-                message.Append("?");
+                message.Append('?');
                 foreach (KeyValuePair<string, string> kvp in req.Queries)
                     message.Append($"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}&");
                 message.Length -= 1;
@@ -96,14 +96,16 @@ namespace Frontend
                 else
                     return null;
             string content = groups["content"].Value;
-            Response r = new Response(statusCode);
-            r.Headers = headers;
             int contentLength = content.Length;
-            if (Header.Contains(r.Headers, "CONTENT-LENGTH"))
-                contentLength = int.Parse(Header.GetValueByName(r.Headers, "CONTENT-LENGTH"));
+            if (Header.Contains(headers, "CONTENT-LENGTH"))
+                contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
             if (contentLength < content.Length)
                 content = content.Substring(0, contentLength);
-            r.Content = Encoding.ASCII.GetBytes(content);
+            Response r = new Response(statusCode)
+            {
+                Headers = headers,
+                Content = Encoding.ASCII.GetBytes(content)
+            };
             return r;
         }
     }

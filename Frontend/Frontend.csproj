@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Generator.cs" />
     <Compile Remove="Utilities.cs" />
   </ItemGroup>
 

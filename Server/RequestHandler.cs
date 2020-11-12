@@ -96,7 +96,7 @@ namespace Server
             return parsing;
         }
 
-        private Validation ValidateRequest(Request req)
+        private static Validation ValidateRequest(Request req)
         {
             if (req.HttpVersion != ServerConstants.HttpVersion)
                 return Validation.HttpVersionNotSupported;
@@ -266,7 +266,7 @@ namespace Server
             }
             else
             {
-                responseBody = new byte[0];
+                responseBody = Array.Empty<byte>();
             }
 
             _r = MakeResponse(200, responseBody);
@@ -328,15 +328,13 @@ namespace Server
             return MakeResponse(statusCode);
         }
 
-        private Response MakeResponse(int statusCode)
+        private static Response MakeResponse(int statusCode)
         {
             return MakeResponse(statusCode, SetContent(""));
         }
 
-        private Response MakeResponse(int statusCode, byte[] content, string contentType = "application/json")
+        private static Response MakeResponse(int statusCode, byte[] content, string contentType = "application/json")
         {
-            Response r = new Response(statusCode);
-            r.Content = content;
             List<Header> headers = new List<Header>
             {
                 new Header("Connection", "close"),
@@ -346,7 +344,11 @@ namespace Server
             if (content.Length > 0)
                 headers.Add(new Header("Content-type", $"{contentType}; charset=utf-8"));
             headers.Add(new Header("Content-length", content.Length.ToString()));
-            r.Headers = headers;
+            Response r = new Response(statusCode)
+            {
+                Content = content,
+                Headers = headers
+            };
             return r;
         }
 
@@ -419,7 +421,7 @@ namespace Server
             }
             else
             {
-                responseBody = new byte[0];
+                responseBody = Array.Empty<byte>();
             }
 
             _r = MakeResponse(200, responseBody);
@@ -458,13 +460,13 @@ namespace Server
             }
             else
             {
-                responseBody = new byte[0];
+                responseBody = Array.Empty<byte>();
             }
 
             _r = MakeResponse(200, responseBody);
         }
 
-        private byte[] SetContent(string output)
+        private static byte[] SetContent(string output)
         {
             return System.Text.Encoding.ASCII.GetBytes(output);
         }
@@ -487,7 +489,7 @@ namespace Server
             }
         }
 
-        private SortingCriteria? GetSortingCriteria(string criteriaString)
+        private static SortingCriteria? GetSortingCriteria(string criteriaString)
         {
             SortingCriteria? criteria = null;
             Type sortingType = typeof(SortingCriteria);

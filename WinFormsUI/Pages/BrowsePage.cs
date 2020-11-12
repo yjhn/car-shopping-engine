@@ -92,7 +92,7 @@ namespace CarEngine
             sortResultsByCombobox.SelectedIndex = 0;
         }
 
-        //  this constructor is needed to use this as a search results page
+        // this constructor is needed to use this as a search results page
         public BrowsePage(CarFilters carFilters, string selectedSortItem, bool sortAsc, IApi api, UserInfo userInfo)
         {
             _frontendApi = api;
@@ -116,7 +116,7 @@ namespace CarEngine
             // clear main panel to load other ads
             mainPanel.Controls.Clear();
 
-            // enable . It might get disabled later in the method, so we cannot do this later
+            // enable "next page" button placeholder. It might get disabled later in the method, so we cannot do this later
             _nextPageButtonEnabled = true;
 
             // if we are on the first page for the first time
@@ -154,13 +154,6 @@ namespace CarEngine
 
             // try to display only as many ads as there are in the page
             mainPanel.Controls.AddRange(pageToShow);
-            //for (int i = 0; i < pageToShow.Length; i++)
-            //{
-            //    mainPanel.Controls.Add(pageToShow[i]);
-
-            //    // make ads selectable by tab (added 6 to make space for sorting buttons at the bottom)
-            //    pageToShow[i].TabIndex = i + 6;
-            //}
             nextPageButton.Enabled = _nextPageButtonEnabled;
 
             // re-enable "refresh" and "sort" buttons
@@ -179,7 +172,7 @@ namespace CarEngine
             {
                 vehicles = await _frontendApi.GetSortedCars(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
             }
-            return Converter.VehicleListToAds(vehicles, _userInfo);
+            return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
         private void NextPageButton_Click(object sender, EventArgs e)
@@ -234,7 +227,8 @@ namespace CarEngine
         {
             if (Visible)
             {
-                //refreshButton.Focus();
+                // need to figure out how to make ads selectable with tab -- current solution works, but everything can be selected only once
+                mainPanel.Select();
             }
         }
     }

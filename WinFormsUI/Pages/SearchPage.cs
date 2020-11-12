@@ -15,7 +15,7 @@ namespace CarEngine
         private readonly EnumParser _parser = new EnumParser();
 
         // tab close button image
-        private readonly Image _closeImage = Converter.ResizeImage(Resources.tabclose, 15, 15);
+        private readonly Image _closeImage = Utilities.ResizeImage(Resources.tabclose, 15, 15);
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]

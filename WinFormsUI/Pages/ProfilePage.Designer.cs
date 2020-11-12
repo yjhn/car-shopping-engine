@@ -1,4 +1,4 @@
-﻿namespace CarEngine.Pages
+﻿namespace CarEngine
 {
     partial class ProfilePage
     {

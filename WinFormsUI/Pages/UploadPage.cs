@@ -3,10 +3,9 @@ using Frontend;
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace CarEngine.Pages
+namespace CarEngine
 {
     public partial class UploadPage : UserControl
     {
@@ -90,14 +89,17 @@ namespace CarEngine.Pages
                 pictureBox1.ImageLocation = dialog.FileName.ToString();
             }
 
-            for (int i = 1; i < dialog.FileNames.Count(); i++)
+            for (int i = 1; i < dialog.FileNames.Length; i++)
             {
-                PictureBox picture = new PictureBox();
-                picture.Size = new Size(additionalImagesPanel.Height, additionalImagesPanel.Height);
-                picture.Location = new Point(additionalImagesPanel.Width - (i) * (picture.Width + 5), 0);
-                picture.Image = Image.FromFile(dialog.FileNames[i]);
-                picture.SizeMode = PictureBoxSizeMode.Zoom;
-                picture.BackColor = SystemColors.ControlLightLight;
+                Size pictureSize = new Size(additionalImagesPanel.Height, additionalImagesPanel.Height);
+                PictureBox picture = new PictureBox
+                {
+                    Size = pictureSize,
+                    Location = new Point(additionalImagesPanel.Width - (i) * (pictureSize.Width + 5), 0),
+                    Image = Image.FromFile(dialog.FileNames[i]),
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    BackColor = SystemColors.ControlLightLight
+                };
                 additionalImagesPanel.Controls.Add(picture);
             }
         }
@@ -182,11 +184,11 @@ namespace CarEngine.Pages
         {
             string[] images = new string[additionalImagesPanel.Controls.Count + 1];
             // main image
-            images[0] = Converter.ConvertImageToBase64(pictureBox1.Image);
+            images[0] = Utilities.ConvertImageToBase64(pictureBox1.Image);
             // additional images
             for (int i = 1; i <= additionalImagesPanel.Controls.Count; i++)
             {
-                images[i] = Converter.ConvertImageToBase64(((PictureBox)additionalImagesPanel.Controls[i - 1]).Image);
+                images[i] = Utilities.ConvertImageToBase64(((PictureBox)additionalImagesPanel.Controls[i - 1]).Image);
             }
             return images;
 
@@ -209,7 +211,7 @@ namespace CarEngine.Pages
             defectsTextBox.ResetText();
         }
 
-        private void DisplayErrorMessage(string text)
+        private static void DisplayErrorMessage(string text)
         {
             MessageBox.Show(text, "Wrong Information Input",
             MessageBoxButtons.OK, MessageBoxIcon.Error);

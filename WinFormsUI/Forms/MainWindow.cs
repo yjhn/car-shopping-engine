@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Test1
+namespace CarEngine
 {
     public partial class MainWindow : Form
     {
@@ -28,7 +28,7 @@ namespace Test1
 
             InitializeComponent();
 
-            // pass Api down
+            // pass Api and UserInfo down
             browsePage.Api = _api;
             browsePage.UserInfo = _userInfo;
             searchPage.Api = _api;

@@ -11,7 +11,7 @@ namespace Frontend
             FrontendApi = frontendApi;
         }
 
-        public void post()
+        public void Post()
         {
             Random r = new Random();
             string[] colors = { "raudona", "zalia", "melyna", "geltona", "balta", "belekokia spalva", "purpurine", "alyvine", "tamsiai violetine" };

@@ -1,11 +1,9 @@
 ﻿using DataTypes;
 using Frontend;
 using System;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
 
-namespace Test1
+namespace CarEngine
 {
     public partial class LoginScreen : Form
     {
@@ -26,9 +24,9 @@ namespace Test1
         {
             string username = usernameTextBox.Text;
             string password = passwordTextBox.Text;
-                        if (Validate(username,  password))
+            if (Utilities.ValidateInput(username, password))
             {
-                MinimalUser user = await _frontendApi.GetUser(username, EncryptPassword(passwordTextBox.Text, username));
+                MinimalUser user = await _frontendApi.GetUser(username, Utilities.EncryptPassword(passwordTextBox.Text, username));
                 if (user == null)
                 {
                     // this is not always correct, as we will get null also when there is no connection
@@ -61,9 +59,9 @@ namespace Test1
                 long phone = 1000000;
                 if (!string.IsNullOrEmpty(phoneTextbox.Text))
                     phone = Convert.ToInt64(phoneTextbox.Text);
-                if (Validate(username, password) && email != "" && !email.Contains(' ') && phone != 1000000)
+                if (Utilities.ValidateInput(username, password) && email != "" && !email.Contains(' ') && phone != 1000000)
                 {
-                    User user = new User(username, phone, EncryptPassword(password, username), email);
+                    User user = new User(username, phone, Utilities.EncryptPassword(password, username), email);
                     successfullyCreated = await _frontendApi.AddUser(user);
 
                     if (successfullyCreated != null)
@@ -121,21 +119,6 @@ namespace Test1
             if (e.KeyCode == Keys.Enter)
             {
                 loginButton.PerformClick();
-            }
-        }
-
-        private bool Validate(string username, string password)
-        {
-            return !(username == "" || username.Contains(' ') || password == "" || password.Contains(' '));
-        }
-
-        public string EncryptPassword(string password, string salt)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var saltedPassword = string.Format("{0}{1}", salt, password);
-                byte[] saltedPasswordAsBytes = Encoding.UTF8.GetBytes(saltedPassword);
-                return Convert.ToBase64String(sha256.ComputeHash(saltedPasswordAsBytes));
             }
         }
     }

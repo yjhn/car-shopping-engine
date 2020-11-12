@@ -3,15 +3,15 @@ using Frontend;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CarEngine.Pages
+namespace CarEngine
 {
     public partial class ProfilePage : UserControl
     {
         private IApi _frontendApi;
+        private UserInfo _userInfo;
         private readonly int _likedAdsInPage = Constants.AdsInLikedAdsPage;
         private readonly int _uploadedAdsInPage = Constants.AdsInUploadedAdsPage;
         private readonly EnumParser _parser = new EnumParser();
@@ -21,9 +21,6 @@ namespace CarEngine.Pages
         private bool _nextUploadedAdsPageBtnEnabled = false;
         private readonly List<CarAdMinimal[]> _likedAdsPages = new List<CarAdMinimal[]>();
         private readonly List<CarAdMinimal[]> _uploadedAdsPages = new List<CarAdMinimal[]>();
-        private int _leftoverNrOfAdsLikedInSession { get; } = 0;
-        private int _nrOfAdsLikedInSession { get; } = 0;
-        private List<Car> _adsLikedInCurrentSession;
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
@@ -52,8 +49,6 @@ namespace CarEngine.Pages
                 }
             }
         }
-
-        private UserInfo _userInfo;
 
         [DefaultValue(null)]
         public UserInfo UserInfo
@@ -137,33 +132,6 @@ namespace CarEngine.Pages
          */
 
         // loads one page of liked cars
-        //private void LoadLikedCars()
-        //{
-        //    // disable all buttons for the duration of the load
-        //    likedAdsNextPageBtn.Enabled = false;
-        //    likedAdsPrevPageBtn.Enabled = false;
-        //    sortLikedAdsBtn.Enabled = false;
-
-        //    List<Car> likedCars = _userInfo.GetLikedCarsPage(_likedAdsPageNr);
-        //    if(likedCars == null)
-        //    {
-        //        // if there is nothing to load, then return
-        //        likedAdsPrevPageBtn.Enabled = _likedAdsPageNr > 1;
-        //        sortLikedAdsBtn.Enabled = true;
-        //        return;
-        //    }
-        //    CarAdMinimal[] likedAdsList = Converter.VehicleListToAds(likedCars, _userInfo);
-        //    likedAdsPanel.Controls.Clear();
-        //    likedAdsPanel.Controls.AddRange(likedAdsList);
-
-        //    // enable some buttons
-        //    likedAdsPrevPageBtn.Enabled = _likedAdsPageNr > 1;
-        //    //likedAdsNextPageBtn.Enabled = 
-        //    sortLikedAdsBtn.Enabled = true;
-        //}
-
-
-        // loads one page of liked cars
         private async void ShowLikedCars()
         {
             // disable all buttons for the duration of the load
@@ -229,8 +197,8 @@ namespace CarEngine.Pages
             bool sortAsc = sortLikedAdsAscRdBtn.Checked;
             SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortLikedAdsByCombobox.SelectedItem);
 
-            List<Car> vehicles = await _frontendApi.GetSortedLikedCars(_userInfo.Token,sortBy,sortAsc, startIndex, amount);
-            return Converter.VehicleListToAds(vehicles, _userInfo);
+            List<Car> vehicles = await _frontendApi.GetSortedLikedCars(_userInfo.Token, sortBy, sortAsc, startIndex, amount);
+            return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
         private async Task<CarAdMinimal[]> GetMinimalUploadedVehicleAds(int startIndex, int amount)
@@ -240,7 +208,7 @@ namespace CarEngine.Pages
             SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortUploadedAdsByCombobox.SelectedItem);
 
             List<Car> vehicles = await _frontendApi.GetSortedUploadedCars(_userInfo.Username, sortBy, sortAsc, startIndex, amount);
-            return Converter.VehicleListToAds(vehicles, _userInfo);
+            return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
 

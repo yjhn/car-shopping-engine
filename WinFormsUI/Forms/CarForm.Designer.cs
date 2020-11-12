@@ -1,4 +1,4 @@
-﻿namespace CarEngine.Forms
+﻿namespace CarEngine
 {
     partial class CarForm
     {

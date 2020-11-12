@@ -1,7 +1,8 @@
 ﻿using DataTypes;
 using System.Drawing;
 using System.Windows.Forms;
-namespace CarEngine.Forms
+
+namespace CarEngine
 {
     public partial class CarForm : Form
     {
@@ -104,13 +105,13 @@ namespace CarEngine.Forms
                 {
                     PictureBox pic = new PictureBox
                     {
-                        Image = Converter.Base64ToImg(i),
+                        Image = Utilities.Base64ToImg(i),
                         SizeMode = PictureBoxSizeMode.Zoom,//447; 407
                         Size = new Size(447, 407)
                     };
                     flowLayoutPanel2.Controls.Add(pic);
                 }
-                carMainImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
+                carMainImage.Image = Utilities.Base64ToImg(carInfo.Images[0]);
             }
 
         }

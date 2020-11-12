@@ -6,10 +6,12 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CarEngine
 {
-    internal static class Converter
+    internal static class Utilities
     {
         public static Bitmap ResizeImage(Image image, int width, int height)
         {
@@ -26,11 +28,9 @@ namespace CarEngine
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
+                using var wrapMode = new ImageAttributes();
+                wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
             }
 
             return destImage;
@@ -70,6 +70,19 @@ namespace CarEngine
                 minimalAds[i] = new CarAdMinimal(vehicleList[i], userInfo);
             }
             return minimalAds;
+        }
+
+        public static bool ValidateInput(string username, string password)
+        {
+            return !(username == "" || username.Contains(' ') || password == "" || password.Contains(' '));
+        }
+
+        public static string EncryptPassword(string password, string salt)
+        {
+            using var sha256 = SHA256.Create();
+            var saltedPassword = string.Format("{0}{1}", salt, password);
+            byte[] saltedPasswordAsBytes = Encoding.UTF8.GetBytes(saltedPassword);
+            return Convert.ToBase64String(sha256.ComputeHash(saltedPasswordAsBytes));
         }
     }
 }

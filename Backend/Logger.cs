@@ -35,7 +35,7 @@ namespace Backend
             byte[] info = new UTF8Encoding(true).GetBytes($"[{DateTime.Now:T}] {e}\n\n");
             try
             {
-                await _exceptionsLogFile.WriteAsync(info, 0, info.Length);
+                await _exceptionsLogFile.WriteAsync(info.AsMemory(0, info.Length));
                 await _exceptionsLogFile.FlushAsync();
             }
             catch (Exception exc)
@@ -49,7 +49,7 @@ namespace Backend
             byte[] info = new UTF8Encoding(true).GetBytes($"{s}\n");
             try
             {
-                await _messagesLogFile.WriteAsync(info, 0, info.Length);
+                await _messagesLogFile.WriteAsync(info.AsMemory(0, info.Length));
                 await _messagesLogFile.FlushAsync();
             }
             catch (Exception exc)

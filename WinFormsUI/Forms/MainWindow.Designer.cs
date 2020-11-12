@@ -1,4 +1,4 @@
-﻿namespace Test1
+﻿namespace CarEngine
 {
     partial class MainWindow
     {
@@ -38,9 +38,9 @@
             this.logoutBtn = new System.Windows.Forms.Button();
             this.pagePanel = new System.Windows.Forms.Panel();
             this.browsePage = new CarEngine.BrowsePage();
-            this.uploadPage = new CarEngine.Pages.UploadPage();
+            this.uploadPage = new CarEngine.UploadPage();
             this.searchPage = new CarEngine.SearchPage();
-            this.profilePage = new CarEngine.Pages.ProfilePage();
+            this.profilePage = new CarEngine.ProfilePage();
             this.networkErrorMessage = new System.Windows.Forms.Label();
             this.sidebarPanel.SuspendLayout();
             this.pagePanel.SuspendLayout();
@@ -302,8 +302,8 @@
         private System.Windows.Forms.Panel pagePanel;
         private CarEngine.SearchPage searchPage;
         private CarEngine.BrowsePage browsePage;
-        private CarEngine.Pages.ProfilePage profilePage;
-        private CarEngine.Pages.UploadPage uploadPage;
+        private CarEngine.ProfilePage profilePage;
+        private CarEngine.UploadPage uploadPage;
         private System.Windows.Forms.Label networkErrorMessage;
         private System.Windows.Forms.Button logoutBtn;
         private System.Windows.Forms.Button loginBtn;

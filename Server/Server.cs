@@ -95,8 +95,7 @@ namespace Server
                 // Process the data sent by the client and make a response.
                 if (!isRequestValid)
                 {
-                    bool unnecessary;
-                    msg = new RequestHandler(data.ToString(), _db, _logger).HandleRequest(out unnecessary);
+                    msg = new RequestHandler(data.ToString(), _db, _logger).HandleRequest(out bool unnecessary);
                 }
                 // Send back a response.
                 sslStream.Write(msg, 0, msg.Length);
@@ -116,12 +115,12 @@ namespace Server
             }
         }
 
-        public static void Main(String[] args)
+        public static void Main()
         {
             // create database and logger since only one instance of each will be needed
             Logger logger = new Logger();
             IDatabase db = new Database(logger);
-            new Server(logger, db);
+            _ = new Server(logger, db);
         }
     }
 }

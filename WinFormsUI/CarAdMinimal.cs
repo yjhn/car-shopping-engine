@@ -1,8 +1,6 @@
-﻿using CarEngine.Forms;
-using DataTypes;
+﻿using DataTypes;
 using Frontend;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -46,7 +44,7 @@ namespace CarEngine
             additionalInfo.Text += $" \"{carInfo.Comment}\"";
             if (carInfo.Images != null && carInfo.Images.Length > 0)
             {
-                carImage.Image = Converter.Base64ToImg(carInfo.Images[0]);
+                carImage.Image = Utilities.Base64ToImg(carInfo.Images[0]);
             }
         }
 
@@ -105,20 +103,11 @@ namespace CarEngine
             {
                 ((Button)sender).Text = "♥";
                 _userInfo.LikedAds.Add(_carInfo.Id);
-                //_userInfo.CarsLikedInCurrentSession.Add(_carInfo);
             }
             else
             {
                 ((Button)sender).Text = "❤";
                 _userInfo.LikedAds.Remove(_carInfo.Id);
-                //_userInfo.CarsLikedInCurrentSession.Remove(_carInfo);
-
-                // this does not work correctly
-                //if (!_userInfo.CarsLikedInCurrentSession.Remove(_carInfo))
-                //{
-                //    // this should never happen if the program works correctly
-                //    throw new Exception("Trying to remove not liked car from liked cars");
-                //}
             }
         }
     }

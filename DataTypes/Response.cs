@@ -8,7 +8,7 @@ namespace DataTypes
     {
         public int StatusCode
         { get; }
-        private string _statusText;
+        private readonly string _statusText;
         public List<Header> Headers
         { set; get; }
         public byte[] Content
@@ -17,48 +17,22 @@ namespace DataTypes
         public Response(int statusCode)
         {
             StatusCode = statusCode;
-            switch (statusCode)
+            _statusText = statusCode switch
             {
-                case 200:
-                    _statusText = "OK";
-                    break;
-                case 201:
-                    _statusText = "Created";
-                    break;
-                case 204:
-                    _statusText = "No Content";
-                    break;
-                case 400:
-                    _statusText = "Bad Request";
-                    break;
-                case 401:
-                    _statusText = "Unauthorized";
-                    break;
-                case 404:
-                    _statusText = "Not Found";
-                    break;
-                case 408:
-                    _statusText = "Request Timeout";
-                    break;
-                case 411:
-                    _statusText = "Length Required";
-                    break;
-                case 415:
-                    _statusText = "Unsupported Media Type";
-                    break;
-                case 500:
-                    _statusText = "Internal Server Error";
-                    break;
-                case 501:
-                    _statusText = "Not Implemented";
-                    break;
-                case 505:
-                    _statusText = "HTTP Version Not Supported";
-                    break;
-                default:
-                    _statusText = "Unknown";
-                    break;
-            }
+                200 => "OK",
+                201 => "Created",
+                204 => "No Content",
+                400 => "Bad Request",
+                401 => "Unauthorized",
+                404 => "Not Found",
+                408 => "Request Timeout",
+                411 => "Length Required",
+                415 => "Unsupported Media Type",
+                500 => "Internal Server Error",
+                501 => "Not Implemented",
+                505 => "HTTP Version Not Supported",
+                _ => "Unknown",
+            };
         }
 
         public byte[] Format()

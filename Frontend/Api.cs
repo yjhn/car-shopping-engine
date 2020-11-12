@@ -13,25 +13,6 @@ namespace Frontend
         // event to tell the UI that there is no connection to server
         public event Action NoServerResponse = delegate { };
 
-
-        // this is not needed
-        //public Task<List<Car>> GetCars(int startIndex, int amount)
-        //{
-        //    return Task.Run<List<Car>>(() =>
-        //    {
-        //        Request req = ReqInit("GET", "cars");
-        //        req.Queries.Add("amount", amount.ToString());
-        //        req.Queries.Add("start_index", startIndex.ToString());
-        //        Response r = GetResponse(req);
-        //        if (r == null)
-        //        {
-        //            NoServerResponse.Invoke();
-        //            return null;
-        //        }
-        //        return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
-        //    });
-        //}
-
         public Task<List<Car>> GetSortedCars(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
         {
             // to be able to await a task we first need to create it
@@ -90,23 +71,6 @@ namespace Frontend
                 return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
             });
         }
-
-        // this is not currently used and will probably not be used
-        //public Task<Car> GetCar(int id)
-        //{
-        //    return Task.Run<Car>(() =>
-        //    {
-        //        Request req = ReqInit("GET", "cars");
-        //        req.Queries.Add("id", id.ToString());
-        //        Response r = GetResponse(req);
-        //        if (r == null)
-        //        {
-        //            NoServerResponse.Invoke();
-        //            return null;
-        //        }
-        //        return r.Content.Length > 0 ? JsonSerializer.Deserialize<Car>(r.Content) : null;
-        //    });
-        //}
 
         // this probably should not return int
         public Task<int?> AddCar(Car car)
@@ -234,27 +198,6 @@ namespace Frontend
             });
         }
 
-        //public Task<List<Car>> GetSortedLikedCars(string token, int startIndex, int amount)
-        //{
-        //    return Task.Run<List<Car>>(() =>
-        //    {
-        //        Request req = ReqInit("GET", "cars/liked");
-        //        req.Queries.Add("amount", amount.ToString());
-        //        req.Queries.Add("start_index", startIndex.ToString());
-        //        req.Headers.Add(new Header("token", token));
-        //        Response r = GetResponse(req);
-        //        if (r == null)
-        //        {
-        //            NoServerResponse.Invoke();
-        //            return null;
-        //        }
-        //        // if server returns anything, it cannot be null (it may be an empty list)
-        //        List<Car> likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
-        //        return likedCarList;
-
-        //    });
-        //}
-
         public Task<List<Car>> GetSortedLikedCars(string token, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             // to be able to await a task we first need to create it
@@ -276,26 +219,6 @@ namespace Frontend
             });
         }
 
-        //public Task<List<Car>> GetSortedUploadedCars(string username, int startIndex, int amount)
-        //{
-        //    return Task.Run<List<Car>>(() =>
-        //    {
-        //        Request req = ReqInit("GET", "cars/uploaded");
-        //        req.Queries.Add("amount", amount.ToString());
-        //        req.Queries.Add("start_index", startIndex.ToString());
-        //        req.Queries.Add("username", username);
-        //        Response r = GetResponse(req);
-        //        if (r == null)
-        //        {
-        //            NoServerResponse.Invoke();
-        //            return null;
-        //        }
-
-        //        // if server returns anything, it cannot be null (it may be an empty list)
-        //        List<Car> uploadedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
-        //        return uploadedCarList;
-        //    });
-        //}
 
         public Task<List<Car>> GetSortedUploadedCars(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
@@ -318,23 +241,18 @@ namespace Frontend
             });
         }
 
-        private string MakeType(string key)
+        private static string MakeType(string key)
         {
-            string contentType;
-            switch (key)
+            string contentType = key switch
             {
-                case "json":
-                    contentType = "application/json";
-                    break;
-                default:
-                    contentType = "application/x-www-form-urlencoded";
-                    break;
-            }
+                "json" => "application/json",
+                _ => "application/x-www-form-urlencoded",
+            };
             contentType += "; charset=utf-8";
             return contentType;
         }
 
-        private Request ReqInit(string method, string resource)
+        private static Request ReqInit(string method, string resource)
         {
             Request req = new Request
             {
@@ -346,9 +264,91 @@ namespace Frontend
             return req;
         }
 
-        private Response GetResponse(Request req)
+        private static Response GetResponse(Request req)
         {
             return Client.FromStringToResponse(Client.GetRawResponse(req));
         }
     }
 }
+
+
+
+
+// this is not needed
+//public Task<List<Car>> GetCars(int startIndex, int amount)
+//{
+//    return Task.Run<List<Car>>(() =>
+//    {
+//        Request req = ReqInit("GET", "cars");
+//        req.Queries.Add("amount", amount.ToString());
+//        req.Queries.Add("start_index", startIndex.ToString());
+//        Response r = GetResponse(req);
+//        if (r == null)
+//        {
+//            NoServerResponse.Invoke();
+//            return null;
+//        }
+//        return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
+//    });
+//}
+
+//public Task<List<Car>> GetSortedUploadedCars(string username, int startIndex, int amount)
+//{
+//    return Task.Run<List<Car>>(() =>
+//    {
+//        Request req = ReqInit("GET", "cars/uploaded");
+//        req.Queries.Add("amount", amount.ToString());
+//        req.Queries.Add("start_index", startIndex.ToString());
+//        req.Queries.Add("username", username);
+//        Response r = GetResponse(req);
+//        if (r == null)
+//        {
+//            NoServerResponse.Invoke();
+//            return null;
+//        }
+
+//        // if server returns anything, it cannot be null (it may be an empty list)
+//        List<Car> uploadedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
+//        return uploadedCarList;
+//    });
+//}
+
+
+//public Task<List<Car>> GetSortedLikedCars(string token, int startIndex, int amount)
+//{
+//    return Task.Run<List<Car>>(() =>
+//    {
+//        Request req = ReqInit("GET", "cars/liked");
+//        req.Queries.Add("amount", amount.ToString());
+//        req.Queries.Add("start_index", startIndex.ToString());
+//        req.Headers.Add(new Header("token", token));
+//        Response r = GetResponse(req);
+//        if (r == null)
+//        {
+//            NoServerResponse.Invoke();
+//            return null;
+//        }
+//        // if server returns anything, it cannot be null (it may be an empty list)
+//        List<Car> likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
+//        return likedCarList;
+
+//    });
+//}
+
+
+// this is not currently used and will probably not be used
+//public Task<Car> GetCar(int id)
+//{
+//    return Task.Run<Car>(() =>
+//    {
+//        Request req = ReqInit("GET", "cars");
+//        req.Queries.Add("id", id.ToString());
+//        Response r = GetResponse(req);
+//        if (r == null)
+//        {
+//            NoServerResponse.Invoke();
+//            return null;
+//        }
+//        return r.Content.Length > 0 ? JsonSerializer.Deserialize<Car>(r.Content) : null;
+//    });
+//}
