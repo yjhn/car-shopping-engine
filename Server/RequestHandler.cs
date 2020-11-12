@@ -147,7 +147,7 @@ namespace Server
             switch (res)
             {
                 case "cars":
-                    GetCars(req);
+                    GetCars(req.Queries);
                     break;
                 case "cars/filters":
                     GetFilteredCars(req.Queries);
@@ -239,9 +239,9 @@ namespace Server
                 _r = MakeResponse(404);
         }
 
-        private void GetCars(Request req)
+        private void GetCars(Dictionary<string, string> queries /*Request req*/)
         {
-            Dictionary<string, string> queries = req.Queries;
+            //Dictionary<string, string> queries = req.Queries;
             int amount = 50, startIndex = 0;
             SortingCriteria? criteria = null;
             if (queries.ContainsKey("sort_by"))
@@ -389,19 +389,79 @@ namespace Server
 
         private void GetLikedCars(Dictionary<string, string> queries, string token)
         {
-            int startIndex = int.Parse(queries["start_index"]);
-            int amount = int.Parse(queries["amount"]);
-            byte[] favouriteCars = _db.GetUserLikedAdsJson(token, TODO, TODO, startIndex, amount);
-            _r = MakeResponse(200, favouriteCars);
+            //int startIndex = int.Parse(queries["start_index"]);
+            //int amount = int.Parse(queries["amount"]);
+            //byte[] favouriteCars = _db.GetUserLikedAdsJson(token, TODO, TODO, startIndex, amount);
+            //_r = MakeResponse(200, favouriteCars);
+
+            //Dictionary<string, string> queries = req.Queries;
+            int amount = 50, startIndex = 0;
+            SortingCriteria? criteria = null;
+            if (queries.ContainsKey("sort_by"))
+            {
+                criteria = GetSortingCriteria(queries["sort_by"]);
+            }
+            if (queries.ContainsKey("amount"))
+            {
+                amount = int.Parse(queries["amount"]);
+            }
+            if (queries.ContainsKey("start_index"))
+            {
+                startIndex = int.Parse(queries["start_index"]);
+            }
+            byte[] responseBody;
+            if (criteria != null)
+            {
+                bool sortAscending = true;
+                if (queries.ContainsKey("sort_ascending"))
+                    sortAscending = bool.Parse(queries["sort_ascending"]);
+                responseBody = _db.GetUserLikedAdsJson(token,(SortingCriteria)criteria, sortAscending, startIndex, amount);
+            }
+            else
+            {
+                responseBody = new byte[0];
+            }
+
+            _r = MakeResponse(200, responseBody);
         }
 
         private void GetUploadedCars(Dictionary<string, string> queries)
         {
-            int startIndex = int.Parse(queries["start_index"]);
-            int amount = int.Parse(queries["amount"]);
+            //int startIndex = int.Parse(queries["start_index"]);
+            //int amount = int.Parse(queries["amount"]);
+            //string username = queries["username"];
+            //byte[] uploadedCars = _db.GetUserUploadedAdsJson(username, TODO, TODO, startIndex, amount);
+            //_r = MakeResponse(200, uploadedCars);
+
+            int amount = 50, startIndex = 0;
+            SortingCriteria? criteria = null;
             string username = queries["username"];
-            byte[] uploadedCars = _db.GetUserUploadedAdsJson(username, TODO, TODO, startIndex, amount);
-            _r = MakeResponse(200, uploadedCars);
+            if (queries.ContainsKey("sort_by"))
+            {
+                criteria = GetSortingCriteria(queries["sort_by"]);
+            }
+            if (queries.ContainsKey("amount"))
+            {
+                amount = int.Parse(queries["amount"]);
+            }
+            if (queries.ContainsKey("start_index"))
+            {
+                startIndex = int.Parse(queries["start_index"]);
+            }
+            byte[] responseBody;
+            if (criteria != null)
+            {
+                bool sortAscending = true;
+                if (queries.ContainsKey("sort_ascending"))
+                    sortAscending = bool.Parse(queries["sort_ascending"]);
+                responseBody = _db.GetUserUploadedAdsJson(username,(SortingCriteria)criteria, sortAscending, startIndex, amount);
+            }
+            else
+            {
+                responseBody = new byte[0];
+            }
+
+            _r = MakeResponse(200, responseBody);
         }
 
         private byte[] SetContent(string output)

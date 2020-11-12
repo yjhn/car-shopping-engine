@@ -32,7 +32,7 @@ namespace Frontend
         //    });
         //}
 
-        public Task<List<Car>> SortBy(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
+        public Task<List<Car>> GetSortedCars(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
         {
             // to be able to await a task we first need to create it
             return Task.Run<List<Car>>(() =>
@@ -234,12 +234,36 @@ namespace Frontend
             });
         }
 
-        public Task<List<Car>> GetSortedLikedCars(string token, int startIndex, int amount)
+        //public Task<List<Car>> GetSortedLikedCars(string token, int startIndex, int amount)
+        //{
+        //    return Task.Run<List<Car>>(() =>
+        //    {
+        //        Request req = ReqInit("GET", "cars/liked");
+        //        req.Queries.Add("amount", amount.ToString());
+        //        req.Queries.Add("start_index", startIndex.ToString());
+        //        req.Headers.Add(new Header("token", token));
+        //        Response r = GetResponse(req);
+        //        if (r == null)
+        //        {
+        //            NoServerResponse.Invoke();
+        //            return null;
+        //        }
+        //        // if server returns anything, it cannot be null (it may be an empty list)
+        //        List<Car> likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
+        //        return likedCarList;
+
+        //    });
+        //}
+
+        public Task<List<Car>> GetSortedLikedCars(string token, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
+            // to be able to await a task we first need to create it
             return Task.Run<List<Car>>(() =>
             {
                 Request req = ReqInit("GET", "cars/liked");
+                req.Queries.Add("sort_by", sortBy.ToString());
                 req.Queries.Add("amount", amount.ToString());
+                req.Queries.Add("sort_ascending", sortAscending.ToString());
                 req.Queries.Add("start_index", startIndex.ToString());
                 req.Headers.Add(new Header("token", token));
                 Response r = GetResponse(req);
@@ -248,19 +272,40 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-                // if server returns anything, it cannot be null (it may be an empty list)
-                List<Car> likedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
-                return likedCarList;
-
+                return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
             });
         }
 
-        public Task<List<Car>> GetSortedUploadedCars(string username, int startIndex, int amount)
+        //public Task<List<Car>> GetSortedUploadedCars(string username, int startIndex, int amount)
+        //{
+        //    return Task.Run<List<Car>>(() =>
+        //    {
+        //        Request req = ReqInit("GET", "cars/uploaded");
+        //        req.Queries.Add("amount", amount.ToString());
+        //        req.Queries.Add("start_index", startIndex.ToString());
+        //        req.Queries.Add("username", username);
+        //        Response r = GetResponse(req);
+        //        if (r == null)
+        //        {
+        //            NoServerResponse.Invoke();
+        //            return null;
+        //        }
+
+        //        // if server returns anything, it cannot be null (it may be an empty list)
+        //        List<Car> uploadedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
+        //        return uploadedCarList;
+        //    });
+        //}
+
+        public Task<List<Car>> GetSortedUploadedCars(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
+            // to be able to await a task we first need to create it
             return Task.Run<List<Car>>(() =>
             {
                 Request req = ReqInit("GET", "cars/uploaded");
+                req.Queries.Add("sort_by", sortBy.ToString());
                 req.Queries.Add("amount", amount.ToString());
+                req.Queries.Add("sort_ascending", sortAscending.ToString());
                 req.Queries.Add("start_index", startIndex.ToString());
                 req.Queries.Add("username", username);
                 Response r = GetResponse(req);
@@ -269,12 +314,8 @@ namespace Frontend
                     NoServerResponse.Invoke();
                     return null;
                 }
-
-                // if server returns anything, it cannot be null (it may be an empty list)
-                List<Car> uploadedCarList = JsonSerializer.Deserialize<List<Car>>(r.Content);
-                return uploadedCarList;
-            }
- );
+                return r.Content.Length > 0 ? JsonSerializer.Deserialize<List<Car>>(r.Content) : null;
+            });
         }
 
         private string MakeType(string key)

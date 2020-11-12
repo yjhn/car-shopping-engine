@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CarEngine.Pages
@@ -13,6 +14,7 @@ namespace CarEngine.Pages
         private IApi _frontendApi;
         private readonly int _likedAdsInPage = Constants.AdsInLikedAdsPage;
         private readonly int _uploadedAdsInPage = Constants.AdsInUploadedAdsPage;
+        private readonly EnumParser _parser = new EnumParser();
         private int _likedAdsPageNr = 1;
         private int _uploadedAdsPageNr = 1;
         private bool _nextLikedAdsPageBtnEnabled = false;
@@ -84,6 +86,8 @@ namespace CarEngine.Pages
         public ProfilePage()
         {
             InitializeComponent();
+            sortLikedAdsByCombobox.SelectedIndex = 0;
+            sortUploadedAdsByCombobox.SelectedIndex = 0;
         }
 
         private void LoginStateChanged()
@@ -102,13 +106,23 @@ namespace CarEngine.Pages
             if (_userInfo != null && _userInfo.Username != null && _frontendApi != null)
             {
                 usernameLabel.Text = _userInfo.Username;
-                _likedAdsPageNr = 1;
-                _likedAdsPages.Clear();
-                ShowLikedCars();
-                _uploadedAdsPageNr = 1;
-                _uploadedAdsPages.Clear();
-                LoadUploadedCars();
+                LoadLikedAds();
+                LoadUploadedAds();
             }
+        }
+
+        private void LoadUploadedAds()
+        {
+            _uploadedAdsPageNr = 1;
+            _uploadedAdsPages.Clear();
+            ShowUploadedCars();
+        }
+
+        private void LoadLikedAds()
+        {
+            _likedAdsPageNr = 1;
+            _likedAdsPages.Clear();
+            ShowLikedCars();
         }
 
         /*
@@ -152,15 +166,6 @@ namespace CarEngine.Pages
         // loads one page of liked cars
         private async void ShowLikedCars()
         {
-            /*
-             * Strategy:
-             *  ads liked in current session are kept in UserInfo
-             *  all other liked ads are fetched here
-             *  each time profile page is opened, the list from server is cleaned up (because the user might have unliked the ads he liked in previous sessions)
-             *  then the lists from UserInfo and here are merged (more ads need to be prefetched tp know if next page button should be enabled)
-             *  finally, they are shown to th user
-             */
-
             // disable all buttons for the duration of the load
             likedAdsNextPageBtn.Enabled = false;
             likedAdsPrevPageBtn.Enabled = false;
@@ -172,91 +177,35 @@ namespace CarEngine.Pages
             // enable "next page" placeholder bool. It might get disabled later in the method, it will be used to set nextpagebutton.enabled property
             _nextLikedAdsPageBtnEnabled = true;
 
-            // if we are one the first page for the first time
+            // IMPORTANT: do not add this to liked ads list if user has already logged out!!! //
+
+            // if we are on the first page for the first time
             if (_likedAdsPages.Count == 0)
             {
-                // get cars liked in this session
-                _adsLikedInCurrentSession = new List<Car>(); //_userInfo.CarsLikedInCurrentSession;
-                //_nrOfAdsLikedInSession = _adsLikedInCurrentSession.Count;
-                //_leftoverNrOfAdsLikedInSession = _nrOfAdsLikedInSession;
-
-                if (_leftoverNrOfAdsLikedInSession < _likedAdsInPage)
+                CarAdMinimal[] carAds = await GetMinimalLikedVehicleAds(0, _likedAdsInPage);
+                if (carAds == null || carAds.Length == 0)
                 {
-                    // send updated liked ads list to server
-                    await _userInfo.UpdateLikedAds();
-                    // not sure if this is going to work, it might not fetch the data before going forward
-                    _adsLikedInCurrentSession.AddRange(await _frontendApi.GetSortedLikedCars(_userInfo.Token,/*SortingCrieteria, sortAscending*/ 0, _likedAdsInPage - _leftoverNrOfAdsLikedInSession));
-
-                    //// remove currently unliked ads from list
-                    //_adsLikedInCurrentSession.RemoveAll(car => !_userInfo.LikedAds.Contains(car.Id));
-
-                    // if there are less ads liked in current session then can be displayed in one page, we set this to 0
-                    //_leftoverNrOfAdsLikedInSession = 0;
-
-                    // if the page is still not full, we should disable "next page" button
-                    if (_adsLikedInCurrentSession.Count < _likedAdsInPage)
-                    {
-                        _nextLikedAdsPageBtnEnabled = false;
-                        // if there is nothing to show, we return
-                        if (_adsLikedInCurrentSession.Count == 0)
-                        {
-                            // if there are zero ads shown, we should not enable sorting
-                            sortLikedAdsBtn.Enabled = true;
-                            likedAdsNextPageBtn.Enabled = false;
-                            // return if there is nothing to show
-                            return;
-                        }
-                    }
-                    // we add the ads we got to the liked ads panel
-                    _likedAdsPages.Add(Converter.VehicleListToAds(_adsLikedInCurrentSession.Take(_likedAdsInPage).ToList(), _userInfo));
-
-                    // clear current page ads from the list
-                    _adsLikedInCurrentSession.Clear();
+                    sortLikedAdsBtn.Enabled = true;
+                    _nextLikedAdsPageBtnEnabled = false;
+                    likedAdsNextPageBtn.Enabled = false;
+                    return;
                 }
-                else
-                {
-                    // if there are more liked ads in current session than can fit on one page
-                    // decrease the number of ads that were liked in current session by amount shown on this page
-                    //_leftoverNrOfAdsLikedInSession -= _likedAdsInPage;
-
-                    // we add the ads we got to the liked ads panel
-                    _likedAdsPages.Add(Converter.VehicleListToAds(_adsLikedInCurrentSession.Take(_likedAdsInPage).ToList(), _userInfo));
-
-                    // clear current page ads from the list
-                    _adsLikedInCurrentSession = _adsLikedInCurrentSession.Skip(_likedAdsInPage).ToList();
-                }
+                _likedAdsPages.Add(carAds);
             }
 
-            // if we are on the last populated page, and there are potentially more ads to get from server, we need to prefetch more data
-            if (_likedAdsPageNr == _likedAdsPages.Count && _nextLikedAdsPageBtnEnabled)
+            // if we are on the last popuplated page, we need to prefetch more data
+            if (_likedAdsPageNr == _likedAdsPages.Count)
             {
-                //List<Car> likedCars;
-
-                // calculate the start index for GetLIkedCars method. In order to know it, we need to know how many ads in total were liked in this session
-                int startIndex = _likedAdsPageNr * _likedAdsInPage - _nrOfAdsLikedInSession;
-                if (_leftoverNrOfAdsLikedInSession < _likedAdsInPage)
+                // if we are on the last page, we fetch more vehicles to show
+                CarAdMinimal[] carAds = await GetMinimalLikedVehicleAds(_likedAdsInPage * _likedAdsPageNr, _likedAdsInPage);
+                if (carAds == null || carAds.Length == 0)
                 {
-                    // send updated liked ads list to server
-                    await _userInfo.UpdateLikedAds();
-                    // fetch more ads to make full page if there is not enough
-                    _adsLikedInCurrentSession.AddRange(await _frontendApi.GetSortedLikedCars(_userInfo.Token, startIndex, _likedAdsInPage - _leftoverNrOfAdsLikedInSession)); //_userInfo.GetLikedCarsPage(_likedAdsPageNr);
-                    if (_adsLikedInCurrentSession.Count == 0)
-                    {
-                        // since the next page is empty, next page button should be disabled
-                        _nextLikedAdsPageBtnEnabled = false;
-                    }
-                    else
-                    {
-                        _likedAdsPages.Add(Converter.VehicleListToAds(_adsLikedInCurrentSession.Take(_likedAdsInPage).ToList(), _userInfo));
-                    }
-                    //_leftoverNrOfAdsLikedInSession = 0;
+                    // since the next page is empty, next page button should be disabled
+                    _nextLikedAdsPageBtnEnabled = false;
                 }
                 else
                 {
-                    _likedAdsPages.Add(Converter.VehicleListToAds(_adsLikedInCurrentSession.Take(_likedAdsInPage).ToList(), _userInfo));
-
-                    _adsLikedInCurrentSession = _adsLikedInCurrentSession.Skip(_likedAdsInPage).ToList();
-                    //_leftoverNrOfAdsLikedInSession -= _likedAdsInPage;
+                    _likedAdsPages.Add(carAds);
                 }
             }
 
@@ -271,6 +220,28 @@ namespace CarEngine.Pages
             sortLikedAdsBtn.Enabled = true;
         }
 
+        private async Task<CarAdMinimal[]> GetMinimalLikedVehicleAds(int startIndex, int amount)
+        {
+            // update liked ads
+            await _userInfo.UpdateLikedAds();
+
+            // get sortingCriteria and sortAscending
+            bool sortAsc = sortLikedAdsAscRdBtn.Checked;
+            SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortLikedAdsByCombobox.SelectedItem);
+
+            List<Car> vehicles = await _frontendApi.GetSortedLikedCars(_userInfo.Token,sortBy,sortAsc, startIndex, amount);
+            return Converter.VehicleListToAds(vehicles, _userInfo);
+        }
+
+        private async Task<CarAdMinimal[]> GetMinimalUploadedVehicleAds(int startIndex, int amount)
+        {
+            // get sortingCriteria and sortAscending
+            bool sortAsc = sortUploadedAdsAscRdBtn.Checked;
+            SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortUploadedAdsByCombobox.SelectedItem);
+
+            List<Car> vehicles = await _frontendApi.GetSortedUploadedCars(_userInfo.Username, sortBy, sortAsc, startIndex, amount);
+            return Converter.VehicleListToAds(vehicles, _userInfo);
+        }
 
 
         private void ProfilePage_VisibleChanged(object sender, EventArgs e)
@@ -283,7 +254,7 @@ namespace CarEngine.Pages
 
 
 
-        private async void LoadUploadedCars()
+        private async void ShowUploadedCars()
         {
             // disable all buttons for the duration of the load
             uploadedAdsNextPageBtn.Enabled = false;
@@ -297,11 +268,15 @@ namespace CarEngine.Pages
             // enable "next page" button placeholder. Its value will be used to set the actual button.enabled proerty
             _nextUploadedAdsPageBtnEnabled = true;
 
-            // if we are one the first page for the first time
+
+            // IMPORTANT: do not add this to uploaded ads list if user has already logged out!!! //
+            // will need to test with slow network (probably would be good enough to add a delay to server call task)
+
+            // if we are on the first page for the first time
             if (_uploadedAdsPages.Count == 0)
             {
-                List<Car> uploadedCars = await _frontendApi.GetSortedUploadedCars(_userInfo.Username,/* SortingCriteria, sortAscending*/ 0, _uploadedAdsInPage);
-                if (uploadedCars == null || uploadedCars.Count == 0)
+                CarAdMinimal[] carAds = await GetMinimalUploadedVehicleAds(0, _uploadedAdsInPage);
+                if (carAds == null || carAds.Length == 0)
                 {
                     refreshUploadedAdsBtn.Enabled = true;
                     sortUploadedAdsBtn.Enabled = true;
@@ -309,39 +284,33 @@ namespace CarEngine.Pages
                     uploadedAdsNextPageBtn.Enabled = false;
                     return;
                 }
-                _uploadedAdsPages.Add(Converter.VehicleListToAds(uploadedCars, _userInfo));
+                _uploadedAdsPages.Add(carAds);
             }
 
-            // if we are on the last popuplated page, we need to prefetch more data
+            // if we are on the last populated page, we need to prefetch more data
             if (_uploadedAdsPageNr == _uploadedAdsPages.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                List<Car> uploadedCars = await _frontendApi.GetSortedUploadedCars(_userInfo.Username, (_uploadedAdsPageNr - 1) * _uploadedAdsInPage, _uploadedAdsInPage);
-                if (uploadedCars == null || uploadedCars.Count == 0)
+                CarAdMinimal[] carAds = await GetMinimalUploadedVehicleAds(_uploadedAdsInPage * _uploadedAdsPageNr, _uploadedAdsInPage);
+                if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
                     _nextUploadedAdsPageBtnEnabled = false;
                 }
                 else
                 {
-                    _uploadedAdsPages.Add(Converter.VehicleListToAds(uploadedCars, _userInfo));
+                    _uploadedAdsPages.Add(carAds);
                 }
             }
+
 
             CarAdMinimal[] pageToShow = _uploadedAdsPages[_uploadedAdsPageNr - 1];
 
             // try to display only as many ads as there are in the page
             uploadedAdsPanel.Controls.AddRange(pageToShow);
-            //for (int i = 0; i < pageToShow.Length; i++)
-            //{
-            //    mainPanel.Controls.Add(pageToShow[i]);
-
-            //    // make ads selectable by tab (added 6 to make space for sorting buttons at the bottom)
-            //    //pageToShow[i].TabIndex = i + 6;
-            //}
 
             // enable some buttons
-            uploadedAdsPrevPageBtn.Enabled = _likedAdsPageNr > 1;
+            uploadedAdsPrevPageBtn.Enabled = _uploadedAdsPageNr > 1;
             uploadedAdsNextPageBtn.Enabled = _nextUploadedAdsPageBtnEnabled;
             sortUploadedAdsBtn.Enabled = true;
             refreshUploadedAdsBtn.Enabled = true;
@@ -349,12 +318,17 @@ namespace CarEngine.Pages
 
         private void SortLikedAdsBtn_Click(object sender, EventArgs e)
         {
-            // currently sorting does not work
+            LoadLikedAds();
         }
 
-        private void sortUploadedAdsBtn_Click(object sender, EventArgs e)
+        private void SortUploadedAdsBtn_Click(object sender, EventArgs e)
         {
-            // currently sorting does not work
+            LoadUploadedAds();
+        }
+
+        private void RefreshUploadedAdsBtn_Click(object sender, EventArgs e)
+        {
+            LoadUploadedAds();
         }
     }
 }

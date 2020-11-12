@@ -119,7 +119,7 @@ namespace CarEngine
             // enable . It might get disabled later in the method, so we cannot do this later
             _nextPageButtonEnabled = true;
 
-            // if we are one the first page for the first time
+            // if we are on the first page for the first time
             if (_adList.Count == 0)
             {
                 CarAdMinimal[] carAds = await GetMinimalVehicleAds(0, _adsInPage);
@@ -134,7 +134,7 @@ namespace CarEngine
                 _adList.Add(carAds);
             }
 
-            // if we are on the last popuplated page, we need to prefetch more data
+            // if we are on the last populated page, we need to prefetch more data
             if (_currentPageNumber == _adList.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
@@ -153,14 +153,14 @@ namespace CarEngine
             CarAdMinimal[] pageToShow = _adList[_currentPageNumber - 1];
 
             // try to display only as many ads as there are in the page
-            //mainPanel.Controls.AddRange(pageToShow);
-            for (int i = 0; i < pageToShow.Length; i++)
-            {
-                mainPanel.Controls.Add(pageToShow[i]);
+            mainPanel.Controls.AddRange(pageToShow);
+            //for (int i = 0; i < pageToShow.Length; i++)
+            //{
+            //    mainPanel.Controls.Add(pageToShow[i]);
 
-                // make ads selectable by tab (added 6 to make space for sorting buttons at the bottom)
-                pageToShow[i].TabIndex = i + 6;
-            }
+            //    // make ads selectable by tab (added 6 to make space for sorting buttons at the bottom)
+            //    pageToShow[i].TabIndex = i + 6;
+            //}
             nextPageButton.Enabled = _nextPageButtonEnabled;
 
             // re-enable "refresh" and "sort" buttons
@@ -177,7 +177,7 @@ namespace CarEngine
             }
             else
             {
-                vehicles = await _frontendApi.SortBy(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
+                vehicles = await _frontendApi.GetSortedCars(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
             }
             return Converter.VehicleListToAds(vehicles, _userInfo);
         }

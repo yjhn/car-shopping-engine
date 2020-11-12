@@ -134,6 +134,10 @@ namespace Backend
             try
             {
                 List<int> newAds = JsonSerializer.Deserialize<List<int>>(newAdsJson);
+
+                // remove deleted cars from liked ads list
+                newAds.RemoveAll(id => !_carList.Exists(car => car.Id == id));
+
                 MinimalUser minimal = _currentlyLoggedInUsers.Find((minimalUser) => minimalUser.Token == token);
                 if (minimal == null)
                     return false;

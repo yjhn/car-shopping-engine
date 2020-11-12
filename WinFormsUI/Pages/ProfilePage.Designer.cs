@@ -39,7 +39,7 @@
             this.likedPanel = new System.Windows.Forms.Panel();
             this.sortingLikedAdsPnl = new System.Windows.Forms.Panel();
             this.sortLikedAdsBtn = new System.Windows.Forms.Button();
-            this.sortLikedAdsCombobox = new System.Windows.Forms.ComboBox();
+            this.sortLikedAdsByCombobox = new System.Windows.Forms.ComboBox();
             this.sortLikedAdsByLbl = new System.Windows.Forms.Label();
             this.likedAdsPageNrLbl = new System.Windows.Forms.Label();
             this.likedAdsPrevPageBtn = new System.Windows.Forms.Button();
@@ -172,7 +172,7 @@
             this.sortingLikedAdsPnl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sortingLikedAdsPnl.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.sortingLikedAdsPnl.Controls.Add(this.sortLikedAdsBtn);
-            this.sortingLikedAdsPnl.Controls.Add(this.sortLikedAdsCombobox);
+            this.sortingLikedAdsPnl.Controls.Add(this.sortLikedAdsByCombobox);
             this.sortingLikedAdsPnl.Controls.Add(this.sortLikedAdsByLbl);
             this.sortingLikedAdsPnl.Controls.Add(this.likedAdsPageNrLbl);
             this.sortingLikedAdsPnl.Controls.Add(this.likedAdsPrevPageBtn);
@@ -200,24 +200,24 @@
             this.sortLikedAdsBtn.UseVisualStyleBackColor = true;
             this.sortLikedAdsBtn.Click += new System.EventHandler(this.SortLikedAdsBtn_Click);
             // 
-            // sortLikedAdsCombobox
+            // sortLikedAdsByCombobox
             // 
-            this.sortLikedAdsCombobox.AccessibleDescription = "sort by combo box";
-            this.sortLikedAdsCombobox.AccessibleName = "sort by combo box";
-            this.sortLikedAdsCombobox.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.sortLikedAdsCombobox.FormattingEnabled = true;
-            this.sortLikedAdsCombobox.Items.AddRange(new object[] {
+            this.sortLikedAdsByCombobox.AccessibleDescription = "sort by combo box";
+            this.sortLikedAdsByCombobox.AccessibleName = "sort by combo box";
+            this.sortLikedAdsByCombobox.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.sortLikedAdsByCombobox.FormattingEnabled = true;
+            this.sortLikedAdsByCombobox.Items.AddRange(new object[] {
             "upload date",
             "price",
             "date of purchase",
             "total kilometers driven",
             "original purchase country",
             "next vehicle inspection"});
-            this.sortLikedAdsCombobox.Location = new System.Drawing.Point(465, 15);
-            this.sortLikedAdsCombobox.Margin = new System.Windows.Forms.Padding(2);
-            this.sortLikedAdsCombobox.Name = "sortLikedAdsCombobox";
-            this.sortLikedAdsCombobox.Size = new System.Drawing.Size(160, 23);
-            this.sortLikedAdsCombobox.TabIndex = 10;
+            this.sortLikedAdsByCombobox.Location = new System.Drawing.Point(465, 15);
+            this.sortLikedAdsByCombobox.Margin = new System.Windows.Forms.Padding(2);
+            this.sortLikedAdsByCombobox.Name = "sortLikedAdsByCombobox";
+            this.sortLikedAdsByCombobox.Size = new System.Drawing.Size(160, 23);
+            this.sortLikedAdsByCombobox.TabIndex = 10;
             // 
             // sortLikedAdsByLbl
             // 
@@ -361,7 +361,7 @@
             this.sortUploadedAdsBtn.TabIndex = 13;
             this.sortUploadedAdsBtn.Text = "sort";
             this.sortUploadedAdsBtn.UseVisualStyleBackColor = true;
-            this.sortUploadedAdsBtn.Click += new System.EventHandler(this.sortUploadedAdsBtn_Click);
+            this.sortUploadedAdsBtn.Click += new System.EventHandler(this.SortUploadedAdsBtn_Click);
             // 
             // sortUploadedAdsByCombobox
             // 
@@ -394,6 +394,7 @@
             this.refreshUploadedAdsBtn.TabIndex = 12;
             this.refreshUploadedAdsBtn.Text = "refresh";
             this.refreshUploadedAdsBtn.UseVisualStyleBackColor = true;
+            this.refreshUploadedAdsBtn.Click += new System.EventHandler(this.RefreshUploadedAdsBtn_Click);
             // 
             // sortUploadedAdsByLbl
             // 
@@ -534,7 +535,7 @@
         private System.Windows.Forms.Panel uploadedPanel;
         private System.Windows.Forms.Panel sortingLikedAdsPnl;
         private System.Windows.Forms.Button sortLikedAdsBtn;
-        private System.Windows.Forms.ComboBox sortLikedAdsCombobox;
+        private System.Windows.Forms.ComboBox sortLikedAdsByCombobox;
         private System.Windows.Forms.Label sortLikedAdsByLbl;
         private System.Windows.Forms.Label likedAdsPageNrLbl;
         private System.Windows.Forms.Button likedAdsPrevPageBtn;
