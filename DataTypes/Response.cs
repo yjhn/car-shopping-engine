@@ -43,7 +43,7 @@ namespace DataTypes
                 output.Append($"{h.Name}: {h.Value}{ServerConstants.HeaderSeparator}");
             }
             output.Append(ServerConstants.HeaderSeparator);
-            byte[] finalOutput = Encoding.ASCII.GetBytes(output.ToString());
+            byte[] finalOutput = Encoding.UTF8.GetBytes(output.ToString());
             int outputSize = finalOutput.Length;
             Array.Resize<byte>(ref finalOutput, outputSize + Content.Length);
             Array.Copy(Content, 0, finalOutput, outputSize, Content.Length);

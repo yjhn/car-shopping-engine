@@ -163,7 +163,7 @@ namespace Frontend
                 Request req = ReqInit("POST", "users/login");
                 string content = "username=" + username + "&hashed_password=" + hashedPassword;
                 req.Headers.Add(new Header("Content-length", content.Length.ToString()));
-                req.Content = Encoding.ASCII.GetBytes(content);
+                req.Content = Encoding.UTF8.GetBytes(content);
                 Response r = GetResponse(req);
                 if (r == null)
                 {

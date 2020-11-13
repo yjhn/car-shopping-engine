@@ -78,8 +78,8 @@ namespace Server
                             break; // this should be equivalent to commented out line
                             //readMore = false;
 
-                        // Translate data bytes to a ASCII string.
-                        newData = Encoding.ASCII.GetString(bytes, 0, numOfBytes);
+                        // Translate data bytes to a UTF8 string.
+                        newData = Encoding.UTF8.GetString(bytes, 0, numOfBytes);
                         // if all data was fetched already, check it
                             msg = new RequestHandler(newData, _db, _logger).HandleRequest(out isRequestValid);
                             if (isRequestValid)

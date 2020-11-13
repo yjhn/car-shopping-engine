@@ -43,7 +43,7 @@ namespace Frontend
             foreach (Header h in req.Headers)
                 message.Append($"{ServerConstants.HeaderSeparator}{h.Name}: {h.Value}");
             message.Append($"{ServerConstants.HeaderSeparator}{ServerConstants.HeaderSeparator}");
-            byte[] sentData = Encoding.ASCII.GetBytes(message.ToString());
+            byte[] sentData = Encoding.UTF8.GetBytes(message.ToString());
             int sentDataSize = sentData.Length;
             if (req.Content != null)
             {
@@ -67,7 +67,7 @@ namespace Frontend
                     attempts++;
                     if (bytes == 0)
                         readMore = false;
-                    rawResponse.Append(Encoding.ASCII.GetString(receivedData, 0, bytes));
+                    rawResponse.Append(Encoding.UTF8.GetString(receivedData, 0, bytes));
                 }
                 while (readMore && attempts < ServerConstants.MaxAttempts);
                 client.Close();
@@ -104,7 +104,7 @@ namespace Frontend
             Response r = new Response(statusCode)
             {
                 Headers = headers,
-                Content = Encoding.ASCII.GetBytes(content)
+                Content = Encoding.UTF8.GetBytes(content)
             };
             return r;
         }

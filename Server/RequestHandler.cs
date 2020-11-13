@@ -91,7 +91,7 @@ namespace Server
                     headers.Add(new Header(names[i].Value.ToUpper(), values[i].Value));
                 else
                     throw new ArgumentException("DuplicateHeader");
-            byte[] content = Encoding.ASCII.GetBytes(groups["content"].Value);
+            byte[] content = Encoding.UTF8.GetBytes(groups["content"].Value);
             Request parsing = new Request(method, url, resource, queries, httpVersion, headers, content);
             return parsing;
         }
@@ -126,9 +126,9 @@ namespace Server
                 int contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
                 if (req.Content.Length > contentLength)
                 {
-                    string contentString = Encoding.ASCII.GetString(req.Content);
+                    string contentString = Encoding.UTF8.GetString(req.Content);
                     contentString = contentString.Substring(0, contentLength);
-                    req.Content = Encoding.ASCII.GetBytes(contentString);
+                    req.Content = Encoding.UTF8.GetBytes(contentString);
                 }
                 else if (req.Content.Length < contentLength)
                     return Validation.RequestTimeout;
@@ -191,7 +191,7 @@ namespace Server
                     break;
                 case "users/login":
                     if (contentType == "application/x-www-form-urlencoded")
-                        Login(Encoding.ASCII.GetString(req.Content));
+                        Login(Encoding.UTF8.GetString(req.Content));
                     else
                         _r = unsupportedType;
                     break;
@@ -468,7 +468,7 @@ namespace Server
 
         private static byte[] SetContent(string output)
         {
-            return System.Text.Encoding.ASCII.GetBytes(output);
+            return System.Text.Encoding.UTF8.GetBytes(output);
         }
 
         private void Login(string loginData)
