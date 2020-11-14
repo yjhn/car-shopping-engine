@@ -46,17 +46,51 @@ namespace CarEngine
             {
                 SetActivePanel(networkErrorMessage);
                 networkErrorMessage.BringToFront();
-                browseButton.Enabled = false;
-                searchButton.Enabled = false;
-                uploadButton.Enabled = false;
-                profileButton.Enabled = false;
-                loginBtn.Enabled = false;
-                logoutBtn.Enabled = false;
+                Button[] disabledButtons = new Button[6];
+                int btnCount = 0;
+                if (browseButton.Enabled)
+                {
+                    browseButton.Enabled = false;
+                    disabledButtons[btnCount++] = browseButton;
+                }
+                if (searchButton.Enabled)
+                {
+                    searchButton.Enabled = false;
+                    disabledButtons[btnCount++] = searchButton;
+                }
+                if (uploadButton.Enabled)
+                {
+                    uploadButton.Enabled = false;
+                    disabledButtons[btnCount++] = uploadButton;
+                }
+                if (profileButton.Enabled)
+                {
+                    profileButton.Enabled = false;
+                    disabledButtons[btnCount++] = profileButton;
+                }
+                if (loginBtn.Enabled)
+                {
+                    loginBtn.Enabled = false;
+                    disabledButtons[btnCount++] = loginBtn;
+                }
+                if (logoutBtn.Enabled)
+                {
+                    logoutBtn.Enabled = false;
+                    disabledButtons[btnCount++] = logoutBtn;
+                }
                 // close login screen if it is open
                 if(loginScreen != null)
                 {
                     loginScreen.Close();
                 }
+                bool reconnected;
+                do
+                {
+                    reconnected = _api.CheckConnection();
+                }
+                while (!reconnected);
+                for (int i=0; i<btnCount; i++)
+                    disabledButtons[i].Enabled = true;
             });
             Invoke(a);
         }
@@ -134,7 +168,6 @@ namespace CarEngine
             browseButton.PerformClick();
             profileButton.Enabled = false;
             uploadButton.Enabled = false;
-
             loginBtn.Enabled = true;
             logoutBtn.Visible = false;
         }

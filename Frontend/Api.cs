@@ -241,6 +241,13 @@ namespace Frontend
             });
         }
 
+        public bool CheckConnection()
+        {
+            Request req = ReqInit("GET", "/");
+            Response r = GetResponse(req);
+            return r == null ? false : true;
+        }
+
         private static string MakeType(string key)
         {
             string contentType = key switch
