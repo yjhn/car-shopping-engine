@@ -21,6 +21,6 @@ namespace Frontend
         Task<List<Car>> GetSortedUploadedCars(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
         Task<List<Car>> SearchVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
         Task<List<Car>> GetSortedCars(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending);
-        bool CheckConnection();
+        Task<bool> CheckConnection();
     }
 }

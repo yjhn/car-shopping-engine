@@ -241,11 +241,14 @@ namespace Frontend
             });
         }
 
-        public bool CheckConnection()
+        public Task<bool> CheckConnection()
         {
-            Request req = ReqInit("GET", "/");
-            Response r = GetResponse(req);
-            return r == null ? false : true;
+            return Task.Run(() =>
+            {
+                Request req = ReqInit("GET", "/");
+                Response r = GetResponse(req);
+                return r == null ? false : true;
+            });
         }
 
         private static string MakeType(string key)

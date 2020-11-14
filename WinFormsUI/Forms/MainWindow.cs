@@ -42,7 +42,7 @@ namespace CarEngine
         // this works, but if connection reappears, currently nothing changes
         private void NoConnection()
         {
-            Action a = new Action(() =>
+            Action a = new Action(async () =>
             {
                 SetActivePanel(networkErrorMessage);
                 networkErrorMessage.BringToFront();
@@ -68,6 +68,11 @@ namespace CarEngine
                     profileButton.Enabled = false;
                     disabledButtons[btnCount++] = profileButton;
                 }
+                // close login screen if it is open
+                if (loginScreen != null)
+                {
+                    loginScreen.Close();
+                }
                 if (loginBtn.Enabled)
                 {
                     loginBtn.Enabled = false;
@@ -78,20 +83,16 @@ namespace CarEngine
                     logoutBtn.Enabled = false;
                     disabledButtons[btnCount++] = logoutBtn;
                 }
-                // close login screen if it is open
-                if(loginScreen != null)
-                {
-                    loginScreen.Close();
-                }
                 bool reconnected;
                 do
                 {
-                    reconnected = _api.CheckConnection();
+                    reconnected = await _api.CheckConnection();
                 }
                 while (!reconnected);
-                for (int i=0; i<btnCount; i++)
+                for (int i = 0; i < btnCount; i++)
                     disabledButtons[i].Enabled = true;
-            });
+            }
+        );
             Invoke(a);
         }
 
@@ -103,7 +104,7 @@ namespace CarEngine
                 _userInfo.User = null;
             }
             // close login screen if it is opened
-            if(loginScreen != null)
+            if (loginScreen != null)
             {
                 loginScreen.Close();
             }
