@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
+using System.Configuration;
 
 namespace Server
 {
@@ -17,12 +18,25 @@ namespace Server
         private readonly Logger _logger;
         private readonly IDatabase _db;
         private X509Certificate _serverCertificate;
+        private readonly Config _configuration;
+
         public Server(Logger logger, IDatabase db)
         {
             _logger = logger;
             _db = db;
-            IPAddress addr = IPAddress.Parse(ServerConstants.Host);
-            _tcpServer = new TcpListener(addr, ServerConstants.Port);
+
+            // retreaving values from config file
+            string ip = ConfigurationManager.AppSettings["ip"];
+            int port = int.Parse(ConfigurationManager.AppSettings["port"]);
+            string httpVersion = ConfigurationManager.AppSettings["httpVersion"];
+            string scheme = ConfigurationManager.AppSettings["scheme"];
+            int maxBufferSize = int.Parse(ConfigurationManager.AppSettings["maxBufferSize"]);
+            int maxAttempts = int.Parse(ConfigurationManager.AppSettings["maxAttempts"]);
+            int timeout = int.Parse(ConfigurationManager.AppSettings["timeout"]);
+            _configuration = new Config(ip, port, httpVersion, scheme, maxBufferSize, maxAttempts, timeout);
+            string[] extras = { ConfigurationManager.AppSettings["certFileName"], ConfigurationManager.AppSettings["password"] };
+            _configuration.Extra = extras;
+            _tcpServer = new TcpListener(IPAddress.Parse(ip), _configuration.Port);
             _tcpServer.Start();
             StartListener();
         }
@@ -38,7 +52,7 @@ namespace Server
                     Console.Write("Waiting for a connection... ");
                     // Perform a blocking call to accept requests.
                     TcpClient tcpClient = _tcpServer.AcceptTcpClient();
-                                        Console.WriteLine("Connected!");
+                    Console.WriteLine("Connected!");
                     Thread t = new Thread(new ParameterizedThreadStart(ReceiveRequests));
                     t.Start(tcpClient);
                 }
@@ -55,38 +69,37 @@ namespace Server
         {
             TcpClient client = (TcpClient)clientObj;
             SslStream sslStream = new SslStream(client.GetStream(), false);
+            sslStream.ReadTimeout = _configuration.Timeout;
+            sslStream.WriteTimeout = _configuration.Timeout;
             try
             {
-                _serverCertificate = new X509Certificate(ServerConstants.CertFileName, ServerConstants.Password);
+                _serverCertificate = new X509Certificate(_configuration.Extra[0], _configuration.Extra[1]);
                 sslStream.AuthenticateAsServer(_serverCertificate, clientCertificateRequired: false, checkCertificateRevocation: true);
-                sslStream.ReadTimeout = ServerConstants.ServerTimeout;
-                sslStream.WriteTimeout = ServerConstants.ServerTimeout;
                 StringBuilder data = new StringBuilder();
-                byte[] bytes = new Byte[ServerConstants.MaxBufferSize];
+                byte[] bytes = new Byte[_configuration.MaxBufferSize];
                 byte[] msg = null;
-                bool isRequestValid = false;
+                bool isRequestValid = false, readMore = true;
+                int attempts = 0;
+                string newData = null;
                 try
                 {
-                    bool readMore = true;
-                    int attempts = 0;
-                    string newData = null;
                     do
                     {
                         int numOfBytes = sslStream.Read(bytes, 0, bytes.Length);
                         attempts++;
                         if (numOfBytes == 0)
-                            break; // this should be equivalent to commented out line
-                            //readMore = false;
-
+                        {
+                            break;
+                        }
                         // Translate data bytes to a UTF8 string.
                         newData = Encoding.UTF8.GetString(bytes, 0, numOfBytes);
                         // if all data was fetched already, check it
-                            msg = new RequestHandler(newData, _db, _logger).HandleRequest(out isRequestValid);
-                            if (isRequestValid)
-                                readMore = false;
+                        msg = new RequestHandler(newData, _db, _logger, _configuration).HandleRequest(out isRequestValid);
+                        if (isRequestValid)
+                            readMore = false;
                         data.Append(newData);
                     }
-                    while (readMore && attempts < ServerConstants.MaxAttempts);
+                    while (readMore && attempts < _configuration.MaxAttempts);
                 }
                 catch (IOException e)
                 {
@@ -95,7 +108,7 @@ namespace Server
                 // Process the data sent by the client and make a response.
                 if (!isRequestValid)
                 {
-                    msg = new RequestHandler(data.ToString(), _db, _logger).HandleRequest(out bool unnecessary);
+                    msg = new RequestHandler(data.ToString(), _db, _logger, _configuration).HandleRequest(out bool unnecessary);
                 }
                 // Send back a response.
                 sslStream.Write(msg, 0, msg.Length);

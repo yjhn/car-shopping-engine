@@ -10,15 +10,18 @@ namespace Server
 {
     public class RequestHandler
     {
-        readonly private string _rawRequest;
+        private readonly string _rawRequest;
         private Response _r;
-        readonly private IDatabase _db;
-        readonly private Logger _logger;
-        public RequestHandler(string rawRequest, IDatabase db, Logger logger)
+        private readonly IDatabase _db;
+        private readonly Logger _logger;
+        private readonly Config _configuration;
+        public RequestHandler(string rawRequest, IDatabase db, Logger logger, Config configuration)
         {
             _rawRequest = rawRequest;
             _logger = logger;
             _db = db;
+            _configuration = configuration;
+            _r = new Response(_configuration.HttpVersion);
         }
 
         public byte[] HandleRequest(out bool isAllRequest)
@@ -30,7 +33,7 @@ namespace Server
                 if (isValid != Validation.OK)
                 {
                     isAllRequest = false;
-                    _r = MakeResponse(isValid);
+                    invalidRequestOutput(isValid);
                 }
                 else
                 {
@@ -47,7 +50,7 @@ namespace Server
                             ProcessDelete(newRequest);
                             break;
                         default:
-                            _r = MakeResponse(501);
+                            fillResponse(501);
                             break;
                     }
                 }
@@ -55,13 +58,13 @@ namespace Server
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is ArgumentException || e is ArgumentNullException)
             {
                 _logger.LogException(e);
-                _r = MakeResponse(400);
+                fillResponse(400);
                 isAllRequest = false;
             }
             catch (Exception e)
             {
                 _logger.LogException(e);
-                _r = MakeResponse(500);
+                fillResponse(500);
                 isAllRequest = false;
             }
 
@@ -70,7 +73,7 @@ namespace Server
 
         private Request ParseRequest()
         {
-            Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_\-]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+){ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[^\r\n]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
+            Regex regex = new Regex(@$"^(?<method>[\w]+) (?<url>https?:\/\/([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?)?\/(?<resource>[a-zA-Z\/\d&_\-]*)(\?(?<queries>(?<query>&?(?<queryName>[a-zA-Z\d_\-]+)=(?<queryValue>[a-zA-Z\d_\-~%\+]+))*))? (?<httpVersion>[\w\/\d\.]+)\r\n(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[^\r\n]+)\r\n)+\r\n(?<content>[\d\D]*)$");
             if (!regex.IsMatch(_rawRequest))
                 throw new ArgumentException("Invalid request");
             GroupCollection groups = regex.Matches(_rawRequest)[0].Groups;
@@ -96,9 +99,9 @@ namespace Server
             return parsing;
         }
 
-        private static Validation ValidateRequest(Request req)
+        private Validation ValidateRequest(Request req)
         {
-            if (req.HttpVersion != ServerConstants.HttpVersion)
+            if (req.HttpVersion != _configuration.HttpVersion)
                 return Validation.HttpVersionNotSupported;
 
             // check Host header
@@ -108,7 +111,7 @@ namespace Server
 
             // Host header validity
             string hostValue = Header.GetValueByName(headers, "HOST");
-            Regex hostRegex = new Regex(@"^([a-zA-Z\d\.\-_]+\.)*[a-zA-Z]+(:\d{1,5})?$");
+            Regex hostRegex = new Regex(@"^[a-zA-Z\.\-_\d]+(:\d{1,5})?$");
             if (!hostRegex.IsMatch(hostValue))
                 return Validation.InvalidHost;
 
@@ -162,7 +165,7 @@ namespace Server
                     GetUser(req.Queries["username"]);
                     break;
                 default:
-                    _r = MakeResponse(404);
+                    fillResponse(404);
                     break;
             }
         }
@@ -172,7 +175,6 @@ namespace Server
             string contentType = "application/x-www-form-urlencoded";
             if (Header.Contains(req.Headers, "CONTENT-TYPE"))
                 contentType = Header.GetValueByName(req.Headers, "CONTENT-TYPE");
-            Response unsupportedType = MakeResponse(415);
             switch (req.Resource)
             {
                 case "cars":
@@ -181,28 +183,28 @@ namespace Server
                     if (contentType.StartsWith("application/json"))
                         AddCar(req.Content);
                     else
-                        _r = unsupportedType;
+                        fillResponse(415);
                     break;
                 case "users":
                     if (contentType.StartsWith("application/json"))
                         AddUser(req.Content);
                     else
-                        _r = unsupportedType;
+                        fillResponse(415);
                     break;
                 case "users/login":
                     if (contentType == "application/x-www-form-urlencoded")
                         Login(Encoding.UTF8.GetString(req.Content));
                     else
-                        _r = unsupportedType;
+                        fillResponse(415);
                     break;
                 case "users/update-liked-ads":
                     if (contentType.StartsWith("application/json"))
                         UpdateAds(Header.GetValueByName(req.Headers, "TOKEN"), req.Content);
                     else
-                        _r = unsupportedType;
+                        fillResponse(415);
                     break;
                 default:
-                    _r = MakeResponse(404);
+                    fillResponse(404);
                     break;
             }
         }
@@ -221,22 +223,22 @@ namespace Server
                     result = DeleteUser(req.Queries["username"]);
                     break;
                 default:
-                    _r = MakeResponse(404);
+                    fillResponse(404);
                     break;
             }
             if (!result)
-                _r = MakeResponse(200, SetContent("Deletion failed"), "text/plain");
+                fillResponse(200, "Deletion failed", "text/plain");
             else
-                _r = MakeResponse(200);
+                fillResponse(200);
         }
 
         private void UpdateAds(string token, byte[] ads)
         {
             bool result = _db.UpdateLikedAds(token, ads);
             if (result)
-                _r = MakeResponse(200);
+                fillResponse(200);
             else
-                _r = MakeResponse(404);
+                fillResponse(404);
         }
 
         private void GetCars(Dictionary<string, string> queries /*Request req*/)
@@ -269,13 +271,13 @@ namespace Server
                 responseBody = Array.Empty<byte>();
             }
 
-            _r = MakeResponse(200, responseBody);
+            fillResponse(200, responseBody);
         }
 
         private void GetUser(string username)
         {
             byte[] responseBody = _db.GetUserInfoJson(username);
-            _r = MakeResponse(200, responseBody);
+            fillResponse(200, responseBody);
         }
 
         private void AddCar(byte[] carData)
@@ -283,24 +285,24 @@ namespace Server
             bool result = _db.AddCarJson(carData);
             if (result)
             {
-                _r = MakeResponse(201);
+                fillResponse(201);
                 IDatabase cs = _db;
                 int id = cs.GetLastCarId();
-                _r.Headers.Add(new Header("Location", $"{ServerConstants.Scheme}://{ServerConstants.HostForClients}:{ServerConstants.Port}/cars/{id}"));
+                _r.Headers.Add(new Header("Location", $"{_configuration.Scheme}://{_configuration.Ip}:{_configuration.Port}/cars/{id}"));
             }
             else
-                _r = MakeResponse(204);
+                fillResponse(204);
         }
 
         private void AddUser(byte[] userData)
         {
             if (_db.AddUserJson(userData))
             {
-                _r = MakeResponse(201);
+                fillResponse(201);
             }
             else
             {
-                _r = MakeResponse(204);
+                fillResponse(204);
             }
         }
 
@@ -314,7 +316,7 @@ namespace Server
             return _db.DeleteUser(username);
         }
 
-        private static Response MakeResponse(Validation v)
+        private void invalidRequestOutput(Validation v)
         {
             int statusCode;
             if (v == Validation.HttpVersionNotSupported)
@@ -325,16 +327,12 @@ namespace Server
                 statusCode = 408;
             else
                 statusCode = 400;
-            return MakeResponse(statusCode);
+            fillResponse(statusCode);
         }
 
-        private static Response MakeResponse(int statusCode)
+        private void fillResponse(int statusCode, string content = "", string contentType = "application/json")
         {
-            return MakeResponse(statusCode, SetContent(""));
-        }
-
-        private static Response MakeResponse(int statusCode, byte[] content, string contentType = "application/json")
-        {
+            _r.StatusCode = statusCode;
             List<Header> headers = new List<Header>
             {
                 new Header("Connection", "close"),
@@ -344,12 +342,25 @@ namespace Server
             if (content.Length > 0)
                 headers.Add(new Header("Content-type", $"{contentType}; charset=utf-8"));
             headers.Add(new Header("Content-length", content.Length.ToString()));
-            Response r = new Response(statusCode)
+            _r.Content = Encoding.UTF8.GetBytes(content);
+            _r.Headers = headers;
+        }
+
+        // overload for byte[] content
+        private void fillResponse(int statusCode, byte[] content, string contentType = "application/json")
+        {
+            _r.StatusCode = statusCode;
+            List<Header> headers = new List<Header>
             {
-                Content = content,
-                Headers = headers
+                new Header("Connection", "close"),
+                new Header("Date", DateTime.Now.ToUniversalTime().ToString("r")),
+                new Header("Server", "UnquestionableSolutions")
             };
-            return r;
+            if (content.Length > 0)
+                headers.Add(new Header("Content-type", $"{contentType}; charset=utf-8"));
+            headers.Add(new Header("Content-length", content.Length.ToString()));
+            _r.Content = content;
+            _r.Headers = headers;
         }
 
         private void GetFilteredCars(Dictionary<string, string> queries)
@@ -386,7 +397,7 @@ namespace Server
                 sortAscending = bool.Parse(queries["sort_ascending"]);
             if (queries.ContainsKey("start_index"))
                 startIndex = int.Parse(queries["start_index"]);
-            _r = MakeResponse(200, _db.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
+            fillResponse(200, _db.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
         }
 
         private void GetLikedCars(Dictionary<string, string> queries, string token)
@@ -394,7 +405,7 @@ namespace Server
             //int startIndex = int.Parse(queries["start_index"]);
             //int amount = int.Parse(queries["amount"]);
             //byte[] favouriteCars = _db.GetUserLikedAdsJson(token, TODO, TODO, startIndex, amount);
-            //_r = MakeResponse(200, favouriteCars);
+            //fillResponse(200, favouriteCars);
 
             //Dictionary<string, string> queries = req.Queries;
             int amount = 50, startIndex = 0;
@@ -417,14 +428,14 @@ namespace Server
                 bool sortAscending = true;
                 if (queries.ContainsKey("sort_ascending"))
                     sortAscending = bool.Parse(queries["sort_ascending"]);
-                responseBody = _db.GetUserLikedAdsJson(token,(SortingCriteria)criteria, sortAscending, startIndex, amount);
+                responseBody = _db.GetUserLikedAdsJson(token, (SortingCriteria)criteria, sortAscending, startIndex, amount);
             }
             else
             {
                 responseBody = Array.Empty<byte>();
             }
 
-            _r = MakeResponse(200, responseBody);
+            fillResponse(200, responseBody);
         }
 
         private void GetUploadedCars(Dictionary<string, string> queries)
@@ -433,7 +444,7 @@ namespace Server
             //int amount = int.Parse(queries["amount"]);
             //string username = queries["username"];
             //byte[] uploadedCars = _db.GetUserUploadedAdsJson(username, TODO, TODO, startIndex, amount);
-            //_r = MakeResponse(200, uploadedCars);
+            //fillResponse(200, uploadedCars);
 
             int amount = 50, startIndex = 0;
             SortingCriteria? criteria = null;
@@ -456,26 +467,21 @@ namespace Server
                 bool sortAscending = true;
                 if (queries.ContainsKey("sort_ascending"))
                     sortAscending = bool.Parse(queries["sort_ascending"]);
-                responseBody = _db.GetUserUploadedAdsJson(username,(SortingCriteria)criteria, sortAscending, startIndex, amount);
+                responseBody = _db.GetUserUploadedAdsJson(username, (SortingCriteria)criteria, sortAscending, startIndex, amount);
             }
             else
             {
                 responseBody = Array.Empty<byte>();
             }
 
-            _r = MakeResponse(200, responseBody);
-        }
-
-        private static byte[] SetContent(string output)
-        {
-            return System.Text.Encoding.UTF8.GetBytes(output);
+            fillResponse(200, responseBody);
         }
 
         private void Login(string loginData)
         {
             Regex loginValidation = new Regex(@"^username=(?<username>[\d\D]+)&hashed_password=(?<hashedPassword>[\d\D]+)$");
             if (!loginValidation.IsMatch(loginData))
-                _r = MakeResponse(400);
+                fillResponse(400);
             else
             {
                 GroupCollection groups = loginValidation.Matches(loginData)[0].Groups;
@@ -483,13 +489,13 @@ namespace Server
                 string hashedPassword = groups["hashedPassword"].Value;
                 byte[] loginOperation = _db.Authenticate(username, hashedPassword);
                 if (loginOperation != null)
-                    _r = MakeResponse(200, loginOperation);
+                    fillResponse(200, loginOperation);
                 else
-                    _r = MakeResponse(400);
+                    fillResponse(400);
             }
         }
 
-        private static SortingCriteria? GetSortingCriteria(string criteriaString)
+        private SortingCriteria? GetSortingCriteria(string criteriaString)
         {
             SortingCriteria? criteria = null;
             Type sortingType = typeof(SortingCriteria);

@@ -12,7 +12,14 @@ namespace Frontend
 {
     public class Client
     {
-        private static bool ValidateServerCertificate(
+        private readonly Config _configuration;
+
+        public Client(Config configuration)
+        {
+            _configuration = configuration;
+        }
+
+        private bool ValidateServerCertificate(
           object sender,
           X509Certificate certificate,
           X509Chain chain,
@@ -27,9 +34,9 @@ namespace Frontend
             return true;
         }
 
-        public static string GetRawResponse(Request req)
+        public Response GetResponse(Request req)
         {
-            byte[] receivedData = new Byte[ServerConstants.MaxBufferSize];
+            byte[] receivedData = new Byte[_configuration.MaxBufferSize];
             StringBuilder message = new StringBuilder($"{req.Method} {req.Url}/{req.Resource}");
             if (req.Queries.Count > 0)
             {
@@ -38,11 +45,11 @@ namespace Frontend
                     message.Append($"{kvp.Key}={WebUtility.UrlEncode(kvp.Value)}&");
                 message.Length -= 1;
             }
-            message.Append($" {ServerConstants.HttpVersion}");
-            req.Headers.Insert(0, new Header("Host", ServerConstants.HostForClients));
+            message.Append($" {_configuration.HttpVersion}");
+            req.Headers.Insert(0, new Header("Host", _configuration.Ip));
             foreach (Header h in req.Headers)
-                message.Append($"{ServerConstants.HeaderSeparator}{h.Name}: {h.Value}");
-            message.Append($"{ServerConstants.HeaderSeparator}{ServerConstants.HeaderSeparator}");
+                message.Append($"\r\n{h.Name}: {h.Value}");
+            message.Append("\r\n\r\n");
             byte[] sentData = Encoding.UTF8.GetBytes(message.ToString());
             int sentDataSize = sentData.Length;
             if (req.Content != null)
@@ -53,36 +60,38 @@ namespace Frontend
             StringBuilder rawResponse = new StringBuilder();
             try
             {
-                TcpClient client = new TcpClient(ServerConstants.Ip, ServerConstants.Port);
+                TcpClient client = new TcpClient(_configuration.Ip, _configuration.Port);
                 SslStream sslStream = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
-                sslStream.AuthenticateAsClient(ServerConstants.HostForClients);
-                sslStream.ReadTimeout = ServerConstants.ClientTimeout;
-                sslStream.WriteTimeout = ServerConstants.ClientTimeout;
+                sslStream.AuthenticateAsClient(_configuration.Ip);
+                sslStream.ReadTimeout = 5000;
+                sslStream.WriteTimeout = 5000;
                 sslStream.Write(sentData, 0, sentData.Length);
                 bool readMore = true;
                 int attempts = 0;
                 do
                 {
-                    int bytes = sslStream.Read(receivedData, 0, ServerConstants.MaxBufferSize);
+                    int bytes = sslStream.Read(receivedData, 0, _configuration.MaxBufferSize);
                     attempts++;
                     if (bytes == 0)
-                        readMore = false;
+                    {
+                        break;
+                    }
                     rawResponse.Append(Encoding.UTF8.GetString(receivedData, 0, bytes));
                 }
-                while (readMore && attempts < ServerConstants.MaxAttempts);
+                while (readMore && attempts < _configuration.MaxAttempts);
                 client.Close();
                 sslStream.Close();
-                return rawResponse.ToString();
+                return fromStringToResponse(rawResponse.ToString());
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return rawResponse.ToString();
+                return fromStringToResponse(rawResponse.ToString());
             }
         }
 
-        public static Response FromStringToResponse(string rawResponse)
+        private Response fromStringToResponse(string rawResponse)
         {
-            Regex regex = new Regex(@$"^{ServerConstants.HttpVersion} (?<statusCode>\d\d\d) [a-zA-Z ]+{ServerConstants.HeaderSeparator}(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z,\.:\/\?\d&_\-; =]+){ServerConstants.HeaderSeparator})+{ServerConstants.HeaderSeparator}(?<content>[\d\D]*)$");
+            Regex regex = new Regex(@$"^{_configuration.HttpVersion} (?<statusCode>\d\d\d) [a-zA-Z ]+\r\n(?<headers>(?<headerName>[a-zA-Z\-]+):\s*(?<headerValue>[a-zA-Z,\.:\/\?\d&_\-; =]+)\r\n)+\r\n(?<content>[\d\D]*)$");
             if (string.IsNullOrEmpty(rawResponse) || !regex.IsMatch(rawResponse))
                 return null;
             GroupCollection groups = regex.Matches(rawResponse)[0].Groups;
@@ -101,12 +110,14 @@ namespace Frontend
                 contentLength = int.Parse(Header.GetValueByName(headers, "CONTENT-LENGTH"));
             if (contentLength < content.Length)
                 content = content.Substring(0, contentLength);
-            Response r = new Response(statusCode)
+            Response r = new Response(_configuration.HttpVersion)
             {
                 Headers = headers,
-                Content = Encoding.UTF8.GetBytes(content)
+                Content = Encoding.UTF8.GetBytes(content),
+                StatusCode = statusCode
             };
             return r;
         }
     }
+
 }

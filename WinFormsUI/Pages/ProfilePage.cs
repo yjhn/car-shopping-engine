@@ -12,8 +12,8 @@ namespace CarEngine
     {
         private IApi _frontendApi;
         private UserInfo _userInfo;
-        private readonly int _likedAdsInPage = Constants.AdsInLikedAdsPage;
-        private readonly int _uploadedAdsInPage = Constants.AdsInUploadedAdsPage;
+        private readonly int _likedAdsInPage = Settings.Default.adsInLikedAdsPage;
+        private readonly int _uploadedAdsInPage = Settings.Default.adsInUploadedAdsPage;
         private readonly EnumParser _parser = new EnumParser();
         private int _likedAdsPageNr = 1;
         private int _uploadedAdsPageNr = 1;
