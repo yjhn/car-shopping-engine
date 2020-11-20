@@ -262,7 +262,7 @@ namespace Server
                 bool sortAscending = true;
                 if (queries.ContainsKey("sort_ascending"))
                     sortAscending = bool.Parse(queries["sort_ascending"]);
-                responseBody = _db.GetSortedCarsJson((SortingCriteria)criteria, sortAscending, startIndex, amount);
+                responseBody = _db.GetSortedCars((SortingCriteria)criteria, sortAscending, startIndex, amount);
             }
             else
             {
@@ -386,7 +386,7 @@ namespace Server
                 sortAscending = bool.Parse(queries["sort_ascending"]);
             if (queries.ContainsKey("start_index"))
                 startIndex = int.Parse(queries["start_index"]);
-            _r = MakeResponse(200, _db.GetFilteredCarsJson(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
+            _r = MakeResponse(200, _db.GetFilteredCars(cf, (SortingCriteria)criteria, sortAscending, startIndex, amount));
         }
 
         private void GetLikedCars(Dictionary<string, string> queries, string token)
