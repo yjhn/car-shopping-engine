@@ -28,5 +28,10 @@ namespace DataTypes
         {
             return other.Username == Username;
         }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as User);
+        }
     }
 }

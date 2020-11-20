@@ -6,13 +6,12 @@ namespace DataTypes
     {
         // unique db key = Id
 
-        public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, bool used, YearMonth dateOfPurchase, Engine engine, FuelType fuelType,
+        public Car(DateTime uploadDate, int price, string brand, string model, bool used, YearMonth dateOfPurchase, Engine engine, FuelType fuelType,
             ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, string[] defects,
             SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, YearMonth nextVehicleInspection,
             string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images, string comment)
         {
             Price = price;
-            UploaderUsername = uploaderUsername;
             UploadDate = uploadDate;
             Brand = brand;
             Model = model;
@@ -87,6 +86,11 @@ namespace DataTypes
 
         // required for serialization to work
         public Car() { }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Car);
+        }
     }
 
     public class YearMonth : IComparable<YearMonth>
