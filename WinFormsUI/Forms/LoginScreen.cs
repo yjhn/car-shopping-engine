@@ -7,17 +7,17 @@ namespace CarEngine
 {
     public partial class LoginScreen : Form
     {
-        private readonly IApi _frontendApi;
+        private readonly IApiWrapper _frontendApi;
         private readonly UserInfo _userInfo;
 
-        public LoginScreen(IApi api, UserInfo userInfo)
+        public LoginScreen(IApiWrapper api, UserInfo userInfo)
         {
             _userInfo = userInfo;
             _frontendApi = api;
             InitializeComponent();
             passwordTextBox.PasswordChar = '*';
-            phoneTextbox.Controls[0].Visible = false;
-            phoneTextbox.ResetText();
+            //phoneTextbox.Controls[0].Visible = false;
+            //phoneTextbox.ResetText();
         }
 
         private async void LoginButton_Click(object sender, EventArgs e)
@@ -26,8 +26,9 @@ namespace CarEngine
             string password = passwordTextBox.Text;
             if (Utilities.ValidateInput(username, password))
             {
-                MinimalUser user = await _frontendApi.GetUser(username, Utilities.EncryptPassword(passwordTextBox.Text, username));
-                if (user == null)
+                //User user = await _frontendApi.GetUser(username, password);
+
+                if (!await _userInfo.Login(username, password))
                 {
                     // this is not always correct, as we will get null also when there is no connection
                     // close this window from main window in no connection event
@@ -36,7 +37,8 @@ namespace CarEngine
                 }
                 else
                 {
-                    _userInfo.User = user;
+                    //_userInfo.User = user;
+                    //_userInfo.Password = password;
                     Close();
                 }
             }
@@ -49,7 +51,7 @@ namespace CarEngine
 
         private async void SigUpButton_Click(object sender, EventArgs e)
         {
-            bool? successfullyCreated;
+            int successfullyCreated;
             if (!loginButton.Visible)
             {
                 // need to check for bad input
@@ -62,12 +64,10 @@ namespace CarEngine
                 if (Utilities.ValidateInput(username, password) && email != "" && !email.Contains(' ') && phone != 1000000)
                 {
                     User user = new User(username, phone, Utilities.EncryptPassword(password, username), email);
-                    successfullyCreated = await _frontendApi.AddUser(user);
-
-                    if (successfullyCreated != null)
+                    successfullyCreated = await _frontendApi.PostUser(user);
+                    switch (successfullyCreated)
                     {
-                        if ((bool)successfullyCreated)
-                        {
+                        case 0:
                             // show that user creation is successful
                             MessageBox.Show("Successfully created user " + username, "User created", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -78,16 +78,15 @@ namespace CarEngine
                             phoneTextbox.Visible = false;
                             loginButton.Visible = true;
                             usernameTextBox.Focus();
-                        }
-                        else
-                        {
+                            break;
+                        case -1:
                             MessageBox.Show("This username is already taken", "Bad username", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    else
-                    {
-                        // if Api returns null, then there is no connection to server
-                        MessageBox.Show("No connection to server", "No connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        case -2:
+                            MessageBox.Show("No connection to server", "No connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        default:
+                            throw new Exception("Unknown value returned");
                     }
                 }
                 else

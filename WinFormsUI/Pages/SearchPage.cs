@@ -11,7 +11,7 @@ namespace CarEngine
     public partial class SearchPage : UserControl
     {
         private int _resultspageNr = 1;
-        private IApi _frontendApi;
+        private IApiWrapper _frontendApi;
         private readonly EnumParser _parser = new EnumParser();
 
         // tab close button image
@@ -19,7 +19,7 @@ namespace CarEngine
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
-        public IApi Api
+        public IApiWrapper Api
         {
             get
             {

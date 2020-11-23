@@ -1,6 +1,7 @@
 ﻿using DataTypes;
 using Frontend;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -9,12 +10,12 @@ namespace CarEngine
 {
     public partial class UploadPage : UserControl
     {
-        private IApi _frontendApi;
+        private IApiWrapper _frontendApi;
         private readonly EnumParser _parser = new EnumParser();
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
-        public IApi Api
+        public IApiWrapper Api
         {
             get
             {
@@ -164,12 +165,11 @@ namespace CarEngine
                 GearboxType = (GearboxType)_parser.GetGearboxType((string)gearboxTypeComboBox.SelectedItem),
                 TotalKilometersDriven = Convert.ToInt32(priceBox.Value),
                 DriveWheels = (DriveWheels)_parser.GetDriveWheels((string)driveWheelsComboBox.SelectedItem),
-                Defects = new string[] { defectsTextBox.Text },
+                Defects = new List<string> { defectsTextBox.Text },
                 SteeringWheelPosition = radioButtonLeftWheel.Checked ? SteeringWheelPosition.Left : SteeringWheelPosition.Right,
                 Images = GetImages()
             };
-            int? result = await _frontendApi.AddCar(uploadCar);
-            if (result != null)
+            if (await _userInfo.PostCar(uploadCar) == 0)
             {
                 MessageBox.Show("Successfully uploaded", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -180,18 +180,19 @@ namespace CarEngine
         }
 
         //surenka visas nuotraukas, kurios yra parinktos at a given time
-        private string[] GetImages()
+        private List<string> GetImages()
         {
-            string[] images = new string[additionalImagesPanel.Controls.Count + 1];
-            // main image
-            images[0] = Utilities.ConvertImageToBase64(pictureBox1.Image);
-            // additional images
-            for (int i = 1; i <= additionalImagesPanel.Controls.Count; i++)
+            List<string> images = new List<string>(additionalImagesPanel.Controls.Count + 1)
             {
-                images[i] = Utilities.ConvertImageToBase64(((PictureBox)additionalImagesPanel.Controls[i - 1]).Image);
+                // main image
+                Utilities.ConvertImageToBase64(pictureBox1.Image)
+            };
+            // additional images
+            foreach (PictureBox p in additionalImagesPanel.Controls)
+            {
+                images.Add(Utilities.ConvertImageToBase64(p.Image));
             }
             return images;
-
         }
 
         private void ClearSelections()

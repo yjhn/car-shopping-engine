@@ -25,11 +25,11 @@ namespace CarEngine
         // a list to store all car ads in all pages
         private readonly List<CarAdMinimal[]> _adList = new List<CarAdMinimal[]>();
         // instance of API
-        private IApi _frontendApi;
+        private IApiWrapper _frontendApi;
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
-        public IApi Api
+        public IApiWrapper Api
         {
             get
             {
@@ -93,7 +93,7 @@ namespace CarEngine
         }
 
         // this constructor is needed to use this as a search results page
-        public BrowsePage(CarFilters carFilters, string selectedSortItem, bool sortAsc, IApi api, UserInfo userInfo)
+        public BrowsePage(CarFilters carFilters, string selectedSortItem, bool sortAsc, IApiWrapper api, UserInfo userInfo)
         {
             _frontendApi = api;
             _userInfo = userInfo;
@@ -166,11 +166,11 @@ namespace CarEngine
             List<Car> vehicles;
             if (_isSearchResultsPage)
             {
-                vehicles = await _frontendApi.SearchVehicles(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
+                vehicles = await _frontendApi.GetFilteredVehicles(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
             }
             else
             {
-                vehicles = await _frontendApi.GetSortedCars(_parser.GetSortingCriteria(_selectedSortItem), startIndex, amount, _sortAsc);
+                vehicles = await _frontendApi.GetSortedVehicles(_parser.GetSortingCriteria(_selectedSortItem),_sortAsc, startIndex, amount);
             }
             return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
