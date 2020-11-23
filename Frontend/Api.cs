@@ -247,7 +247,7 @@ namespace Frontend
             {
                 Request req = ReqInit("GET", "/");
                 Response r = GetResponse(req);
-                return r == null ? false : true;
+                return r != null;
             });
         }
 
