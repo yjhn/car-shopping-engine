@@ -1,6 +1,8 @@
 ﻿using Backend;
 using DataTypes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ServerV2.Controllers
 {
+    [Produces("application/json")]
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -19,18 +22,11 @@ namespace ServerV2.Controllers
             _db = db;
         }
 
-        // GET: api/<UsersController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
         // GET api/<UsersController>/5
         [HttpGet("{user}")]
-        public ActionResult<User> Get(string user, [FromHeader] string username, [FromHeader] string password)
+        public ActionResult<User> GetUser(string user, [FromHeader] string username, [FromHeader] string password)
         {
-            if(user != username)
+            if(username == null || password == null || user != username)
             {
                 return BadRequest();
             }
@@ -47,10 +43,15 @@ namespace ServerV2.Controllers
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("liked/{username}")]
-        public ActionResult<IEnumerable<Car>> GetUserUploadedAds(string username, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
+        [HttpGet("liked/{user}")]
+        public ActionResult<IEnumerable<Car>> GetUserLikedAds(string user, [FromHeader] string username, [FromHeader] string password, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
         {
-            var ads = _db.GetUserUploadedAds(username, sortBy, sortAscending, startIndex, amount);
+            if (username == null || password == null || user != username)
+            {
+                return BadRequest();
+            }
+
+            var ads = _db.GetUserLikedAds(username,password, sortBy, sortAscending, startIndex, amount);
             if(ads == null)
             {
                 return NotFound();
@@ -61,41 +62,73 @@ namespace ServerV2.Controllers
             }
         }
 
+        // GET api/<UsersController>/5
+        [HttpGet("uploaded/{username}")]
+        public ActionResult<IEnumerable<Car>> GetUserUploadedAds(string username, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
+        {
+            if(username == null)
+            {
+                return BadRequest();
+            }
+
+            var ads = _db.GetUserUploadedAds(username, sortBy, sortAscending, startIndex, amount);
+            if (ads == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return new ActionResult<IEnumerable<Car>>(ads);
+            }
+        }
+
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="409">If the item is duplicate</response> 
         // POST api/<UsersController>
         [HttpPost]
-        public ActionResult<User> Post([FromBody] User value)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public ActionResult<User> PostUser([FromBody] User value)
         {
-            return _db.AddUser(value) == null ? Conflict() : CreatedAtAction(nameof(Get), value);
+            if(value == null)
+            {
+                return BadRequest();
+            }
+
+            return _db.AddUser(value) == null ? Conflict() : StatusCode(201, value); //Created(Url.Link($"api/users/{value.Username}", value),value);//StatusCode(201, value); //CreatedAtRoute("api/users/", value); //CreatedAtAction(nameof(GetUser), value);
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{user}")]
-        public IActionResult Put(string user, [FromHeader] string username, [FromHeader] string password, [FromBody] User value)
+        public IActionResult PutUser(string user, [FromHeader] string username, [FromHeader] string password, [FromBody] User value)
         {
-            if (user != username)
+            if (user != username || user != value.Username || value == null)
             {
                 return BadRequest();
             }
 
-            // users cannot change username
-            if (user != value.Username || value == null)
+            if(_db.UpdateUser(username, password, value))
             {
-                return BadRequest();
+                return NoContent();
             }
-
-            int result = _db.UpdateUser(username, password, value);
-            return result switch
+            else
             {
-                0 => NoContent(),
-                -1 => NotFound(),
-                -2 => Conflict(),
-                _ => NotFound(),
-            };
+                return NotFound();
+            }
+            //int result = _db.UpdateUser(username, password, value);
+            //return result switch
+            //{
+            //    0 => NoContent(),
+            //    -1 => NotFound(),
+            //    -2 => Conflict(),
+            //    _ => NotFound(),
+            //};
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{user}")]
-        public IActionResult Delete(string user, [FromHeader] string username, [FromHeader] string password)
+        public IActionResult DeleteUser(string user, [FromHeader] string username, [FromHeader] string password)
         {
             if (user != username)
             {

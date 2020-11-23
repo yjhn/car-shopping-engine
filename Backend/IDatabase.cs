@@ -38,12 +38,12 @@ namespace Backend
         public bool DeleteUser(string username, string password);
         //public bool UpdateLikedAds(string token, byte[] newAdsJson);
 
-        /**
-         * Status codes:
-         *  0  -> updated
-         *  -1 -> not found
-         *  -2 -> username clash (user tried to change username to already existing one)
-        **/
-        public int UpdateUser(string username, string password, User user);
+        ///**
+        // * Status codes:
+        // *  0  -> updated
+        // *  -1 -> not found
+        // *  -2 -> username clash (user tried to change username to already existing one)
+        //**/
+        public bool UpdateUser(string username, string password, User user);
     }
 }
