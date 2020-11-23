@@ -8,10 +8,10 @@ namespace CarEngine
     public partial class MainWindow : Form
     {
         // create default colors for (in)active sidebar buttons
-        private readonly Color _activeSidebarButtonColor = Constants.ActiveSidebarButtonColor;
-        private readonly Color _activeSidebarButtonTextColor = Constants.ActiveSidebarButtonTextColor;
-        private readonly Color _inactiveSidebarButtonColor = Constants.InactiveSidebarButtonColor;
-        private readonly Color _inactiveSidebarButtonTextColor = Constants.InactiveSidebarButtonTextColor;
+        private readonly Color _activeSidebarButtonColor = Settings.Default.activeSidebarButtonColor;
+        private readonly Color _activeSidebarButtonTextColor = Settings.Default.activeSidebarButtonTextColor;
+        private readonly Color _inactiveSidebarButtonColor = Settings.Default.inactiveSidebarButtonColor;
+        private readonly Color _inactiveSidebarButtonTextColor = Settings.Default.inactiveSidebarButtonTextColor;
 
         private readonly IApiWrapper _api;
         private readonly UserInfo _userInfo;
@@ -38,7 +38,6 @@ namespace CarEngine
             profilePage.UserInfo = _userInfo;
         }
 
-        // this works, but if connection reappears, currently nothing changes
         private void NoConnection()
         {
             Action a = new Action(/*async*/ () =>

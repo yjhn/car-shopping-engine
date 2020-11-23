@@ -1,6 +1,8 @@
 using Frontend;
+using DataTypes;
 using System;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace CarEngine
 {
@@ -17,6 +19,8 @@ namespace CarEngine
         [STAThread]
         static void Main()
         {
+
+            _api = new Api(new Config(Settings.Default.ip, Settings.Default.port, Settings.Default.httpVersion, Settings.Default.scheme, Settings.Default.maxBufferSize, Settings.Default.maxAttempts, Settings.Default.timeout));
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -15,7 +15,7 @@ namespace CarEngine
         private readonly CarFilters _filters;
         private string _selectedSortItem;
         private bool _sortAsc;
-        private readonly int _adsInPage = Constants.AdsInBrowsePage;
+        private readonly int _adsInPage = Settings.Default.adsInBrowsePage;
         private int _currentPageNumber = 1;
         private readonly EnumParser _parser = new EnumParser();
 

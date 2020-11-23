@@ -8,8 +8,8 @@ namespace CarEngine
 {
     public partial class CarAdMinimal : UserControl
     {
-        private readonly Color _selectedAdColor = Constants.SelectedAdColor;
-        private readonly Color _normalAdColor = Constants.NormalAdColor;
+        private readonly Color _selectedAdColor = Settings.Default.selectedAdColor;
+        private readonly Color _normalAdColor = Settings.Default.normalAdColor;
         //public bool LoggedIn { get; set; } = false;
 
         private readonly Car _carInfo;

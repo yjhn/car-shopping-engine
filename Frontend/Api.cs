@@ -10,8 +10,14 @@ namespace Frontend
 {
     public class Api : IApi
     {
+        private readonly Config _configuration;
         // event to tell the UI that there is no connection to server
         public event Action NoServerResponse = delegate { };
+
+        public Api(Config configuration)
+        {
+            _configuration = configuration;
+        }
 
         public Task<List<Car>> GetSortedCars(SortingCriteria sortBy, int startIndex, int amount, bool sortAscending)
         {
@@ -274,9 +280,9 @@ namespace Frontend
             return req;
         }
 
-        private static Response GetResponse(Request req)
+        private Response GetResponse(Request req)
         {
-            return Client.FromStringToResponse(Client.GetRawResponse(req));
+            return new Client(_configuration).GetResponse(req);
         }
     }
 }
