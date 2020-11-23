@@ -1,5 +1,6 @@
 ﻿using Backend;
 using DataTypes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 
 namespace ServerV2.Controllers
 {
+    [Produces("application/json")]
     [Route("api/vehicles")]
     [ApiController]
     public class VehiclesController : ControllerBase
@@ -18,9 +20,9 @@ namespace ServerV2.Controllers
             _db = db;
         }
 
-        // GET: api/<VehicleController>
+        // GET: api/<VehicleController>/5
         [HttpGet("{id}")]
-        public ActionResult<Car> GetCar(int id)
+        public ActionResult<Car> GetVehicle(int id)
         {
             Car car = _db.GetCar(id);
             if (car == null)
@@ -33,8 +35,8 @@ namespace ServerV2.Controllers
             }
         }
 
-        // GET api/<VehicleController>/5
-        [HttpGet]
+        // GET api/<VehicleController>
+        [HttpGet("sorted")]
         public ActionResult<IEnumerable<Car>> GetSortedVehicles([FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
         {
             var cars = _db.GetSortedCars(sortBy, sortAscending, startIndex, amount);
@@ -49,7 +51,7 @@ namespace ServerV2.Controllers
         }
 
         // GET api/<VehicleController>/5
-        [HttpGet]
+        [HttpGet("filtered")]
         public ActionResult<IEnumerable<Car>> GetFiteredVehicles([FromHeader] CarFilters filters, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
         {
             var cars = _db.GetFilteredCars(filters, sortBy, sortAscending, startIndex, amount);
@@ -63,37 +65,38 @@ namespace ServerV2.Controllers
             }
         }
 
+        /// <response code="201">Returns the newly created item</response>
         // POST api/<VehicleController>
         [HttpPost]
-        public IActionResult Post([FromHeader] string username, [FromHeader] string password, [FromBody] Car car)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<Car> PostVehicle([FromHeader] string username, [FromHeader] string password, [FromBody] Car car)
         {
-            if (!_db.AddCar(username, password, car))
+            if (car == null || username == null || password == null)
             {
                 return BadRequest();
             }
-            else
-            {
-                return NoContent();
-            }
+
+
+            return _db.AddCar(username, password, car) ? StatusCode(201, car) : BadRequest();
         }
 
         // PUT api/<VehicleController>/5
         [HttpPut]
-        public IActionResult Put([FromHeader] string username, [FromHeader] string password, [FromBody] Car car)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult PutVehicle([FromHeader] string username, [FromHeader] string password, [FromBody] Car car)
         {
-            if (!_db.UpdateCar(username, password, car))
+            if(car == null || username == null || password == null)
             {
                 return BadRequest();
             }
-            else
-            {
-                return CreatedAtAction(nameof(GetCar), car);
-            }
+
+            return _db.UpdateCar(username, password, car) ? NoContent() : BadRequest();
         }
 
         // DELETE api/<VehicleController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id, [FromHeader] string username, [FromHeader] string password)
+        public IActionResult DeleteVehicle(int id, [FromHeader] string username, [FromHeader] string password)
         {
             if (!_db.DeleteCar(id, username, password))
             {

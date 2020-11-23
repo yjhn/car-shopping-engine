@@ -26,171 +26,7 @@ namespace Backend
             _carList = _fileReader.GetAllCarData();
             _userList = _fileReader.GetAllUserData();
             _lastCarId = _fileReader.LastCarId;
-            //_lastUserId = _fileReader.LastUserId;
-
-            //LoadAllData();
         }
-
-        //private async void LoadAllData()
-        //{
-        //    _carList = await _fileReader.GetAllCarData();
-        //    _userList = await _fileReader.GetAllUserData();
-        //    _lastCarId = _fileReader.LastCarId;
-        //}
-
-        //public int GetLastCarId()
-        //{
-        //    return _lastCarId;
-        //}
-
-        //// params: Car serialized to JSON
-        //public bool AddCarJson(byte[] car)
-        //{
-        //    try
-        //    {
-        //        Car c = JsonSerializer.Deserialize<Car>(car);
-        //        _lastCarId++;
-        //        c.Id = _lastCarId;
-        //        _carList.Add(c);
-        //        if (_fileWriter.WriteCarData(c))
-        //        {
-        //            _logger.Log("Added new car. ID = " + c.Id);
-        //            return true;
-        //        }
-        //        else return false;
-        //    }
-        //    catch (JsonException e)
-        //    {
-        //        _logger.LogException(new Exception("Failed to write car data due to bad serialization", e));
-        //        return false;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogException(e);
-        //        return false;
-        //    }
-        //}
-
-        //public bool AddUserJson(byte[] user)
-        //{
-        //    try
-        //    {
-        //        User u = JsonSerializer.Deserialize<User>(user);
-        //        if (!_userList.Exists(user => user.Username == u.Username))
-        //        {
-        //            _userList.Add(u);
-        //            // should probably return a status code, not bool
-        //            _logger.Log("Added new user. Username = " + u.Username);
-        //            return _fileWriter.WriteUserData(u);
-        //        }
-        //        else
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    catch (JsonException e)
-        //    {
-        //        _logger.LogException(new Exception("Cannot add user due to bad serialization", e));
-        //        return false;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogException(e);
-        //        return false;
-        //    }
-        //}
-
-        //// returns: MinimalUser serialized to UTF-8 JSON
-        //public byte[] Authenticate(string username, string hashedPassword)
-        //{
-        //    try
-        //    {
-        //        User user = _userList.Find(user => user.Username == username && user.HashedPassword == hashedPassword);
-        //        if (user == null)
-        //        {
-        //            _logger.Log($"Failed login attempt. User [ {username} ] not found or bad user password");
-        //            return null;
-        //        }
-        //        // remove all current minimalUser instances from _currentlyLoggedInUsers
-        //        // if user signs in at a few locations, this will "sign him out" from all but the last one
-        //        _currentlyLoggedInUsers.RemoveAll(user => user.Username == username);
-
-        //        // create new minimalUser with new session Id
-        //        MinimalUser authenticatedUser = new MinimalUser
-        //        {
-        //            Username = user.Username,
-        //            Token = Guid.NewGuid().ToString(),
-        //            Phone = user.Phone,
-        //            Email = user.Email,
-        //            LikedAds = user.LikedAds
-        //        };
-        //        // this is the only place that can add users to currently logged in user list
-        //        _currentlyLoggedInUsers.Add(authenticatedUser);
-        //        _logger.Log($"User [ {username} ] logged in.");
-        //        return JsonSerializer.SerializeToUtf8Bytes<MinimalUser>(authenticatedUser);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogException(e);
-        //        return null;
-        //    }
-        //}
-
-        //public bool UpdateLikedAds(string token, byte[] newAdsJson)
-        //{
-        //    try
-        //    {
-        //        List<int> newAds = JsonSerializer.Deserialize<List<int>>(newAdsJson);
-
-        //        // remove deleted cars from liked ads list
-        //        newAds.RemoveAll(id => !_carList.Exists(car => car.Id == id));
-
-        //        MinimalUser minimal = _currentlyLoggedInUsers.Find((minimalUser) => minimalUser.Token == token);
-        //        if (minimal == null)
-        //            return false;
-        //        minimal.LikedAds = newAds;
-        //        User original = _userList.Find((User user) => minimal.Username == user.Username);
-        //        original.LikedAds = newAds;
-
-        //        // write updated user data to file
-        //        _fileWriter.WriteUserData(original);
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogException(e);
-        //        return false;
-        //    }
-        //}
-
-        //public bool DeleteCar(int id)
-        //{
-        //    // remove this car from all users liked cars lists
-        //    _userList.ForEach(user =>
-        //    {
-        //        if (user.LikedAds.Remove(id))
-        //        {
-        //            // if user info is changed, it needs to be saved
-        //            _fileWriter.WriteUserData(user);
-        //        }
-        //    });
-        //    // remove this car from currently logged in users liked lists
-        //    _currentlyLoggedInUsers.ForEach(user => user.LikedAds.Remove(id));
-        //    //foreach (User user in _userList)
-        //    //{
-        //    //    user.LikedAds.Remove(id);
-        //    //}
-        //    return _carList.RemoveAll(car => car.Id == id) == 1 && _fileWriter.DeleteCar(id);
-        //}
-
-        //public bool DeleteUser(string username)
-        //{
-        //    // remove ads posted by this user
-        //    _carList.RemoveAll(car => car.UploaderUsername == username);
-        //    // delete user from currently logged in users
-        //    //_currentlyLoggedInUsers.RemoveAll(user => user.Username == username);
-        //    return _userList.RemoveAll(user => user.Username == username) == 1 && _fileWriter.DeleteUser(username);
-        //}
 
         public IEnumerable<Car> GetFilteredCars(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
@@ -226,55 +62,6 @@ namespace Backend
             return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount);
         }
 
-        // returns null if not found
-        // this is not used
-        //public byte[] GetUserInfoJson(string username)
-        //{
-        //    User user = _userList.Find(user => user.Username == username);
-        //    return user != null ? JsonSerializer.SerializeToUtf8Bytes<User>(user) : null;
-        //}
-
-        //public IEnumerable<Car> GetUserLikedAdsJson(string token, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
-        //{
-        //    // check if this user is currently logged in, otherwise his liked ads cannot be given
-        //    MinimalUser user = _currentlyLoggedInUsers.Find(user => user.Token == token);
-        //    if (user == null)
-        //    {
-        //        // if user is not logged in
-        //        return null;
-        //    }
-        //    List<Car> likedCars = _carList.Where(car => user.LikedAds.Contains(car.Id)).ToList();
-        //    //foreach (int id in user.LikedAds)
-        //    //{
-        //    //    // if Find returns null (although it should never happen), this will cause problems
-        //    //    likedCars.Add(_carList.Find(car => car.Id == id));
-        //    //}
-        //    //List<Car> carsToReturn = likedCars.Skip(startIndex).Take(amount).ToList();
-        //    return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, likedCars);
-        //}
-
-        //public IEnumerable<Car> GetUserUploadedAdsJson(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
-        //{
-        //    //List<Car> uploadedCars = new List<Car>();
-        //    User user = _userList.Find(user => user.Username == username);
-        //    // if this user does not exist
-        //    if (user == null)
-        //    {
-        //        return null;
-        //    }
-        //    List<Car> uploadedCars = _carList.Where(car => car.UploaderUsername == username).ToList();
-        //    //foreach (Car car in _carList)
-        //    //{
-        //    //    if (car.UploaderUsername == username)
-        //    //    {
-        //    //        uploadedCars.Add(car);
-        //    //    }
-        //    //}
-        //    return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, uploadedCars);
-
-        //    //List<Car> carsToReturn = uploadedCars.Skip(startIndex).Take(amount).ToList();
-        //    //return JsonSerializer.SerializeToUtf8Bytes(carsToReturn);
-        //}
 
         private IEnumerable<Car> GetSortedCarsListJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {
@@ -318,8 +105,11 @@ namespace Backend
 
         public string AddUser(User user)
         {
-            //int id = _lastUserId++;
-            //user.Id = id;
+            // do not allow null fields
+            if (user.Username == null || user.HashedPassword == null || user.LikedAds == null || user.Email == null)
+            {
+                return null;
+            }
 
             if (!_userList.Exists(u => u.Username == user.Username))
             {
@@ -331,8 +121,8 @@ namespace Backend
                 {
                     _userList.Add(user);
                     _logger.Log("Added new user. Username = " + user.Username);
-                    return user.Username;
                 }
+                return user.Username;
             }
             else
             {
@@ -386,27 +176,21 @@ namespace Backend
             }
         }
 
-        public int UpdateUser(string username, string password, User user)
+        public bool UpdateUser(string username, string password, User user)
         {
             // this should return only one user, but if user updates his username to a clashing one, we check for it
-            List<User> userToUpdate = _userList.FindAll(u => u.Username == username && u.HashedPassword == EncryptPassword(password, username));
-            if (userToUpdate.Count == 0)
+            User userToUpdate = _userList.Find(u => u.Username == username && u.HashedPassword == EncryptPassword(password, username));
+            if (userToUpdate == null)
             {
-                return -1;
+                return false;
             }
             else
             {
-                if (userToUpdate.Count == 1)
-                {
-                    _userList.Remove(userToUpdate[0]);
-                    _fileWriter.DeleteUser(userToUpdate[0].Username);
-                    _userList.Add(user);
-                    return 0;
-                }
-                else
-                {
-                    return -2;
-                }
+                _userList.Remove(userToUpdate);
+                _fileWriter.DeleteUser(userToUpdate.Username);
+                _userList.Add(user);
+                _fileWriter.WriteUserData(user);
+                return true;
             }
         }
 
