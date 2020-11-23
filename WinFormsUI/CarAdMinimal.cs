@@ -42,7 +42,7 @@ namespace CarEngine
             // for now we don't have this
             //additionalInfo.Text = carInfo.Engine.Kw.ToString() + "kW";
             additionalInfo.Text += $" \"{carInfo.Comment}\"";
-            if (carInfo.Images != null && carInfo.Images.Length > 0)
+            if (carInfo.Images != null && carInfo.Images.Count > 0)
             {
                 carImage.Image = Utilities.Base64ToImg(carInfo.Images[0]);
             }

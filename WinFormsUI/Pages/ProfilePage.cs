@@ -10,7 +10,7 @@ namespace CarEngine
 {
     public partial class ProfilePage : UserControl
     {
-        private IApi _frontendApi;
+        private IApiWrapper _frontendApi;
         private UserInfo _userInfo;
         private readonly int _likedAdsInPage = Constants.AdsInLikedAdsPage;
         private readonly int _uploadedAdsInPage = Constants.AdsInUploadedAdsPage;
@@ -24,7 +24,7 @@ namespace CarEngine
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
-        public IApi Api
+        public IApiWrapper Api
         {
             get
             {
@@ -90,10 +90,10 @@ namespace CarEngine
             likedAdsPanel.Controls.Clear();
             uploadedAdsPanel.Controls.Clear();
             // if user logs in we load their info
-            if (_userInfo.Username != null)
-            {
-                LoadInfo();
-            }
+            //if (_userInfo.Username != null)
+            //{
+            //    LoadInfo();
+            //}
         }
 
         private void LoadInfo()
@@ -150,10 +150,10 @@ namespace CarEngine
             // if we are on the first page for the first time
             if (_likedAdsPages.Count == 0)
             {
-                CarAdMinimal[] carAds = await GetMinimalLikedVehicleAds(0, _likedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalLikedAds(0, _likedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
-                    sortLikedAdsBtn.Enabled = true;
+                    sortLikedAdsBtn.Enabled = false;
                     _nextLikedAdsPageBtnEnabled = false;
                     likedAdsNextPageBtn.Enabled = false;
                     return;
@@ -165,7 +165,7 @@ namespace CarEngine
             if (_likedAdsPageNr == _likedAdsPages.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                CarAdMinimal[] carAds = await GetMinimalLikedVehicleAds(_likedAdsInPage * _likedAdsPageNr, _likedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalLikedAds(_likedAdsInPage * _likedAdsPageNr, _likedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
@@ -188,26 +188,26 @@ namespace CarEngine
             sortLikedAdsBtn.Enabled = true;
         }
 
-        private async Task<CarAdMinimal[]> GetMinimalLikedVehicleAds(int startIndex, int amount)
+        private async Task<CarAdMinimal[]> GetMinimalLikedAds(int startIndex, int amount)
         {
             // update liked ads
-            await _userInfo.UpdateLikedAds();
+            _userInfo.PutUser();
 
             // get sortingCriteria and sortAscending
             bool sortAsc = sortLikedAdsAscRdBtn.Checked;
             SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortLikedAdsByCombobox.SelectedItem);
 
-            List<Car> vehicles = await _frontendApi.GetSortedLikedCars(_userInfo.Token, sortBy, sortAsc, startIndex, amount);
+            List<Car> vehicles = await _userInfo.GetUserLikedAds(sortBy, sortAsc, startIndex, amount);
             return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
-        private async Task<CarAdMinimal[]> GetMinimalUploadedVehicleAds(int startIndex, int amount)
+        private async Task<CarAdMinimal[]> GetMinimalUploadedAds(int startIndex, int amount)
         {
             // get sortingCriteria and sortAscending
             bool sortAsc = sortUploadedAdsAscRdBtn.Checked;
             SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortUploadedAdsByCombobox.SelectedItem);
 
-            List<Car> vehicles = await _frontendApi.GetSortedUploadedCars(_userInfo.Username, sortBy, sortAsc, startIndex, amount);
+            List<Car> vehicles = await _userInfo.GetUserUploadedAds(sortBy, sortAsc, startIndex, amount);
             return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
@@ -243,7 +243,7 @@ namespace CarEngine
             // if we are on the first page for the first time
             if (_uploadedAdsPages.Count == 0)
             {
-                CarAdMinimal[] carAds = await GetMinimalUploadedVehicleAds(0, _uploadedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalUploadedAds(0, _uploadedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     refreshUploadedAdsBtn.Enabled = true;
@@ -259,7 +259,7 @@ namespace CarEngine
             if (_uploadedAdsPageNr == _uploadedAdsPages.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                CarAdMinimal[] carAds = await GetMinimalUploadedVehicleAds(_uploadedAdsInPage * _uploadedAdsPageNr, _uploadedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalUploadedAds(_uploadedAdsInPage * _uploadedAdsPageNr, _uploadedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
