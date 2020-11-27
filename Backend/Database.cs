@@ -11,11 +11,9 @@ namespace Backend
     {
         private readonly List<Car> _carList;
         private readonly List<User> _userList;
-        //private readonly List<MinimalUser> _currentlyLoggedInUsers = new List<MinimalUser>();
         private readonly FileReader _fileReader;
         private readonly FileWriter _fileWriter;
         private int _lastCarId;
-        //private int _lastUserId;
         private readonly Logger _logger;
 
         public Database(Logger logger, string carDbPath = null, string userDbPath = null)
@@ -53,24 +51,23 @@ namespace Backend
             //if (!string.IsNullOrEmpty(filters.Username))
             //    filteredCarList = (from car in filteredCarList where car.UploaderUsername.ToLower() == filters.Username select car).ToList();
 
-
-            return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, filteredCarList);
+            return GetSortedCarsList(sortBy, sortAscending, startIndex, amount, filteredCarList);
         }
 
         public IEnumerable<Car> GetSortedCars(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount);
+            return GetSortedCarsList(sortBy, sortAscending, startIndex, amount);
         }
 
 
-        private IEnumerable<Car> GetSortedCarsListJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
+        private IEnumerable<Car> GetSortedCarsList(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {
             if (carListToSort == null)
             {
                 carListToSort = _carList;
             }
             carListToSort.SortBy(sortBy, sortAscending);
-            return /*JsonSerializer.SerializeToUtf8Bytes<List<Car>>(*/carListToSort.Skip(startIndex).Take(amount);
+            return carListToSort.Skip(startIndex).Take(amount);
         }
 
         public bool DeleteCar(int carId, string username, string password)
@@ -89,12 +86,6 @@ namespace Backend
                         _fileWriter.WriteUserData(user);
                     }
                 });
-                // remove this car from currently logged in users liked lists
-                //_currentlyLoggedInUsers.ForEach(user => user.LikedAds.Remove(id));
-                //foreach (User user in _userList)
-                //{
-                //    user.LikedAds.Remove(id);
-                //}
                 return _carList.Remove(car) && _fileWriter.DeleteCar(carId);
             }
             else
@@ -145,7 +136,7 @@ namespace Backend
             }
             else
             {
-                return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, _carList.FindAll(car => car.UploaderUsername == user.Username));
+                return GetSortedCarsList(sortBy, sortAscending, startIndex, amount, _carList.FindAll(car => car.UploaderUsername == user.Username));
             }
         }
 
@@ -158,7 +149,7 @@ namespace Backend
             }
             else
             {
-                return GetSortedCarsListJson(sortBy, sortAscending, startIndex, amount, _carList.FindAll(car => user.LikedAds.Contains(car.Id)));
+                return GetSortedCarsList(sortBy, sortAscending, startIndex, amount, _carList.FindAll(car => user.LikedAds.Contains(car.Id)));
             }
         }
 
@@ -178,7 +169,6 @@ namespace Backend
 
         public bool UpdateUser(string username, string password, User user)
         {
-            // this should return only one user, but if user updates his username to a clashing one, we check for it
             User userToUpdate = _userList.Find(u => u.Username == username && u.HashedPassword == EncryptPassword(password, username));
             if (userToUpdate == null)
             {

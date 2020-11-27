@@ -104,8 +104,6 @@ namespace CarEngine
 
             ChassisType? chassisType = _parser.GetChassisType((string)vehicleTypeCombobox.SelectedItem);
 
-            //SortingCriteria sortBy = EnumParser.GetSortingCriteria((string)sortByCombobox.SelectedItem);
-
             string brand = brandTextbox.Text.ToLower();
             string model = modelTextbox.Text.ToLower();
             int lowerPrice = (int)lowerPriceTextbox.Value;
@@ -166,9 +164,6 @@ namespace CarEngine
 
         private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
-
-            //try
-            //{
             var tabPage = this.searchAndResultsTabs.TabPages[e.Index];
             var tabRect = this.searchAndResultsTabs.GetTabRect(e.Index);
             tabRect.Inflate(-2, -2);
@@ -181,8 +176,6 @@ namespace CarEngine
             }
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font,
                 tabRect, tabPage.ForeColor, TextFormatFlags.Left);
-            //}
-            //catch (Exception ex) { throw new Exception(ex.Message); }
         }
 
 

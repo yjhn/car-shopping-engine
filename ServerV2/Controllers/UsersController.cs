@@ -96,7 +96,7 @@ namespace ServerV2.Controllers
                 return BadRequest();
             }
 
-            return _db.AddUser(value) == null ? Conflict() : StatusCode(201, value); //Created(Url.Link($"api/users/{value.Username}", value),value);//StatusCode(201, value); //CreatedAtRoute("api/users/", value); //CreatedAtAction(nameof(GetUser), value);
+            return _db.AddUser(value) == null ? Conflict() : StatusCode(201, value);
         }
 
         // PUT api/<UsersController>/5
@@ -116,14 +116,6 @@ namespace ServerV2.Controllers
             {
                 return NotFound();
             }
-            //int result = _db.UpdateUser(username, password, value);
-            //return result switch
-            //{
-            //    0 => NoContent(),
-            //    -1 => NotFound(),
-            //    -2 => Conflict(),
-            //    _ => NotFound(),
-            //};
         }
 
         // DELETE api/<UsersController>/5

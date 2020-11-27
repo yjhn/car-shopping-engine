@@ -28,7 +28,7 @@ namespace DataTypes
             MaxBufferSize = maxBufferSize;
             MaxAttempts = maxAttempts;
             Timeout = timeout;
-            Extra = new string[0];
+            Extra = System.Array.Empty<string>();
         }
     }
 }

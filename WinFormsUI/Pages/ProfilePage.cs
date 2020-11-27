@@ -89,11 +89,6 @@ namespace CarEngine
         {
             likedAdsPanel.Controls.Clear();
             uploadedAdsPanel.Controls.Clear();
-            // if user logs in we load their info
-            //if (_userInfo.Username != null)
-            //{
-            //    LoadInfo();
-            //}
         }
 
         private void LoadInfo()
@@ -119,17 +114,6 @@ namespace CarEngine
             _likedAdsPages.Clear();
             ShowLikedCars();
         }
-
-        /*
-         * loading strategy:
-         *  liked ads:
-         *      check if UserInfo has enough ads for us to load anything
-         *      maybe do some sort of prefetch?
-         *      check if UserInfo has more ads than we currently need. If it does, enable "next page" button (else disable it)
-         *      
-         *  uploaded ads:
-         *      similar to how BrowsePage loads stuff
-         */
 
         // loads one page of liked cars
         private async void ShowLikedCars()
@@ -300,25 +284,3 @@ namespace CarEngine
         }
     }
 }
-
-
-//private Car GenerateRandomCar()
-//{
-//    //string[] carBrands = { "BMW", "Audi", "Fiat" };
-//    //string[] carModels = { "Vienas", "Du", "Trys" };
-//    string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
-//    Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
-//        brand: "alfa", model: "beta", true, dateOfPurchase: new YearMonth(2020, 2), engine: new Engine(100, 60, 1.2f, EngineType.W3),
-//        fuelType: FuelType.Petrol, chassisType: ChassisType.Station_wagon, color: "juoda", gearboxType: GearboxType.Automatic, totalKilometersDriven: 100000,
-//        driveWheels: DriveWheels.Rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.Left,
-//        numberOfDoors: NumberOfDoors.FourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new YearMonth(2022, 5),
-//        wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
-//        additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
-
-//    newCar.Model = "Vienas";
-//    newCar.Brand = "BMW";
-//    newCar.Price = 15000;
-//    newCar.Comment = "Komentaras";
-//    newCar.Images = images;
-//    return newCar;
-//}

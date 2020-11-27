@@ -16,8 +16,8 @@ namespace CarEngine
             _frontendApi = api;
             InitializeComponent();
             passwordTextBox.PasswordChar = '*';
-            //phoneTextbox.Controls[0].Visible = false;
-            //phoneTextbox.ResetText();
+            phoneTextbox.Controls[0].Visible = false;
+            phoneTextbox.ResetText();
         }
 
         private async void LoginButton_Click(object sender, EventArgs e)
@@ -26,8 +26,6 @@ namespace CarEngine
             string password = passwordTextBox.Text;
             if (Utilities.ValidateInput(username, password))
             {
-                //User user = await _frontendApi.GetUser(username, password);
-
                 if (!await _userInfo.Login(username, password))
                 {
                     // this is not always correct, as we will get null also when there is no connection
@@ -37,8 +35,6 @@ namespace CarEngine
                 }
                 else
                 {
-                    //_userInfo.User = user;
-                    //_userInfo.Password = password;
                     Close();
                 }
             }

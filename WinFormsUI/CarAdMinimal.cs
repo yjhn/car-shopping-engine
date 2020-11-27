@@ -10,7 +10,6 @@ namespace CarEngine
     {
         private readonly Color _selectedAdColor = Settings.Default.selectedAdColor;
         private readonly Color _normalAdColor = Settings.Default.normalAdColor;
-        //public bool LoggedIn { get; set; } = false;
 
         private readonly Car _carInfo;
         private readonly UserInfo _userInfo;
@@ -23,24 +22,17 @@ namespace CarEngine
 
             InitializeComponent();
 
-            // liked should be removed from constructor
-            //if (_userInfo.LikedAds.Contains(_carInfo.Id))
-            //{
-            //    likeButton.Text = "♥";
-            //}
-
             LoginStateChanged();
-
-            // if user is not logged in he cannot like ads
-            //likeButton.Enabled = _userInfo.Username != null;
 
             BackColor = _normalAdColor;
 
             carBrandModelBtn.Text = $"{carInfo.Brand} {carInfo.Model}";
             priceLabel.Text = carInfo.Price.ToString() + "€";
 
-            // for now we don't have this
-            //additionalInfo.Text = carInfo.Engine.Kw.ToString() + "kW";
+            if (carInfo.Engine != null)
+            {
+                additionalInfo.Text = carInfo.Engine.Kw.ToString() + "kW";
+            }
             additionalInfo.Text += $" \"{carInfo.Comment}\"";
             if (carInfo.Images != null && carInfo.Images.Count > 0)
             {

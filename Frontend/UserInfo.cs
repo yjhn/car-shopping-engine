@@ -45,10 +45,6 @@ namespace Frontend
                 if (value != null && Username == null)
                 {
                     _user = value;
-                    //Token = value.Token;
-                    // prefetch more ads in advance to know if there is more
-                    //GetSortedLikedCars(value.Username, 0, 2 * _likedAdsInPage);
-                    // set cahnged password to null to know if user changed it
                     _changedPassword = null;
                     Username = value.Username;
                     LikedAds = value.LikedAds;
@@ -70,9 +66,6 @@ namespace Frontend
                     //Token = null;
                     Email = null;
                     Phone = -1;
-                    //CanFetchMoreLikedAds = true;
-                    // clear the liked cars list to prepare for another user
-                    //CarsLikedInCurrentSession.Clear();
                     LoginStateChanged.Invoke();
                 }
             }
@@ -80,7 +73,6 @@ namespace Frontend
 
         public UserInfo(IApiWrapper api)
         {
-            //_likedAdsInPage = likedAdsInPage;
             _api = api;
         }
 
