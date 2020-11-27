@@ -482,13 +482,6 @@
         "operationId": "GetFiteredVehicles",
         "parameters": [
           {
-            "name": "filters",
-            "in": "header",
-            "schema": {
-              "$ref": "#/components/schemas/CarFilters"
-            }
-          },
-          {
             "name": "sortBy",
             "in": "header",
             "schema": {
@@ -516,6 +509,88 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "brand",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "model",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "used",
+            "in": "header",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          },
+          {
+            "name": "priceFrom",
+            "in": "header",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "priceTo",
+            "in": "header",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "username",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "yearFrom",
+            "in": "header",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "yearTo",
+            "in": "header",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "fuelType",
+            "in": "header",
+            "schema": {
+              "$ref": "#/components/schemas/FuelType"
+            }
+          },
+          {
+            "name": "chassisType",
+            "in": "header",
+            "schema": {
+              "$ref": "#/components/schemas/ChassisType"
             }
           }
         ],
@@ -645,9 +720,6 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Success"
-          },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -980,54 +1052,6 @@
           }
         },
         "additionalProperties": { }
-      },
-      "CarFilters": {
-        "type": "object",
-        "properties": {
-          "brand": {
-            "type": "string",
-            "nullable": true
-          },
-          "model": {
-            "type": "string",
-            "nullable": true
-          },
-          "used": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "priceFrom": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "priceTo": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "yearFrom": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "yearTo": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "fuelType": {
-            "$ref": "#/components/schemas/FuelType"
-          },
-          "chassisType": {
-            "$ref": "#/components/schemas/ChassisType"
-          }
-        },
-        "additionalProperties": false
       }
     }
   }
