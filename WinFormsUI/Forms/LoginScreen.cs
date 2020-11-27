@@ -47,7 +47,6 @@ namespace CarEngine
 
         private async void SigUpButton_Click(object sender, EventArgs e)
         {
-            int successfullyCreated;
             if (!loginButton.Visible)
             {
                 // need to check for bad input
@@ -60,10 +59,9 @@ namespace CarEngine
                 if (Utilities.ValidateInput(username, password) && email != "" && !email.Contains(' ') && phone != 1000000)
                 {
                     User user = new User(username, phone, Utilities.EncryptPassword(password, username), email);
-                    successfullyCreated = await _frontendApi.PostUser(user);
-                    switch (successfullyCreated)
+                    switch (await _frontendApi.PostUser(user))
                     {
-                        case 0:
+                        case Response.Ok:
                             // show that user creation is successful
                             MessageBox.Show("Successfully created user " + username, "User created", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -75,10 +73,10 @@ namespace CarEngine
                             loginButton.Visible = true;
                             usernameTextBox.Focus();
                             break;
-                        case -1:
+                        case Response.InvalidResponse:
                             MessageBox.Show("This username is already taken", "Bad username", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             break;
-                        case -2:
+                        case Response.NoResponse:
                             MessageBox.Show("No connection to server", "No connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             break;
                         default:

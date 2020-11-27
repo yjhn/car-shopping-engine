@@ -2,9 +2,7 @@
 using DataTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,7 +24,7 @@ namespace ServerV2.Controllers
         [HttpGet("{user}")]
         public ActionResult<User> GetUser(string user, [FromHeader] string username, [FromHeader] string password)
         {
-            if(username == null || password == null || user != username)
+            if (username == null || password == null || user != username)
             {
                 return BadRequest();
             }
@@ -51,8 +49,8 @@ namespace ServerV2.Controllers
                 return BadRequest();
             }
 
-            var ads = _db.GetUserLikedAds(username,password, sortBy, sortAscending, startIndex, amount);
-            if(ads == null)
+            var ads = _db.GetUserLikedAds(username, password, sortBy, sortAscending, startIndex, amount);
+            if (ads == null)
             {
                 return NotFound();
             }
@@ -66,7 +64,7 @@ namespace ServerV2.Controllers
         [HttpGet("uploaded/{username}")]
         public ActionResult<IEnumerable<Car>> GetUserUploadedAds(string username, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
         {
-            if(username == null)
+            if (username == null)
             {
                 return BadRequest();
             }
@@ -91,7 +89,7 @@ namespace ServerV2.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public ActionResult<User> PostUser([FromBody] User value)
         {
-            if(value == null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -108,7 +106,7 @@ namespace ServerV2.Controllers
                 return BadRequest();
             }
 
-            if(_db.UpdateUser(username, password, value))
+            if (_db.UpdateUser(username, password, value))
             {
                 return NoContent();
             }

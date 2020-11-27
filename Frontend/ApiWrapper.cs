@@ -19,22 +19,22 @@ namespace Frontend
             _api = api;
         }
 
-        public async Task<int> PostUser(User user)
+        public async Task<Response> PostUser(User user)
         {
             try
             {
                 var result = await _api.PostUserAsync(ConvertToFrontendUser(user));
-                return 0;
+                return Response.Ok;
             }
             catch (HttpOperationException)
             {
                 // this happens when server returns invalid response code (this means that user has set some value to some shit)
-                return -1;
+                return Response.InvalidResponse;
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return -2; ;
+                return Response.NoResponse;
             }
         }
 
@@ -57,41 +57,41 @@ namespace Frontend
             }
         }
 
-        public async Task<int> DeleteUser(string username, string password)
+        public async Task<Response> DeleteUser(string username, string password)
         {
             try
             {
                 await _api.DeleteUserAsync(username, username, password);
-                return 0;
+                return Response.Ok;
             }
             catch (HttpOperationException)
             {
                 // this happens when server returns invalid response code (this means that user has set some value to some shit)
-                return -1;
+                return Response.InvalidResponse;
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return -2;
+                return Response.NoResponse;
             }
         }
 
-        public async Task<int> UpdateUser(string username, string password, User user)
+        public async Task<Response> UpdateUser(string username, string password, User user)
         {
             try
             {
                 await _api.PutUserAsync(username, ConvertToFrontendUser(user), username, password);
-                return 0;
+                return Response.Ok;
             }
             catch (HttpOperationException)
             {
                 // this happens when server returns invalid response code (this means that user has set some value to some shit)
-                return -1;
+                return Response.InvalidResponse;
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return -2;
+                return Response.NoResponse;
             }
         }
 
@@ -114,61 +114,53 @@ namespace Frontend
             }
         }
 
-        public async Task<int> PostCar(Car car, string username, string password)
+        public async Task<Response> PostCar(Car car, string username, string password)
         {
             try
             {
                 var result = await _api.PostVehicleAsync(ConvertToFrontendCar(car), username, password);
-                return 0;
+                return Response.Ok;
             }
             catch (HttpOperationException)
             {
                 // this happens when server returns invalid response code (this means that user has set some value to some shit)
-                return -1;
+                return Response.InvalidResponse;
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return -2;
+                return Response.NoResponse;
             }
         }
 
-        public async Task<int> UpdateVehicle(Car car, string username, string password)
+        public async Task<Response> UpdateVehicle(Car car, string username, string password)
         {
             try
             {
                 await _api.PutVehicleAsync(ConvertToFrontendCar(car), username, password);
-                return 0;
+                return Response.Ok;
             }
             catch (HttpOperationException)
             {
                 // this happens when server returns invalid response code (this means that user has set some value to some shit)
-                return -1;
+                return Response.InvalidResponse;
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return -2;
+                return Response.NoResponse;
             }
         }
 
-        public async Task<int> DeleteVehicle(int id, string username, string password)
+        public async Task<Response> DeleteVehicle(int id, string username, string password)
         {
             try
             {
                 await _api.DeleteVehicleAsync(id, username, password);
-                return 0;
+                return Response.Ok;
             }
-            catch (HttpOperationException)
-            {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
-                return -1;
-            }
-            catch (HttpRequestException)
-            {
-                NoServerResponse.Invoke();
-                return -2;
-            }
+            catch (HttpOperationException) { return Response.InvalidResponse; }
+            catch (HttpRequestException) { NoServerResponse.Invoke(); return Response.NoResponse; }
         }
 
         public async Task<List<Car>> GetSortedVehicles(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)

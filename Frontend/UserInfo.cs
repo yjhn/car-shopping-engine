@@ -63,7 +63,6 @@ namespace Frontend
                     Password = null;
                     _changedPassword = null;
                     LikedAds = null;
-                    //Token = null;
                     Email = null;
                     Phone = -1;
                     LoginStateChanged.Invoke();
@@ -118,7 +117,7 @@ namespace Frontend
             return await _api.GetUserUploadedAds(Username, sortBy, sortAscending, startIndex, amount);
         }
 
-        public async Task<int> PostCar(Car uploadCar)
+        public async Task<Response> PostCar(Car uploadCar)
         {
             return await _api.PostCar(uploadCar, Username, Password);
         }
