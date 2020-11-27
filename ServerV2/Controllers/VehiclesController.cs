@@ -52,8 +52,23 @@ namespace ServerV2.Controllers
 
         // GET api/<VehicleController>/5
         [HttpGet("filtered")]
-        public ActionResult<IEnumerable<Car>> GetFiteredVehicles([FromHeader] CarFilters filters, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
+        public ActionResult<IEnumerable<Car>> GetFiteredVehicles([FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount,
+            [FromHeader] string brand = null, [FromHeader] string model = null, [FromHeader] bool? used = null, [FromHeader] int? priceFrom = null, [FromHeader] int? priceTo = null,
+            [FromHeader] string username = null, [FromHeader] int? yearFrom = null, [FromHeader] int? yearTo = null, [FromHeader] FuelType? fuelType = null, [FromHeader] ChassisType? chassisType = null)
         {
+            CarFilters filters = new CarFilters
+            {
+                Brand = brand,
+                Model = model,
+                Used = used,
+                PriceFrom = priceFrom,
+                PriceTo = priceTo,
+                Username = username,
+                YearFrom = yearFrom,
+                YearTo = yearTo,
+                FuelType = fuelType,
+                ChassisType = chassisType
+            };
             var cars = _db.GetFilteredCars(filters, sortBy, sortAscending, startIndex, amount);
             if (cars == null)
             {
@@ -86,7 +101,7 @@ namespace ServerV2.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult PutVehicle([FromHeader] string username, [FromHeader] string password, [FromBody] Car car)
         {
-            if(car == null || username == null || password == null)
+            if (car == null || username == null || password == null)
             {
                 return BadRequest();
             }

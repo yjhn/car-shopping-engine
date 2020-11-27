@@ -1518,8 +1518,6 @@ namespace Frontend
             return _result;
         }
 
-        /// <param name='filters'>
-        /// </param>
         /// <param name='sortBy'>
         /// </param>
         /// <param name='sortAscending'>
@@ -1527,6 +1525,26 @@ namespace Frontend
         /// <param name='startIndex'>
         /// </param>
         /// <param name='amount'>
+        /// </param>
+        /// <param name='brand'>
+        /// </param>
+        /// <param name='model'>
+        /// </param>
+        /// <param name='used'>
+        /// </param>
+        /// <param name='priceFrom'>
+        /// </param>
+        /// <param name='priceTo'>
+        /// </param>
+        /// <param name='username'>
+        /// </param>
+        /// <param name='yearFrom'>
+        /// </param>
+        /// <param name='yearTo'>
+        /// </param>
+        /// <param name='fuelType'>
+        /// </param>
+        /// <param name='chassisType'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1543,7 +1561,7 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<Car>>> GetFiteredVehiclesWithHttpMessagesAsync(object filters = default(object), int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Car>>> GetFiteredVehiclesWithHttpMessagesAsync(int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), string brand = default(string), string model = default(string), bool? used = default(bool?), int? priceFrom = default(int?), int? priceTo = default(int?), string username = default(string), int? yearFrom = default(int?), int? yearTo = default(int?), int? fuelType = default(int?), int? chassisType = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1552,11 +1570,20 @@ namespace Frontend
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("filters", filters);
                 tracingParameters.Add("sortBy", sortBy);
                 tracingParameters.Add("sortAscending", sortAscending);
                 tracingParameters.Add("startIndex", startIndex);
                 tracingParameters.Add("amount", amount);
+                tracingParameters.Add("brand", brand);
+                tracingParameters.Add("model", model);
+                tracingParameters.Add("used", used);
+                tracingParameters.Add("priceFrom", priceFrom);
+                tracingParameters.Add("priceTo", priceTo);
+                tracingParameters.Add("username", username);
+                tracingParameters.Add("yearFrom", yearFrom);
+                tracingParameters.Add("yearTo", yearTo);
+                tracingParameters.Add("fuelType", fuelType);
+                tracingParameters.Add("chassisType", chassisType);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetFiteredVehicles", tracingParameters);
             }
@@ -1569,14 +1596,6 @@ namespace Frontend
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (filters != null)
-            {
-                if (_httpRequest.Headers.Contains("filters"))
-                {
-                    _httpRequest.Headers.Remove("filters");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("filters", SafeJsonConvert.SerializeObject(filters, SerializationSettings).Trim('"'));
-            }
             if (sortBy != null)
             {
                 if (_httpRequest.Headers.Contains("sortBy"))
@@ -1608,6 +1627,86 @@ namespace Frontend
                     _httpRequest.Headers.Remove("amount");
                 }
                 _httpRequest.Headers.TryAddWithoutValidation("amount", SafeJsonConvert.SerializeObject(amount, SerializationSettings).Trim('"'));
+            }
+            if (brand != null)
+            {
+                if (_httpRequest.Headers.Contains("brand"))
+                {
+                    _httpRequest.Headers.Remove("brand");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("brand", brand);
+            }
+            if (model != null)
+            {
+                if (_httpRequest.Headers.Contains("model"))
+                {
+                    _httpRequest.Headers.Remove("model");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("model", model);
+            }
+            if (used != null)
+            {
+                if (_httpRequest.Headers.Contains("used"))
+                {
+                    _httpRequest.Headers.Remove("used");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("used", SafeJsonConvert.SerializeObject(used, SerializationSettings).Trim('"'));
+            }
+            if (priceFrom != null)
+            {
+                if (_httpRequest.Headers.Contains("priceFrom"))
+                {
+                    _httpRequest.Headers.Remove("priceFrom");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("priceFrom", SafeJsonConvert.SerializeObject(priceFrom, SerializationSettings).Trim('"'));
+            }
+            if (priceTo != null)
+            {
+                if (_httpRequest.Headers.Contains("priceTo"))
+                {
+                    _httpRequest.Headers.Remove("priceTo");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("priceTo", SafeJsonConvert.SerializeObject(priceTo, SerializationSettings).Trim('"'));
+            }
+            if (username != null)
+            {
+                if (_httpRequest.Headers.Contains("username"))
+                {
+                    _httpRequest.Headers.Remove("username");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("username", username);
+            }
+            if (yearFrom != null)
+            {
+                if (_httpRequest.Headers.Contains("yearFrom"))
+                {
+                    _httpRequest.Headers.Remove("yearFrom");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("yearFrom", SafeJsonConvert.SerializeObject(yearFrom, SerializationSettings).Trim('"'));
+            }
+            if (yearTo != null)
+            {
+                if (_httpRequest.Headers.Contains("yearTo"))
+                {
+                    _httpRequest.Headers.Remove("yearTo");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("yearTo", SafeJsonConvert.SerializeObject(yearTo, SerializationSettings).Trim('"'));
+            }
+            if (fuelType != null)
+            {
+                if (_httpRequest.Headers.Contains("fuelType"))
+                {
+                    _httpRequest.Headers.Remove("fuelType");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("fuelType", SafeJsonConvert.SerializeObject(fuelType, SerializationSettings).Trim('"'));
+            }
+            if (chassisType != null)
+            {
+                if (_httpRequest.Headers.Contains("chassisType"))
+                {
+                    _httpRequest.Headers.Remove("chassisType");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("chassisType", SafeJsonConvert.SerializeObject(chassisType, SerializationSettings).Trim('"'));
             }
 
 
@@ -1953,7 +2052,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 201 && (int)_statusCode != 400)
+            if ((int)_statusCode != 400)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2179,8 +2278,6 @@ namespace Frontend
         /// </param>
         Task<HttpOperationResponse<IList<Car>>> GetSortedVehiclesWithHttpMessagesAsync(int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        /// <param name='filters'>
-        /// </param>
         /// <param name='sortBy'>
         /// </param>
         /// <param name='sortAscending'>
@@ -2189,13 +2286,33 @@ namespace Frontend
         /// </param>
         /// <param name='amount'>
         /// </param>
+        /// <param name='brand'>
+        /// </param>
+        /// <param name='model'>
+        /// </param>
+        /// <param name='used'>
+        /// </param>
+        /// <param name='priceFrom'>
+        /// </param>
+        /// <param name='priceTo'>
+        /// </param>
+        /// <param name='username'>
+        /// </param>
+        /// <param name='yearFrom'>
+        /// </param>
+        /// <param name='yearTo'>
+        /// </param>
+        /// <param name='fuelType'>
+        /// </param>
+        /// <param name='chassisType'>
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<Car>>> GetFiteredVehiclesWithHttpMessagesAsync(object filters = default(object), int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Car>>> GetFiteredVehiclesWithHttpMessagesAsync(int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), string brand = default(string), string model = default(string), bool? used = default(bool?), int? priceFrom = default(int?), int? priceTo = default(int?), string username = default(string), int? yearFrom = default(int?), int? yearTo = default(int?), int? fuelType = default(int?), int? chassisType = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='body'>
         /// </param>
@@ -2433,8 +2550,6 @@ namespace Frontend
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='filters'>
-            /// </param>
             /// <param name='sortBy'>
             /// </param>
             /// <param name='sortAscending'>
@@ -2443,12 +2558,32 @@ namespace Frontend
             /// </param>
             /// <param name='amount'>
             /// </param>
+            /// <param name='brand'>
+            /// </param>
+            /// <param name='model'>
+            /// </param>
+            /// <param name='used'>
+            /// </param>
+            /// <param name='priceFrom'>
+            /// </param>
+            /// <param name='priceTo'>
+            /// </param>
+            /// <param name='username'>
+            /// </param>
+            /// <param name='yearFrom'>
+            /// </param>
+            /// <param name='yearTo'>
+            /// </param>
+            /// <param name='fuelType'>
+            /// </param>
+            /// <param name='chassisType'>
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<Car>> GetFiteredVehiclesAsync(this IServerV2 operations, object filters = default(object), int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Car>> GetFiteredVehiclesAsync(this IServerV2 operations, int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), string brand = default(string), string model = default(string), bool? used = default(bool?), int? priceFrom = default(int?), int? priceTo = default(int?), string username = default(string), int? yearFrom = default(int?), int? yearTo = default(int?), int? fuelType = default(int?), int? chassisType = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetFiteredVehiclesWithHttpMessagesAsync(filters, sortBy, sortAscending, startIndex, amount, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetFiteredVehiclesWithHttpMessagesAsync(sortBy, sortAscending, startIndex, amount, brand, model, used, priceFrom, priceTo, username, yearFrom, yearTo, fuelType, chassisType, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2999,110 +3134,6 @@ namespace Frontend.Models
         /// </summary>
         [JsonProperty(PropertyName = "instance")]
         public string Instance { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace Frontend.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class CarFilters
-    {
-        /// <summary>
-        /// Initializes a new instance of the CarFilters class.
-        /// </summary>
-        public CarFilters()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CarFilters class.
-        /// </summary>
-        public CarFilters(string brand = default(string), string model = default(string), bool? used = default(bool?), int? priceFrom = default(int?), int? priceTo = default(int?), string username = default(string), int? yearFrom = default(int?), int? yearTo = default(int?), int? fuelType = default(int?), int? chassisType = default(int?))
-        {
-            Brand = brand;
-            Model = model;
-            Used = used;
-            PriceFrom = priceFrom;
-            PriceTo = priceTo;
-            Username = username;
-            YearFrom = yearFrom;
-            YearTo = yearTo;
-            FuelType = fuelType;
-            ChassisType = chassisType;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "brand")]
-        public string Brand { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "model")]
-        public string Model { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "used")]
-        public bool? Used { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priceFrom")]
-        public int? PriceFrom { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "priceTo")]
-        public int? PriceTo { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "username")]
-        public string Username { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "yearFrom")]
-        public int? YearFrom { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "yearTo")]
-        public int? YearTo { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "fuelType")]
-        public int? FuelType { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "chassisType")]
-        public int? ChassisType { get; set; }
 
     }
 }

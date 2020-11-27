@@ -190,7 +190,8 @@ namespace Frontend
         {
             try
             {
-                var result = await _api.GetFiteredVehiclesAsync(filters, (int)sortBy, sortAscending, startIndex, amount);
+                var result = await _api.GetFiteredVehiclesAsync((int)sortBy, sortAscending, startIndex, amount, filters.Brand, filters.Model, filters.Used, filters.PriceFrom,
+                    filters.PriceTo, filters.Username, filters.YearFrom, filters.YearTo, (int?)filters.FuelType, (int?)filters.ChassisType);
                 return GetCarList(result);
             }
             catch (HttpOperationException)
