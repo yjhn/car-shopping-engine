@@ -35,6 +35,11 @@ namespace Frontend
         public JsonSerializerSettings DeserializationSettings { get; private set; }
 
         /// <summary>
+        /// Subscription credentials which uniquely identify client subscription.
+        /// </summary>
+        public ServiceClientCredentials Credentials { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the ServerV2 class.
         /// </summary>
         /// <param name='httpClient'>
@@ -42,7 +47,7 @@ namespace Frontend
         /// </param>
         /// <param name='disposeHttpClient'>
         /// True: will dispose the provided httpClient on calling ServerV2.Dispose(). False: will not dispose provided httpClient</param>
-        public ServerV2(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        protected ServerV2(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
@@ -53,7 +58,7 @@ namespace Frontend
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public ServerV2(params DelegatingHandler[] handlers) : base(handlers)
+        protected ServerV2(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
@@ -67,7 +72,7 @@ namespace Frontend
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public ServerV2(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected ServerV2(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
@@ -84,7 +89,7 @@ namespace Frontend
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public ServerV2(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected ServerV2(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -108,13 +113,162 @@ namespace Frontend
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public ServerV2(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected ServerV2(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
                 throw new System.ArgumentNullException("baseUri");
             }
             BaseUri = baseUri;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ServerV2 class.
+        /// </summary>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public ServerV2(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        {
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ServerV2 class.
+        /// </summary>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='httpClient'>
+        /// HttpClient to be used
+        /// </param>
+        /// <param name='disposeHttpClient'>
+        /// True: will dispose the provided httpClient on calling ServerV2.Dispose(). False: will not dispose provided httpClient</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public ServerV2(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        {
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ServerV2 class.
+        /// </summary>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='rootHandler'>
+        /// Optional. The http client handler used to handle http transport.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public ServerV2(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        {
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ServerV2 class.
+        /// </summary>
+        /// <param name='baseUri'>
+        /// Optional. The base URI of the service.
+        /// </param>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public ServerV2(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        {
+            if (baseUri == null)
+            {
+                throw new System.ArgumentNullException("baseUri");
+            }
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            BaseUri = baseUri;
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ServerV2 class.
+        /// </summary>
+        /// <param name='baseUri'>
+        /// Optional. The base URI of the service.
+        /// </param>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='rootHandler'>
+        /// Optional. The http client handler used to handle http transport.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public ServerV2(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        {
+            if (baseUri == null)
+            {
+                throw new System.ArgumentNullException("baseUri");
+            }
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            BaseUri = baseUri;
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
         }
 
         /// <summary>
@@ -154,11 +308,7 @@ namespace Frontend
             };
             CustomInitialize();
         }
-        /// <param name='user'>
-        /// </param>
         /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -181,11 +331,11 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<User>> GetUserWithHttpMessagesAsync(string user, string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<User>> GetUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (user == null)
+            if (username == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "user");
+                throw new ValidationException(ValidationRules.CannotBeNull, "username");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -194,38 +344,20 @@ namespace Frontend
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("user", user);
                 tracingParameters.Add("username", username);
-                tracingParameters.Add("password", password);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetUser", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/{user}").ToString();
-            _url = _url.Replace("{user}", System.Uri.EscapeDataString(user));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/{username}").ToString();
+            _url = _url.Replace("{username}", System.Uri.EscapeDataString(username));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (username != null)
-            {
-                if (_httpRequest.Headers.Contains("username"))
-                {
-                    _httpRequest.Headers.Remove("username");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("username", username);
-            }
-            if (password != null)
-            {
-                if (_httpRequest.Headers.Contains("password"))
-                {
-                    _httpRequest.Headers.Remove("password");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("password", password);
-            }
 
 
             if (customHeaders != null)
@@ -242,6 +374,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -307,13 +445,9 @@ namespace Frontend
             return _result;
         }
 
-        /// <param name='user'>
-        /// </param>
-        /// <param name='body'>
-        /// </param>
         /// <param name='username'>
         /// </param>
-        /// <param name='password'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -333,11 +467,11 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> PutUserWithHttpMessagesAsync(string user, User body = default(User), string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> PutUserWithHttpMessagesAsync(string username, User body = default(User), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (user == null)
+            if (username == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "user");
+                throw new ValidationException(ValidationRules.CannotBeNull, "username");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -347,38 +481,20 @@ namespace Frontend
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("body", body);
-                tracingParameters.Add("user", user);
                 tracingParameters.Add("username", username);
-                tracingParameters.Add("password", password);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "PutUser", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/{user}").ToString();
-            _url = _url.Replace("{user}", System.Uri.EscapeDataString(user));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/{username}").ToString();
+            _url = _url.Replace("{username}", System.Uri.EscapeDataString(username));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("PUT");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (username != null)
-            {
-                if (_httpRequest.Headers.Contains("username"))
-                {
-                    _httpRequest.Headers.Remove("username");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("username", username);
-            }
-            if (password != null)
-            {
-                if (_httpRequest.Headers.Contains("password"))
-                {
-                    _httpRequest.Headers.Remove("password");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("password", password);
-            }
 
 
             if (customHeaders != null)
@@ -401,6 +517,12 @@ namespace Frontend
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -448,11 +570,7 @@ namespace Frontend
             return _result;
         }
 
-        /// <param name='user'>
-        /// </param>
         /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -472,11 +590,11 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteUserWithHttpMessagesAsync(string user, string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (user == null)
+            if (username == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "user");
+                throw new ValidationException(ValidationRules.CannotBeNull, "username");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -485,38 +603,20 @@ namespace Frontend
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("user", user);
                 tracingParameters.Add("username", username);
-                tracingParameters.Add("password", password);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DeleteUser", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/{user}").ToString();
-            _url = _url.Replace("{user}", System.Uri.EscapeDataString(user));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/{username}").ToString();
+            _url = _url.Replace("{username}", System.Uri.EscapeDataString(username));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("DELETE");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (username != null)
-            {
-                if (_httpRequest.Headers.Contains("username"))
-                {
-                    _httpRequest.Headers.Remove("username");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("username", username);
-            }
-            if (password != null)
-            {
-                if (_httpRequest.Headers.Contains("password"))
-                {
-                    _httpRequest.Headers.Remove("password");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("password", password);
-            }
 
 
             if (customHeaders != null)
@@ -533,6 +633,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -580,11 +686,7 @@ namespace Frontend
             return _result;
         }
 
-        /// <param name='user'>
-        /// </param>
         /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
         /// </param>
         /// <param name='sortBy'>
         /// </param>
@@ -615,11 +717,11 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<Car>>> GetUserLikedAdsWithHttpMessagesAsync(string user, string username = default(string), string password = default(string), int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Car>>> GetUserLikedAdsWithHttpMessagesAsync(string username, int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (user == null)
+            if (username == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "user");
+                throw new ValidationException(ValidationRules.CannotBeNull, "username");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -628,9 +730,7 @@ namespace Frontend
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("user", user);
                 tracingParameters.Add("username", username);
-                tracingParameters.Add("password", password);
                 tracingParameters.Add("sortBy", sortBy);
                 tracingParameters.Add("sortAscending", sortAscending);
                 tracingParameters.Add("startIndex", startIndex);
@@ -640,30 +740,14 @@ namespace Frontend
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/liked/{user}").ToString();
-            _url = _url.Replace("{user}", System.Uri.EscapeDataString(user));
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/users/liked/{username}").ToString();
+            _url = _url.Replace("{username}", System.Uri.EscapeDataString(username));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (username != null)
-            {
-                if (_httpRequest.Headers.Contains("username"))
-                {
-                    _httpRequest.Headers.Remove("username");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("username", username);
-            }
-            if (password != null)
-            {
-                if (_httpRequest.Headers.Contains("password"))
-                {
-                    _httpRequest.Headers.Remove("password");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("password", password);
-            }
             if (sortBy != null)
             {
                 if (_httpRequest.Headers.Contains("sortBy"))
@@ -712,6 +796,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -887,6 +977,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1012,6 +1108,12 @@ namespace Frontend
                 _requestContent = SafeJsonConvert.SerializeObject(body, SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -1170,6 +1272,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1237,10 +1345,6 @@ namespace Frontend
 
         /// <param name='id'>
         /// </param>
-        /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
-        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1250,10 +1354,13 @@ namespace Frontend
         /// <exception cref="HttpOperationException">
         /// Thrown when the operation returned an invalid status code
         /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteVehicleWithHttpMessagesAsync(int id, string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> DeleteVehicleWithHttpMessagesAsync(int id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1263,8 +1370,6 @@ namespace Frontend
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("id", id);
-                tracingParameters.Add("username", username);
-                tracingParameters.Add("password", password);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DeleteVehicle", tracingParameters);
             }
@@ -1278,22 +1383,6 @@ namespace Frontend
             _httpRequest.Method = new HttpMethod("DELETE");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (username != null)
-            {
-                if (_httpRequest.Headers.Contains("username"))
-                {
-                    _httpRequest.Headers.Remove("username");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("username", username);
-            }
-            if (password != null)
-            {
-                if (_httpRequest.Headers.Contains("password"))
-                {
-                    _httpRequest.Headers.Remove("password");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("password", password);
-            }
 
 
             if (customHeaders != null)
@@ -1310,6 +1399,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1324,7 +1419,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200)
+            if ((int)_statusCode != 400)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1347,9 +1442,27 @@ namespace Frontend
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse();
+            var _result = new HttpOperationResponse<ProblemDetails>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 400)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
             if (_shouldTrace)
             {
                 ServiceClientTracing.Exit(_invocationId, _result);
@@ -1453,6 +1566,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1724,6 +1843,12 @@ namespace Frontend
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1789,11 +1914,9 @@ namespace Frontend
             return _result;
         }
 
-        /// <param name='body'>
-        /// </param>
         /// <param name='username'>
         /// </param>
-        /// <param name='password'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1807,11 +1930,21 @@ namespace Frontend
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> PostVehicleWithHttpMessagesAsync(Car body = default(Car), string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> PostVehicleWithHttpMessagesAsync(string username, Car body = default(Car), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (username == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "username");
+            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1821,35 +1954,19 @@ namespace Frontend
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("username", username);
-                tracingParameters.Add("password", password);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "PostVehicle", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/vehicles").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/vehicles/{username}").ToString();
+            _url = _url.Replace("{username}", System.Uri.EscapeDataString(username));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (username != null)
-            {
-                if (_httpRequest.Headers.Contains("username"))
-                {
-                    _httpRequest.Headers.Remove("username");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("username", username);
-            }
-            if (password != null)
-            {
-                if (_httpRequest.Headers.Contains("password"))
-                {
-                    _httpRequest.Headers.Remove("password");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("password", password);
-            }
 
 
             if (customHeaders != null)
@@ -1871,6 +1988,12 @@ namespace Frontend
                 _requestContent = SafeJsonConvert.SerializeObject(body, SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -1955,11 +2078,9 @@ namespace Frontend
             return _result;
         }
 
-        /// <param name='body'>
-        /// </param>
         /// <param name='username'>
         /// </param>
-        /// <param name='password'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1973,11 +2094,21 @@ namespace Frontend
         /// <exception cref="SerializationException">
         /// Thrown when unable to deserialize the response
         /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> PutVehicleWithHttpMessagesAsync(Car body = default(Car), string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> PutVehicleWithHttpMessagesAsync(string username, Car body = default(Car), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (username == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "username");
+            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -1987,35 +2118,19 @@ namespace Frontend
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("username", username);
-                tracingParameters.Add("password", password);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "PutVehicle", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/vehicles").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/vehicles/{username}").ToString();
+            _url = _url.Replace("{username}", System.Uri.EscapeDataString(username));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("PUT");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (username != null)
-            {
-                if (_httpRequest.Headers.Contains("username"))
-                {
-                    _httpRequest.Headers.Remove("username");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("username", username);
-            }
-            if (password != null)
-            {
-                if (_httpRequest.Headers.Contains("password"))
-                {
-                    _httpRequest.Headers.Remove("password");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("password", password);
-            }
 
 
             if (customHeaders != null)
@@ -2037,6 +2152,12 @@ namespace Frontend
                 _requestContent = SafeJsonConvert.SerializeObject(body, SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -2143,12 +2264,14 @@ namespace Frontend
         /// </summary>
         JsonSerializerSettings DeserializationSettings { get; }
 
+        /// <summary>
+        /// Subscription credentials which uniquely identify client
+        /// subscription.
+        /// </summary>
+        ServiceClientCredentials Credentials { get; }
 
-        /// <param name='user'>
-        /// </param>
+
         /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2156,15 +2279,21 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<User>> GetUserWithHttpMessagesAsync(string user, string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<User>> GetUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        /// <param name='user'>
+        /// <param name='username'>
         /// </param>
         /// <param name='body'>
         /// </param>
-        /// <param name='username'>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
         /// </param>
-        /// <param name='password'>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse> PutUserWithHttpMessagesAsync(string username, User body = default(User), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <param name='username'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2172,27 +2301,9 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> PutUserWithHttpMessagesAsync(string user, User body = default(User), string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        /// <param name='user'>
-        /// </param>
         /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse> DeleteUserWithHttpMessagesAsync(string user, string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <param name='user'>
-        /// </param>
-        /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
         /// </param>
         /// <param name='sortBy'>
         /// </param>
@@ -2208,7 +2319,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<Car>>> GetUserLikedAdsWithHttpMessagesAsync(string user, string username = default(string), string password = default(string), int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Car>>> GetUserLikedAdsWithHttpMessagesAsync(string username, int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='username'>
         /// </param>
@@ -2250,17 +2361,13 @@ namespace Frontend
 
         /// <param name='id'>
         /// </param>
-        /// <param name='username'>
-        /// </param>
-        /// <param name='password'>
-        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> DeleteVehicleWithHttpMessagesAsync(int id, string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> DeleteVehicleWithHttpMessagesAsync(int id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='sortBy'>
         /// </param>
@@ -2314,11 +2421,9 @@ namespace Frontend
         /// </param>
         Task<HttpOperationResponse<IList<Car>>> GetFiteredVehiclesWithHttpMessagesAsync(int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), string brand = default(string), string model = default(string), bool? used = default(bool?), int? priceFrom = default(int?), int? priceTo = default(int?), string username = default(string), int? yearFrom = default(int?), int? yearTo = default(int?), int? fuelType = default(int?), int? chassisType = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        /// <param name='body'>
-        /// </param>
         /// <param name='username'>
         /// </param>
-        /// <param name='password'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2326,13 +2431,11 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> PostVehicleWithHttpMessagesAsync(Car body = default(Car), string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<object>> PostVehicleWithHttpMessagesAsync(string username, Car body = default(Car), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        /// <param name='body'>
-        /// </param>
         /// <param name='username'>
         /// </param>
-        /// <param name='password'>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -2340,7 +2443,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> PutVehicleWithHttpMessagesAsync(Car body = default(Car), string username = default(string), string password = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> PutVehicleWithHttpMessagesAsync(string username, Car body = default(Car), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }
@@ -2371,18 +2474,14 @@ namespace Frontend
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='user'>
-            /// </param>
             /// <param name='username'>
-            /// </param>
-            /// <param name='password'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<User> GetUserAsync(this IServerV2 operations, string user, string username = default(string), string password = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<User> GetUserAsync(this IServerV2 operations, string username, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetUserWithHttpMessagesAsync(user, username, password, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetUserWithHttpMessagesAsync(username, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2391,47 +2490,35 @@ namespace Frontend
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='user'>
+            /// <param name='username'>
             /// </param>
             /// <param name='body'>
             /// </param>
-            /// <param name='username'>
-            /// </param>
-            /// <param name='password'>
-            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task PutUserAsync(this IServerV2 operations, string user, User body = default(User), string username = default(string), string password = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task PutUserAsync(this IServerV2 operations, string username, User body = default(User), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.PutUserWithHttpMessagesAsync(user, body, username, password, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.PutUserWithHttpMessagesAsync(username, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='user'>
-            /// </param>
             /// <param name='username'>
-            /// </param>
-            /// <param name='password'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteUserAsync(this IServerV2 operations, string user, string username = default(string), string password = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteUserAsync(this IServerV2 operations, string username, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteUserWithHttpMessagesAsync(user, username, password, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteUserWithHttpMessagesAsync(username, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='user'>
-            /// </param>
             /// <param name='username'>
-            /// </param>
-            /// <param name='password'>
             /// </param>
             /// <param name='sortBy'>
             /// </param>
@@ -2444,9 +2531,9 @@ namespace Frontend
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<Car>> GetUserLikedAdsAsync(this IServerV2 operations, string user, string username = default(string), string password = default(string), int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Car>> GetUserLikedAdsAsync(this IServerV2 operations, string username, int? sortBy = default(int?), bool? sortAscending = default(bool?), int? startIndex = default(int?), int? amount = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetUserLikedAdsWithHttpMessagesAsync(user, username, password, sortBy, sortAscending, startIndex, amount, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetUserLikedAdsWithHttpMessagesAsync(username, sortBy, sortAscending, startIndex, amount, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2513,16 +2600,15 @@ namespace Frontend
             /// </param>
             /// <param name='id'>
             /// </param>
-            /// <param name='username'>
-            /// </param>
-            /// <param name='password'>
-            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteVehicleAsync(this IServerV2 operations, int id, string username = default(string), string password = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> DeleteVehicleAsync(this IServerV2 operations, int id, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteVehicleWithHttpMessagesAsync(id, username, password, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.DeleteVehicleWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <param name='operations'>
@@ -2592,18 +2678,16 @@ namespace Frontend
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='body'>
-            /// </param>
             /// <param name='username'>
             /// </param>
-            /// <param name='password'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> PostVehicleAsync(this IServerV2 operations, Car body = default(Car), string username = default(string), string password = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> PostVehicleAsync(this IServerV2 operations, string username, Car body = default(Car), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.PostVehicleWithHttpMessagesAsync(body, username, password, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.PostVehicleWithHttpMessagesAsync(username, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -2612,18 +2696,16 @@ namespace Frontend
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='body'>
-            /// </param>
             /// <param name='username'>
             /// </param>
-            /// <param name='password'>
+            /// <param name='body'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> PutVehicleAsync(this IServerV2 operations, Car body = default(Car), string username = default(string), string password = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> PutVehicleAsync(this IServerV2 operations, string username, Car body = default(Car), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.PutVehicleWithHttpMessagesAsync(body, username, password, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.PutVehicleWithHttpMessagesAsync(username, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

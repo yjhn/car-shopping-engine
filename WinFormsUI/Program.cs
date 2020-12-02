@@ -9,8 +9,7 @@ namespace CarEngine
     static class Program
     {
         // this is the only instance of Api that exists
-        private static readonly IServerV2 _server = new ServerV2(new Uri($"https://{Settings.Default.ip}:{Settings.Default.port}/"));
-        private static readonly IApiWrapper _api = new ApiWrapper(_server);
+        private static readonly IApiWrapper _api = new ApiWrapper(new Uri($"https://{Settings.Default.ip}:{Settings.Default.port}/"));
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>

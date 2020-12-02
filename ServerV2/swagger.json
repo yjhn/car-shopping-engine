@@ -5,7 +5,7 @@
     "version": "v1"
   },
   "paths": {
-    "/api/users/{user}": {
+    "/api/users/{username}": {
       "get": {
         "tags": [
           "Users"
@@ -13,25 +13,9 @@
         "operationId": "GetUser",
         "parameters": [
           {
-            "name": "user",
+            "name": "username",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "username",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "password",
-            "in": "header",
             "schema": {
               "type": "string",
               "nullable": true
@@ -58,25 +42,9 @@
         "operationId": "PutUser",
         "parameters": [
           {
-            "name": "user",
+            "name": "username",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "username",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "password",
-            "in": "header",
             "schema": {
               "type": "string",
               "nullable": true
@@ -115,25 +83,9 @@
         "operationId": "DeleteUser",
         "parameters": [
           {
-            "name": "user",
+            "name": "username",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "username",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "password",
-            "in": "header",
             "schema": {
               "type": "string",
               "nullable": true
@@ -147,7 +99,7 @@
         }
       }
     },
-    "/api/users/liked/{user}": {
+    "/api/users/liked/{username}": {
       "get": {
         "tags": [
           "Users"
@@ -155,25 +107,9 @@
         "operationId": "GetUserLikedAds",
         "parameters": [
           {
-            "name": "user",
+            "name": "username",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "username",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "password",
-            "in": "header",
             "schema": {
               "type": "string",
               "nullable": true
@@ -394,27 +330,18 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "username",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "password",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Success"
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         }
       }
@@ -611,7 +538,7 @@
         }
       }
     },
-    "/api/vehicles": {
+    "/api/vehicles/{username}": {
       "post": {
         "tags": [
           "Vehicles"
@@ -620,15 +547,8 @@
         "parameters": [
           {
             "name": "username",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "password",
-            "in": "header",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "nullable": true
@@ -685,15 +605,8 @@
         "parameters": [
           {
             "name": "username",
-            "in": "header",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          {
-            "name": "password",
-            "in": "header",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "nullable": true
@@ -1053,6 +966,18 @@
         },
         "additionalProperties": { }
       }
+    },
+    "securitySchemes": {
+      "Basic": {
+        "type": "http",
+        "description": "Please enter your username and password",
+        "scheme": "basic"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Basic": [ ]
+    }
+  ]
 }

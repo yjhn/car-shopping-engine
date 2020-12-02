@@ -9,14 +9,15 @@ namespace Frontend
 {
     public class ApiWrapper : IApiWrapper
     {
-        // all methods in this class may throw various exceptions related to server response codes
-
+        private readonly BasicAuthenticationCredentials credentials = new BasicAuthenticationCredentials();
+        private readonly Uri _serverUri;
         private readonly IServerV2 _api;
         public event Action NoServerResponse = delegate { };
 
-        public ApiWrapper(IServerV2 api)
+        public ApiWrapper(Uri serverUri)
         {
-            _api = api;
+            _serverUri = serverUri;
+            _api = new ServerV2(_serverUri, credentials);
         }
 
         public async Task<Response> PostUser(User user)
@@ -40,9 +41,10 @@ namespace Frontend
 
         public async Task<User> GetUser(string username, string password)
         {
+            PrepareApi(username, password);
             try
             {
-                var user = await _api.GetUserAsync(username, username, password);
+                var user = await _api.GetUserAsync(username);
                 return ConvertToUser(user);
             }
             catch (HttpOperationException)
@@ -59,9 +61,10 @@ namespace Frontend
 
         public async Task<Response> DeleteUser(string username, string password)
         {
+            PrepareApi(username, password);
             try
             {
-                await _api.DeleteUserAsync(username, username, password);
+                await _api.DeleteUserAsync(username);
                 return Response.Ok;
             }
             catch (HttpOperationException)
@@ -78,9 +81,10 @@ namespace Frontend
 
         public async Task<Response> UpdateUser(string username, string password, User user)
         {
+            PrepareApi(username, password);
             try
             {
-                await _api.PutUserAsync(username, ConvertToFrontendUser(user), username, password);
+                await _api.PutUserAsync(username, ConvertToFrontendUser(user));
                 return Response.Ok;
             }
             catch (HttpOperationException)
@@ -116,9 +120,10 @@ namespace Frontend
 
         public async Task<Response> PostCar(Car car, string username, string password)
         {
+            PrepareApi(username, password);
             try
             {
-                var result = await _api.PostVehicleAsync(ConvertToFrontendCar(car), username, password);
+                var result = await _api.PostVehicleAsync(username,ConvertToFrontendCar(car));
                 return Response.Ok;
             }
             catch (HttpOperationException)
@@ -135,9 +140,10 @@ namespace Frontend
 
         public async Task<Response> UpdateVehicle(Car car, string username, string password)
         {
+            PrepareApi(username, password);
             try
             {
-                await _api.PutVehicleAsync(ConvertToFrontendCar(car), username, password);
+                await _api.PutVehicleAsync(username,ConvertToFrontendCar(car));
                 return Response.Ok;
             }
             catch (HttpOperationException)
@@ -154,9 +160,10 @@ namespace Frontend
 
         public async Task<Response> DeleteVehicle(int id, string username, string password)
         {
+            PrepareApi(username, password);
             try
             {
-                await _api.DeleteVehicleAsync(id, username, password);
+                await _api.DeleteVehicleAsync(id);
                 return Response.Ok;
             }
             catch (HttpOperationException) { return Response.InvalidResponse; }
@@ -200,9 +207,10 @@ namespace Frontend
 
         public async Task<List<Car>> GetUserLikedAds(string username, string password, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
+            PrepareApi(username, password);
             try
             {
-                var result = await _api.GetUserLikedAdsAsync(username, username, password, (int)sortBy, sortAscending, startIndex, amount);
+                var result = await _api.GetUserLikedAdsAsync(username, (int)sortBy, sortAscending, startIndex, amount);
                 return GetCarList(result);
             }
             catch (HttpOperationException)
@@ -236,6 +244,17 @@ namespace Frontend
             }
         }
 
+
+        // For HTTP Basic Auth
+        private void PrepareApi(string username, string password)
+        {
+            // update credentials if the user has changed
+            if (credentials.UserName != username || credentials.Password != password)
+            {
+                credentials.UserName = username;
+                credentials.Password = password;
+            }
+        }
 
 
 

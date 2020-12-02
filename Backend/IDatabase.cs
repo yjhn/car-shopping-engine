@@ -12,25 +12,26 @@ namespace Backend
 
         public Car GetCar(int id);
         // args: car serialized to UTF-8 JSON
-        public bool AddCar(string username, string password, Car car);
+        public bool AddCar(string username, Car car);
 
-        public bool UpdateCar(string username, string password, Car car);
+        public bool UpdateCar(string username, Car car);
         // returns: true, if removal is successful, false if not
-        public bool DeleteCar(int carId, string username, string password);
+        public bool DeleteCar(int carId, string username);
 
         // args: user serialized to UTF-8 JSON
         public string AddUser(User user);
 
+        public User Authenticate(string username, string password);
         // returns: user info serialized to UTF-8 JSON
-        public User GetUser(string username, string password);
+        public User GetUser(string username);
 
         public IEnumerable<Car> GetUserUploadedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
-        public IEnumerable<Car> GetUserLikedAds(string username, string password, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
+        public IEnumerable<Car> GetUserLikedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
         // returns: true, if removal is successful, false if not
-        public bool DeleteUser(string username, string password);
+        public bool DeleteUser(string username);
 
-        public bool UpdateUser(string username, string password, User user);
+        public bool UpdateUser(string username, User user);
     }
 }

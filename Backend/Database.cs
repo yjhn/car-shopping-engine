@@ -70,12 +70,12 @@ namespace Backend
             return carListToSort.Skip(startIndex).Take(amount);
         }
 
-        public bool DeleteCar(int carId, string username, string password)
+        public bool DeleteCar(int carId, string username)
         {
             // find car to delete
             Car car = _carList.Find(c => c.UploaderUsername == username && c.Id == carId);
             // only procedd if user exists and is uploader of the vehicle
-            if (GetUser(username, password) != null && car != null)
+            if (GetUser(username) != null && car != null)
             {
                 // remove this car from all users liked cars lists
                 _userList.ForEach(user =>
@@ -122,14 +122,19 @@ namespace Backend
             }
         }
 
-        public User GetUser(string username, string password)
+        public User Authenticate(string username, string password)
         {
             return _userList.Find(u => u.Username == username && u.HashedPassword == EncryptPassword(password, username));
         }
 
+        public User GetUser(string username)
+        {
+            return _userList.Find(u => u.Username == username);
+        }
+
         public IEnumerable<Car> GetUserUploadedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            User user = _userList.Find(u => u.Username == username);
+            User user = GetUser(username);
             if (user == null)
             {
                 return null;
@@ -140,9 +145,9 @@ namespace Backend
             }
         }
 
-        public IEnumerable<Car> GetUserLikedAds(string username, string password, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public IEnumerable<Car> GetUserLikedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            User user = GetUser(username, password);
+            User user = GetUser(username);
             if (user == null)
             {
                 return null;
@@ -153,9 +158,9 @@ namespace Backend
             }
         }
 
-        public bool DeleteUser(string username, string password)
+        public bool DeleteUser(string username)
         {
-            User user = GetUser(username, password);
+            User user = GetUser(username);
             if (user == null)
             {
                 return false;
@@ -167,9 +172,9 @@ namespace Backend
             }
         }
 
-        public bool UpdateUser(string username, string password, User user)
+        public bool UpdateUser(string username, User user)
         {
-            User userToUpdate = _userList.Find(u => u.Username == username && u.HashedPassword == EncryptPassword(password, username));
+            User userToUpdate = GetUser(username);
             if (userToUpdate == null)
             {
                 return false;
@@ -184,9 +189,9 @@ namespace Backend
             }
         }
 
-        public bool AddCar(string username, string password, Car car)
+        public bool AddCar(string username, Car car)
         {
-            User user = GetUser(username, password);
+            User user = GetUser(username);
             if (user == null)
             {
                 return false;
@@ -209,9 +214,9 @@ namespace Backend
             return Convert.ToBase64String(sha256.ComputeHash(saltedPasswordAsBytes));
         }
 
-        public bool UpdateCar(string username, string password, Car car)
+        public bool UpdateCar(string username, Car car)
         {
-            User user = GetUser(username, password);
+            User user = GetUser(username);
             if (user == null)
             {
                 return false;

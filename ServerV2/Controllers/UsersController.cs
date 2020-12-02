@@ -1,5 +1,6 @@
 ﻿using Backend;
 using DataTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -21,15 +22,17 @@ namespace ServerV2.Controllers
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("{user}")]
-        public ActionResult<User> GetUser(string user, [FromHeader] string username, [FromHeader] string password)
+        [Authorize]
+        [HttpGet("{username}")]
+        public ActionResult<User> GetUser(string username)
         {
-            if (username == null || password == null || user != username)
+            string user = HttpContext.User.Identity.Name;
+            if (username == null || user != username)
             {
                 return BadRequest();
             }
 
-            var u = _db.GetUser(username, password);
+            var u = _db.GetUser(user);
             if (u == null)
             {
                 return NotFound();
@@ -41,15 +44,17 @@ namespace ServerV2.Controllers
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("liked/{user}")]
-        public ActionResult<IEnumerable<Car>> GetUserLikedAds(string user, [FromHeader] string username, [FromHeader] string password, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
+        [Authorize]
+        [HttpGet("liked/{username}")]
+        public ActionResult<IEnumerable<Car>> GetUserLikedAds(string username, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
         {
-            if (username == null || password == null || user != username)
+            string user = HttpContext.User.Identity.Name;
+            if (username == null || user != username)
             {
                 return BadRequest();
             }
 
-            var ads = _db.GetUserLikedAds(username, password, sortBy, sortAscending, startIndex, amount);
+            var ads = _db.GetUserLikedAds(username, sortBy, sortAscending, startIndex, amount);
             if (ads == null)
             {
                 return NotFound();
@@ -98,15 +103,17 @@ namespace ServerV2.Controllers
         }
 
         // PUT api/<UsersController>/5
-        [HttpPut("{user}")]
-        public IActionResult PutUser(string user, [FromHeader] string username, [FromHeader] string password, [FromBody] User value)
+        [Authorize]
+        [HttpPut("{username}")]
+        public IActionResult PutUser(string username, [FromBody] User value)
         {
+            string user = HttpContext.User.Identity.Name;
             if (user != username || user != value.Username || value == null)
             {
                 return BadRequest();
             }
 
-            if (_db.UpdateUser(username, password, value))
+            if (_db.UpdateUser(username, value))
             {
                 return NoContent();
             }
@@ -117,15 +124,17 @@ namespace ServerV2.Controllers
         }
 
         // DELETE api/<UsersController>/5
-        [HttpDelete("{user}")]
-        public IActionResult DeleteUser(string user, [FromHeader] string username, [FromHeader] string password)
+        [Authorize]
+        [HttpDelete("{username}")]
+        public IActionResult DeleteUser(string username)
         {
+            string user = HttpContext.User.Identity.Name;
             if (user != username)
             {
                 return BadRequest();
             }
 
-            return _db.DeleteUser(username, password) ? NoContent() : NotFound();
+            return _db.DeleteUser(username) ? NoContent() : NotFound();
         }
     }
 }

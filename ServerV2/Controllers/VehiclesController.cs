@@ -1,5 +1,6 @@
 ﻿using Backend;
 using DataTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -82,38 +83,45 @@ namespace ServerV2.Controllers
 
         /// <response code="201">Returns the newly created item</response>
         // POST api/<VehicleController>
-        [HttpPost]
+        [HttpPost("{username}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Car> PostVehicle([FromHeader] string username, [FromHeader] string password, [FromBody] Car car)
+        public ActionResult<Car> PostVehicle(string username, [FromBody] Car car)
         {
-            if (car == null || username == null || password == null)
+            string user = HttpContext.User.Identity.Name;
+            if (car == null || username == null || username != user)
             {
                 return BadRequest();
             }
 
 
-            return _db.AddCar(username, password, car) ? StatusCode(201, car) : BadRequest();
+            return _db.AddCar(username, car) ? StatusCode(201, car) : BadRequest();
         }
 
         // PUT api/<VehicleController>/5
-        [HttpPut]
+        [HttpPut("{username}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult PutVehicle([FromHeader] string username, [FromHeader] string password, [FromBody] Car car)
+        public IActionResult PutVehicle(string username, Car car)
         {
-            if (car == null || username == null || password == null)
+            string user = HttpContext.User.Identity.Name;
+            if (car == null || username == null || user != username)
             {
                 return BadRequest();
             }
 
-            return _db.UpdateCar(username, password, car) ? NoContent() : BadRequest();
+            return _db.UpdateCar(username, car) ? NoContent() : BadRequest();
         }
 
         // DELETE api/<VehicleController>/5
+        [Authorize]
         [HttpDelete("{id}")]
-        public IActionResult DeleteVehicle(int id, [FromHeader] string username, [FromHeader] string password)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteVehicle(int id)
         {
-            if (!_db.DeleteCar(id, username, password))
+            string user = HttpContext.User.Identity.Name;
+            if (!_db.DeleteCar(id, user))
             {
                 return NotFound();
             }
