@@ -3,6 +3,7 @@ using Microsoft.Rest;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace Frontend
@@ -12,12 +13,19 @@ namespace Frontend
         private readonly BasicAuthenticationCredentials credentials = new BasicAuthenticationCredentials();
         private readonly Uri _serverUri;
         private readonly IServerV2 _api;
+        private readonly Ping _ping = new Ping();
         public event Action NoServerResponse = delegate { };
 
         public ApiWrapper(Uri serverUri)
         {
             _serverUri = serverUri;
             _api = new ServerV2(_serverUri, credentials);
+        }
+
+        public async Task<bool> PingServer()
+        {
+            var reply = await _ping.SendPingAsync(_serverUri.Host);
+            return reply.Status == IPStatus.Success;
         }
 
         public async Task<Response> PostUser(User user)

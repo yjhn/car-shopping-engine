@@ -16,6 +16,7 @@ namespace Frontend
 
 
         public event Action NoServerResponse;
+        Task<bool> PingServer();
         Task<Response> DeleteUser(string username, string password);
         Task<Response> DeleteVehicle(int id, string username, string password);
         Task<Car> GetCar(int id);
