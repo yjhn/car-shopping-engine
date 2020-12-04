@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Backend;
 using DataTypes;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -30,6 +32,11 @@ namespace ServerV2.Modules
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             return Task.Run(() => {
+                // skip authentication if endpoint has [AllowAnonymous] attribute
+                var endpoint = Context.GetEndpoint();
+                if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null)
+                    return AuthenticateResult.NoResult();
+
                 if (!Request.Headers.ContainsKey("Authorization"))
                     return AuthenticateResult.Fail("Missing Authorization Header");
 

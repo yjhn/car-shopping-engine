@@ -22,6 +22,7 @@ namespace ServerV2.Controllers
         }
 
         // GET: api/<VehicleController>/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public ActionResult<Car> GetVehicle(int id)
         {
@@ -37,6 +38,7 @@ namespace ServerV2.Controllers
         }
 
         // GET api/<VehicleController>
+        [AllowAnonymous]
         [HttpGet("sorted")]
         public ActionResult<IEnumerable<Car>> GetSortedVehicles([FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
         {
@@ -52,6 +54,7 @@ namespace ServerV2.Controllers
         }
 
         // GET api/<VehicleController>/5
+        [AllowAnonymous]
         [HttpGet("filtered")]
         public ActionResult<IEnumerable<Car>> GetFiteredVehicles([FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount,
             [FromHeader] string brand = null, [FromHeader] string model = null, [FromHeader] bool? used = null, [FromHeader] int? priceFrom = null, [FromHeader] int? priceTo = null,

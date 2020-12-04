@@ -66,6 +66,7 @@ namespace ServerV2.Controllers
         }
 
         // GET api/<UsersController>/5
+        [AllowAnonymous]
         [HttpGet("uploaded/{username}")]
         public ActionResult<IEnumerable<Car>> GetUserUploadedAds(string username, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
         {
@@ -89,6 +90,7 @@ namespace ServerV2.Controllers
         /// <response code="409">If the item is duplicate</response> 
         // POST api/<UsersController>
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
