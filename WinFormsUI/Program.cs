@@ -9,8 +9,7 @@ namespace CarEngine
     static class Program
     {
         // this is the only instance of Api that exists
-        private static IApi _api;
-
+        private static readonly IApiWrapper _api = new ApiWrapper(new Uri($"https://{Settings.Default.ip}:{Settings.Default.port}/"));
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -18,8 +17,6 @@ namespace CarEngine
         [STAThread]
         static void Main()
         {
-
-            _api = new Api(new Config(Settings.Default.ip, Settings.Default.port, Settings.Default.httpVersion, Settings.Default.scheme, Settings.Default.maxBufferSize, Settings.Default.maxAttempts, Settings.Default.timeout));
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

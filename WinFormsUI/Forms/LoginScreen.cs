@@ -7,10 +7,10 @@ namespace CarEngine
 {
     public partial class LoginScreen : Form
     {
-        private readonly IApi _frontendApi;
+        private readonly IApiWrapper _frontendApi;
         private readonly UserInfo _userInfo;
 
-        public LoginScreen(IApi api, UserInfo userInfo)
+        public LoginScreen(IApiWrapper api, UserInfo userInfo)
         {
             _userInfo = userInfo;
             _frontendApi = api;
@@ -26,8 +26,7 @@ namespace CarEngine
             string password = passwordTextBox.Text;
             if (Utilities.ValidateInput(username, password))
             {
-                MinimalUser user = await _frontendApi.GetUser(username, Utilities.EncryptPassword(passwordTextBox.Text, username));
-                if (user == null)
+                if (!await _userInfo.Login(username, password))
                 {
                     // this is not always correct, as we will get null also when there is no connection
                     // close this window from main window in no connection event
@@ -36,7 +35,6 @@ namespace CarEngine
                 }
                 else
                 {
-                    _userInfo.User = user;
                     Close();
                 }
             }
@@ -49,7 +47,6 @@ namespace CarEngine
 
         private async void SigUpButton_Click(object sender, EventArgs e)
         {
-            bool? successfullyCreated;
             if (!loginButton.Visible)
             {
                 // need to check for bad input
@@ -62,12 +59,9 @@ namespace CarEngine
                 if (Utilities.ValidateInput(username, password) && email != "" && !email.Contains(' ') && phone != 1000000)
                 {
                     User user = new User(username, phone, Utilities.EncryptPassword(password, username), email);
-                    successfullyCreated = await _frontendApi.AddUser(user);
-
-                    if (successfullyCreated != null)
+                    switch (await _frontendApi.PostUser(user))
                     {
-                        if ((bool)successfullyCreated)
-                        {
+                        case Response.Ok:
                             // show that user creation is successful
                             MessageBox.Show("Successfully created user " + username, "User created", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -78,16 +72,15 @@ namespace CarEngine
                             phoneTextbox.Visible = false;
                             loginButton.Visible = true;
                             usernameTextBox.Focus();
-                        }
-                        else
-                        {
+                            break;
+                        case Response.InvalidResponse:
                             MessageBox.Show("This username is already taken", "Bad username", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    else
-                    {
-                        // if Api returns null, then there is no connection to server
-                        MessageBox.Show("No connection to server", "No connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        case Response.NoResponse:
+                            MessageBox.Show("No connection to server", "No connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        default:
+                            throw new Exception("Unknown value returned");
                     }
                 }
                 else

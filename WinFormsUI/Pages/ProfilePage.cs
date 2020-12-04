@@ -10,7 +10,7 @@ namespace CarEngine
 {
     public partial class ProfilePage : UserControl
     {
-        private IApi _frontendApi;
+        private IApiWrapper _frontendApi;
         private UserInfo _userInfo;
         private readonly int _likedAdsInPage = Settings.Default.adsInLikedAdsPage;
         private readonly int _uploadedAdsInPage = Settings.Default.adsInUploadedAdsPage;
@@ -24,7 +24,7 @@ namespace CarEngine
 
         // This property MUST be set for this to work correctly
         [DefaultValue(null)]
-        public IApi Api
+        public IApiWrapper Api
         {
             get
             {
@@ -89,11 +89,6 @@ namespace CarEngine
         {
             likedAdsPanel.Controls.Clear();
             uploadedAdsPanel.Controls.Clear();
-            // if user logs in we load their info
-            if (_userInfo.Username != null)
-            {
-                LoadInfo();
-            }
         }
 
         private void LoadInfo()
@@ -120,17 +115,6 @@ namespace CarEngine
             ShowLikedCars();
         }
 
-        /*
-         * loading strategy:
-         *  liked ads:
-         *      check if UserInfo has enough ads for us to load anything
-         *      maybe do some sort of prefetch?
-         *      check if UserInfo has more ads than we currently need. If it does, enable "next page" button (else disable it)
-         *      
-         *  uploaded ads:
-         *      similar to how BrowsePage loads stuff
-         */
-
         // loads one page of liked cars
         private async void ShowLikedCars()
         {
@@ -150,10 +134,10 @@ namespace CarEngine
             // if we are on the first page for the first time
             if (_likedAdsPages.Count == 0)
             {
-                CarAdMinimal[] carAds = await GetMinimalLikedVehicleAds(0, _likedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalLikedAds(0, _likedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
-                    sortLikedAdsBtn.Enabled = true;
+                    sortLikedAdsBtn.Enabled = false;
                     _nextLikedAdsPageBtnEnabled = false;
                     likedAdsNextPageBtn.Enabled = false;
                     return;
@@ -165,7 +149,7 @@ namespace CarEngine
             if (_likedAdsPageNr == _likedAdsPages.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                CarAdMinimal[] carAds = await GetMinimalLikedVehicleAds(_likedAdsInPage * _likedAdsPageNr, _likedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalLikedAds(_likedAdsInPage * _likedAdsPageNr, _likedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
@@ -188,26 +172,26 @@ namespace CarEngine
             sortLikedAdsBtn.Enabled = true;
         }
 
-        private async Task<CarAdMinimal[]> GetMinimalLikedVehicleAds(int startIndex, int amount)
+        private async Task<CarAdMinimal[]> GetMinimalLikedAds(int startIndex, int amount)
         {
             // update liked ads
-            await _userInfo.UpdateLikedAds();
+            _userInfo.PutUser();
 
             // get sortingCriteria and sortAscending
             bool sortAsc = sortLikedAdsAscRdBtn.Checked;
             SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortLikedAdsByCombobox.SelectedItem);
 
-            List<Car> vehicles = await _frontendApi.GetSortedLikedCars(_userInfo.Token, sortBy, sortAsc, startIndex, amount);
+            List<Car> vehicles = await _userInfo.GetUserLikedAds(sortBy, sortAsc, startIndex, amount);
             return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
-        private async Task<CarAdMinimal[]> GetMinimalUploadedVehicleAds(int startIndex, int amount)
+        private async Task<CarAdMinimal[]> GetMinimalUploadedAds(int startIndex, int amount)
         {
             // get sortingCriteria and sortAscending
             bool sortAsc = sortUploadedAdsAscRdBtn.Checked;
             SortingCriteria sortBy = _parser.GetSortingCriteria((string)sortUploadedAdsByCombobox.SelectedItem);
 
-            List<Car> vehicles = await _frontendApi.GetSortedUploadedCars(_userInfo.Username, sortBy, sortAsc, startIndex, amount);
+            List<Car> vehicles = await _userInfo.GetUserUploadedAds(sortBy, sortAsc, startIndex, amount);
             return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
@@ -243,7 +227,7 @@ namespace CarEngine
             // if we are on the first page for the first time
             if (_uploadedAdsPages.Count == 0)
             {
-                CarAdMinimal[] carAds = await GetMinimalUploadedVehicleAds(0, _uploadedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalUploadedAds(0, _uploadedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     refreshUploadedAdsBtn.Enabled = true;
@@ -259,7 +243,7 @@ namespace CarEngine
             if (_uploadedAdsPageNr == _uploadedAdsPages.Count)
             {
                 // if we are on the last page, we fetch more vehicles to show
-                CarAdMinimal[] carAds = await GetMinimalUploadedVehicleAds(_uploadedAdsInPage * _uploadedAdsPageNr, _uploadedAdsInPage);
+                CarAdMinimal[] carAds = await GetMinimalUploadedAds(_uploadedAdsInPage * _uploadedAdsPageNr, _uploadedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
                     // since the next page is empty, next page button should be disabled
@@ -300,25 +284,3 @@ namespace CarEngine
         }
     }
 }
-
-
-//private Car GenerateRandomCar()
-//{
-//    //string[] carBrands = { "BMW", "Audi", "Fiat" };
-//    //string[] carModels = { "Vienas", "Du", "Trys" };
-//    string[] images = { Converter.ConvertImageToBase64(Resources.branson_f42c_akcija_f47cn) };
-//    Car newCar = new Car(uploaderUsername: "Andrius", uploadDate: DateTime.Now, price: 123,
-//        brand: "alfa", model: "beta", true, dateOfPurchase: new YearMonth(2020, 2), engine: new Engine(100, 60, 1.2f, EngineType.W3),
-//        fuelType: FuelType.Petrol, chassisType: ChassisType.Station_wagon, color: "juoda", gearboxType: GearboxType.Automatic, totalKilometersDriven: 100000,
-//        driveWheels: DriveWheels.Rear, defects: new string[] { "dauzta mazda" }, steeringWheelPosition: SteeringWheelPosition.Left,
-//        numberOfDoors: NumberOfDoors.FourFive, numberOfCylinders: 4, numberOfGears: 6, seats: 5, nextVehicleInspection: new YearMonth(2022, 5),
-//        wheelSize: "R16", weight: 1300, euroStandard: EuroStandard.Euro3, originalPurchaseCountry: "Vokietija", vin: "cgfb13uj5b4gri53",
-//        additionalProperties: new string[] { "a", "b" }, images: images, comment: "my comment");
-
-//    newCar.Model = "Vienas";
-//    newCar.Brand = "BMW";
-//    newCar.Price = 15000;
-//    newCar.Comment = "Komentaras";
-//    newCar.Images = images;
-//    return newCar;
-//}

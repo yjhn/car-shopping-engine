@@ -1,26 +1,41 @@
 ﻿using DataTypes;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Frontend
 {
     public class UserInfo
     {
-        private readonly IApi _api;
-        //private readonly int _likedAdsInPage;
-
-        //public bool CanFetchMoreLikedAds { get; private set; } = true;
+        private readonly IApiWrapper _api;
+        // username cannot be changed, so it can only be set here
         public string Username { get; private set; }
-        public string Email { get; private set; }
-        public long Phone { get; private set; }
+        public string Email { get; set; }
+        public long Phone { get; set; }
         public List<int> LikedAds { get; private set; }
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                if (_password == null)
+                {
+                    _password = value;
+                }
+                else
+                {
+                    // user changed password
+                    _changedPassword = value;
+                }
+            }
+        }
+        private string _password;
+        private string _changedPassword;
+        private User _user;
 
-        public string Token { get; private set; }
-
-        //public readonly List<Car> CarsLikedInCurrentSession = new List<Car>();
-
-        public MinimalUser User
+        public User User
         {
             // use setter when logging in and out
             // when logging out, set this to null
@@ -29,9 +44,8 @@ namespace Frontend
                 // only let a new user log in once the last has logged out
                 if (value != null && Username == null)
                 {
-                    Token = value.Token;
-                    // prefetch more ads in advance to know if there is more
-                    //GetSortedLikedCars(value.Username, 0, 2 * _likedAdsInPage);
+                    _user = value;
+                    _changedPassword = null;
                     Username = value.Username;
                     LikedAds = value.LikedAds;
                     Email = value.Email;
@@ -42,124 +56,78 @@ namespace Frontend
                 {
                     // this happens if user logs out
                     // update liked ads of the user who just logged out
-                    UpdateLikedAds();
+                    PutUser();
+                    _user = null;
                     // reset user info
                     Username = null;
+                    Password = null;
+                    _changedPassword = null;
                     LikedAds = null;
-                    Token = null;
                     Email = null;
                     Phone = -1;
-                    //CanFetchMoreLikedAds = true;
-                    // clear the liked cars list to prepare for another user
-                    //CarsLikedInCurrentSession.Clear();
                     LoginStateChanged.Invoke();
                 }
             }
         }
 
-        public UserInfo(IApi api/*, int likedAdsInPage*/)
+        public UserInfo(IApiWrapper api)
         {
-            //_likedAdsInPage = likedAdsInPage;
             _api = api;
+        }
+
+        public async Task<bool> Login(string username, string password)
+        {
+            User u = await _api.GetUser(username, password);
+            if (u == null)
+            {
+                return false;
+            }
+            else
+            {
+                User = u;
+                Password = password;
+                return true;
+            }
         }
 
         public Action LoginStateChanged = delegate { };
 
-        public Task<bool?> UpdateLikedAds()
+        public async void PutUser()
         {
-            return _api.UpdateLikedAds(Token, LikedAds);
+            if (_changedPassword != null)
+            {
+                _user.HashedPassword = EncryptPassword(_changedPassword, Username);
+            }
+            _user.Email = Email;
+            _user.Phone = Phone;
+            if (Password == null)
+            {
+                throw new Exception();
+            }
+            await _api.UpdateUser(Username, Password, _user);
         }
-        //public delegate void ListUpdated<T>(T addedItems);
-        //public ListUpdated<List<Car>> LikedCarListUpdated = delegate { };
 
-        //public async Task<List<Car>> GetLikedCarList()
-        //{
-        //    // use cached liked car list if it is available
-        //    if (CarsLikedInCurrentSession != null)
-        //    {
-        //        return CarsLikedInCurrentSession;
-        //    }
-        //    else
-        //    {
-        //        CarsLikedInCurrentSession = await _api.GetSortedLikedCars(Token, 0, 100);
-        //        return CarsLikedInCurrentSession;
-        //    }
-        //}
+        public async Task<List<Car>> GetUserLikedAds(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        {
+            return await _api.GetUserLikedAds(Username, Password, sortBy, sortAscending, startIndex, amount);
+        }
 
-        //private async void GetSortedLikedCars(string username, int startIndex, int amount)
-        //{
-        //    // we only fetch anything if there is something to be fetched
-        //    if (CanFetchMoreLikedAds)
-        //    {
-        //        // this will probably cause bugs when one user logs in then instantly out, then another instantly logs in
-        //        List<Car> temp = await _api.GetSortedLikedCars(Token, startIndex, amount);
-        //        // user might have logged out while we were fetching data
-        //        // check if the same user is still logged in
-        //        if (temp != null)
-        //        {
-        //            if (Username == username)
-        //            {
-        //                CarsLikedInCurrentSession.AddRange(temp);
-        //                if (temp.Count < amount)
-        //                {
-        //                    CanFetchMoreLikedAds = false;
-        //                }
-        //                LikedCarListUpdated.Invoke(temp);
-        //            }
-        //        }
-        //        else if (Username == username)
-        //        {
-        //            CanFetchMoreLikedAds = false;
-        //        }
-        //    }
-        //}
+        public async Task<List<Car>> GetUserUploadedAds(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        {
+            return await _api.GetUserUploadedAds(Username, sortBy, sortAscending, startIndex, amount);
+        }
 
-        //public List<Car> GetLikedCarsPage(int pageNr)
-        //{
-        //    int startIndex = (pageNr - 1) * _likedAdsInPage;
-        //    // if we already have enough ads
-        //    // it should be impossible for this to be false if more ads can be fetched
-        //    if (CarsLikedInCurrentSession.Count >= startIndex)
-        //    {
-        //        if (CanFetchMoreLikedAds)
-        //        {
-        //            GetSortedLikedCars(Username, startIndex, _likedAdsInPage);
+        public async Task<Response> PostCar(Car uploadCar)
+        {
+            return await _api.PostCar(uploadCar, Username, Password);
+        }
 
-        //            return CarsLikedInCurrentSession.Skip(startIndex).Take(_likedAdsInPage).ToList();
-        //        }
-        //        else
-        //        {
-        //            return CarsLikedInCurrentSession.Skip(startIndex).Take(_likedAdsInPage).ToList();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // if we don't have enough ads, there is nothing we can do
-        //        return null;
-        //    }
-        //}
-        //    // fetch the required data from server
-        //    // we could make server return total amount of results to avoid pointless queries
-        //    if (_canFetchMoreLikedAds)
-        //    {
-        //        GetSortedLikedCars(Username, startIndex, amount);
-        //        return CarsLikedInCurrentSession.Count > startIndex ? CarsLikedInCurrentSession.Skip(startIndex).Take(amount).ToList() : null;
-        //        //if (CarsLikedInCurrentSession.Count > startIndex)
-        //        //{
-        //        //    return CarsLikedInCurrentSession.Skip(startIndex).Take(amount).ToList();
-        //        //}
-        //        //else
-        //        //{
-        //        //    // return null if query to the server didn't give us anything
-        //        //    return null;
-        //        //}
-        //    }
-        //    else
-        //    {
-        //        // return null if we don't have enough ads and we can't get more
-        //        return null;
-        //    }
-        //}
-        //}
+        private static string EncryptPassword(string password, string salt)
+        {
+            using var sha256 = SHA256.Create();
+            var saltedPassword = string.Format("{0}{1}", salt, password);
+            byte[] saltedPasswordAsBytes = Encoding.UTF8.GetBytes(saltedPassword);
+            return Convert.ToBase64String(sha256.ComputeHash(saltedPasswordAsBytes));
+        }
     }
 }

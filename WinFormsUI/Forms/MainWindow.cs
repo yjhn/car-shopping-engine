@@ -1,5 +1,4 @@
-﻿using CarEngine;
-using Frontend;
+﻿using Frontend;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -14,11 +13,11 @@ namespace CarEngine
         private readonly Color _inactiveSidebarButtonColor = Settings.Default.inactiveSidebarButtonColor;
         private readonly Color _inactiveSidebarButtonTextColor = Settings.Default.inactiveSidebarButtonTextColor;
 
-        private readonly IApi _api;
+        private readonly IApiWrapper _api;
         private readonly UserInfo _userInfo;
         LoginScreen loginScreen;
 
-        public MainWindow(IApi api, UserInfo userInfo)
+        public MainWindow(IApiWrapper api, UserInfo userInfo)
         {
             _api = api;
             _userInfo = userInfo;
@@ -41,7 +40,7 @@ namespace CarEngine
 
         private void NoConnection()
         {
-            Action a = new Action(async () =>
+            Action a = new Action(/*async*/ () =>
             {
                 SetActivePanel(networkErrorMessage);
                 networkErrorMessage.BringToFront();
@@ -82,16 +81,15 @@ namespace CarEngine
                     logoutBtn.Enabled = false;
                     disabledButtons[btnCount++] = logoutBtn;
                 }
-                bool reconnected;
-                do
-                {
-                    reconnected = await _api.CheckConnection();
-                }
-                while (!reconnected);
+                //bool reconnected;
+                //do
+                //{
+                //    reconnected = await _api.CheckConnection();
+                //}
+                //while (!reconnected);
                 for (int i = 0; i < btnCount; i++)
                     disabledButtons[i].Enabled = true;
-            }
-        );
+            });
             Invoke(a);
         }
 

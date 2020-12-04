@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DataTypes
 {
@@ -6,13 +7,12 @@ namespace DataTypes
     {
         // unique db key = Id
 
-        public Car(string uploaderUsername, DateTime uploadDate, int price, string brand, string model, bool used, YearMonth dateOfPurchase, Engine engine, FuelType fuelType,
-            ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, string[] defects,
+        public Car(DateTime uploadDate, int price, string brand, string model, bool used, YearMonth dateOfPurchase, Engine engine, FuelType fuelType,
+            ChassisType chassisType, string color, GearboxType gearboxType, int totalKilometersDriven, DriveWheels driveWheels, List<string> defects,
             SteeringWheelPosition steeringWheelPosition, NumberOfDoors numberOfDoors, int numberOfCylinders, int numberOfGears, int seats, YearMonth nextVehicleInspection,
-            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, string[] additionalProperties, string[] images, string comment)
+            string wheelSize, int weight, EuroStandard euroStandard, string originalPurchaseCountry, string vin, List<string> additionalProperties, List<string> images, string comment)
         {
             Price = price;
-            UploaderUsername = uploaderUsername;
             UploadDate = uploadDate;
             Brand = brand;
             Model = model;
@@ -57,7 +57,7 @@ namespace DataTypes
         public GearboxType GearboxType { get; set; }
         public int TotalKilometersDriven { get; set; }
         public DriveWheels DriveWheels { get; set; }
-        public string[] Defects { get; set; }
+        public List<string> Defects { get; set; }
         public SteeringWheelPosition SteeringWheelPosition { get; set; }
         public NumberOfDoors NumberOfDoors { get; set; }
         public int NumberOfCylinders { get; set; }
@@ -69,8 +69,8 @@ namespace DataTypes
         public EuroStandard EuroStandard { get; set; }
         public string OriginalPurchaseCountry { get; set; }
         public string Vin { get; set; }
-        public string[] AdditionalProperties { get; set; }
-        public string[] Images { get; set; }
+        public List<string> AdditionalProperties { get; set; }
+        public List<string> Images { get; set; }
         public string Comment { get; set; }
 
         public bool Equals(Car other)
@@ -87,6 +87,11 @@ namespace DataTypes
 
         // required for serialization to work
         public Car() { }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Car);
+        }
     }
 
     public class YearMonth : IComparable<YearMonth>
@@ -99,8 +104,8 @@ namespace DataTypes
 
         // required for serialization to work
         public YearMonth() { }
-        public int Year { get; private set; }
-        public int Month { get; private set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
 
         public int CompareTo(YearMonth other)
         {
@@ -148,7 +153,7 @@ namespace DataTypes
         public Engine() { }
         public int Hp { get; set; }
         public int Kw { get; set; }
-        public float Volume { get; set; }
+        public float? Volume { get; set; }
         public EngineType Type { get; set; }
 
     }

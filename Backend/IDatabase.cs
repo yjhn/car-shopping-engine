@@ -4,37 +4,34 @@ namespace Backend
 {
     public interface IDatabase
     {
-        public int GetLastCarId();
-
         // returns: <amount> of vehicles from beginning of the sorted list serialized to UTF-8 JSON
-        public byte[] GetSortedCarsJson(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
+        public IEnumerable<Car> GetSortedCars(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
         // returns: <amount> of vehicles from beginning of the filtered and sorted list serialized to UTF-8 JSON
-        public byte[] GetFilteredCarsJson(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
+        public IEnumerable<Car> GetFilteredCars(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
-
+        public Car GetCar(int id);
         // args: car serialized to UTF-8 JSON
-        public bool AddCarJson(byte[] car);
+        public bool AddCar(string username, Car car);
 
+        public bool UpdateCar(string username, Car car);
         // returns: true, if removal is successful, false if not
-        public bool DeleteCar(int id);
-
+        public bool DeleteCar(int carId, string username);
 
         // args: user serialized to UTF-8 JSON
-        public bool AddUserJson(byte[] user);
+        public string AddUser(User user);
 
+        public User Authenticate(string username, string password);
         // returns: user info serialized to UTF-8 JSON
-        public byte[] GetUserInfoJson(string username);
+        public User GetUser(string username);
 
-        public byte[] GetUserUploadedAdsJson(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
+        public IEnumerable<Car> GetUserUploadedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
-        public byte[] GetUserLikedAdsJson(string token, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
-
-        // returns: true, if such a user exists, false otherwise
-        public byte[] Authenticate(string username, string hashedPassword);
+        public IEnumerable<Car> GetUserLikedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount);
 
         // returns: true, if removal is successful, false if not
         public bool DeleteUser(string username);
-        public bool UpdateLikedAds(string token, byte[] newAdsJson);
+
+        public bool UpdateUser(string username, User user);
     }
 }
