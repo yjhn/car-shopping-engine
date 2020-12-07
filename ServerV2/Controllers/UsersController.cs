@@ -45,7 +45,7 @@ namespace Server.Controllers
         }
 
         [HttpGet("liked/{username}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<User>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<IEnumerable<Car>> GetUserLikedAds([Required] string username,
