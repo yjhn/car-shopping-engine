@@ -27,6 +27,9 @@ namespace CarEngine
 
             InitializeComponent();
 
+            // subscribe to connection retry event
+            noConnectionPage.RetryConnection += NoConnection;
+
             // pass Api and UserInfo down
             browsePage.Api = _api;
             browsePage.UserInfo = _userInfo;
@@ -40,10 +43,13 @@ namespace CarEngine
 
         private void NoConnection()
         {
-            Action a = new Action(/*async*/ () =>
+            Action a = new Action(async () =>
             {
-                SetActivePanel(networkErrorMessage);
-                networkErrorMessage.BringToFront();
+                noConnectionPage.Visible = true;
+                SetActivePanel(noConnectionPage);
+                noConnectionPage.BringToFront();
+                //SetActivePanel(networkErrorMessage);
+                //networkErrorMessage.BringToFront();
                 Button[] disabledButtons = new Button[6];
                 int btnCount = 0;
                 if (browseButton.Enabled)
@@ -84,11 +90,16 @@ namespace CarEngine
                 //bool reconnected;
                 //do
                 //{
-                //    reconnected = await _api.CheckConnection();
+                //    reconnected = await _api.PingServer();
                 //}
                 //while (!reconnected);
-                for (int i = 0; i < btnCount; i++)
-                    disabledButtons[i].Enabled = true;
+                if (await _api.PingServer())
+                {
+                    for (int i = 0; i < btnCount; i++)
+                        disabledButtons[i].Enabled = true;
+                    //noConnectionPage.Visible = false;
+                    //noConnectionPage.SendToBack();
+                }
             });
             Invoke(a);
         }
