@@ -1,18 +1,21 @@
 using Backend;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using ServerV2.Modules;
+using Server.Modules;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Claims;
 
-namespace ServerV2
+namespace Server
 {
     public class Startup
     {
@@ -41,7 +44,7 @@ namespace ServerV2
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ServerV2", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server", Version = "v1" });
 
                 c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
                 {
@@ -76,7 +79,7 @@ namespace ServerV2
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ServerV2 v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Server v1"));
             }
 
             app.UseHttpsRedirection();

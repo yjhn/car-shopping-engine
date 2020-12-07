@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace ServerV2.Controllers
+namespace Server.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/vehicles")]
     [ApiController]
@@ -21,10 +21,11 @@ namespace ServerV2.Controllers
             _db = db;
         }
 
-        // GET: api/<VehicleController>/5
-        [AllowAnonymous]
         [HttpGet("{id}")]
-        public ActionResult<Car> GetVehicle(int id)
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Car))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Car> GetAd([Required] int id)
         {
             Car car = _db.GetCar(id);
             if (car == null)
@@ -37,10 +38,31 @@ namespace ServerV2.Controllers
             }
         }
 
-        // GET api/<VehicleController>
+        [HttpGet]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<Car>> GetAds([FromHeader][Required] int[] ids)
+        {
+            IEnumerable<Car> cars = _db.GetCars(ids);
+            if (cars == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return new ActionResult<IEnumerable<Car>>(cars);
+            }
+        }
+
         [HttpGet("sorted")]
-        public ActionResult<IEnumerable<Car>> GetSortedVehicles([FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult<IEnumerable<Car>> GetSortedAds([FromHeader][Required] SortingCriteria sortBy,
+                                                                [FromHeader][Required] bool sortAscending,
+                                                                [FromHeader][Required] int startIndex,
+                                                                [FromHeader][Required] int amount)
         {
             var cars = _db.GetSortedCars(sortBy, sortAscending, startIndex, amount);
             if (cars == null)
@@ -53,12 +75,24 @@ namespace ServerV2.Controllers
             }
         }
 
-        // GET api/<VehicleController>/5
-        [AllowAnonymous]
         [HttpGet("filtered")]
-        public ActionResult<IEnumerable<Car>> GetFiteredVehicles([FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount,
-            [FromHeader] string brand = null, [FromHeader] string model = null, [FromHeader] bool? used = null, [FromHeader] int? priceFrom = null, [FromHeader] int? priceTo = null,
-            [FromHeader] string username = null, [FromHeader] int? yearFrom = null, [FromHeader] int? yearTo = null, [FromHeader] FuelType? fuelType = null, [FromHeader] ChassisType? chassisType = null)
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult<IEnumerable<Car>> GetFilteredAds([FromHeader] [Required] SortingCriteria sortBy,
+                                                                 [FromHeader] [Required] bool sortAscending,
+                                                                 [FromHeader] [Required] int startIndex,
+                                                                 [FromHeader] [Required] int amount,
+                                                                 [FromHeader] string brand = null,
+                                                                 [FromHeader] string model = null,
+                                                                 [FromHeader] bool? used = null,
+                                                                 [FromHeader] int? priceFrom = null,
+                                                                 [FromHeader] int? priceTo = null,
+                                                                 [FromHeader] string username = null,
+                                                                 [FromHeader] int? yearFrom = null,
+                                                                 [FromHeader] int? yearTo = null,
+                                                                 [FromHeader] FuelType? fuelType = null,
+                                                                 [FromHeader] ChassisType? chassisType = null)
         {
             CarFilters filters = new CarFilters
             {
@@ -84,13 +118,10 @@ namespace ServerV2.Controllers
             }
         }
 
-        /// <response code="201">Returns the newly created item</response>
-        // POST api/<VehicleController>
         [HttpPost("{username}")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Car> PostVehicle(string username, [FromBody] Car car)
+        public ActionResult<Car> PostAd([Required] string username, [FromBody] [Required] Car car)
         {
             string user = HttpContext.User.Identity.Name;
             if (car == null || username == null || username != user)
@@ -102,11 +133,10 @@ namespace ServerV2.Controllers
             return _db.AddCar(username, car) ? StatusCode(201, car) : BadRequest();
         }
 
-        // PUT api/<VehicleController>/5
         [HttpPut("{username}")]
-        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult PutVehicle(string username, Car car)
+        public IActionResult PutAd([Required] string username, [Required] Car car)
         {
             string user = HttpContext.User.Identity.Name;
             if (car == null || username == null || user != username)
@@ -117,20 +147,77 @@ namespace ServerV2.Controllers
             return _db.UpdateCar(username, car) ? NoContent() : BadRequest();
         }
 
-        // DELETE api/<VehicleController>/5
-        [Authorize]
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteVehicle(int id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteAd([Required] int id)
         {
             string user = HttpContext.User.Identity.Name;
-            if (!_db.DeleteCar(id, user))
+            return _db.DeleteCar(id, user) ? NoContent() : NotFound();
+        }
+
+
+        // Admin methods //
+
+        [HttpDelete]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteAds([Required] int[] ids)
+        {
+            return _db.DeleteCars(ids) > 0 ? NoContent() : NotFound();
+        }
+
+        [HttpPut("disable")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult DisableAds([Required] int[] ids)
+        {
+            Car car;
+            foreach (int id in ids)
             {
-                return NotFound();
+                car = _db.GetCar(id);
+                if (car != null)
+                {
+                    car.Hidden = true;
+                    _db.UpdateCar(car.UploaderUsername, car);
+                }
+            }
+            return NoContent();
+        }
+
+        [HttpPut("enable")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult EnableAds([Required] int[] ids)
+        {
+            Car car;
+            foreach (int id in ids)
+            {
+                car = _db.GetCar(id);
+                if (car != null)
+                {
+                    car.Hidden = false;
+                    _db.UpdateCar(car.UploaderUsername, car);
+                }
+            }
+            return NoContent();
+        }
+
+        [HttpGet("disabled")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult<IEnumerable<Car>> GetDisabledAds()
+        {
+            var cars = _db.GetDisabledAds();
+            if (cars == null)
+            {
+                return NoContent();
             }
             else
             {
-                return NoContent();
+                return new ActionResult<IEnumerable<Car>>(cars);
             }
         }
     }

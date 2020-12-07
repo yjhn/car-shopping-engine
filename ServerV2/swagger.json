@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "ServerV2",
+    "title": "Server",
     "version": "v1"
   },
   "paths": {
@@ -17,8 +17,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           }
         ],
@@ -29,6 +28,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -46,8 +65,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           }
         ],
@@ -68,11 +86,32 @@
                 "$ref": "#/components/schemas/User"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         }
       },
@@ -87,14 +126,33 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         }
       }
@@ -111,13 +169,13 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           },
           {
             "name": "sortBy",
             "in": "header",
+            "required": true,
             "schema": {
               "$ref": "#/components/schemas/SortingCriteria"
             }
@@ -125,6 +183,7 @@
           {
             "name": "sortAscending",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "boolean"
             }
@@ -132,6 +191,7 @@
           {
             "name": "startIndex",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -140,6 +200,7 @@
           {
             "name": "amount",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -154,8 +215,21 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Car"
+                    "$ref": "#/components/schemas/User"
                   }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -175,13 +249,13 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           },
           {
             "name": "sortBy",
             "in": "header",
+            "required": true,
             "schema": {
               "$ref": "#/components/schemas/SortingCriteria"
             }
@@ -189,6 +263,7 @@
           {
             "name": "sortAscending",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "boolean"
             }
@@ -196,6 +271,7 @@
           {
             "name": "startIndex",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -204,6 +280,7 @@
           {
             "name": "amount",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -220,6 +297,26 @@
                   "items": {
                     "$ref": "#/components/schemas/Car"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -250,11 +347,12 @@
                 "$ref": "#/components/schemas/User"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
-            "description": "Returns the newly created item",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
@@ -274,7 +372,57 @@
             }
           },
           "409": {
-            "description": "If the item is duplicate",
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "DeleteUsers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -286,12 +434,172 @@
         }
       }
     },
+    "/api/users/full/{username}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "GetFullUser",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/disable": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "DisableUsers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/users/enable": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "EnableUsers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/users/disabled": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "GetDisabledUsers",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/vehicles/{id}": {
       "get": {
         "tags": [
           "Vehicles"
         ],
-        "operationId": "GetVehicle",
+        "operationId": "GetAd",
         "parameters": [
           {
             "name": "id",
@@ -313,6 +621,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         }
       },
@@ -320,7 +638,7 @@
         "tags": [
           "Vehicles"
         ],
-        "operationId": "DeleteVehicle",
+        "operationId": "DeleteAd",
         "parameters": [
           {
             "name": "id",
@@ -333,8 +651,111 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad Request",
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vehicles": {
+      "get": {
+        "tags": [
+          "Vehicles"
+        ],
+        "operationId": "GetAds",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vehicles"
+        ],
+        "operationId": "DeleteAds",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -351,11 +772,12 @@
         "tags": [
           "Vehicles"
         ],
-        "operationId": "GetSortedVehicles",
+        "operationId": "GetSortedAds",
         "parameters": [
           {
             "name": "sortBy",
             "in": "header",
+            "required": true,
             "schema": {
               "$ref": "#/components/schemas/SortingCriteria"
             }
@@ -363,6 +785,7 @@
           {
             "name": "sortAscending",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "boolean"
             }
@@ -370,6 +793,7 @@
           {
             "name": "startIndex",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -378,6 +802,7 @@
           {
             "name": "amount",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -397,6 +822,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "Success"
           }
         }
       }
@@ -406,11 +834,12 @@
         "tags": [
           "Vehicles"
         ],
-        "operationId": "GetFiteredVehicles",
+        "operationId": "GetFilteredAds",
         "parameters": [
           {
             "name": "sortBy",
             "in": "header",
+            "required": true,
             "schema": {
               "$ref": "#/components/schemas/SortingCriteria"
             }
@@ -418,6 +847,7 @@
           {
             "name": "sortAscending",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "boolean"
             }
@@ -425,6 +855,7 @@
           {
             "name": "startIndex",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -433,6 +864,7 @@
           {
             "name": "amount",
             "in": "header",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -534,6 +966,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "Success"
           }
         }
       }
@@ -543,15 +978,14 @@
         "tags": [
           "Vehicles"
         ],
-        "operationId": "PostVehicle",
+        "operationId": "PostAd",
         "parameters": [
           {
             "name": "username",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           }
         ],
@@ -572,11 +1006,12 @@
                 "$ref": "#/components/schemas/Car"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
-            "description": "Returns the newly created item",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
@@ -601,15 +1036,14 @@
         "tags": [
           "Vehicles"
         ],
-        "operationId": "PutVehicle",
+        "operationId": "PutAd",
         "parameters": [
           {
             "name": "username",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           }
         ],
@@ -630,9 +1064,13 @@
                 "$ref": "#/components/schemas/Car"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
+          "204": {
+            "description": "Success"
+          },
           "400": {
             "description": "Bad Request",
             "content": {
@@ -642,6 +1080,122 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/vehicles/disable": {
+      "put": {
+        "tags": [
+          "Vehicles"
+        ],
+        "operationId": "DisableAds",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/vehicles/enable": {
+      "put": {
+        "tags": [
+          "Vehicles"
+        ],
+        "operationId": "EnableAds",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/vehicles/disabled": {
+      "get": {
+        "tags": [
+          "Vehicles"
+        ],
+        "operationId": "GetDisabledAds",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Car"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
           }
         }
       }
@@ -660,6 +1214,10 @@
             "type": "integer",
             "format": "int64"
           },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
           "hashedPassword": {
             "type": "string",
             "nullable": true
@@ -675,9 +1233,39 @@
               "format": "int32"
             },
             "nullable": true
+          },
+          "disabled": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
       },
       "SortingCriteria": {
         "enum": [
@@ -935,36 +1523,12 @@
           "comment": {
             "type": "string",
             "nullable": true
+          },
+          "hidden": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
-      },
-      "ProblemDetails": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "detail": {
-            "type": "string",
-            "nullable": true
-          },
-          "instance": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": { }
       }
     },
     "securitySchemes": {

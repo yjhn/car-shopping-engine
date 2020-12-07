@@ -1,19 +1,18 @@
-﻿using System;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Backend;
+﻿using Backend;
 using DataTypes;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
-namespace ServerV2.Modules
+namespace Server.Modules
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
@@ -31,7 +30,8 @@ namespace ServerV2.Modules
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            return Task.Run(() => {
+            return Task.Run(() =>
+            {
                 // skip authentication if endpoint has [AllowAnonymous] attribute
                 var endpoint = Context.GetEndpoint();
                 if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null)
@@ -59,10 +59,19 @@ namespace ServerV2.Modules
                 if (user == null)
                     return AuthenticateResult.Fail("Invalid Username or Password");
 
-                var principal = new ClaimsPrincipal(new GenericIdentity(user.Username));
-                var ticket = new AuthenticationTicket(principal, Scheme.Name);
+                var claims = new Claim[]{
+                    new Claim(ClaimTypes.Name,user.Username),
+                    new Claim(ClaimTypes.Role,user.Role)
+                };
 
+                // scheme.name MUST be used here or it won't work
+                var identity = new ClaimsIdentity(claims, Scheme.Name);
+                var principal = new ClaimsPrincipal(identity);
+                var ticket = new AuthenticationTicket(principal, Scheme.Name);
                 return AuthenticateResult.Success(ticket);
+
+                //var principal = new ClaimsPrincipal(new GenericIdentity(user.Username));
+                //return AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name));
             });
         }
     }

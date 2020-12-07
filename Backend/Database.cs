@@ -59,6 +59,10 @@ namespace Backend
             return GetSortedCarsList(sortBy, sortAscending, startIndex, amount);
         }
 
+        public IEnumerable<Car> GetCars(int[] ids)
+        {
+            return _carList.Where(c => ids.Contains(c.Id));
+        }
 
         private IEnumerable<Car> GetSortedCarsList(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount, List<Car> carListToSort = null)
         {
@@ -104,6 +108,11 @@ namespace Backend
 
             if (!_userList.Exists(u => u.Username == user.Username))
             {
+                // only admin can set the roles
+                if (user.Role == null)
+                {
+                    user.Role = UserRole.User;
+                }
                 if (!_fileWriter.WriteUserData(user))
                 {
                     throw new Exception("Failed to add user");
@@ -243,6 +252,35 @@ namespace Backend
         public Car GetCar(int id)
         {
             return _carList.Find(car => car.Id == id);
+        }
+
+        public int DeleteCars(params int[] ids)
+        {
+            int carsDeleted = _carList.RemoveAll(c => ids.Contains(c.Id));
+            foreach(int id in ids)
+            {
+                _fileWriter.DeleteCar(id);
+            }
+            return carsDeleted;
+        }
+
+        public IEnumerable<Car> GetDisabledAds()
+        {
+            return _carList.Where(c => c.Hidden);
+        }
+
+        public int DeleteUsers(string[] usernames)
+        {
+            int usersDeleted = _userList.RemoveAll(u => usernames.Contains(u.Username));
+            foreach(string u in usernames)
+            {
+                _fileWriter.DeleteUser(u);
+            }
+            return usersDeleted;
+        }
+        public IEnumerable<User> GetDisabledUsers()
+        {
+            return _userList.Where(u => u.Disabled);
         }
     }
 }

@@ -119,7 +119,7 @@ namespace Frontend
 
         public async Task<Response> PostCar(Car uploadCar)
         {
-            return await _api.PostCar(uploadCar, Username, Password);
+            return await _api.PostAd(uploadCar, Username, Password);
         }
 
         private static string EncryptPassword(string password, string salt)

@@ -72,6 +72,7 @@ namespace DataTypes
         public List<string> AdditionalProperties { get; set; }
         public List<string> Images { get; set; }
         public string Comment { get; set; }
+        public bool Hidden { get; set; } = false;
 
         public bool Equals(Car other)
         {

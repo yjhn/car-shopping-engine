@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ServerV2": {
+    "Server": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

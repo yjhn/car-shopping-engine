@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace ServerV2.Controllers
+namespace Server.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/users")]
     [ApiController]
@@ -21,10 +21,11 @@ namespace ServerV2.Controllers
             _db = db;
         }
 
-        // GET api/<UsersController>/5
-        [Authorize]
         [HttpGet("{username}")]
-        public ActionResult<User> GetUser(string username)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<User> GetUser([Required] string username)
         {
             string user = HttpContext.User.Identity.Name;
             if (username == null || user != username)
@@ -43,10 +44,15 @@ namespace ServerV2.Controllers
             }
         }
 
-        // GET api/<UsersController>/5
-        [Authorize]
         [HttpGet("liked/{username}")]
-        public ActionResult<IEnumerable<Car>> GetUserLikedAds(string username, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<User>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<Car>> GetUserLikedAds([Required] string username,
+                                                              [FromHeader][Required] SortingCriteria sortBy,
+                                                              [FromHeader][Required] bool sortAscending,
+                                                              [FromHeader][Required] int startIndex,
+                                                              [FromHeader][Required] int amount)
         {
             string user = HttpContext.User.Identity.Name;
             if (username == null || user != username)
@@ -57,7 +63,7 @@ namespace ServerV2.Controllers
             var ads = _db.GetUserLikedAds(username, sortBy, sortAscending, startIndex, amount);
             if (ads == null)
             {
-                return NotFound();
+                return NoContent();
             }
             else
             {
@@ -65,10 +71,16 @@ namespace ServerV2.Controllers
             }
         }
 
-        // GET api/<UsersController>/5
-        [AllowAnonymous]
         [HttpGet("uploaded/{username}")]
-        public ActionResult<IEnumerable<Car>> GetUserUploadedAds(string username, [FromHeader] SortingCriteria sortBy, [FromHeader] bool sortAscending, [FromHeader] int startIndex, [FromHeader] int amount)
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<Car>> GetUserUploadedAds([Required] string username,
+                                                                 [FromHeader][Required] SortingCriteria sortBy,
+                                                                 [FromHeader][Required] bool sortAscending,
+                                                                 [FromHeader][Required] int startIndex,
+                                                                 [FromHeader][Required] int amount)
         {
             if (username == null)
             {
@@ -86,15 +98,12 @@ namespace ServerV2.Controllers
             }
         }
 
-        /// <response code="201">Returns the newly created item</response>
-        /// <response code="409">If the item is duplicate</response> 
-        // POST api/<UsersController>
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public ActionResult<User> PostUser([FromBody] User value)
+        public ActionResult<User> PostUser([FromBody][Required] User value)
         {
             if (value == null)
             {
@@ -104,10 +113,12 @@ namespace ServerV2.Controllers
             return _db.AddUser(value) == null ? Conflict() : StatusCode(201, value);
         }
 
-        // PUT api/<UsersController>/5
-        [Authorize]
         [HttpPut("{username}")]
-        public IActionResult PutUser(string username, [FromBody] User value)
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult PutUser([Required] string username, [FromBody][Required] User value)
         {
             string user = HttpContext.User.Identity.Name;
             if (user != username || user != value.Username || value == null)
@@ -125,10 +136,11 @@ namespace ServerV2.Controllers
             }
         }
 
-        // DELETE api/<UsersController>/5
-        [Authorize]
         [HttpDelete("{username}")]
-        public IActionResult DeleteUser(string username)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteUser([Required] string username)
         {
             string user = HttpContext.User.Identity.Name;
             if (user != username)
@@ -137,6 +149,94 @@ namespace ServerV2.Controllers
             }
 
             return _db.DeleteUser(username) ? NoContent() : NotFound();
+        }
+
+
+        // Admin methods //
+
+        [HttpGet("full/{username}")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<User> GetFullUser([Required] string username)
+        {
+            if (username == null)
+            {
+                return BadRequest();
+            }
+
+            var u = _db.GetUser(username);
+            if (u == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return u;
+            }
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteUsers([Required] string[] usernames)
+        {
+            return _db.DeleteUsers(usernames) > 0 ? NoContent() : NotFound();
+        }
+
+        [HttpPut("disable")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult DisableUsers([Required] string[] usernames)
+        {
+            User user;
+            foreach (string u in usernames)
+            {
+                user = _db.GetUser(u);
+                if (user != null)
+                {
+                    user.Disabled = true;
+                    _db.UpdateUser(u, user);
+                }
+            }
+            return NoContent();
+        }
+
+        [HttpPut("enable")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult EnableUsers([Required] string[] usernames)
+        {
+            User user;
+            foreach (string u in usernames)
+            {
+                user = _db.GetUser(u);
+                if (user != null)
+                {
+                    user.Disabled = false;
+                    _db.UpdateUser(u, user);
+                }
+            }
+            return NoContent();
+        }
+
+        [HttpGet("disabled")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<User>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult<IEnumerable<User>> GetDisabledUsers()
+        {
+            var users = _db.GetDisabledUsers();
+            if (users == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return new ActionResult<IEnumerable<User>>(users);
+            }
         }
     }
 }

@@ -12,14 +12,14 @@ namespace Frontend
     {
         private readonly BasicAuthenticationCredentials credentials = new BasicAuthenticationCredentials();
         private readonly Uri _serverUri;
-        private readonly IServerV2 _api;
+        private readonly IServer _api;
         private readonly Ping _ping = new Ping();
         public event Action NoServerResponse = delegate { };
 
         public ApiWrapper(Uri serverUri)
         {
             _serverUri = serverUri;
-            _api = new ServerV2(_serverUri, credentials);
+            _api = new Server(_serverUri, credentials);
         }
 
         public async Task<bool> PingServer()
@@ -37,7 +37,6 @@ namespace Frontend
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return Response.InvalidResponse;
             }
             catch (HttpRequestException)
@@ -52,12 +51,11 @@ namespace Frontend
             PrepareApi(username, password);
             try
             {
-                var user = await _api.GetUserAsync(username);
-                return ConvertToUser(user);
+                var result = await _api.GetUserAsync(username);
+                return ConvertToUser((Models.User)result);
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return null;
             }
             catch (HttpRequestException)
@@ -77,7 +75,6 @@ namespace Frontend
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return Response.InvalidResponse;
             }
             catch (HttpRequestException)
@@ -92,12 +89,11 @@ namespace Frontend
             PrepareApi(username, password);
             try
             {
-                await _api.PutUserAsync(username, ConvertToFrontendUser(user));
+                await _api.PutUserAsync(ConvertToFrontendUser(user),username);
                 return Response.Ok;
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return Response.InvalidResponse;
             }
             catch (HttpRequestException)
@@ -107,16 +103,15 @@ namespace Frontend
             }
         }
 
-        public async Task<Car> GetCar(int id)
+        public async Task<Car> GetAd(int id)
         {
             try
             {
-                var car = await _api.GetVehicleAsync(id);
-                return ConvertToCar(car);
+                var car = await _api.GetAdAsync(id);
+                return ConvertToCar((Models.Car)car);
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return null;
             }
             catch (HttpRequestException)
@@ -126,17 +121,16 @@ namespace Frontend
             }
         }
 
-        public async Task<Response> PostCar(Car car, string username, string password)
+        public async Task<Response> PostAd(Car car, string username, string password)
         {
             PrepareApi(username, password);
             try
             {
-                var result = await _api.PostVehicleAsync(username,ConvertToFrontendCar(car));
+                var result = await _api.PostAdAsync(ConvertToFrontendCar(car), username);
                 return Response.Ok;
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return Response.InvalidResponse;
             }
             catch (HttpRequestException)
@@ -146,12 +140,12 @@ namespace Frontend
             }
         }
 
-        public async Task<Response> UpdateVehicle(Car car, string username, string password)
+        public async Task<Response> UpdateAd(Car car, string username, string password)
         {
             PrepareApi(username, password);
             try
             {
-                await _api.PutVehicleAsync(username,ConvertToFrontendCar(car));
+                await _api.PutAdAsync(ConvertToFrontendCar(car), username);
                 return Response.Ok;
             }
             catch (HttpOperationException)
@@ -161,49 +155,66 @@ namespace Frontend
             }
             catch (HttpRequestException)
             {
+                // this happens when there is no connection
                 NoServerResponse.Invoke();
                 return Response.NoResponse;
             }
         }
 
-        public async Task<Response> DeleteVehicle(int id, string username, string password)
+        public async Task<Response> DeleteAd(int id, string username, string password)
         {
             PrepareApi(username, password);
             try
             {
-                await _api.DeleteVehicleAsync(id);
+                await _api.DeleteAdAsync(id);
                 return Response.Ok;
             }
             catch (HttpOperationException) { return Response.InvalidResponse; }
             catch (HttpRequestException) { NoServerResponse.Invoke(); return Response.NoResponse; }
         }
 
-        public async Task<List<Car>> GetSortedVehicles(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public async Task<List<Car>> GetSortedAds(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             try
             {
-                var result = await _api.GetSortedVehiclesAsync((int)sortBy, sortAscending, startIndex, amount);
+                var result = await _api.GetSortedAdsAsync((int)sortBy, sortAscending, startIndex, amount);
                 return GetCarList(result);
             }
             catch (HttpRequestException)
             {
-                // this happens when there is no connection
                 NoServerResponse.Invoke();
                 return null;
             }
         }
 
-        public async Task<List<Car>> GetFilteredVehicles(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public async Task<List<Car>> GetAds(int[] ids)
         {
             try
             {
-                var result = await _api.GetFiteredVehiclesAsync((int)sortBy, sortAscending, startIndex, amount, filters.Brand, filters.Model, filters.Used, filters.PriceFrom,
+                var result = await _api.GetAdsAsync(GetNullableIntList(ids));
+                return GetCarList((IList<Models.Car>)result);
+            }
+            catch (HttpOperationException)
+            {
+                return null;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return null;
+            }
+        }
+
+        public async Task<List<Car>> GetFilteredAds(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        {
+            try
+            {
+                var result = await _api.GetFilteredAdsAsync((int)sortBy, sortAscending, startIndex, amount, filters.Brand, filters.Model, filters.Used, filters.PriceFrom,
                     filters.PriceTo, filters.Username, filters.YearFrom, filters.YearTo, (int?)filters.FuelType, (int?)filters.ChassisType);
                 return GetCarList(result);
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return null;
             }
             catch (HttpRequestException)
@@ -219,11 +230,10 @@ namespace Frontend
             try
             {
                 var result = await _api.GetUserLikedAdsAsync(username, (int)sortBy, sortAscending, startIndex, amount);
-                return GetCarList(result);
+                return GetCarList((IList<Models.Car>)result);
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
                 return null;
             }
             catch (HttpRequestException)
@@ -238,11 +248,179 @@ namespace Frontend
             try
             {
                 var result = await _api.GetUserUploadedAdsAsync(username, (int)sortBy, sortAscending, startIndex, amount);
-                return GetCarList(result);
+                return GetCarList((IList<Models.Car>)result);
             }
             catch (HttpOperationException)
             {
-                // this happens when server returns invalid response code (this means that user has set some value to some shit)
+                return null;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return null;
+            }
+        }
+
+
+        public async Task<Response> DeleteUsers(string[] usernames, string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                await _api.DeleteUsersAsync(usernames);
+                return Response.Ok;
+            }
+            catch (HttpOperationException)
+            {
+                return Response.InvalidResponse;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return Response.NoResponse;
+            }
+        }
+
+        public async Task<Response> DeleteAds(int[] ids, string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                await _api.DeleteAdsAsync(GetNullableIntList(ids));
+                return Response.Ok;
+            }
+            catch (HttpOperationException)
+            {
+                return Response.InvalidResponse;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return Response.NoResponse;
+            }
+        }
+
+        public async Task<List<Car>> GetDisabledAds(string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                return GetCarList(await _api.GetDisabledAdsAsync());
+            }
+            catch (HttpOperationException)
+            {
+                return null;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return null;
+            }
+        }
+
+        public async Task<List<User>> GetDisabledUsers(string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                return GetUserList(await _api.GetDisabledUsersAsync());
+            }
+            catch (HttpOperationException)
+            {
+                return null;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return null;
+            }
+        }
+
+        public async Task<Response> DisableUsers(string[] usernames, string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                await _api.DisableUsersAsync(usernames);
+                return Response.Ok;
+            }
+            catch (HttpOperationException)
+            {
+                return Response.InvalidResponse;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return Response.NoResponse;
+            }
+        }
+
+        public async Task<Response> HideAds(int[] ids, string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                await _api.DisableAdsAsync(GetNullableIntList(ids));
+                return Response.Ok;
+            }
+            catch (HttpOperationException)
+            {
+                return Response.InvalidResponse;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return Response.NoResponse;
+            }
+        }
+
+        public async Task<Response> EnableUsers(string[] usernames, string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                await _api.EnableUsersAsync(usernames);
+                return Response.Ok;
+            }
+            catch (HttpOperationException)
+            {
+                return Response.InvalidResponse;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return Response.NoResponse;
+            }
+        }
+
+        public async Task<Response> UnhideAds(int[] ids, string username, string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                await _api.EnableAdsAsync(GetNullableIntList(ids));
+                return Response.Ok;
+            }
+            catch (HttpOperationException)
+            {
+                return Response.InvalidResponse;
+            }
+            catch (HttpRequestException)
+            {
+                NoServerResponse.Invoke();
+                return Response.NoResponse;
+            }
+        }
+
+        public async Task<User> GetFullUser(string user, string username,string password)
+        {
+            PrepareApi(username, password);
+            try
+            {
+                return ConvertToUser((Models.User)await _api.GetFullUserAsync(user));
+            }
+            catch (HttpOperationException)
+            {
                 return null;
             }
             catch (HttpRequestException)
@@ -257,16 +435,36 @@ namespace Frontend
         private void PrepareApi(string username, string password)
         {
             // update credentials if the user has changed
-            if (credentials.UserName != username || credentials.Password != password)
-            {
+            //if (credentials.UserName != username || credentials.Password != password)
+            //{
                 credentials.UserName = username;
                 credentials.Password = password;
-            }
+            //}
         }
 
 
 
         // Converter methods //
+
+        private static List<int?> GetNullableIntList(int[] ints)
+        {
+            var a = new List<int?>();
+            foreach(int i in ints)
+            {
+                a.Add(i);
+            }
+            return a;
+        }
+
+        private static List<User> GetUserList(IList<Models.User> list)
+        {
+            List<User> users = new List<User>();
+            foreach (Models.User u in list)
+            {
+                users.Add(ConvertToUser(u));
+            }
+            return users;
+        }
 
         private static List<Car> GetCarList(IList<Models.Car> list)
         {
@@ -311,7 +509,8 @@ namespace Frontend
                 Vin = c.Vin,
                 AdditionalProperties = c.AdditionalProperties,
                 Images = c.Images,
-                Comment = c.Comment
+                Comment = c.Comment,
+                Hidden = c.Hidden
             };
 
             return car;
@@ -380,7 +579,8 @@ namespace Frontend
                 Vin = c.Vin,
                 AdditionalProperties = (List<string>)c.AdditionalProperties,
                 Images = (List<string>)c.Images,
-                Comment = c.Comment
+                Comment = c.Comment,
+                Hidden = (bool)c.Hidden
             };
 
             return car;
@@ -431,7 +631,9 @@ namespace Frontend
                 HashedPassword = u.HashedPassword,
                 LikedAds = ads,
                 Phone = (long)u.Phone,
-                Email = u.Email
+                Email = u.Email,
+                Role = u.Role,
+                Disabled = (bool)u.Disabled
             };
             return user;
         }
@@ -448,7 +650,9 @@ namespace Frontend
                 HashedPassword = u.HashedPassword,
                 LikedAds = ads,
                 Phone = u.Phone,
-                Email = u.Email
+                Email = u.Email,
+                Role = u.Role,
+                Disabled = u.Disabled
             };
             return user;
         }

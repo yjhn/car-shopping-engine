@@ -20,9 +20,11 @@ namespace DataTypes
 
         public string Username { get; set; }
         public long Phone { get; set; }
+        public string Role { get; set; } = UserRole.User;
         public string HashedPassword { get; set; }
         public string Email { get; set; }
         public List<int> LikedAds { get; set; }
+        public bool Disabled { get; set; } = false;
 
         public bool Equals(User other)
         {
@@ -33,5 +35,11 @@ namespace DataTypes
         {
             return Equals(obj as User);
         }
+    }
+
+    public static class UserRole
+    {
+        public const string Admin = "admin";
+        public const string User = "user";
     }
 }
