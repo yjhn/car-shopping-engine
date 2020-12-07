@@ -100,7 +100,13 @@ namespace CarEngine
             {
                 ((Button)sender).Text = "❤";
                 _userInfo.LikedAds.Remove(_carInfo.Id);
+                _userInfo.PutUser();
             }
+        }
+
+        private void CarAdMinimal_Paint(object sender, PaintEventArgs e)
+        {
+            LoginStateChanged();
         }
     }
 }

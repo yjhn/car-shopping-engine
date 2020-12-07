@@ -203,7 +203,7 @@
             this.pagePanel.Margin = new System.Windows.Forms.Padding(2);
             this.pagePanel.MinimumSize = new System.Drawing.Size(660, 250);
             this.pagePanel.Name = "pagePanel";
-            this.pagePanel.Size = new System.Drawing.Size(898, 625);
+            this.pagePanel.Size = new System.Drawing.Size(888, 625);
             this.pagePanel.TabIndex = 2;
             // 
             // browsePage
@@ -215,7 +215,7 @@
             this.browsePage.Margin = new System.Windows.Forms.Padding(1);
             this.browsePage.MinimumSize = new System.Drawing.Size(660, 250);
             this.browsePage.Name = "browsePage";
-            this.browsePage.Size = new System.Drawing.Size(898, 625);
+            this.browsePage.Size = new System.Drawing.Size(888, 625);
             this.browsePage.TabIndex = 0;
             this.browsePage.TabStop = false;
             // 
@@ -228,7 +228,7 @@
             this.uploadPage.Location = new System.Drawing.Point(0, 0);
             this.uploadPage.Margin = new System.Windows.Forms.Padding(1);
             this.uploadPage.Name = "uploadPage";
-            this.uploadPage.Size = new System.Drawing.Size(898, 625);
+            this.uploadPage.Size = new System.Drawing.Size(888, 625);
             this.uploadPage.TabIndex = 2;
             // 
             // searchPage
@@ -241,7 +241,7 @@
             this.searchPage.Location = new System.Drawing.Point(0, 0);
             this.searchPage.Margin = new System.Windows.Forms.Padding(1);
             this.searchPage.Name = "searchPage";
-            this.searchPage.Size = new System.Drawing.Size(898, 625);
+            this.searchPage.Size = new System.Drawing.Size(888, 625);
             this.searchPage.TabIndex = 1;
             // 
             // profilePage
@@ -252,7 +252,7 @@
             this.profilePage.Location = new System.Drawing.Point(0, 0);
             this.profilePage.Margin = new System.Windows.Forms.Padding(1);
             this.profilePage.Name = "profilePage";
-            this.profilePage.Size = new System.Drawing.Size(898, 625);
+            this.profilePage.Size = new System.Drawing.Size(888, 625);
             this.profilePage.TabIndex = 3;
             // 
             // noConnectionPage
@@ -273,7 +273,7 @@
             this.networkErrorMessage.ForeColor = System.Drawing.Color.Red;
             this.networkErrorMessage.Location = new System.Drawing.Point(0, 0);
             this.networkErrorMessage.Name = "networkErrorMessage";
-            this.networkErrorMessage.Size = new System.Drawing.Size(1024, 625);
+            this.networkErrorMessage.Size = new System.Drawing.Size(1014, 625);
             this.networkErrorMessage.TabIndex = 3;
             this.networkErrorMessage.Text = "No connection to server";
             this.networkErrorMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -285,7 +285,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(1024, 625);
+            this.ClientSize = new System.Drawing.Size(1014, 625);
             this.Controls.Add(this.pagePanel);
             this.Controls.Add(this.sidebarPanel);
             this.Controls.Add(this.noConnectionPage);

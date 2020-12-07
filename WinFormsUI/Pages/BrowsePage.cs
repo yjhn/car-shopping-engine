@@ -166,11 +166,11 @@ namespace CarEngine
             List<Car> vehicles;
             if (_isSearchResultsPage)
             {
-                vehicles = await _frontendApi.GetFilteredVehicles(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
+                vehicles = await _frontendApi.GetFilteredAds(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
             }
             else
             {
-                vehicles = await _frontendApi.GetSortedVehicles(_parser.GetSortingCriteria(_selectedSortItem),_sortAsc, startIndex, amount);
+                vehicles = await _frontendApi.GetSortedAds(_parser.GetSortingCriteria(_selectedSortItem),_sortAsc, startIndex, amount);
             }
             return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
@@ -229,6 +229,7 @@ namespace CarEngine
             {
                 // need to figure out how to make ads selectable with tab -- current solution works, but everything can be selected only once
                 mainPanel.Select();
+                
             }
         }
     }

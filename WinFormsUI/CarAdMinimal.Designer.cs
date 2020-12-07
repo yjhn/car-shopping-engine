@@ -134,6 +134,7 @@
             this.Controls.Add(this.mainPanel);
             this.Name = "CarAdMinimal";
             this.Size = new System.Drawing.Size(208, 264);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.CarAdMinimal_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.carImage)).EndInit();
             this.mainPanel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);

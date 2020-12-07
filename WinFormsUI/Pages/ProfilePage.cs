@@ -134,6 +134,8 @@ namespace CarEngine
             // if we are on the first page for the first time
             if (_likedAdsPages.Count == 0)
             {
+                // update user before loading
+                _userInfo.PutUser();
                 CarAdMinimal[] carAds = await GetMinimalLikedAds(0, _likedAdsInPage);
                 if (carAds == null || carAds.Length == 0)
                 {
