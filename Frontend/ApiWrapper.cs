@@ -46,22 +46,22 @@ namespace Frontend
             }
         }
 
-        public async Task<User> GetUser(string username, string password)
+        public async Task<(User user,Response response)> GetUser(string username, string password)
         {
             PrepareApi(username, password);
             try
             {
                 var result = await _api.GetUserAsync(username);
-                return ConvertToUser((Models.User)result);
+                return (ConvertToUser(result),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null, Response.NoResponse);
             }
         }
 
@@ -103,21 +103,21 @@ namespace Frontend
             }
         }
 
-        public async Task<Car> GetAd(int id)
+        public async Task<(Car ad,Response response)> GetAd(int id)
         {
             try
             {
                 var car = await _api.GetAdAsync(id);
-                return ConvertToCar((Models.Car)car);
+                return (ConvertToCar(car),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
@@ -173,91 +173,95 @@ namespace Frontend
             catch (HttpRequestException) { NoServerResponse.Invoke(); return Response.NoResponse; }
         }
 
-        public async Task<List<Car>> GetSortedAds(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public async Task<(List<Car> adList,Response response)> GetSortedAds(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             try
             {
                 var result = await _api.GetSortedAdsAsync((int)sortBy, sortAscending, startIndex, amount);
-                return GetCarList(result);
+                return (GetCarList(result),Response.Ok);
+            }
+            catch (HttpOperationException)
+            {
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
-        public async Task<List<Car>> GetAds(int[] ids)
+        public async Task<(List<Car> adList, Response response)> GetAds(int[] ids)
         {
             try
             {
                 var result = await _api.GetAdsAsync(GetNullableIntList(ids));
-                return GetCarList((IList<Models.Car>)result);
+                return (GetCarList(result),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
-        public async Task<List<Car>> GetFilteredAds(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public async Task<(List<Car> adList, Response response)> GetFilteredAds(CarFilters filters, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             try
             {
                 var result = await _api.GetFilteredAdsAsync((int)sortBy, sortAscending, startIndex, amount, filters.Brand, filters.Model, filters.Used, filters.PriceFrom,
                     filters.PriceTo, filters.Username, filters.YearFrom, filters.YearTo, (int?)filters.FuelType, (int?)filters.ChassisType);
-                return GetCarList(result);
+                return (GetCarList(result),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
-        public async Task<List<Car>> GetUserLikedAds(string username, string password, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public async Task<(List<Car> adList, Response response)> GetUserLikedAds(string username, string password, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             PrepareApi(username, password);
             try
             {
                 var result = await _api.GetUserLikedAdsAsync(username, (int)sortBy, sortAscending, startIndex, amount);
-                return GetCarList((IList<Models.Car>)result);
+                return (GetCarList(result),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
-        public async Task<List<Car>> GetUserUploadedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
+        public async Task<(List<Car> adList, Response response)> GetUserUploadedAds(string username, SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
             try
             {
                 var result = await _api.GetUserUploadedAdsAsync(username, (int)sortBy, sortAscending, startIndex, amount);
-                return GetCarList((IList<Models.Car>)result);
+                return (GetCarList(result),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
@@ -300,39 +304,41 @@ namespace Frontend
             }
         }
 
-        public async Task<List<Car>> GetDisabledAds(string username, string password)
+        public async Task<(List<Car> adList, Response response)> GetDisabledAds(string username, string password)
         {
             PrepareApi(username, password);
             try
             {
-                return GetCarList(await _api.GetDisabledAdsAsync());
+                var ads = await _api.GetDisabledAdsAsync();
+                return (GetCarList(ads),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
-        public async Task<List<User>> GetDisabledUsers(string username, string password)
+        public async Task<(List<User> users, Response response)> GetDisabledUsers(string username, string password)
         {
             PrepareApi(username, password);
             try
             {
-                return GetUserList(await _api.GetDisabledUsersAsync());
+                var users = await _api.GetDisabledUsersAsync();
+                return (GetUserList(users), Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 
@@ -412,21 +418,22 @@ namespace Frontend
             }
         }
 
-        public async Task<User> GetFullUser(string user, string username,string password)
+        public async Task<(User user, Response response)> GetFullUser(string user, string username,string password)
         {
             PrepareApi(username, password);
             try
             {
-                return ConvertToUser((Models.User)await _api.GetFullUserAsync(user));
+                var fullUser = await _api.GetFullUserAsync(user);
+                return (ConvertToUser(fullUser),Response.Ok);
             }
             catch (HttpOperationException)
             {
-                return null;
+                return (null,Response.InvalidResponse);
             }
             catch (HttpRequestException)
             {
                 NoServerResponse.Invoke();
-                return null;
+                return (null,Response.NoResponse);
             }
         }
 

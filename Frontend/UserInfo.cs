@@ -77,14 +77,14 @@ namespace Frontend
 
         public async Task<bool> Login(string username, string password)
         {
-            User u = await _api.GetUser(username, password);
-            if (u == null)
+            var (user, response) = await _api.GetUser(username, password);
+            if (user == null)
             {
                 return false;
             }
             else
             {
-                User = u;
+                User = user;
                 Password = password;
                 return true;
             }
@@ -109,12 +109,14 @@ namespace Frontend
 
         public async Task<List<Car>> GetUserLikedAds(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            return await _api.GetUserLikedAds(Username, Password, sortBy, sortAscending, startIndex, amount);
+            var (adList, response) = await _api.GetUserLikedAds(Username, Password, sortBy, sortAscending, startIndex, amount);
+            return adList;
         }
 
         public async Task<List<Car>> GetUserUploadedAds(SortingCriteria sortBy, bool sortAscending, int startIndex, int amount)
         {
-            return await _api.GetUserUploadedAds(Username, sortBy, sortAscending, startIndex, amount);
+            var (adList,response) = await _api.GetUserUploadedAds(Username, sortBy, sortAscending, startIndex, amount);
+            return adList;
         }
 
         public async Task<Response> PostCar(Car uploadCar)

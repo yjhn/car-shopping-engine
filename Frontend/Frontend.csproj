@@ -5,13 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Api.cs" />
-    <Compile Remove="Generator.cs" />
-    <Compile Remove="IApi.cs" />
-    <Compile Remove="Utilities.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.22" />
   </ItemGroup>

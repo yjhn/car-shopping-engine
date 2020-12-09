@@ -331,7 +331,7 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<User>> GetUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (username == null)
             {
@@ -394,7 +394,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 400 && (int)_statusCode != 404)
+            if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -417,7 +417,7 @@ namespace Frontend
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<User>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -427,42 +427,6 @@ namespace Frontend
                 try
                 {
                     _result.Body = SafeJsonConvert.DeserializeObject<User>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 400)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 404)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -835,7 +799,7 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetUserLikedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Car>>> GetUserLikedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (username == null)
             {
@@ -922,7 +886,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 204 && (int)_statusCode != 400)
+            if ((int)_statusCode != 200 && (int)_statusCode != 204)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -945,7 +909,7 @@ namespace Frontend
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<IList<Car>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -955,24 +919,6 @@ namespace Frontend
                 try
                 {
                     _result.Body = SafeJsonConvert.DeserializeObject<IList<Car>>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 400)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1022,7 +968,7 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetUserUploadedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Car>>> GetUserUploadedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (username == null)
             {
@@ -1109,7 +1055,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 400 && (int)_statusCode != 404)
+            if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1132,7 +1078,7 @@ namespace Frontend
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<IList<Car>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1142,42 +1088,6 @@ namespace Frontend
                 try
                 {
                     _result.Body = SafeJsonConvert.DeserializeObject<IList<Car>>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 400)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 404)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1539,7 +1449,7 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetFullUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<User>> GetFullUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (username == null)
             {
@@ -1602,7 +1512,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 400 && (int)_statusCode != 404)
+            if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -1625,7 +1535,7 @@ namespace Frontend
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<User>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1635,42 +1545,6 @@ namespace Frontend
                 try
                 {
                     _result.Body = SafeJsonConvert.DeserializeObject<User>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 400)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 404)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -2003,7 +1877,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 204)
+            if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2071,7 +1945,7 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetAdWithHttpMessagesAsync(int id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Car>> GetAdWithHttpMessagesAsync(int id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2130,7 +2004,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 404)
+            if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2153,7 +2027,7 @@ namespace Frontend
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<Car>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2163,24 +2037,6 @@ namespace Frontend
                 try
                 {
                     _result.Body = SafeJsonConvert.DeserializeObject<Car>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 404)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -2349,7 +2205,7 @@ namespace Frontend
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetAdsWithHttpMessagesAsync(IList<int?> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<Car>>> GetAdsWithHttpMessagesAsync(IList<int?> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (ids == null)
             {
@@ -2419,7 +2275,7 @@ namespace Frontend
             HttpStatusCode _statusCode = _httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 404)
+            if ((int)_statusCode != 200)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {
@@ -2442,7 +2298,7 @@ namespace Frontend
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<object>();
+            var _result = new HttpOperationResponse<IList<Car>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2452,24 +2308,6 @@ namespace Frontend
                 try
                 {
                     _result.Body = SafeJsonConvert.DeserializeObject<IList<Car>>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            // Deserialize Response
-            if ((int)_statusCode == 404)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ProblemDetails>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -3788,7 +3626,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<User>> GetUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='body'>
         /// </param>
@@ -3828,7 +3666,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetUserLikedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Car>>> GetUserLikedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='username'>
         /// </param>
@@ -3846,7 +3684,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetUserUploadedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Car>>> GetUserUploadedAdsWithHttpMessagesAsync(string username, int sortBy, bool sortAscending, int startIndex, int amount, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='body'>
         /// </param>
@@ -3876,7 +3714,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetFullUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<User>> GetFullUserWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='body'>
         /// </param>
@@ -3914,7 +3752,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetAdWithHttpMessagesAsync(int id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Car>> GetAdWithHttpMessagesAsync(int id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='id'>
         /// </param>
@@ -3934,7 +3772,7 @@ namespace Frontend
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetAdsWithHttpMessagesAsync(IList<int?> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<Car>>> GetAdsWithHttpMessagesAsync(IList<int?> ids, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='body'>
         /// </param>
@@ -4084,7 +3922,7 @@ namespace Frontend
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetUserAsync(this IServer operations, string username, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<User> GetUserAsync(this IServer operations, string username, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetUserWithHttpMessagesAsync(username, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -4142,7 +3980,7 @@ namespace Frontend
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetUserLikedAdsAsync(this IServer operations, string username, int sortBy, bool sortAscending, int startIndex, int amount, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Car>> GetUserLikedAdsAsync(this IServer operations, string username, int sortBy, bool sortAscending, int startIndex, int amount, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetUserLikedAdsWithHttpMessagesAsync(username, sortBy, sortAscending, startIndex, amount, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -4166,7 +4004,7 @@ namespace Frontend
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetUserUploadedAdsAsync(this IServer operations, string username, int sortBy, bool sortAscending, int startIndex, int amount, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Car>> GetUserUploadedAdsAsync(this IServer operations, string username, int sortBy, bool sortAscending, int startIndex, int amount, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetUserUploadedAdsWithHttpMessagesAsync(username, sortBy, sortAscending, startIndex, amount, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -4214,7 +4052,7 @@ namespace Frontend
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetFullUserAsync(this IServer operations, string username, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<User> GetFullUserAsync(this IServer operations, string username, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetFullUserWithHttpMessagesAsync(username, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -4270,7 +4108,7 @@ namespace Frontend
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetAdAsync(this IServer operations, int id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Car> GetAdAsync(this IServer operations, int id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAdWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -4302,7 +4140,7 @@ namespace Frontend
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetAdsAsync(this IServer operations, IList<int?> ids, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<Car>> GetAdsAsync(this IServer operations, IList<int?> ids, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAdsWithHttpMessagesAsync(ids, null, cancellationToken).ConfigureAwait(false))
                 {
