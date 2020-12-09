@@ -1,19 +1,18 @@
 using Backend;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Server.Middleware;
 using Server.Modules;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Security.Claims;
 
 namespace Server
 {
@@ -29,6 +28,13 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            services.AddHttpContextAccessor();
+
+            services.AddSingleton(x => Log.Logger);
             services.AddSingleton<IDatabase, Database>();
             services.AddSingleton<Logger>();
             services.AddControllers();
@@ -88,6 +94,7 @@ namespace Server
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<LoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

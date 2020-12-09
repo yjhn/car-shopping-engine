@@ -24,7 +24,6 @@ namespace Server.Controllers
         [HttpGet("{id}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Car))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Car> GetAd([Required] int id)
         {
             Car car = _db.GetCar(id);
@@ -41,7 +40,6 @@ namespace Server.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<Car>> GetAds([FromHeader][Required] int[] ids)
         {
             IEnumerable<Car> cars = _db.GetCars(ids);

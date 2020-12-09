@@ -23,8 +23,6 @@ namespace Server.Controllers
 
         [HttpGet("{username}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<User> GetUser([Required] string username)
         {
             string user = HttpContext.User.Identity.Name;
@@ -47,7 +45,6 @@ namespace Server.Controllers
         [HttpGet("liked/{username}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<IEnumerable<Car>> GetUserLikedAds([Required] string username,
                                                               [FromHeader][Required] SortingCriteria sortBy,
                                                               [FromHeader][Required] bool sortAscending,
@@ -74,8 +71,6 @@ namespace Server.Controllers
         [HttpGet("uploaded/{username}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Car>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<Car>> GetUserUploadedAds([Required] string username,
                                                                  [FromHeader][Required] SortingCriteria sortBy,
                                                                  [FromHeader][Required] bool sortAscending,
@@ -157,8 +152,6 @@ namespace Server.Controllers
         [HttpGet("full/{username}")]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<User> GetFullUser([Required] string username)
         {
             if (username == null)
@@ -225,7 +218,6 @@ namespace Server.Controllers
         [HttpGet("disabled")]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<User>))]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<IEnumerable<User>> GetDisabledUsers()
         {
             var users = _db.GetDisabledUsers();
