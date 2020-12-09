@@ -115,11 +115,50 @@ namespace AdminInterface
             switch (obj)
             {
                 case "user":
-                    // need to actually show this
-                    Show(Api.GetFullUser(args[0], username, password).Result);
+                    var (user, response) = Api.GetFullUser(args[0], username, password).Result;
+                    if (user == null)
+                    {
+                        switch (response)
+                        {
+                            case Response.Ok:
+                                throw new Exception("Request returned no result");
+                            case Response.InvalidResponse:
+                                Console.WriteLine($"User '{args[0]}' not found.");
+                                break;
+                            case Response.NoResponse:
+                                Console.WriteLine($"Cannot connect to server.");
+                                break;
+                            default:
+                                throw new NotImplementedException("Unknown response value");
+                        }
+                    }
+                    else
+                    {
+                        Show(user);
+                    }
                     break;
                 case "ad":
-                    Show(Api.GetAd(Convert.ToInt32(args[0])).Result);
+                    var (ad, response1) = Api.GetFullUser(args[0], username, password).Result;
+                    if (ad == null)
+                    {
+                        switch (response1)
+                        {
+                            case Response.Ok:
+                                throw new Exception("Request returned no result");
+                            case Response.InvalidResponse:
+                                Console.WriteLine($"Ad '{args[0]}' not found.");
+                                break;
+                            case Response.NoResponse:
+                                Console.WriteLine($"Cannot connect to server.");
+                                break;
+                            default:
+                                throw new NotImplementedException("Unknown response value");
+                        }
+                    }
+                    else
+                    {
+                        Show(ad);
+                    }
                     break;
                 case "ads":
                     int[] ids = new int[args.Length];
@@ -127,7 +166,27 @@ namespace AdminInterface
                     {
                         ids[i] = Convert.ToInt32(args[i]);
                     }
-                    ShowList(Api.GetAds(ids).Result);
+                    var (adList, response2) = Api.GetAds(ids).Result;
+                    if (adList == null)
+                    {
+                        switch (response2)
+                        {
+                            case Response.Ok:
+                                throw new Exception("Request returned no result");
+                            case Response.InvalidResponse:
+                                Console.WriteLine($"Ads not found.");
+                                break;
+                            case Response.NoResponse:
+                                Console.WriteLine($"Cannot connect to server.");
+                                break;
+                            default:
+                                throw new NotImplementedException("Unknown response value");
+                        }
+                    }
+                    else
+                    {
+                        ShowList(adList);
+                    }
                     break;
                 default:
                     Console.WriteLine($"Command 'show {obj}' not recognized.");
@@ -145,7 +204,6 @@ namespace AdminInterface
 
         private static void Show(object obj)
         {
-            // for now
             Console.WriteLine(obj.ToString());
         }
 
@@ -230,10 +288,22 @@ namespace AdminInterface
             Console.WriteLine("password:");
             password = Console.ReadLine();
 
-            User user = Api.GetUser(username, password).Result;
+            var (user,response) = Api.GetUser(username, password).Result;
             if (user == null)
             {
-                Console.WriteLine("Bad username or password");
+                switch (response)
+                {
+                    case Response.Ok:
+                        throw new Exception("Request returned no result");
+                    case Response.InvalidResponse:
+                        Console.WriteLine("Bad username or password");
+                        break;
+                    case Response.NoResponse:
+                        Console.WriteLine($"Cannot connect to server.");
+                        break;
+                    default:
+                        throw new NotImplementedException("Unknown response value");
+                }
             }
             else
             {

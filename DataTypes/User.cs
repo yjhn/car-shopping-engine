@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace DataTypes
 {
@@ -34,6 +35,29 @@ namespace DataTypes
         public override bool Equals(object obj)
         {
             return Equals(obj as User);
+        }
+
+        public override string ToString()
+        {
+            return $"-----------------------\n" +
+                $"Username: {Username}\n" +
+                $"Role: {Role}\n" +
+                $"Phone: {Phone}\n" +
+                $"Hashed Password: {HashedPassword}\n" +
+                $"Email: {Email}\n" +
+                $"Liked ads:{LikedAdsListToString()}\n" +
+                $"Enabled: {!Disabled}\n" +
+                $"-----------------------";
+        }
+
+        private string LikedAdsListToString()
+        {
+            StringBuilder s = new StringBuilder();
+            foreach(int id in LikedAds)
+            {
+                s.Append($"\n  {id}");
+            }
+            return s.ToString();
         }
     }
 
