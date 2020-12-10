@@ -163,15 +163,8 @@ namespace CarEngine
 
         private async Task<CarAdMinimal[]> GetMinimalVehicleAds(int startIndex, int amount)
         {
-            List<Car> vehicles;
-            if (_isSearchResultsPage)
-            {
-                vehicles = await _frontendApi.GetFilteredAds(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
-            }
-            else
-            {
-                vehicles = await _frontendApi.GetSortedAds(_parser.GetSortingCriteria(_selectedSortItem),_sortAsc, startIndex, amount);
-            }
+            var (vehicles, response) = _isSearchResultsPage ? await _frontendApi.GetFilteredAds(_filters, _parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount) :
+                                                            await _frontendApi.GetSortedAds(_parser.GetSortingCriteria(_selectedSortItem), _sortAsc, startIndex, amount);
             return Utilities.VehicleListToAds(vehicles, _userInfo);
         }
 
@@ -229,7 +222,7 @@ namespace CarEngine
             {
                 // need to figure out how to make ads selectable with tab -- current solution works, but everything can be selected only once
                 mainPanel.Select();
-                
+
             }
         }
     }

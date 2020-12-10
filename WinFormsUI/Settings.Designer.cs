@@ -25,7 +25,7 @@ namespace CarEngine {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("80.209.238.247")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
         public string ip {
             get {
                 return ((string)(this["ip"]));
@@ -34,7 +34,7 @@ namespace CarEngine {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8888")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5001")]
         public int port {
             get {
                 return ((int)(this["port"]));
