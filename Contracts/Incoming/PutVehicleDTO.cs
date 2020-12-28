@@ -4,9 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Contracts.Incoming
 {
-    public class IncomingVehicleDTO
+    public class PutVehicleDTO
     {
-        public int? Id { get; set; }
+        [Required]
+        public int Id { get; set; }
         [Required]
         public int Price { get; set; }
         [Required]

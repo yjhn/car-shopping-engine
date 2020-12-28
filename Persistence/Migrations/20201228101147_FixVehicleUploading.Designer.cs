@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
-namespace Models.Migrations
+namespace Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201221092159_DatePropertyModifications")]
-    partial class DatePropertyModifications
+    [Migration("20201228101147_FixVehicleUploading")]
+    partial class FixVehicleUploading
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -119,7 +119,6 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UploaderUsername")
-                        .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("Used")
@@ -184,14 +183,13 @@ namespace Models.Migrations
                     b.HasOne("Models.VehicleModel", "VehicleModel")
                         .WithMany("Vehicles")
                         .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Models.User", "Uploader")
                         .WithMany("UploadedAds")
                         .HasForeignKey("UploaderUsername")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.OwnsOne("Models.Engine", "Engine", b1 =>
                         {
@@ -210,9 +208,6 @@ namespace Models.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<int>("Kw")
-                                .HasColumnType("int");
-
-                            b1.Property<int?>("NumberOfCylinders")
                                 .HasColumnType("int");
 
                             b1.Property<int>("Type")

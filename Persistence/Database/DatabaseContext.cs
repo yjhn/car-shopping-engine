@@ -90,11 +90,25 @@ namespace Models
                 .WithMany(u => u.LikedAds)
                 .UsingEntity(j => j.ToTable("UserLikedAds"));
 
+
             // ads uploaded by user
+
+            // Setting DeleteBehaviour to Cascade (which would delete user uploaded vehicles)
+            // results in error when adding DB constraint on SQL Server
+            // (because UserLikedAds table rows can be deleted from 2 paths
+            // (User -> Vehicle -> UserLikedAds OR User -> (UserLikedAds, Vehicle))
+            // So DeleteBehaviour here is set to SetNull and user uploaded
+            // vehicles have to be deleted manually
             modelBuilder.Entity<User>()
                 .HasMany(u => u.UploadedAds)
                 .WithOne(v => v.Uploader)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // vehicle models
+            modelBuilder.Entity<Vehicle>()
+                .HasOne(v => v.VehicleModel)
+                .WithMany(m => m.Vehicles)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

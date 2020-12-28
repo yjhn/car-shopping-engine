@@ -69,9 +69,6 @@ namespace Server.Modules
                 var principal = new ClaimsPrincipal(identity);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
                 return AuthenticateResult.Success(ticket);
-
-                //var principal = new ClaimsPrincipal(new GenericIdentity(user.Username));
-                //return AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name));
             });
         }
     }

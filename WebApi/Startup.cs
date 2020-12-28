@@ -10,20 +10,21 @@ using Models;
 using Serilog;
 using Server.Middleware;
 using Server.Modules;
+using Services.Dependencies;
 using Services.Repositories;
 using Services.Services;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using WebApi.SwaggerConfig;
 
 namespace Server
 {
     public class Startup
     {
-        private string _carNetApiKey;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,7 +35,7 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _carNetApiKey = Configuration["CarNetApiKey"];
+            ConfigureDependencies(services);
             ConfigureDatabase(services);
 
             Log.Logger = new LoggerConfiguration()
@@ -42,9 +43,6 @@ namespace Server
                 .CreateLogger();
 
             services.AddHttpContextAccessor();
-
-            // pass CarNet api key to Vehicles controller
-            services.AddSingleton(x => new ApiKeyContainer { ApiKey = _carNetApiKey });
 
             services.AddSingleton(x => Log.Logger);
             services.AddTransient<IRepoServices, RepoServices>();
@@ -63,7 +61,18 @@ namespace Server
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server", Version = "v1" });
+                c.SwaggerDoc("client", new OpenApiInfo
+                {
+                    Title = "Client API",
+                    Version = "v1",
+                    Description = "API for vehicle trading app"
+                });
+                c.SwaggerDoc("admin", new OpenApiInfo
+                {
+                    Title = "Admin API",
+                    Version = "v1",
+                    Description = "Vehicle trading app admin API"
+                });
 
                 c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
                 {
@@ -73,21 +82,10 @@ namespace Server
                     Scheme = "basic",
                     In = ParameterLocation.Header
                 });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Basic" }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
+                c.OperationFilter<AddAuthHeaderOperationFilter>();
                 c.CustomOperationIds(d => (d.ActionDescriptor as ControllerActionDescriptor)?.ActionName);
-                c.IncludeXmlComments(xmlPath);
+                c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+                c.EnableAnnotations();
             });
         }
 
@@ -102,10 +100,27 @@ namespace Server
                 throw new ArgumentNullException(nameof(connectionString), "Connection string not found");
             }
 
-            services.AddDbContext<IDatabaseContext, DatabaseContext>(options =>
+            services.AddDbContext<DatabaseContext>(options =>
             {
                 options.UseSqlServer(connectionString);
             }, ServiceLifetime.Transient);
+        }
+
+        private void ConfigureDependencies(IServiceCollection services)
+        {
+            string carNetApiKey = Configuration["CarNetApiKey"];
+            string carNetApiUrl = Configuration["CarNetApiUrl"];
+
+            if (string.IsNullOrWhiteSpace(carNetApiKey))
+            {
+                throw new ArgumentNullException(nameof(carNetApiKey), "CarNet API key not found");
+            }
+            if (string.IsNullOrWhiteSpace(carNetApiUrl))
+            {
+                throw new ArgumentNullException(nameof(carNetApiUrl), "CarNet API url not found");
+            }
+
+            services.AddSingleton(x => new CarNetApiClient(carNetApiKey, carNetApiUrl, new HttpClient()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,7 +128,12 @@ namespace Server
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Server v1"));
+            app.UseSwaggerUI(c =>
+            {
+                //c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/swagger/client/swagger.json", "Client API");
+                c.SwaggerEndpoint("/swagger/admin/swagger.json", "Admin API");
+            });
 
             //if (env.IsDevelopment())
             //{

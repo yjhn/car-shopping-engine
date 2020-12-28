@@ -3,7 +3,6 @@ using Contracts.Outgoing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Services.Repositories;
 using Services.Services;
 using System.Collections.Generic;
@@ -13,6 +12,10 @@ using System.Threading.Tasks;
 
 namespace Server.Controllers
 {
+    /// <summary>
+    /// Get, put, post, delete users, get their liked and uploaded ads
+    /// </summary>
+    [ApiExplorerSettings(GroupName = "client")]
     [Authorize]
     [Produces("application/json")]
     [Route("api/users")]
@@ -26,27 +29,32 @@ namespace Server.Controllers
             _services = services;
         }
 
+        /// <summary>
+        /// Gets user of the specified username (this method is used for login)
+        /// </summary>
+        /// <param name="username">Username of the user</param>
+        /// <returns></returns>
         [HttpGet("{username}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<OutgoingUserDTO>> GetUser([Required] string username)
         {
             string user = HttpContext.User.Identity.Name;
             if (username == null || user != username)
-            {
                 return BadRequest();
-            }
 
             var u = await _services.GetUser(user);
-            if (u == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return u;
-            }
+            return u == null ? NotFound() : u;
         }
 
+        /// <summary>
+        /// Gets vehicles liked by the specified user
+        /// </summary>
+        /// <param name="username">Username of the user whose liked vehicles are requested</param>
+        /// <param name="sortBy">How to sort the vehicles</param>
+        /// <param name="sortAscending">true - sort ascending, false - sort descending</param>
+        /// <param name="startIndex">How many vehicles to skip from the start of the sorted list</param>
+        /// <param name="amount">How many results to return</param>
+        /// <returns></returns>
         [HttpGet("liked/{username}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -59,21 +67,23 @@ namespace Server.Controllers
         {
             string user = HttpContext.User.Identity.Name;
             if (username == null || user != username)
-            {
                 return BadRequest();
-            }
 
             var ads = await _services.GetUserLikedAds(username, sortBy, sortAscending, startIndex, amount);
-            if (ads == null)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return new ActionResult<IEnumerable<OutgoingVehicleDTO>>(ads);
-            }
+            return ads == null ? 
+                NoContent() : 
+                new ActionResult<IEnumerable<OutgoingVehicleDTO>>(ads);
         }
 
+        /// <summary>
+        /// Gets vehicles uploaded by the specified user
+        /// </summary>
+        /// <param name="username">Username of the user whose uploaded ads are requested</param>
+        /// <param name="sortBy">How to sort the vehicles</param>
+        /// <param name="sortAscending">true - sort ascending, false - sort descending</param>
+        /// <param name="startIndex">How many vehicles to skip from the start of the sorted list</param>
+        /// <param name="amount">How many results to return</param>
+        /// <returns></returns>
         [HttpGet("uploaded/{username}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -85,22 +95,20 @@ namespace Server.Controllers
             [FromHeader][DefaultValue(10)] int amount)
         {
             if (username == null)
-            {
                 return BadRequest();
-            }
 
             var ads = await _services.GetUserUploadedAds(username, sortBy, sortAscending, startIndex, amount);
-            if (ads == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return new ActionResult<IEnumerable<OutgoingVehicleDTO>>(ads);
-            }
+            return ads == null ? 
+                NotFound() : 
+                new ActionResult<IEnumerable<OutgoingVehicleDTO>>(ads);
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Adds new user
+        /// </summary>
+        /// <param name="value">New user info</param>
+        /// <returns></returns>
+        [HttpPost("new")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -108,36 +116,37 @@ namespace Server.Controllers
         public async Task<ActionResult<IncomingUserDTO>> PostUser([FromBody][Required] IncomingUserDTO value)
         {
             if (value == null)
-            {
                 return BadRequest();
-            }
 
-            return await _services.AddUser(value) == null ? Conflict() : StatusCode(201, value);
+            return await _services.AddUser(value) == null ? 
+                Conflict() : 
+                StatusCode(201, value);
         }
 
+        /// <summary>
+        /// Updates an existing user. Users can only update themselves
+        /// </summary>
+        /// <param name="username">Username of the user to update</param>
+        /// <param name="value">Updated user info</param>
+        /// <returns></returns>
         [HttpPut("{username}")]
-        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutUser([Required] string username, [FromBody][Required] IncomingUserDTO value)
         {
             string user = HttpContext.User.Identity.Name;
-            if (user != username || user != value.Username || value == null)
-            {
+            if (value == null || value.Username != username || user != username || user != value.Username)
                 return BadRequest();
-            }
 
-            if (await _services.UpdateUser(username, value))
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
+            return await _services.UpdateUser(username, value) ? Ok() : NotFound();
         }
 
+        /// <summary>
+        /// Deletes the specified user. Users can only delete themselves. CAUTION: also deletes all ads uploaded by the user
+        /// </summary>
+        /// <param name="username">Username of the user to delete</param>
+        /// <returns></returns>
         [HttpDelete("{username}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -146,76 +155,9 @@ namespace Server.Controllers
         {
             string user = HttpContext.User.Identity.Name;
             if (user != username)
-            {
                 return BadRequest();
-            }
 
             return await _services.DeleteUser(username) ? Ok() : NotFound();
-        }
-
-
-        // Admin methods //
-
-        [HttpGet("full/{username}")]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<User>> GetFullUser([Required] string username)
-        {
-            if (username == null)
-            {
-                return BadRequest();
-            }
-
-            var u = await _services.GetFullUser(username);
-            if (u == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return u;
-            }
-        }
-
-        [HttpDelete]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteUsers([Required] string[] usernames)
-        {
-            return Ok(await _services.DeleteUsers(usernames));
-        }
-
-        [HttpPut("disable")]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> DisableUsers([Required] string[] usernames)
-        {
-            return Ok(await _services.DisableUsers(usernames));
-        }
-
-        [HttpPut("enable")]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> EnableUsers([Required] string[] usernames)
-        {
-            return Ok(await _services.EnableUsers(usernames));
-        }
-
-        [HttpGet("disabled")]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult<IEnumerable<User>> GetDisabledUsers()
-        {
-            var users = _services.GetDisabledUsers();
-            if (users == null)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return new ActionResult<IEnumerable<User>>(users);
-            }
         }
     }
 }

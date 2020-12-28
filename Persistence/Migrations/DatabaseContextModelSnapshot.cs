@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
-namespace Models.Migrations
+namespace Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -117,7 +117,6 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UploaderUsername")
-                        .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("Used")
@@ -182,14 +181,13 @@ namespace Models.Migrations
                     b.HasOne("Models.VehicleModel", "VehicleModel")
                         .WithMany("Vehicles")
                         .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Models.User", "Uploader")
                         .WithMany("UploadedAds")
                         .HasForeignKey("UploaderUsername")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.OwnsOne("Models.Engine", "Engine", b1 =>
                         {
@@ -204,13 +202,7 @@ namespace Models.Migrations
                             b1.Property<int>("FuelType")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("Hp")
-                                .HasColumnType("int");
-
                             b1.Property<int>("Kw")
-                                .HasColumnType("int");
-
-                            b1.Property<int?>("NumberOfCylinders")
                                 .HasColumnType("int");
 
                             b1.Property<int>("Type")

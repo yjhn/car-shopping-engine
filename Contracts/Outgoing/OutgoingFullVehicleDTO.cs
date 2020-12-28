@@ -4,12 +4,15 @@ using System.Collections.Generic;
 
 namespace Contracts.Outgoing
 {
-    public class OutgoingVehicleDTO
+    public class OutgoingFullVehicleDTO
     {
         public int Id { get; set; }
         public int Price { get; set; }
-        public string Model { get; set; }
         public string UploaderUsername { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
+        public int ModelId { get; set; }
+        public string Model { get; set; }
         public string Brand { get; set; }
         public bool Used { get; set; }
         public YearMonth Purchased { get; set; }
@@ -29,9 +32,8 @@ namespace Contracts.Outgoing
         public string Vin { get; set; }
         public IEnumerable<string> Defects { get; set; }
         public IEnumerable<string> AdditionalProperties { get; set; }
-        public IEnumerable<string> Base64EncodedImages { get; set; }
+        public IEnumerable<string> Images { get; set; }
         public string Comment { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
+        public bool Hidden { get; set; }
     }
 }

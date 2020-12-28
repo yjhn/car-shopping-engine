@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Models.Migrations
+namespace Persistence.Migrations
 {
     public partial class CreateAzureDB : Migration
     {
@@ -12,6 +12,7 @@ namespace Models.Migrations
                 columns: table => new
                 {
                     Username = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     Phone = table.Column<long>(type: "bigint", nullable: false),
                     Role = table.Column<string>(type: "char(10)", nullable: false),
                     HashedPassword = table.Column<byte[]>(type: "binary(32)", nullable: false),
@@ -44,9 +45,9 @@ namespace Models.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Price = table.Column<int>(type: "int", nullable: false),
-                    UploaderUsername = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Uploaded = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false, computedColumnSql: "getdate()"),
+                    UploaderUsername = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: false, computedColumnSql: "getdate()"),
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     Used = table.Column<bool>(type: "bit", nullable: false),
                     Purchased_Year = table.Column<int>(type: "int", nullable: true),
@@ -87,13 +88,13 @@ namespace Models.Migrations
                         column: x => x.UploaderUsername,
                         principalTable: "Users",
                         principalColumn: "Username",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Vehicles_VehicleModels_ModelId",
                         column: x => x.ModelId,
                         principalTable: "VehicleModels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -117,7 +118,7 @@ namespace Models.Migrations
                         column: x => x.LikedAdsId,
                         principalTable: "Vehicles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

@@ -8,14 +8,17 @@ namespace Models
 {
     public class Vehicle : IEquatable<Vehicle>
     {
+        [Key]
         public int Id { get; set; }
         public int Price { get; set; }
 
-        [Required]
         [ForeignKey(nameof(User))]
         public string UploaderUsername { get; set; }
 
-        [Required]
+        // this is practically required, but it cannot be enforced
+        // by the database, because when user is deleted, his
+        // uploaded ads are not deleted automatically (they are deleted manually)
+        // [look at long comment in DatabaseContext]
         public User Uploader { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -148,13 +151,11 @@ namespace Models
     [Owned]
     public class Engine
     {
-        public int Hp { get; set; }
         public int Kw { get; set; }
         public float? Volume { get; set; }
         public EngineType Type { get; set; }
         public FuelType FuelType { get; set; }
         public EuroStandard? EuroEmissionsStandard { get; set; }
-        public int? NumberOfCylinders { get; set; }
     }
 
     public enum GearboxType

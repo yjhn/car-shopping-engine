@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
-namespace Models.Migrations
+namespace Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201220143219_ModifyDB")]
-    partial class ModifyDB
+    [Migration("20201224134641_Create-Azure-DB")]
+    partial class CreateAzureDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,6 +25,11 @@ namespace Models.Migrations
                 {
                     b.Property<string>("Username")
                         .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<bool>("Disabled")
                         .HasColumnType("bit");
@@ -69,6 +74,11 @@ namespace Models.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("varchar(1000)");
 
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
                     b.Property<string>("Defects")
                         .HasColumnType("varchar(200)");
 
@@ -85,13 +95,13 @@ namespace Models.Migrations
                     b.Property<int>("KilometersDriven")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastModified")
+                    b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Modified")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasComputedColumnSql("getdate()");
-
-                    b.Property<int>("ModelId")
-                        .HasColumnType("int");
 
                     b.Property<int>("NumberOfDoors")
                         .HasColumnType("int");
@@ -108,13 +118,7 @@ namespace Models.Migrations
                     b.Property<int>("SteeringWheelSide")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Uploaded")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
                     b.Property<string>("UploaderUsername")
-                        .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("Used")
@@ -179,14 +183,13 @@ namespace Models.Migrations
                     b.HasOne("Models.VehicleModel", "VehicleModel")
                         .WithMany("Vehicles")
                         .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Models.User", "Uploader")
                         .WithMany("UploadedAds")
                         .HasForeignKey("UploaderUsername")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.OwnsOne("Models.Engine", "Engine", b1 =>
                         {
