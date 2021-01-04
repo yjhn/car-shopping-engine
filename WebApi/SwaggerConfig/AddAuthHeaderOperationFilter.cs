@@ -16,9 +16,8 @@ namespace WebApi.SwaggerConfig
             var allowAnonymous = actionMetadata.Any(metadataItem => metadataItem is AllowAnonymousAttribute);
 
             if (!isAuthorized || allowAnonymous)
-            {
                 return;
-            }
+            
             if (operation.Parameters == null)
                 operation.Parameters = new List<OpenApiParameter>();
 

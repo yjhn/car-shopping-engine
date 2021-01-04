@@ -353,7 +353,7 @@ namespace Services.Repositories
                     vehicles.AddRange(modelCandidates.SelectMany(m => m.Vehicles));
 
                     // if there are too many results, filter by year
-                    if (vehicles.Count() > amount)
+                    if (vehicles.Count > amount)
                     {
                         var v = FilterByYear(yearStart, yearEnd,vehicles);
                         if (v.Count() > amount)

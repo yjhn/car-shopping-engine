@@ -64,7 +64,6 @@ namespace Server.Modules
                     new Claim(ClaimTypes.Role,user.Role)
                 };
 
-                // scheme.name MUST be used here or it won't work
                 var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);

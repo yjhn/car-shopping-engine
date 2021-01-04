@@ -7,8 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Models;
-using Serilog;
-using Server.Middleware;
 using Server.Modules;
 using Services.Dependencies;
 using Services.Repositories;
@@ -38,13 +36,8 @@ namespace Server
             ConfigureDependencies(services);
             ConfigureDatabase(services);
 
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-
             services.AddHttpContextAccessor();
 
-            services.AddSingleton(x => Log.Logger);
             services.AddTransient<IRepoServices, RepoServices>();
             services.AddTransient<IVehicleRepository, VehicleRepository>();
             services.AddControllers()
@@ -96,9 +89,7 @@ namespace Server
             Trace.TraceInformation(connectionString);
 
             if (string.IsNullOrWhiteSpace(connectionString))
-            {
                 throw new ArgumentNullException(nameof(connectionString), "Connection string not found");
-            }
 
             services.AddDbContext<DatabaseContext>(options =>
             {
@@ -112,13 +103,9 @@ namespace Server
             string carNetApiUrl = Configuration["CarNetApiUrl"];
 
             if (string.IsNullOrWhiteSpace(carNetApiKey))
-            {
                 throw new ArgumentNullException(nameof(carNetApiKey), "CarNet API key not found");
-            }
             if (string.IsNullOrWhiteSpace(carNetApiUrl))
-            {
                 throw new ArgumentNullException(nameof(carNetApiUrl), "CarNet API url not found");
-            }
 
             services.AddSingleton(x => new CarNetApiClient(carNetApiKey, carNetApiUrl, new HttpClient()));
         }
@@ -130,16 +117,9 @@ namespace Server
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                //c.RoutePrefix = string.Empty;
                 c.SwaggerEndpoint("/swagger/client/swagger.json", "Client API");
                 c.SwaggerEndpoint("/swagger/admin/swagger.json", "Admin API");
             });
-
-            //if (env.IsDevelopment())
-            //{
-            //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Server v1"));
-            //}
-
 
             app.UseHttpsRedirection();
 
@@ -147,7 +127,6 @@ namespace Server
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMiddleware<LoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
