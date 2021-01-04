@@ -66,7 +66,7 @@ namespace Server.Controllers
         /// <returns></returns>
         [HttpDelete("users")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteUsers([Required] string[] usernames)
+        public async Task<ActionResult<int>> DeleteUsers([Required] string[] usernames)
         {
             return Ok(await _services.DeleteUsers(usernames));
         }
@@ -78,7 +78,7 @@ namespace Server.Controllers
         /// <returns></returns>
         [HttpPut("users/disable")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> DisableUsers([Required] string[] usernames)
+        public async Task<ActionResult<int>> DisableUsers([Required] string[] usernames)
         {
             return Ok(await _services.DisableUsers(usernames));
         }
@@ -90,7 +90,7 @@ namespace Server.Controllers
         /// <returns></returns>
         [HttpPut("users/enable")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> EnableUsers([Required] string[] usernames)
+        public async Task<ActionResult<int>> EnableUsers([Required] string[] usernames)
         {
             return Ok(await _services.EnableUsers(usernames));
         }
@@ -117,7 +117,7 @@ namespace Server.Controllers
         /// <returns></returns>
         [HttpDelete("ads")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteAds([Required] IList<int> ids)
+        public async Task<ActionResult<int>> DeleteAds([Required] IList<int> ids)
         {
             return Ok(await _services.DeleteVehicles(ids));
         }
@@ -129,7 +129,7 @@ namespace Server.Controllers
         /// <returns></returns>
         [HttpPut("ads/hide")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> HideAds([Required] IList<int> ids)
+        public async Task<ActionResult<int>> HideAds([Required] IList<int> ids)
         {
             return Ok(await _services.HideAds(ids));
         }
@@ -141,7 +141,7 @@ namespace Server.Controllers
         /// <returns></returns>
         [HttpPut("ads/unhide")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UnhideAds([Required] IList<int> ids)
+        public async Task<ActionResult<int>> UnhideAds([Required] IList<int> ids)
         {
             return Ok(await _services.UnhideAds(ids));
         }
