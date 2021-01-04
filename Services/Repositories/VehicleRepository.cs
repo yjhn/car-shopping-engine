@@ -89,10 +89,10 @@ namespace Services.Repositories
             Vehicle v = _vehicles.Find(carId);
 
             // only procedd if user exists and is uploader of the vehicle
-            if (GetUser(username) != null && v != null && v.Uploader.Username == username)
+            var user = await GetUser(username);
+            if (v != null && user != null && (v.Uploader == user || user.Role == UserRole.Admin))
             {
                 // remove this vehicle from all users liked vehicles lists
-                await _users.Include(u => u.LikedAds).ForEachAsync(u => u.LikedAds.Remove(v));
                 _vehicles.Remove(v);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -110,11 +110,9 @@ namespace Services.Repositories
             var u = await _users.FindAsync(user.Username);
             if (u == null)
             {
-                // only admin can set the roles
-                if (user.Role == null)
-                    user.Role = UserRole.User;
-                else
-                    _users.Add(user);
+                int[] ids = user.LikedAds.Select(v => v.Id).ToArray();
+                user.LikedAds = _vehicles.Where(v => ids.Contains(v.Id)).ToList();
+                _users.Add(user);
                 await _dbContext.SaveChangesAsync();
                 return user.Username;
             }
@@ -136,6 +134,8 @@ namespace Services.Repositories
         public async Task<User> GetUser(string username)
         {
             var u = await _users.FindAsync(username);
+            if (u == null)
+                return null;
             await _dbContext.Entry(u).Collection(user => user.UploadedAds).LoadAsync();
             await _dbContext.Entry(u).Collection(user => user.LikedAds).LoadAsync();
             return u;
@@ -180,16 +180,14 @@ namespace Services.Repositories
             else
             {
                 // add uploaded vehicles
-                user.UploadedAds = userToUpdate.UploadedAds;
+                userToUpdate.Phone = user.Phone;
+                userToUpdate.Email = user.Email;
+                userToUpdate.Disabled = user.Disabled;
+                userToUpdate.HashedPassword = user.HashedPassword;
+                int[] ids = user.LikedAds.Select(v => v.Id).ToArray();
+                userToUpdate.LikedAds = _vehicles.Where(v => ids.Contains(v.Id)).ToList();
 
-                // remove previously liked ads
-                foreach(Vehicle v in userToUpdate.LikedAds)
-                    v.LikedBy.Remove(userToUpdate);
-                // add newly liked ads
-                foreach(Vehicle v in user.LikedAds)
-                    v.LikedBy.Add(userToUpdate);
-
-                _users.Update(user);
+                _users.Update(userToUpdate);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
@@ -218,15 +216,37 @@ namespace Services.Repositories
             else
             {
                 var v = await _vehicles.FindAsync(vehicle.Id);
-                if (v == null)
+                if (v == null || (v.Uploader != user && user.Role != UserRole.Admin))
                     return false;
                 else
                 {
-                    vehicle.Created = v.Created;
-                    vehicle.VehicleModel = await GetOrCreateVehicleModel(vehicle.VehicleModel.Brand, vehicle.VehicleModel.Model);
-                    vehicle.Uploader = v.Uploader;
+                    // transfer properties to the vehicle being updated
+                    v.AdditionalProperties = vehicle.AdditionalProperties;
+                    v.ChassisType = vehicle.ChassisType;
+                    v.Color = vehicle.Color;
+                    v.Comment = vehicle.Comment;
+                    v.Defects = vehicle.Defects;
+                    v.DriveWheels = vehicle.DriveWheels;
+                    v.Engine = vehicle.Engine;
+                    v.Gearbox = vehicle.Gearbox;
+                    v.Hidden = vehicle.Hidden;
+                    v.Id = vehicle.Id;
+                    v.Images = vehicle.Images;
+                    v.KilometersDriven = vehicle.KilometersDriven;
+                    v.NextVehicleInspection = vehicle.NextVehicleInspection;
+                    v.NumberOfDoors = vehicle.NumberOfDoors;
+                    v.OriginalPurchaseCountry = vehicle.OriginalPurchaseCountry;
+                    v.Price = vehicle.Price;
+                    v.Purchased = vehicle.Purchased;
+                    v.Seats = vehicle.Seats;
+                    v.SteeringWheelSide = vehicle.SteeringWheelSide;
+                    v.Used = vehicle.Used;
+                    v.Vin = vehicle.Vin;
+                    v.Weight = vehicle.Weight;
+                    v.WheelSize = vehicle.WheelSize;
+                    v.VehicleModel = await GetOrCreateVehicleModel(vehicle.VehicleModel.Brand, vehicle.VehicleModel.Model);
 
-                    _vehicles.Update(vehicle);
+                    _vehicles.Update(v);
                     await _dbContext.SaveChangesAsync();
                     return true;
                 }
@@ -236,6 +256,8 @@ namespace Services.Repositories
         public async Task<Vehicle> GetVehicle(int id)
         {
             var v = await _vehicles.FindAsync(id);
+            if (v == null)
+                return null;
             await _dbContext.Entry(v).Reference(v => v.VehicleModel).LoadAsync();
             return v;
         }
@@ -270,6 +292,8 @@ namespace Services.Repositories
         public async Task<int> UnhideAds(IEnumerable<int> ids)
         {
             var ads = _vehicles.Where(v => ids.Contains(v.Id));
+            if (ads == null)
+                return 0;
             foreach (Vehicle v in ads)
             {
                 v.Hidden = false;
@@ -281,6 +305,8 @@ namespace Services.Repositories
         public async Task<int> HideAds(IEnumerable<int> ids)
         {
             var ads = _vehicles.Where(v => ids.Contains(v.Id));
+            if (ads == null)
+                return 0;
             foreach (Vehicle v in ads)
             {
                 v.Hidden = true;
@@ -294,6 +320,8 @@ namespace Services.Repositories
             // we may need to hide ads of the disabled users
 
             var users = _users.Where(u => usernames.Contains(u.Username));
+            if (users == null)
+                return 0;
             foreach (User u in users)
             {
                 u.Disabled = true;
@@ -305,6 +333,8 @@ namespace Services.Repositories
         public async Task<int> EnableUsers(IEnumerable<string> usernames)
         {
             var users = _users.Where(u => usernames.Contains(u.Username));
+            if (users == null)
+                return 0;
             foreach (User u in users)
             {
                 u.Disabled = false;

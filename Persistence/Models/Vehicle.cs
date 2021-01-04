@@ -175,14 +175,14 @@ namespace Models
     {
         Left,
         Right
-    }
+    };
 
     public enum NumberOfDoors
     {
         TwoThree = 23,
         FourFive = 45,
         SixSeven = 67
-    }
+    };
 
     public enum EuroStandard
     {
@@ -192,7 +192,7 @@ namespace Models
         Euro4,
         Euro5,
         Euro6
-    }
+    };
 
     public enum EngineType
     {

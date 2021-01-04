@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Repositories;
 using Services.Services;
+using Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -38,11 +39,11 @@ namespace Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<OutgoingUserDTO>> GetUser([Required] string username)
         {
-            string user = HttpContext.User.Identity.Name;
-            if (username == null || user != username)
+            var user = HttpContext.User;
+            if (username == null || (!user.IsInRole(UserRole.Admin) && user.Identity.Name != username))
                 return BadRequest();
 
-            var u = await _services.GetUser(user);
+            var u = await _services.GetUser(username);
             return u == null ? NotFound() : u;
         }
 
@@ -65,8 +66,8 @@ namespace Server.Controllers
             [FromHeader][DefaultValue(0)] int startIndex,
             [FromHeader][DefaultValue(10)] int amount)
         {
-            string user = HttpContext.User.Identity.Name;
-            if (username == null || user != username)
+            var user = HttpContext.User;
+            if (username == null || (!user.IsInRole(UserRole.Admin) && user.Identity.Name != username))
                 return BadRequest();
 
             var ads = await _services.GetUserLikedAds(username, sortBy, sortAscending, startIndex, amount);
@@ -113,7 +114,7 @@ namespace Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<IncomingUserDTO>> PostUser([FromBody][Required] IncomingUserDTO value)
+        public async Task<ActionResult<IncomingUserDTO>> PostUser([FromBody, Required] IncomingUserDTO value)
         {
             if (value == null)
                 return BadRequest();
@@ -133,10 +134,10 @@ namespace Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutUser([Required] string username, [FromBody][Required] IncomingUserDTO value)
+        public async Task<IActionResult> PutUser([Required] string username, [FromBody, Required] IncomingUserDTO value)
         {
-            string user = HttpContext.User.Identity.Name;
-            if (value == null || value.Username != username || user != username || user != value.Username)
+            var user = HttpContext.User;
+            if (value == null || username == null || value.Username != username || (!user.IsInRole(UserRole.Admin) && user.Identity.Name != username))
                 return BadRequest();
 
             return await _services.UpdateUser(username, value) ? Ok() : NotFound();
@@ -153,8 +154,8 @@ namespace Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteUser([Required] string username)
         {
-            string user = HttpContext.User.Identity.Name;
-            if (user != username)
+            var user = HttpContext.User;
+            if (username == null || (!user.IsInRole(UserRole.Admin) && user.Identity.Name != username))
                 return BadRequest();
 
             return await _services.DeleteUser(username) ? Ok() : NotFound();

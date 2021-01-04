@@ -170,13 +170,14 @@ namespace Server.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutAd([FromBody, Required] PutVehicleDTO vehicle)
         {
             string username = HttpContext.User.Identity.Name;
             if (vehicle == null || !HttpContext.User.Identity.IsAuthenticated)
                 return BadRequest();
 
-            return await _services.UpdateVehicle(username, vehicle) ? Ok() : BadRequest();
+            return await _services.UpdateVehicle(username, vehicle) ? Ok() : NotFound();
         }
 
         /// <summary>

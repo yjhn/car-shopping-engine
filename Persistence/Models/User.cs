@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,6 +28,7 @@ namespace Models
         public string Email { get; set; }
         public ICollection<Vehicle> LikedAds { get; set; }
         public ICollection<Vehicle> UploadedAds { get; set; }
+        [DefaultValue(false)]
         public bool Disabled { get; set; }
 
         // this constructor sets default values
@@ -34,7 +36,6 @@ namespace Models
         {
             Role = UserRole.User;
             LikedAds = new List<Vehicle>();
-            Disabled = false;
         }
 
 

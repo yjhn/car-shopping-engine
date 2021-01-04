@@ -38,7 +38,10 @@ namespace Server.Modules
                     return AuthenticateResult.NoResult();
 
                 if (!Request.Headers.ContainsKey("Authorization"))
+                {
+                    Context.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Car shopping engine API\"");
                     return AuthenticateResult.Fail("Missing Authorization Header");
+                }
 
                 User user = null;
                 try
@@ -61,7 +64,7 @@ namespace Server.Modules
 
                 var claims = new Claim[]{
                     new Claim(ClaimTypes.Name,user.Username),
-                    new Claim(ClaimTypes.Role,user.Role)
+                    new Claim(ClaimTypes.Role,user.Role.Trim())
                 };
 
                 var identity = new ClaimsIdentity(claims, Scheme.Name);

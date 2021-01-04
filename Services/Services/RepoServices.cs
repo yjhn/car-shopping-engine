@@ -1,6 +1,5 @@
 ﻿using Contracts.Incoming;
 using Contracts.Outgoing;
-using Models;
 using Services.Mappers;
 using Services.Repositories;
 using System.Collections.Generic;
@@ -19,9 +18,9 @@ namespace Services.Services
             _repository = repository;
         }
 
-        public Task<string> AddFullUser(User user)
+        public Task<string> AddFullUser(IncomingFullUserDTO user)
         {
-            return _repository.AddUser(user);
+            return _repository.AddUser(user.ToEntity());
         }
         public Task<string> AddUser(IncomingUserDTO user)
         {

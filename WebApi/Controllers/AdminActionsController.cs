@@ -1,4 +1,5 @@
-﻿using Contracts.Outgoing;
+﻿using Contracts.Incoming;
+using Contracts.Outgoing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<User>> PostFullUser([FromBody][Required] User value)
+        public async Task<ActionResult<IncomingFullUserDTO>> PostFullUser([FromBody][Required] IncomingFullUserDTO value)
         {
             return value == null ? 
                 BadRequest() :

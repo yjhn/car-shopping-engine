@@ -1,6 +1,5 @@
 ﻿using Contracts.Incoming;
 using Contracts.Outgoing;
-using Models;
 using Services.Repositories;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +9,7 @@ namespace Services.Services
 {
     public interface IRepoServices
     {
-        Task<string> AddFullUser(User user);
+        Task<string> AddFullUser(IncomingFullUserDTO user);
         Task<string> AddUser(IncomingUserDTO user);
         Task<bool> AddVehicle(string username, PostVehicleDTO v);
         Task<OutgoingUserDTO> Authenticate(string username, string password);

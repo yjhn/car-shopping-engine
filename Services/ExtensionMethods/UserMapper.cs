@@ -2,6 +2,7 @@
 using Contracts.Outgoing;
 using Models;
 using Services.Services;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Services.Mappers
@@ -13,12 +14,51 @@ namespace Services.Mappers
             if (user == null)
                 return null;
 
+            // create temporary liked ads list
+            List<Vehicle> likedAds = new List<Vehicle>();
+            if (user.LikedAds != null)
+            {
+                foreach (int id in user.LikedAds)
+                {
+                    likedAds.Add(new Vehicle { Id = id });
+                }
+            }
+
             User u = new()
             {
                 Username = user.Username,
                 Phone = user.Phone,
                 Email = user.Email,
-                HashedPassword = Utilities.EncryptPassword(user.Password, user.Username)
+                HashedPassword = Utilities.EncryptPassword(user.Password, user.Username),
+                LikedAds = likedAds
+            };
+            return u;
+        }
+
+        public static User ToEntity(this IncomingFullUserDTO user)
+        {
+            if (user == null)
+                return null;
+
+            // create temporary liked ads list
+            List<Vehicle> likedAds = new List<Vehicle>();
+            if (user.LikedAds != null)
+            {
+                foreach (int id in user.LikedAds)
+                {
+                    likedAds.Add(new Vehicle { Id = id });
+                }
+            }
+
+
+            User u = new()
+            {
+                Username = user.Username,
+                Phone = user.Phone,
+                Email = user.Email,
+                HashedPassword = Utilities.EncryptPassword(user.Password, user.Username),
+                Role = user.Role ?? UserRole.User,
+                LikedAds = likedAds
             };
             return u;
         }
