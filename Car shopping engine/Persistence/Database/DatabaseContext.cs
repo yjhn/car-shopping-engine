@@ -22,11 +22,11 @@ namespace Models
             return base.SaveChangesAsync(cancellationToken);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors()
-                .LogTo(Console.WriteLine);
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            //=> optionsBuilder
+                //.EnableSensitiveDataLogging()
+                //.EnableDetailedErrors()
+                //.LogTo(Console.WriteLine);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

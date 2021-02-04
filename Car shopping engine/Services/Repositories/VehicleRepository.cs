@@ -45,10 +45,6 @@ namespace Services.Repositories
                 filteredVehicleList = (from v in filteredVehicleList where v.Engine.FuelType == filters.FuelType select v);
             filteredVehicleList = FilterByYear(filters.YearFrom, filters.YearTo, filteredVehicleList);
 
-            // this is currently not used
-            //if (!string.IsNullOrEmpty(filters.Username))
-            //    filteredVehicleList = (from v in filteredVehicleList where v.UploaderUsername.ToLower() == filters.Username select v).ToList();
-
             return GetSortedVehiclesList(sortBy, sortAscending, startIndex, amount, (IQueryable<Vehicle>)filteredVehicleList);
         }
 
@@ -92,7 +88,6 @@ namespace Services.Repositories
             var user = await GetUser(username);
             if (v != null && user != null && (v.Uploader == user || user.Role == UserRole.Admin))
             {
-                // remove this vehicle from all users liked vehicles lists
                 _vehicles.Remove(v);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -434,6 +429,55 @@ namespace Services.Repositories
                 _vehicleModels.Add(m);
             }
             return m;
+        }
+
+
+
+        // GroupJoin //
+
+        private void UseGroupJoin()
+        {
+            var uploaded = _users.ToList().GroupJoin(_vehicles,
+                                            (User u) => u,
+                                            (Vehicle v) => v.Uploader,
+                                            (User u, IEnumerable<Vehicle> vs) =>
+                                                new
+                                                {
+                                                    u.Username,
+                                                    UploadedVehicles = vs.Select((Vehicle v) => v.Id)
+                                                }).ToList();
+
+            foreach (var obj in uploaded)
+            {
+                Console.WriteLine(obj.Username);
+                foreach (var o in obj.UploadedVehicles)
+                {
+                    Console.WriteLine(o);
+                }
+            }
+        }
+
+        // Join //
+
+        private void UseJoin()
+        {
+            var uploaded = _users.ToList().Join(_vehicles,
+                                                   u => u,
+                                                   v => v.Uploader,
+                                                   (u, v) => new { u.Username, v.Id });
+
+            foreach (var obj in uploaded)
+            {
+                Console.WriteLine(obj.Username + " " + obj.Id);
+            }
+        }
+
+        // Aggregate //
+
+        private void UseAggregate()
+        {
+            int regularUserCount = _users.ToList().Aggregate(0, (count, user) => user.Role.Trim() == UserRole.User ? count + 1 : count);
+            Console.WriteLine("There are {0} normal users.", regularUserCount);
         }
     }
 }

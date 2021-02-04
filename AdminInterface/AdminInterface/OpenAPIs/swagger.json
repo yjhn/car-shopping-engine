@@ -1,0 +1,1191 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Admin API",
+    "description": "Vehicle trading app admin API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/admin-actions/new": {
+      "post": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Adds new user (all properties can be specified)",
+        "operationId": "PostFullUser",
+        "requestBody": {
+          "description": "New user info",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/user/{username}": {
+      "get": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Gets all user info",
+        "operationId": "GetFullUser",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutgoingFullUserDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/users": {
+      "delete": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Deletes users with specified usernames. CAUTION: also deletes all ads uploaded by them",
+        "operationId": "DeleteUsers",
+        "requestBody": {
+          "description": "Username of the users to be deleted",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Username of the users to be deleted"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Username of the users to be deleted"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Username of the users to be deleted"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/users/disable": {
+      "put": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Disables users with specified usernames",
+        "operationId": "DisableUsers",
+        "requestBody": {
+          "description": "Usernames of the users to be disabled",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Usernames of the users to be disabled"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Usernames of the users to be disabled"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Usernames of the users to be disabled"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/users/enable": {
+      "put": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Enables users with specified usernames",
+        "operationId": "EnableUsers",
+        "requestBody": {
+          "description": "Usernames of the users to be enabled",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Usernames of the users to be enabled"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Usernames of the users to be enabled"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Usernames of the users to be enabled"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/users/disabled": {
+      "get": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Gets all disabled users",
+        "operationId": "GetDisabledUsers",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OutgoingFullUserDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/ads": {
+      "delete": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Deletes ads with specified IDs",
+        "operationId": "DeleteAds",
+        "requestBody": {
+          "description": "IDs of the ads to be deleted",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the ads to be deleted"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the ads to be deleted"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the ads to be deleted"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Gets ads with specified IDs",
+        "operationId": "GetAds",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "header",
+            "description": "IDs of the ads",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "description": "IDs of the ads"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OutgoingFullVehicleDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/ads/hide": {
+      "put": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Hides ads with specified IDs",
+        "operationId": "HideAds",
+        "requestBody": {
+          "description": "IDs of the adds to hide",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the adds to hide"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the adds to hide"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the adds to hide"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/ads/unhide": {
+      "put": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Unhides ads with the specified IDs",
+        "operationId": "UnhideAds",
+        "requestBody": {
+          "description": "IDs of the ads to unhide",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the ads to unhide"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the ads to unhide"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "IDs of the ads to unhide"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/ads/hidden": {
+      "get": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Gets all hidden ads",
+        "operationId": "GetHiddenAds",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OutgoingFullVehicleDTO"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    },
+    "/api/admin-actions/ad/{id}": {
+      "get": {
+        "tags": [
+          "AdminActions"
+        ],
+        "summary": "Gets an ad with specified ID",
+        "operationId": "GetAd",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the ad",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID of the ad",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutgoingFullVehicleDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic": [ ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VehicleModel": {
+        "required": [
+          "brand",
+          "model"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "vehicles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vehicle"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "YearMonth": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EngineType": {
+        "enum": [
+          "I4",
+          "V6",
+          "V8",
+          "W3",
+          "W8",
+          "W12",
+          "W16",
+          "Electric",
+          "Other"
+        ],
+        "type": "string"
+      },
+      "FuelType": {
+        "enum": [
+          "Petrol",
+          "Diesel",
+          "Electricity",
+          "Hybrid"
+        ],
+        "type": "string"
+      },
+      "EuroStandard": {
+        "enum": [
+          "Euro1",
+          "Euro2",
+          "Euro3",
+          "Euro4",
+          "Euro5",
+          "Euro6"
+        ],
+        "type": "string"
+      },
+      "Engine": {
+        "type": "object",
+        "properties": {
+          "kw": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "volume": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/EngineType"
+          },
+          "fuelType": {
+            "$ref": "#/components/schemas/FuelType"
+          },
+          "euroEmissionsStandard": {
+            "$ref": "#/components/schemas/EuroStandard"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GearboxType": {
+        "enum": [
+          "Mechanic",
+          "Automatic"
+        ],
+        "type": "string"
+      },
+      "Gearbox": {
+        "type": "object",
+        "properties": {
+          "gearboxType": {
+            "$ref": "#/components/schemas/GearboxType"
+          },
+          "numberOfGears": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChassisType": {
+        "enum": [
+          "Station_wagon",
+          "Hatchback",
+          "Sedan",
+          "Suv",
+          "Minivan",
+          "Coupe",
+          "Convertible",
+          "Passenger_minibus",
+          "Combi_minibus",
+          "Freight_minibus",
+          "Commercial"
+        ],
+        "type": "string"
+      },
+      "DriveWheels": {
+        "enum": [
+          "Front",
+          "Rear",
+          "All"
+        ],
+        "type": "string"
+      },
+      "SteeringWheelSide": {
+        "enum": [
+          "Left",
+          "Right"
+        ],
+        "type": "string"
+      },
+      "NumberOfDoors": {
+        "enum": [
+          "TwoThree",
+          "FourFive",
+          "SixSeven"
+        ],
+        "type": "string"
+      },
+      "Vehicle": {
+        "required": [
+          "color",
+          "engine",
+          "images",
+          "vehicleModel",
+          "wheelSize"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uploaderUsername": {
+            "type": "string",
+            "nullable": true
+          },
+          "uploader": {
+            "$ref": "#/components/schemas/User"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vehicleModel": {
+            "$ref": "#/components/schemas/VehicleModel"
+          },
+          "used": {
+            "type": "boolean"
+          },
+          "purchased": {
+            "$ref": "#/components/schemas/YearMonth"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/Engine"
+          },
+          "gearbox": {
+            "$ref": "#/components/schemas/Gearbox"
+          },
+          "chassisType": {
+            "$ref": "#/components/schemas/ChassisType"
+          },
+          "color": {
+            "type": "string"
+          },
+          "kilometersDriven": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "driveWheels": {
+            "$ref": "#/components/schemas/DriveWheels"
+          },
+          "steeringWheelSide": {
+            "$ref": "#/components/schemas/SteeringWheelSide"
+          },
+          "numberOfDoors": {
+            "$ref": "#/components/schemas/NumberOfDoors"
+          },
+          "seats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextVehicleInspection": {
+            "$ref": "#/components/schemas/YearMonth"
+          },
+          "wheelSize": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "originalPurchaseCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "vin": {
+            "type": "string",
+            "nullable": true
+          },
+          "defects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "hidden": {
+            "type": "boolean"
+          },
+          "likedBy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "User": {
+        "required": [
+          "email",
+          "hashedPassword",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "phone": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role": {
+            "type": "string"
+          },
+          "hashedPassword": {
+            "type": "string",
+            "format": "byte"
+          },
+          "email": {
+            "type": "string"
+          },
+          "likedAds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vehicle"
+            },
+            "nullable": true
+          },
+          "uploadedAds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vehicle"
+            },
+            "nullable": true
+          },
+          "disabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "OutgoingFullUserDTO": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "phone": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "likedAds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "uploadedAds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "disabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutgoingFullVehicleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uploaderUsername": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "brand": {
+            "type": "string",
+            "nullable": true
+          },
+          "used": {
+            "type": "boolean"
+          },
+          "purchased": {
+            "$ref": "#/components/schemas/YearMonth"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/Engine"
+          },
+          "gearbox": {
+            "$ref": "#/components/schemas/Gearbox"
+          },
+          "chassisType": {
+            "$ref": "#/components/schemas/ChassisType"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "kilometersDriven": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "driveWheels": {
+            "$ref": "#/components/schemas/DriveWheels"
+          },
+          "steeringWheelSide": {
+            "$ref": "#/components/schemas/SteeringWheelSide"
+          },
+          "numberOfDoors": {
+            "$ref": "#/components/schemas/NumberOfDoors"
+          },
+          "seats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextVehicleInspection": {
+            "$ref": "#/components/schemas/YearMonth"
+          },
+          "wheelSize": {
+            "type": "string",
+            "nullable": true
+          },
+          "weight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "originalPurchaseCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "vin": {
+            "type": "string",
+            "nullable": true
+          },
+          "defects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "hidden": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Basic": {
+        "type": "http",
+        "description": "Please enter your username and password",
+        "scheme": "basic"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "AdminActions",
+      "description": "These methods are only accessible with an administrator account"
+    }
+  ]
+}
